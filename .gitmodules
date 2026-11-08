@@ -1,0 +1,6 @@
+[submodule "canterbury"]
+	path = canterbury
+	url = git@github.com:barbalet/ds-canterbury1940.git
+[submodule "apesdk"]
+	path = apesdk
+	url = git@github.com:barbalet/apesdk.git
