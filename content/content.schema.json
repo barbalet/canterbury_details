@@ -1,0 +1,954 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:canterbury-details:content:1",
+  "title": "Canterbury Details candidate content v1",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "generation_id",
+    "units",
+    "setting",
+    "canvas",
+    "admission",
+    "provenance",
+    "data",
+    "review_annotations",
+    "statistics"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "canterbury-details-content"
+    },
+    "version": {
+      "const": 1
+    },
+    "generation_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "units": {
+      "const": "pixels"
+    },
+    "setting": {
+      "type": "object",
+      "required": [
+        "year",
+        "initial_people",
+        "population_basis"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "year": {
+          "const": 1940
+        },
+        "initial_people": {
+          "const": 27000
+        },
+        "population_basis": {
+          "type": "string"
+        }
+      }
+    },
+    "canvas": {
+      "const": {
+        "width": 1600,
+        "height": 1600,
+        "origin": "top-left",
+        "y_axis": "down"
+      }
+    },
+    "admission": {
+      "const": {
+        "candidate_only": true,
+        "routing_enabled": false,
+        "historical_identity_inferred": false
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "source_manifest_sha256",
+        "revisions",
+        "inputs",
+        "owned_inputs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "revisions": {
+          "type": "object",
+          "required": [
+            "canterbury",
+            "apesdk"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "canterbury": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "apesdk": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          }
+        },
+        "inputs": {
+          "type": "object",
+          "required": [
+            "vectors",
+            "annotations",
+            "buildings",
+            "buildings_modern",
+            "buildings_1940",
+            "road_ink",
+            "modern_roads",
+            "historical_roads",
+            "waterways",
+            "rail_ink",
+            "rail_corridors",
+            "institutions",
+            "institution_policy",
+            "review_candidates",
+            "assembly_report",
+            "enrichment_report",
+            "connectivity_report",
+            "road_traces",
+            "modern_sources",
+            "controls",
+            "osm",
+            "osm_roads",
+            "assembler",
+            "enricher",
+            "road_builder",
+            "tracer",
+            "institution_builder"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "vectors": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "annotations": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "buildings": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "buildings_modern": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "buildings_1940": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "road_ink": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "modern_roads": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "historical_roads": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "waterways": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "rail_ink": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "rail_corridors": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "institutions": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "institution_policy": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "review_candidates": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "assembly_report": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "enrichment_report": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "connectivity_report": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "road_traces": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "modern_sources": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "controls": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "osm": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "osm_roads": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "assembler": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "enricher": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "road_builder": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "tracer": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "institution_builder": {
+              "type": "object",
+              "required": [
+                "path",
+                "sha256",
+                "bytes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "owned_inputs": {
+          "type": "object",
+          "required": [
+            "tools/compile_content.py",
+            "tools/audit_sources.py",
+            "content/content-policy.json",
+            "content/review-annotations.json",
+            "content/content.schema.json",
+            "content/cycle-01-validation.json",
+            "content/source-manifest.json",
+            "docs/evidence/cycle01-1.log",
+            "docs/evidence/cycle01-2.log",
+            "docs/evidence/cycle01-3.log"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "tools/compile_content.py": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "tools/audit_sources.py": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/content-policy.json": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/review-annotations.json": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/content.schema.json": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/cycle-01-validation.json": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/source-manifest.json": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "docs/evidence/cycle01-1.log": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "docs/evidence/cycle01-2.log": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "docs/evidence/cycle01-3.log": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "vectors",
+        "annotations",
+        "buildings",
+        "road_ink",
+        "modern_roads",
+        "historical_roads",
+        "waterways",
+        "rail_ink",
+        "rail_corridors",
+        "institutions",
+        "institution_policy",
+        "review_candidates",
+        "context"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "vectors": {
+          "type": "object"
+        },
+        "annotations": {
+          "type": "object"
+        },
+        "buildings": {
+          "type": "object"
+        },
+        "road_ink": {
+          "type": "object"
+        },
+        "modern_roads": {
+          "type": "object"
+        },
+        "historical_roads": {
+          "type": "object"
+        },
+        "waterways": {
+          "type": "object"
+        },
+        "rail_ink": {
+          "type": "object"
+        },
+        "rail_corridors": {
+          "type": "object"
+        },
+        "institutions": {
+          "type": "object"
+        },
+        "institution_policy": {
+          "type": "object"
+        },
+        "review_candidates": {
+          "type": "object"
+        },
+        "context": {
+          "type": "object"
+        }
+      }
+    },
+    "review_annotations": {
+      "type": "object",
+      "required": [
+        "format",
+        "version",
+        "vectors_sha256",
+        "annotations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "const": "canterbury-details-review-annotations"
+        },
+        "version": {
+          "const": 1
+        },
+        "vectors_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "dataset",
+              "record_id",
+              "source_sha256",
+              "decision",
+              "note"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "dataset": {
+                "type": "string"
+              },
+              "record_id": {
+                "type": "string"
+              },
+              "source_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "decision": {
+                "enum": [
+                  "needs_review",
+                  "retain_candidate",
+                  "exclude_from_simulation"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "required": [
+        "buildings",
+        "institutions",
+        "unlocated_institutions",
+        "networks"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "buildings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "institutions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unlocated_institutions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "networks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "nodes",
+              "edges"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "nodes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "edges": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

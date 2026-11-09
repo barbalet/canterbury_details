@@ -1,0 +1,7 @@
+PASS buildings {'objects': 3341, 'source_pixels_preserved': 99053}
+PASS roads {'objects': 2040, 'source_pixels_preserved': 109033}
+PASS waterways {'objects': 211, 'source_pixels_preserved': 28745}
+PASS rail {'objects': 345, 'source_pixels_preserved': 23411}
+PASS reference rail corridors: 5
+PASS review candidates: {'reference_rail_crossing': 48, 'possible_fragment_gap': 252}
+PASS exact OSM road topology and complete source segment coverage: 36266

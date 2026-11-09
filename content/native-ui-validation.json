@@ -1,0 +1,42 @@
+{
+  "format": "canterbury-details-visual-native-ui-observation",
+  "version": 1,
+  "method": "Manual CUA native-app launch, accessibility snapshots and screenshots. Full visual controls observed during development; final binary retested for church recentering, repeated-row selection and clock stepping.",
+  "binary_sha256": "1eded835c5b6642754b7718000b34bfb3a258e6738ec9b2cdf89671956d98b4e",
+  "renderer": "exact upstream canterbury/newcanterbury/json2png.c, text enabled",
+  "basemap_sha256": "6205797b239940f407fe28633c61b4d9ab20f325d953150b9c7f5a2c2a1fd761",
+  "people": 27000,
+  "startup_native_minute": 1,
+  "final_step_10_native_minute": 11,
+  "map_colors_and_labels_visually_observed": true,
+  "institution_inspection": true,
+  "unlocated_site_remains_unlocated": true,
+  "resident_27000_resolves_live": true,
+  "run_pause_and_restart_observed": true,
+  "zoom_and_keyboard_pan_observed": true,
+  "same_zoom_church_navigation": {
+    "zoom": 1.4,
+    "first": "Canterbury Cathedral",
+    "first_scroll_xy": [
+      0.5858135860979474,
+      0.4789165137614673
+    ],
+    "second": "St Dunstan's Church",
+    "second_scroll_xy": [
+      0.3292066350710879,
+      0.4100403669723892
+    ]
+  },
+  "already_selected_row_recenters": {
+    "viewport_moved_away": true,
+    "restored_scroll_xy": [
+      0.3292066350710932,
+      0.410040366972526
+    ]
+  },
+  "selection_and_viewport_changes_preserve_paused_clock": true,
+  "quit_observed_process_ended": true,
+  "ok": true,
+  "historical_observation": true,
+  "superseded_by": "content/cycle-09-13-native-ui.json"
+}

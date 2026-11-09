@@ -1,0 +1,28 @@
+{
+  "format": "canterbury-details-cycle05-native-ui-observation",
+  "version": 1,
+  "method": "Normal app launch and CUA accessibility/screenshot observation; separate from automated tests",
+  "binary_sha256": "7c2be0447c8ae9bdb2a3c0575c32cc205821427cdc26deb85e752abaafcd788b",
+  "people": 27000,
+  "actor_records": 27000,
+  "bindings_valid": true,
+  "startup": {
+    "native_minute": 1,
+    "callbacks": 1,
+    "scenario": "1940-01-01 00:01"
+  },
+  "after_step_1": {
+    "native_minute": 2,
+    "callbacks": 2,
+    "scenario": "1940-01-01 00:02"
+  },
+  "after_step_10": {
+    "native_minute": 12,
+    "callbacks": 12,
+    "scenario": "1940-01-01 00:12"
+  },
+  "refresh_unchanged": true,
+  "layout_visible_without_clipping": true,
+  "quit_observed": true,
+  "ok": true
+}

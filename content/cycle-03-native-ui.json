@@ -1,0 +1,16 @@
+{
+  "format": "canterbury-details-native-ui-observation",
+  "version": 1,
+  "method": "Normal macOS app launch and accessibility observations through CUA; manual observation, not automated test suite",
+  "binary_sha256": "ff914f0b1decaee32e98bd6bcee2aa272e1a2a2584553b2a057c3c668ab53e2f",
+  "people": 27000,
+  "actor_records": 27000,
+  "bindings_valid": true,
+  "initial_native_minute": 1,
+  "after_step_1": 2,
+  "after_step_10": 12,
+  "after_read_only_refresh": 12,
+  "callbacks_match_minutes": true,
+  "quit_observed": true,
+  "ok": true
+}

@@ -1,0 +1,1064 @@
+{
+  "format": "canterbury-details-religious-worksite-matrix",
+  "version": 1,
+  "source_sha256": "d9e6e83be3a218e64b6497256cd38163d5a6635a243c2c267e5fe0589455c7e3",
+  "sites": [
+    {
+      "source_id": "cathedral",
+      "name": "Canterbury Cathedral",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-8b0b3cf08a3b3d0507b4",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-91203c7cd199adb0b2e0",
+          "distance_pixels": 11.692,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-dunstan",
+      "name": "St Dunstan's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-191b9a8a1f8b5560ec15",
+          "distance_pixels": 5.297,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-ed459f926819863fca15",
+          "distance_pixels": 12.584,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-mildred",
+      "name": "St Mildred's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-3e3fa14c2632a35924a5",
+          "distance_pixels": 3.399,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-a31015488a7af84b83a3",
+          "distance_pixels": 10.709,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-db2e0cde0a55bbc42ddd",
+          "distance_pixels": 10.865,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-peter",
+      "name": "St Peter's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "closed_for_regular_worship",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-68280c247a897d349fcc",
+          "distance_pixels": 5.734,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-alphege",
+      "name": "St Alphege's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-920525bc31afbb82328d",
+          "distance_pixels": 1.796,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-eccf24e16c37422348cb",
+          "distance_pixels": 5.827,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-0dac6258c19ddea96c8c",
+          "distance_pixels": 15.027,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-george",
+      "name": "St George the Martyr's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-9f03baad032ed1fe8043",
+          "distance_pixels": 14.851,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-668843ca1d2e55d8712f",
+          "distance_pixels": 16.789,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-gregory",
+      "name": "St Gregory's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-1a0598a7887040b00ac6",
+          "distance_pixels": 5.206,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-94fa7fe79831b53e6345",
+          "distance_pixels": 7.489,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-36b32344ffbcb3217a0a",
+          "distance_pixels": 13.692,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-mary-northgate",
+      "name": "St Mary Northgate Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-0fa2b00f466f3835f50d",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-martin",
+      "name": "St Martin's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-9444e5bf86a057e73bb8",
+          "distance_pixels": 17.753,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-4074a56d3bfe4062b82e",
+          "distance_pixels": 18.554,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-8d3d2780e902bc8865b1",
+          "distance_pixels": 18.96,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-paul",
+      "name": "St Paul's Church",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-b097c04e4c80392d29e1",
+          "distance_pixels": 1.577,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-652c6b466bbc1630d034",
+          "distance_pixels": 6.893,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-0c9d09bb036f968566ec",
+          "distance_pixels": 7.495,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-nicholas-thanington",
+      "name": "St Nicholas' Church, Thanington",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-e6c77347a21e98809a3d",
+          "distance_pixels": 1.683,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-4e2f6f8fb9531f731692",
+          "distance_pixels": 2.767,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-53638bd0262f15432683",
+          "distance_pixels": 10.453,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-stephen",
+      "name": "St Stephen's Church, Hackington",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-5dac7a270ba0a813e9bf",
+          "distance_pixels": 4.973,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-6bbf175ed828802e9633",
+          "distance_pixels": 12.965,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-80a226a203a1e97b9919",
+          "distance_pixels": 13.009,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-cosmus-damian",
+      "name": "St Cosmus and St Damian, Blean",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-michael-harbledown",
+      "name": "St Michael and All Angels, Harbledown",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-a7ae7ac4d77a4c3991db",
+          "distance_pixels": 1.198,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-d16b76951942fe8bd649",
+          "distance_pixels": 11.847,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-nicholas-harbledown",
+      "name": "St Nicholas, Harbledown",
+      "religion": "christianity",
+      "denomination": "unknown",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-d16b76951942fe8bd649",
+          "distance_pixels": 7.446,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-b76b460a6293d17be22d",
+          "distance_pixels": 10.58,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-ca65826034ce66b8b195",
+          "distance_pixels": 12.736,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-nicholas-sturry",
+      "name": "St Nicholas, Sturry",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-77c60dd06d53ea3b9834",
+          "distance_pixels": 0.048,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-bd9467470b8e945690ec",
+          "distance_pixels": 6.106,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-cd7520ce4e4a93b2b8af",
+          "distance_pixels": 15.164,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-mary-nackington",
+      "name": "St Mary, Nackington",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-d11de2cf67247f46690e",
+          "distance_pixels": 10.911,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-e37dc5e12a5b569a70e3",
+          "distance_pixels": 11.04,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-john-milton",
+      "name": "St John the Baptist, Milton",
+      "religion": "christianity",
+      "denomination": "unknown",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-75bd6359b1fa56a992e8",
+          "distance_pixels": 9.551,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-0184f4c091ceedbb6430",
+          "distance_pixels": 9.603,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-cbd06615a718bc648b48",
+          "distance_pixels": 18.818,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-peter-methodist",
+      "name": "St Peter's Methodist Church",
+      "religion": "christianity",
+      "denomination": "methodist",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-6bd0800d6561be141579",
+          "distance_pixels": 8.404,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-1adfd91950b5ef0d76a1",
+          "distance_pixels": 15.679,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "baptist",
+      "name": "Canterbury Baptist Church",
+      "religion": "christianity",
+      "denomination": "baptist",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-aad0586d240f3a90e995",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "salvation-army",
+      "name": "Salvation Army Citadel",
+      "religion": "christianity",
+      "denomination": "salvation_army",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-4a6452f57a6814fd6517",
+          "distance_pixels": 0.014,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-9ffc2c964623aaf7edb3",
+          "distance_pixels": 3.779,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-bfad5b88ceb8b523aa47",
+          "distance_pixels": 16.849,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "zoar",
+      "name": "Zoar Chapel",
+      "religion": "christianity",
+      "denomination": "strict_baptist",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-652c6b466bbc1630d034",
+          "distance_pixels": 2.514,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "distance_pixels": 6.016,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-aad0586d240f3a90e995",
+          "distance_pixels": 14.775,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-thomas",
+      "name": "St Thomas of Canterbury Catholic Church",
+      "religion": "christianity",
+      "denomination": "roman_catholic",
+      "source_status": "active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "distance_pixels": 2.644,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-865af4a0e01d9b128ff6",
+          "distance_pixels": 3.686,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-668843ca1d2e55d8712f",
+          "distance_pixels": 4.398,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "eastbridge",
+      "name": "Eastbridge Hospital Chapel",
+      "religion": "christianity",
+      "denomination": "unknown",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-9ffc2c964623aaf7edb3",
+          "distance_pixels": 7.021,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-5ad35246c07066d0e118",
+          "distance_pixels": 7.365,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-6bd0800d6561be141579",
+          "distance_pixels": 14.918,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "greyfriars",
+      "name": "Greyfriars Chapel",
+      "religion": "christianity",
+      "denomination": "unknown",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-94c4c24da73baec2d294",
+          "distance_pixels": 3.59,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-6bd0800d6561be141579",
+          "distance_pixels": 9.671,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-ea5d33403684f0d8d184",
+          "distance_pixels": 11.445,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "old-synagogue",
+      "name": "Old Synagogue",
+      "religion": "judaism",
+      "denomination": "unknown",
+      "source_status": "scenario_active",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "rabbi"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-eccf24e16c37422348cb",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-05ec6219a08f0c5caf4c",
+          "distance_pixels": 16.113,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-0fa2b00f466f3835f50d",
+          "distance_pixels": 17.225,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "friends-1940",
+      "name": "Friends Meeting House, Canterbury Lane",
+      "religion": "christianity",
+      "denomination": "quaker",
+      "source_status": "active",
+      "located": false,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-andrew-presbyterian",
+      "name": "St Andrew's Presbyterian Church",
+      "religion": "christianity",
+      "denomination": "presbyterian",
+      "source_status": "active",
+      "located": false,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "guildhall-congregational",
+      "name": "Guildhall Street Congregational Church",
+      "religion": "christianity",
+      "denomination": "congregational",
+      "source_status": "active",
+      "located": false,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "countess-huntingdon",
+      "name": "Countess of Huntingdon's Connexion Chapel",
+      "religion": "christianity",
+      "denomination": "countess_of_huntingdon",
+      "source_status": "active",
+      "located": false,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-mary-bredin-1940",
+      "name": "St Mary Bredin Church (pre-1942)",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "active",
+      "located": false,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "garrison-church",
+      "name": "Garrison Church of St Alban (later All Saints)",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-d41061a9050a9839a00f",
+          "distance_pixels": 3.09,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-41c542ce5f5fcbc7049a",
+          "distance_pixels": 7.406,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-79ac84de4e2c47660c54",
+          "distance_pixels": 9.987,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    },
+    {
+      "source_id": "st-gabriel",
+      "name": "St Gabriel, Rough Common",
+      "religion": "christianity",
+      "denomination": "anglican",
+      "source_status": "review_required",
+      "located": true,
+      "permitted_technical_office_kinds": [
+        "custodian",
+        "sexton",
+        "community staff",
+        "teacher",
+        "administrator",
+        "charitable worker",
+        "minister",
+        "priest"
+      ],
+      "source_candidate_premises": [
+        {
+          "id": "buildings-3ff983b8617854a6ea62",
+          "distance_pixels": 0.0,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-6f52215d2fbdfb0e7205",
+          "distance_pixels": 14.548,
+          "identity_verified": false
+        },
+        {
+          "id": "buildings-072914a4379bfb23a20c",
+          "distance_pixels": 17.657,
+          "identity_verified": false
+        }
+      ],
+      "staffing": "unknown; not auto-created",
+      "qualification": "Explicit title/institution or ordinary skill/permission inputs; eligibility is not historical staffing evidence"
+    }
+  ]
+}

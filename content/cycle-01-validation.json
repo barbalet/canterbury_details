@@ -1,0 +1,50 @@
+{
+  "format": "canterbury-details-cycle01-validation",
+  "version": 1,
+  "date": "2026-11-08",
+  "scope": "source inventory and upstream map data validation, not standalone simulation/runtime qualification",
+  "source_manifest_sha256": "9f2672031817daee261b8babe836c6727ce4843b883cb09aea3459c429d380b0",
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "simulation-map/validate.py"
+      ],
+      "purpose": "candidate geometry/schema validation",
+      "exit_code": 0,
+      "log": "docs/evidence/cycle01-1.log",
+      "log_sha256": "69449a1cba8d7935766017b430b798d9c3a9a38b4d4d79fc7229611f52e8d6b8"
+    },
+    {
+      "command": [
+        "python3",
+        "simulation-map/validate_buildings.py"
+      ],
+      "purpose": "building enrichment admission",
+      "exit_code": 0,
+      "log": "docs/evidence/cycle01-2.log",
+      "log_sha256": "1cf2945274655f0e22b0a152e71508dc24d2a9c09ec8430f0133ed465fc09421"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "simulation-map",
+        "-v"
+      ],
+      "purpose": "assembly, enrichment, OSM topology, road completion and religious-site fixtures",
+      "exit_code": 0,
+      "log": "docs/evidence/cycle01-3.log",
+      "log_sha256": "887323c57d4756e99fd5b3c29ec5416ddb0651fbd7003a983a1061873f85cb38",
+      "tests_run": 32
+    }
+  ],
+  "sdk_suites": "entry points inventoried; execution belongs to SDK/build/profile implementation cycles",
+  "original_submodules_unchanged": true,
+  "network_required": false,
+  "sibling_project_required": false,
+  "ok": true
+}

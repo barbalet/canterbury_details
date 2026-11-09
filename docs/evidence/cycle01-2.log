@@ -1,0 +1,4 @@
+PASS unchanged original geometry and IDs: 3341
+PASS snapshot/generator hashes, OSM references, attribution, unknowns and matching radius
+Named/addressed: 1080 Footprint matches: 1612 Land-use-only estimates: 82
+Use counts: {'agricultural': 65, 'civic': 8, 'commercial': 146, 'education': 89, 'healthcare': 21, 'industrial': 16, 'leisure': 16, 'mixed_use': 3, 'religious': 18, 'residential': 1164, 'transport': 1, 'unknown': 1790, 'utility': 4}

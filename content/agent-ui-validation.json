@@ -1,0 +1,32 @@
+{
+  "format": "canterbury-details-agent-visualization",
+  "version": 1,
+  "inputs": {
+    "ui/CityMap.m": "227bfb966d31b639b0d856b2d4792bfc5a69643fd9e0e12405729562c2734fa1",
+    "ui/CityMap.h": "2b1c5979658225ae655930455fd59ca7a6e9f8eb67ba063aaf6c194a23d0b583",
+    "ui/CityApp.m": "a8593e719704aed400c2378ebb65cc5124459d9584f437849541a8b1e9dcf514",
+    "ui/CitySession.m": "20c2429d040c6928ce3e349b1ca7445c6e80809807db16adba81873029f4f631",
+    "ui/CitySession.h": "b45e161804f91bafd92d672f126c447fc2978bacaf42fe173cacfb327282f256",
+    "docs/UI-THREADING.md": "2f23c1ccf9254a0289074e7d4e554a6cdba3a91e49d5504a65eb8823a8b7f337",
+    "docs/XCODE.md": "a96f0617c664ee8848eae769f1a35ec7db94aef16b2582502abb667d0d85f355"
+  },
+  "observed": {
+    "roster_glyphs": 27000,
+    "known_map_positions": 0,
+    "unplaced": 27000,
+    "native_minutes": [
+      1,
+      11
+    ],
+    "clicked_agent": 13501,
+    "clicked_household": 3376,
+    "overview_fit_and_zoom": true,
+    "unknown_coordinates_not_plotted_on_map": true,
+    "markers_render_from_worker_copies": true
+  },
+  "scope": "CUA native controls and screenshot observation; roster cells are not city locations; daily autonomy remains Cycles 15\u201320",
+  "ok": true,
+  "binary_sha256": "63b1e5544fd013beeacc5599488ce2985059016d4aa3aedb454143a1b1236fd0",
+  "historical_observation": true,
+  "superseded_by": "content/cycle-14-18-native-ui.json"
+}

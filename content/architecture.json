@@ -1,0 +1,1019 @@
+{
+  "format": "canterbury-details-architecture",
+  "version": 1,
+  "status": "Implemented through Cycle 28: ordinary offices, explicit community calendars, capability-checked civic services, conserved hand-carried transport and bounded scenario pressures. Full coordinated city checkpoints remain Cycle 31.",
+  "project": {
+    "name": "Canterbury Details",
+    "c_prefix": "cd_",
+    "types_prefix": "Cd",
+    "cli": "CanterburyDetails",
+    "native_app": "Canterbury Details",
+    "year": 1940,
+    "population_model": "ordinary_humans_only",
+    "default_population": 27000,
+    "runtime_dependencies": [
+      "canterbury",
+      "apesdk"
+    ],
+    "population_capacity": 30000
+  },
+  "nodes": [
+    {
+      "id": "upstream.canterbury",
+      "scope": "submodule",
+      "path": "canterbury",
+      "depends_on": []
+    },
+    {
+      "id": "upstream.apesdk",
+      "scope": "submodule",
+      "path": "apesdk",
+      "depends_on": []
+    },
+    {
+      "id": "project.api",
+      "scope": "project",
+      "path": "src/cd_api.h",
+      "state": "declaration_contract",
+      "depends_on": []
+    },
+    {
+      "id": "project.content",
+      "scope": "project",
+      "state": "implemented_cycles09_13",
+      "path": "src/cd_content.c",
+      "depends_on": [
+        "project.api",
+        "upstream.canterbury"
+      ]
+    },
+    {
+      "id": "project.sdk",
+      "scope": "project",
+      "state": "upstream_profile_guarded",
+      "path": "apesdk/universe/universe.h",
+      "depends_on": [
+        "project.api",
+        "upstream.apesdk"
+      ]
+    },
+    {
+      "id": "project.adapter",
+      "scope": "project",
+      "state": "cycle07_staged_resource_publication",
+      "path": "src/cd_adapter.c",
+      "depends_on": [
+        "project.api",
+        "project.sdk",
+        "project.people",
+        "project.memory",
+        "project.random"
+      ]
+    },
+    {
+      "id": "project.world",
+      "scope": "project",
+      "state": "implemented_cycles24_28",
+      "path": "src/cd_world.c",
+      "depends_on": [
+        "project.api",
+        "project.content",
+        "project.adapter",
+        "project.people",
+        "project.households",
+        "project.movement",
+        "project.needs",
+        "project.health",
+        "project.jobs",
+        "project.work",
+        "project.economy",
+        "project.development",
+        "project.institutions",
+        "project.services",
+        "project.logistics",
+        "project.environment",
+        "project.records",
+        "project.operations",
+        "project.memory",
+        "project.random",
+        "project.lifecycle",
+        "project.food",
+        "project.occupation_catalogue",
+        "project.human_digest"
+      ]
+    },
+    {
+      "id": "project.people",
+      "scope": "project",
+      "state": "cycle06_live_membership_and_bindings",
+      "path": "src/cd_people.c",
+      "depends_on": [
+        "project.api",
+        "project.memory"
+      ]
+    },
+    {
+      "id": "project.households",
+      "scope": "project",
+      "state": "implemented_cycles09_13",
+      "path": "src/cd_households.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.movement",
+      "scope": "project",
+      "state": "implemented_cycles09_13",
+      "path": "src/cd_movement.c",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.needs",
+      "scope": "project",
+      "state": "implemented_cycles14_18",
+      "path": "src/cd_needs.c",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.health",
+      "scope": "project",
+      "state": "implemented_cycles14_18",
+      "path": "src/cd_health.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.jobs",
+      "scope": "project",
+      "state": "implemented_cycles19_23",
+      "path": "src/cd_jobs.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.work",
+      "scope": "project",
+      "state": "implemented_cycles19_23",
+      "path": "src/cd_work.c",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.economy",
+      "scope": "project",
+      "state": "implemented_cycles19_23",
+      "path": "src/cd_economy.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.development",
+      "scope": "project",
+      "state": "implemented_cycles19_23",
+      "path": "src/cd_development.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.institutions",
+      "scope": "project",
+      "state": "implemented_cycles19_23",
+      "path": "src/cd_institutions.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.services",
+      "scope": "project",
+      "state": "implemented_cycles24_28",
+      "path": "src/cd_services.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.logistics",
+      "scope": "project",
+      "state": "implemented_cycles24_28",
+      "path": "src/cd_logistics.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.environment",
+      "scope": "project",
+      "state": "implemented_cycles24_28",
+      "path": "src/cd_environment.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.records",
+      "scope": "project",
+      "state": "planned",
+      "path": "src/cd_records.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.operations",
+      "scope": "project",
+      "state": "planned",
+      "path": "src/cd_operations.c",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.persistence",
+      "scope": "project",
+      "state": "planned",
+      "path": "src/cd_persistence.c",
+      "depends_on": [
+        "project.api",
+        "project.content",
+        "project.adapter"
+      ]
+    },
+    {
+      "id": "project.readmodel",
+      "scope": "project",
+      "state": "planned",
+      "path": "src/cd_readmodel.c",
+      "depends_on": [
+        "project.api"
+      ]
+    },
+    {
+      "id": "project.renderer",
+      "scope": "project",
+      "state": "planned",
+      "path": "src/cd_renderer.c",
+      "depends_on": [
+        "project.api",
+        "project.readmodel",
+        "project.adapter"
+      ]
+    },
+    {
+      "id": "project.ui",
+      "scope": "project",
+      "state": "visual_native_city_frontend",
+      "path": "ui/CityApp.m",
+      "depends_on": [
+        "project.api",
+        "project.readmodel",
+        "project.adapter",
+        "project.map_ui"
+      ]
+    },
+    {
+      "id": "project.cli",
+      "scope": "project",
+      "state": "cycle03_bootstrap",
+      "path": "src/main.c",
+      "depends_on": [
+        "project.api",
+        "project.adapter"
+      ]
+    },
+    {
+      "id": "project.build",
+      "scope": "project",
+      "state": "make_and_native_xcode_builds",
+      "path": "tools/build.py",
+      "depends_on": [
+        "project.api",
+        "upstream.canterbury",
+        "upstream.apesdk",
+        "project.native_sources",
+        "project.basemap_build",
+        "project.xcode_project",
+        "project.native_profile"
+      ]
+    },
+    {
+      "id": "project.memory",
+      "scope": "project",
+      "state": "cycle07_checked_payload_accounting",
+      "path": "src/cd_memory.c",
+      "depends_on": [
+        "project.api"
+      ]
+    },
+    {
+      "id": "project.random",
+      "scope": "project",
+      "state": "cycle07_deterministic_streams",
+      "path": "src/cd_random.c",
+      "depends_on": [
+        "project.api"
+      ]
+    },
+    {
+      "id": "project.content_compiler",
+      "scope": "project",
+      "state": "cycle08_offline_candidate_bundle",
+      "path": "tools/compile_content.py",
+      "depends_on": [
+        "upstream.canterbury",
+        "upstream.apesdk"
+      ]
+    },
+    {
+      "id": "project.map_ui",
+      "scope": "project",
+      "state": "json2png_map_viewport_and_candidate_inspection",
+      "path": "ui/CityMap.m",
+      "depends_on": [
+        "upstream.canterbury"
+      ]
+    },
+    {
+      "id": "project.native_sources",
+      "scope": "project",
+      "state": "shared_make_xcode_sources",
+      "path": "tools/native_sources.py",
+      "depends_on": [
+        "upstream.apesdk"
+      ]
+    },
+    {
+      "id": "project.basemap_build",
+      "scope": "project",
+      "state": "exact_upstream_json2png_render",
+      "path": "tools/build_basemap.py",
+      "depends_on": [
+        "upstream.canterbury",
+        "project.native_profile"
+      ]
+    },
+    {
+      "id": "project.xcode_project",
+      "scope": "project",
+      "state": "native_app_cli_smoke_schemes",
+      "path": "tools/generate_xcode.py",
+      "depends_on": [
+        "project.native_sources"
+      ]
+    },
+    {
+      "id": "project.native_profile",
+      "scope": "project",
+      "state": "shared_sdk_profile_admission",
+      "path": "tools/native_profile.py",
+      "depends_on": [
+        "upstream.canterbury",
+        "upstream.apesdk"
+      ]
+    },
+    {
+      "id": "project.population",
+      "scope": "project",
+      "path": "src/cd_population.c",
+      "state": "implemented_cycles09_13",
+      "depends_on": [
+        "project.api",
+        "project.adapter"
+      ]
+    },
+    {
+      "id": "project.geometry",
+      "scope": "project",
+      "path": "src/cd_geometry.c",
+      "state": "implemented_cycles09_13",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.routing",
+      "scope": "project",
+      "path": "src/cd_routing.c",
+      "state": "implemented_cycles09_13",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.city_ui_session",
+      "scope": "project",
+      "path": "ui/CitySession.m",
+      "state": "implemented_cycles24_28",
+      "depends_on": [
+        "project.api",
+        "project.world"
+      ]
+    },
+    {
+      "id": "project.runtime_compiler",
+      "scope": "project",
+      "path": "tools/compile_runtime.py",
+      "state": "implemented_cycles19_23",
+      "depends_on": [
+        "project.content_compiler"
+      ]
+    },
+    {
+      "id": "project.lifecycle",
+      "scope": "project",
+      "path": "src/cd_lifecycle.c",
+      "state": "implemented_cycles14_18",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.people",
+        "project.households",
+        "project.health"
+      ]
+    },
+    {
+      "id": "project.food",
+      "scope": "project",
+      "path": "src/cd_food.c",
+      "state": "implemented_cycles14_18",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.households"
+      ]
+    },
+    {
+      "id": "project.occupation_catalogue",
+      "scope": "project",
+      "path": "src/cd_occupations.c",
+      "state": "implemented_cycles14_18",
+      "depends_on": [
+        "project.api",
+        "upstream.apesdk",
+        "upstream.canterbury"
+      ]
+    },
+    {
+      "id": "project.human_digest",
+      "scope": "project",
+      "path": "src/cd_human_digest.c",
+      "state": "implemented_cycles14_18",
+      "depends_on": [
+        "project.api",
+        "project.occupation_catalogue"
+      ]
+    },
+    {
+      "id": "project.occupation_compiler",
+      "scope": "project",
+      "path": "tools/compile_occupations.py",
+      "state": "implemented_cycles14_18",
+      "depends_on": [
+        "upstream.apesdk",
+        "upstream.canterbury"
+      ]
+    },
+    {
+      "id": "project.work_digest",
+      "scope": "project",
+      "path": "src/cd_work_digest.c",
+      "state": "implemented_cycles19_23",
+      "depends_on": [
+        "project.api"
+      ]
+    },
+    {
+      "id": "project.offices",
+      "scope": "project",
+      "path": "src/cd_offices.c",
+      "state": "implemented_cycles24_28",
+      "depends_on": [
+        "project.jobs",
+        "project.institutions"
+      ]
+    },
+    {
+      "id": "project.community",
+      "scope": "project",
+      "path": "src/cd_community.c",
+      "state": "implemented_cycles24_28",
+      "depends_on": [
+        "project.offices"
+      ]
+    },
+    {
+      "id": "project.calendar_codec",
+      "scope": "project",
+      "path": "src/cd_calendar.c",
+      "state": "implemented_cycles24_28",
+      "depends_on": [
+        "project.community"
+      ]
+    },
+    {
+      "id": "project.civic_digest",
+      "scope": "project",
+      "path": "src/cd_civic_digest.c",
+      "state": "implemented_cycles24_28",
+      "depends_on": [
+        "project.api"
+      ]
+    }
+  ],
+  "owners": [
+    {
+      "module": "project.content",
+      "owner": "immutable_content",
+      "authoritative_field_groups": [
+        "content.source_ids",
+        "content.geometry",
+        "content.candidate_qualifications",
+        "content.institution_definitions",
+        "content.source_calendar_records",
+        "content.policy_definitions",
+        "content.input_fingerprints"
+      ],
+      "qualification": "Cycle 09 immutable runtime geometry and source/review policy; later content definitions remain planned."
+    },
+    {
+      "module": "project.sdk",
+      "owner": "native_sdk",
+      "authoritative_field_groups": [
+        "sdk.body_position",
+        "sdk.body_energy",
+        "sdk.native_body_traits",
+        "sdk.actor_identity",
+        "sdk.live_slot_membership",
+        "sdk.elapsed_native_clock",
+        "sdk.native_work_grants"
+      ],
+      "qualification": "Existing SDK; borrow through guarded adapter"
+    },
+    {
+      "module": "project.adapter",
+      "owner": "runtime_backend",
+      "authoritative_field_groups": [
+        "adapter.active_native_handles",
+        "adapter.registry_activation",
+        "adapter.world_tokens",
+        "adapter.borrow_generations"
+      ],
+      "qualification": "Cycles 05\u201307 native lifecycle, world tokens and fully allocated resource staging/publication implemented; memory/RNG failure checks are Cycle 07."
+    },
+    {
+      "module": "project.world",
+      "owner": "world_coordinator",
+      "authoritative_field_groups": [
+        "world.scenario_binding",
+        "world.transaction_boundary",
+        "world.checkpoint_generation"
+      ],
+      "qualification": "Cycles 05/07; sole mutation coordinator"
+    },
+    {
+      "module": "project.people",
+      "owner": "person_lifecycle",
+      "authoritative_field_groups": [
+        "people.civil_name_and_source_reference",
+        "people.birth_date",
+        "people.life_record",
+        "people.residence_category",
+        "people.household_membership",
+        "people.guardian_and_spouse_links"
+      ],
+      "qualification": "Stable native-backed civil identities, dates, membership and parentage; bounded archival lifecycle implemented in Cycle 14 through cd_lifecycle.c."
+    },
+    {
+      "module": "project.households",
+      "owner": "housing",
+      "authoritative_field_groups": [
+        "households.dwelling_assignment",
+        "households.property_ownership",
+        "households.capacity_reservations"
+      ],
+      "qualification": "Cycle 13; views/indexes reconcile with people membership"
+    },
+    {
+      "module": "project.movement",
+      "owner": "movement",
+      "authoritative_field_groups": [
+        "movement.route_intentions",
+        "movement.route_progress",
+        "movement.door_access_state",
+        "movement.qualified_closures"
+      ],
+      "qualification": "Cycles 09\u201311; writes native position through adapter, never a second stored position"
+    },
+    {
+      "module": "project.needs",
+      "owner": "human_needs",
+      "authoritative_field_groups": [
+        "needs.fatigue",
+        "needs.meal_history",
+        "needs.sleep_intentions",
+        "needs.dependent_care_reservations"
+      ],
+      "qualification": "Cycle 15 fatigue/meal history and native-energy views; no second energy authority."
+    },
+    {
+      "module": "project.health",
+      "owner": "ordinary_health",
+      "authoritative_field_groups": [
+        "health.illness_records",
+        "health.injury_records",
+        "health.care_requests",
+        "health.recovery_state"
+      ],
+      "qualification": "Cycle 17 explicit technical conditions, care history, finite clinic and medicine reservations."
+    },
+    {
+      "module": "project.jobs",
+      "owner": "employment",
+      "authoritative_field_groups": [
+        "jobs.job_assignments",
+        "jobs.employer_contracts",
+        "jobs.skills",
+        "jobs.mentor_links",
+        "jobs.shift_state"
+      ],
+      "qualification": "Cycles 18\u201319; person job ID is a derived join"
+    },
+    {
+      "module": "project.work",
+      "owner": "work_arbitration",
+      "authoritative_field_groups": [
+        "work.work_intentions",
+        "work.completion_commit_records"
+      ],
+      "qualification": "Cycle 20; progress consumes SDK native work grants"
+    },
+    {
+      "module": "project.economy",
+      "owner": "conserved_resources",
+      "authoritative_field_groups": [
+        "economy.stock_ledgers",
+        "economy.household_provision",
+        "economy.money_ledgers",
+        "economy.goods_transfers"
+      ],
+      "qualification": "Cycles 16/21; authoritative quantity kept once per owner/custody record"
+    },
+    {
+      "module": "project.development",
+      "owner": "development",
+      "authoritative_field_groups": [
+        "development.worksite_projects",
+        "development.material_reservations",
+        "development.capacity_change_commits"
+      ],
+      "qualification": "Cycle 22; base source geometry remains immutable"
+    },
+    {
+      "module": "project.institutions",
+      "owner": "human_institutions",
+      "authoritative_field_groups": [
+        "institutions.operational_status",
+        "institutions.service_commitments"
+      ],
+      "qualification": "Cycles 23\u201325; no inferred affiliation or protection strength"
+    },
+    {
+      "module": "project.services",
+      "owner": "civic_services",
+      "authoritative_field_groups": [
+        "services.rosters",
+        "services.equipment_assignments",
+        "services.dispatch_progress"
+      ],
+      "qualification": "Cycle 26; staffing joins come from jobs/institutions"
+    },
+    {
+      "module": "project.logistics",
+      "owner": "ordinary_transport",
+      "authoritative_field_groups": [
+        "logistics.vehicle_state",
+        "logistics.cargo_custody",
+        "logistics.passenger_assignments",
+        "logistics.loading_progress"
+      ],
+      "qualification": "Cycle 27; ordinary route/access policy only"
+    },
+    {
+      "module": "project.environment",
+      "owner": "environment",
+      "authoritative_field_groups": [
+        "environment.weather_model_state",
+        "environment.fire_state",
+        "environment.premise_disruption",
+        "environment.scenario_alert_state"
+      ],
+      "qualification": "Cycle 28; unknown historical events remain absent"
+    },
+    {
+      "module": "project.records",
+      "owner": "causal_history",
+      "authoritative_field_groups": [
+        "records.event_sequence",
+        "records.event_records",
+        "records.observation_provenance",
+        "records.ordinary_record_copies"
+      ],
+      "qualification": "Cycle 29; no special pursuer lineage"
+    },
+    {
+      "module": "project.operations",
+      "owner": "ordinary_operations",
+      "authoritative_field_groups": [
+        "operations.request_queue",
+        "operations.resource_reservations",
+        "operations.request_status",
+        "operations.cancellation_state"
+      ],
+      "qualification": "Cycle 30; preview is read-only, submit owns reservations"
+    },
+    {
+      "module": "project.persistence",
+      "owner": "checkpoint_codec",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 31; serializes other owners, owns no duplicate simulation fields"
+    },
+    {
+      "module": "project.readmodel",
+      "owner": "readonly_snapshot",
+      "authoritative_field_groups": [],
+      "qualification": "Cycles 33\u201334; copied/derived views, never authoritative simulation state"
+    },
+    {
+      "module": "project.renderer",
+      "owner": "presentation",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 33; camera, selection and drawing are non-authoritative"
+    },
+    {
+      "module": "project.ui",
+      "owner": "native_ui",
+      "authoritative_field_groups": [],
+      "qualification": "Visual native frontend and record inspectors implemented by explicit user request; physical model/routing and full management UI remain planned."
+    },
+    {
+      "module": "project.cli",
+      "owner": "cli_client",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 03 smoke client; reads/steps the native adapter only"
+    },
+    {
+      "module": "project.build",
+      "owner": "build_tooling",
+      "authoritative_field_groups": [],
+      "qualification": "Local toolchain/build inputs, no simulation fields"
+    },
+    {
+      "module": "project.memory",
+      "owner": "allocation_accounting",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 07 payload ownership/accounting diagnostics only, never a simulation clock or data authority"
+    },
+    {
+      "module": "project.random",
+      "owner": "deterministic_city_random",
+      "authoritative_field_groups": [
+        "world.rng_streams"
+      ],
+      "qualification": "Cycle 07 three explicit domain streams; SDK body RNG remains native-owned"
+    },
+    {
+      "module": "project.content_compiler",
+      "owner": "offline_source_compilation",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 08 deterministic derived artifact only; source geometry/metadata stay audited upstream facts/candidates. Runtime content ownership remains project.content."
+    },
+    {
+      "module": "project.map_ui",
+      "owner": "visual_map_client",
+      "authoritative_field_groups": [],
+      "qualification": "Presentation/build only; no additional simulation authority or historical qualification"
+    },
+    {
+      "module": "project.native_sources",
+      "owner": "build_source_definition",
+      "authoritative_field_groups": [],
+      "qualification": "Presentation/build only; no additional simulation authority or historical qualification"
+    },
+    {
+      "module": "project.basemap_build",
+      "owner": "reference_map_resource",
+      "authoritative_field_groups": [],
+      "qualification": "Presentation/build only; no additional simulation authority or historical qualification"
+    },
+    {
+      "module": "project.xcode_project",
+      "owner": "native_ide_project",
+      "authoritative_field_groups": [],
+      "qualification": "Presentation/build only; no additional simulation authority or historical qualification"
+    },
+    {
+      "module": "project.native_profile",
+      "owner": "native_build_admission",
+      "authoritative_field_groups": [],
+      "qualification": "Read-only source/profile checks shared by Make, renderer and Xcode builds"
+    },
+    {
+      "module": "project.population",
+      "owner": "population",
+      "authoritative_field_groups": [],
+      "qualification": "Supporting implementation; existing field owners remain authoritative"
+    },
+    {
+      "module": "project.geometry",
+      "owner": "geometry",
+      "authoritative_field_groups": [],
+      "qualification": "Supporting implementation; existing field owners remain authoritative"
+    },
+    {
+      "module": "project.routing",
+      "owner": "routing",
+      "authoritative_field_groups": [],
+      "qualification": "Supporting implementation; existing field owners remain authoritative"
+    },
+    {
+      "module": "project.city_ui_session",
+      "owner": "city_ui_session",
+      "authoritative_field_groups": [],
+      "qualification": "Supporting implementation; existing field owners remain authoritative"
+    },
+    {
+      "module": "project.runtime_compiler",
+      "owner": "runtime_compiler",
+      "authoritative_field_groups": [],
+      "qualification": "Supporting implementation; existing field owners remain authoritative"
+    },
+    {
+      "module": "project.lifecycle",
+      "owner": "lifecycle",
+      "authoritative_field_groups": [],
+      "qualification": "Cycles 14\u201318 implemented; technical model parameters remain explicitly labeled"
+    },
+    {
+      "module": "project.food",
+      "owner": "food",
+      "authoritative_field_groups": [
+        "food.inventories",
+        "food.conservation_ledger"
+      ],
+      "qualification": "Cycles 14\u201318 implemented; technical model parameters remain explicitly labeled"
+    },
+    {
+      "module": "project.occupation_catalogue",
+      "owner": "occupation_catalogue",
+      "authoritative_field_groups": [
+        "content.occupation_definitions",
+        "occupations.input_fingerprints"
+      ],
+      "qualification": "Cycles 14\u201318 implemented; technical model parameters remain explicitly labeled"
+    },
+    {
+      "module": "project.human_digest",
+      "owner": "human_digest",
+      "authoritative_field_groups": [],
+      "qualification": "Cycles 14\u201318 implemented; technical model parameters remain explicitly labeled"
+    },
+    {
+      "module": "project.occupation_compiler",
+      "owner": "occupation_compiler",
+      "authoritative_field_groups": [],
+      "qualification": "Cycles 14\u201318 implemented; technical model parameters remain explicitly labeled"
+    },
+    {
+      "module": "project.work_digest",
+      "authoritative_field_groups": []
+    },
+    {
+      "module": "project.offices",
+      "authoritative_field_groups": [
+        "offices.title_specific_qualifications",
+        "offices.holders_and_succession"
+      ],
+      "qualification": "Native bounded ordinary-city state, explicitly qualified technical scenarios"
+    },
+    {
+      "module": "project.community",
+      "authoritative_field_groups": [
+        "community.explicit_memberships",
+        "community.calendar_occurrences",
+        "community.attendance_credits"
+      ],
+      "qualification": "Native bounded ordinary-city state, explicitly qualified technical scenarios"
+    },
+    {
+      "module": "project.calendar_codec",
+      "authoritative_field_groups": [],
+      "qualification": "Native bounded ordinary-city state, explicitly qualified technical scenarios"
+    },
+    {
+      "module": "project.civic_digest",
+      "authoritative_field_groups": [],
+      "qualification": "Native bounded ordinary-city state, explicitly qualified technical scenarios"
+    }
+  ],
+  "public_header": "src/cd_api.h",
+  "forbidden_owned_symbols": [
+    "NRCount",
+    "NRCampaign",
+    "NRProgeny",
+    "NR_HUMAN",
+    "nr_vampire",
+    "nr_campaign",
+    "nr_episode",
+    "nr_checkpoint_compatibility"
+  ],
+  "future_internal_headers": [
+    "src/cd_internal.h",
+    "src/cd_sdk_adapter.h"
+  ],
+  "serialization": "No C pointers or borrowed native handles on disk; own version/content/ABI gate; prior project checkpoints unsupported",
+  "mutation_order": [
+    "native clock opens interval",
+    "world activates/validates native binding",
+    "scenario/calendar and pending operations",
+    "urgent needs/care and route intentions",
+    "one native movement integrator",
+    "shared native stationary work grant",
+    "deterministic completion/resource/lifecycle commit",
+    "observation/event delivery",
+    "SDK closes interval",
+    "read-only capture/inspection/render"
+  ],
+  "documentation": [
+    "docs/ARCHITECTURE.md",
+    "docs/REUSE.md",
+    "docs/SOURCES.md",
+    "docs/UNCERTAINTIES.md",
+    "docs/GEOMETRY.md",
+    "docs/MOVEMENT.md",
+    "docs/ROUTING.md",
+    "docs/POPULATION.md",
+    "docs/HOUSEHOLDS.md",
+    "docs/UI-THREADING.md",
+    "docs/LIFECYCLE.md",
+    "docs/NEEDS.md",
+    "docs/FOOD.md",
+    "docs/HEALTH.md",
+    "docs/OCCUPATIONS.md"
+  ],
+  "reuse_ledger": "content/reuse-ledger.json",
+  "derived_caches": [
+    {
+      "field_group": "households.member_lists",
+      "source_owner": "project.people"
+    },
+    {
+      "field_group": "movement.route_cost_cache",
+      "source_owner": "project.content"
+    },
+    {
+      "field_group": "people.job_views",
+      "source_owner": "project.jobs"
+    },
+    {
+      "field_group": "institutions.staffing_views",
+      "source_owner": "project.jobs"
+    },
+    {
+      "field_group": "readmodel.person_position",
+      "source_owner": "project.sdk"
+    },
+    {
+      "field_group": "readmodel.living_totals",
+      "source_owner": "project.sdk"
+    }
+  ]
+}

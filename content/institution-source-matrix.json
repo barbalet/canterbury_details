@@ -1,0 +1,1085 @@
+{
+  "format": "canterbury-details-institution-source-matrix",
+  "generation_id": "a8c11775e599e5b306890eec51962b97500db6e2243bedbbd9f4f3950a8ff420",
+  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+  "sites": [
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-8b0b3cf08a3b3d0507b4",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 11.692,
+          "id": "buildings-91203c7cd199adb0b2e0",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "cathedral",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Canterbury Cathedral",
+      "notes": "Cathedral complex; Trinity Chapel is part of this site, not a separate institution.",
+      "osm_ref": "way/28021345",
+      "position_pixels": [
+        877.6,
+        773.736
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "cathedral",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 5.297,
+          "id": "buildings-191b9a8a1f8b5560ec15",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 12.584,
+          "id": "buildings-ed459f926819863fca15",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-dunstan",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Dunstan's Church",
+      "notes": "",
+      "osm_ref": "way/152634959",
+      "position_pixels": [
+        645.554,
+        687.936
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 3.399,
+          "id": "buildings-3e3fa14c2632a35924a5",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 10.709,
+          "id": "buildings-a31015488a7af84b83a3",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 10.865,
+          "id": "buildings-db2e0cde0a55bbc42ddd",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-mildred",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Mildred's Church",
+      "notes": "",
+      "osm_ref": "way/150522360",
+      "position_pixels": [
+        730.053,
+        874.735
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 5.734,
+          "id": "buildings-68280c247a897d349fcc",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-peter",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Peter's Church",
+      "notes": "Closed for parish worship in 1928; services resumed in 1953. Retain Christian site without spawning a regular congregation.",
+      "osm_ref": "way/151352707",
+      "position_pixels": [
+        781.541,
+        754.501
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "closed_for_regular_worship"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 1.796,
+          "id": "buildings-920525bc31afbb82328d",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 5.827,
+          "id": "buildings-eccf24e16c37422348cb",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 15.027,
+          "id": "buildings-0dac6258c19ddea96c8c",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-alphege",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Alphege's Church",
+      "notes": "Modern combined parish name is not used as a 1940 institutional identity.",
+      "osm_ref": "way/150468606",
+      "position_pixels": [
+        839.796,
+        751.827
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 14.851,
+          "id": "buildings-9f03baad032ed1fe8043",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 16.789,
+          "id": "buildings-668843ca1d2e55d8712f",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-george",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St George the Martyr's Church",
+      "notes": "Church stood in 1940 and was destroyed in 1942; modern tower geometry is only a location reference, not its full 1940 footprint.",
+      "osm_ref": "way/150466030",
+      "position_pixels": [
+        884.59,
+        836.588
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 5.206,
+          "id": "buildings-1a0598a7887040b00ac6",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 7.489,
+          "id": "buildings-94fa7fe79831b53e6345",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 13.692,
+          "id": "buildings-36b32344ffbcb3217a0a",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-gregory",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Gregory's Church",
+      "notes": "Modern centre use is not the 1940 assignment.",
+      "osm_ref": "way/151703399",
+      "position_pixels": [
+        979.206,
+        712.616
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-0fa2b00f466f3835f50d",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-mary-northgate",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Mary Northgate Church",
+      "notes": "Retain Christian building identity; present hall use does not establish regular worship in 1940.",
+      "osm_ref": "way/151357609",
+      "position_pixels": [
+        869.948,
+        708.087
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "former_church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 17.753,
+          "id": "buildings-9444e5bf86a057e73bb8",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 18.554,
+          "id": "buildings-4074a56d3bfe4062b82e",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 18.96,
+          "id": "buildings-8d3d2780e902bc8865b1",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-martin",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Martin's Church",
+      "notes": "",
+      "osm_ref": "way/191475362",
+      "position_pixels": [
+        1080.04,
+        804.303
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 1.577,
+          "id": "buildings-b097c04e4c80392d29e1",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 6.893,
+          "id": "buildings-652c6b466bbc1630d034",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 7.495,
+          "id": "buildings-0c9d09bb036f968566ec",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-paul",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Paul's Church",
+      "notes": "",
+      "osm_ref": "way/796925062",
+      "position_pixels": [
+        932.378,
+        821.531
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 1.683,
+          "id": "buildings-e6c77347a21e98809a3d",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 2.767,
+          "id": "buildings-4e2f6f8fb9531f731692",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 10.453,
+          "id": "buildings-53638bd0262f15432683",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-nicholas-thanington",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Nicholas' Church, Thanington",
+      "notes": "",
+      "osm_ref": "way/107246655",
+      "position_pixels": [
+        396.317,
+        1066.682
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 4.973,
+          "id": "buildings-5dac7a270ba0a813e9bf",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 12.965,
+          "id": "buildings-6bbf175ed828802e9633",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 13.009,
+          "id": "buildings-80a226a203a1e97b9919",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-stephen",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Stephen's Church, Hackington",
+      "notes": "",
+      "osm_ref": "way/118634920",
+      "position_pixels": [
+        782.027,
+        478.973
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-cosmus-damian",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Cosmus and St Damian, Blean",
+      "notes": "Approximate modern registration; original St Damian map label is not a precise building anchor.",
+      "osm_ref": "way/351697138",
+      "position_pixels": [
+        249.404,
+        138.652
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 1.198,
+          "id": "buildings-a7ae7ac4d77a4c3991db",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 11.847,
+          "id": "buildings-d16b76951942fe8bd649",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-michael-harbledown",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Michael and All Angels, Harbledown",
+      "notes": "",
+      "osm_ref": "way/870883745",
+      "position_pixels": [
+        375.192,
+        739.884
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 7.446,
+          "id": "buildings-d16b76951942fe8bd649",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 10.58,
+          "id": "buildings-b76b460a6293d17be22d",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 12.736,
+          "id": "buildings-ca65826034ce66b8b195",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "unknown",
+      "historical_identity_verified": false,
+      "id": "st-nicholas-harbledown",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Nicholas, Harbledown",
+      "notes": "Denomination not inferred from the nearby Anglican parish church.",
+      "osm_ref": "way/1292560557",
+      "position_pixels": [
+        338.354,
+        739.642
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "chapel",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.048,
+          "id": "buildings-77c60dd06d53ea3b9834",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 6.106,
+          "id": "buildings-bd9467470b8e945690ec",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 15.164,
+          "id": "buildings-cd7520ce4e4a93b2b8af",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-nicholas-sturry",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Nicholas, Sturry",
+      "notes": "",
+      "osm_ref": "way/530024232",
+      "position_pixels": [
+        1486.952,
+        221.427
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 10.911,
+          "id": "buildings-d11de2cf67247f46690e",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 11.04,
+          "id": "buildings-e37dc5e12a5b569a70e3",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-mary-nackington",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Mary, Nackington",
+      "notes": "",
+      "osm_ref": "way/766206600",
+      "position_pixels": [
+        1101.907,
+        1566.295
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 9.551,
+          "id": "buildings-75bd6359b1fa56a992e8",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 9.603,
+          "id": "buildings-0184f4c091ceedbb6430",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 18.818,
+          "id": "buildings-cbd06615a718bc648b48",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "unknown",
+      "historical_identity_verified": false,
+      "id": "st-john-milton",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St John the Baptist, Milton",
+      "notes": "",
+      "osm_ref": "way/762797499",
+      "position_pixels": [
+        128.551,
+        1341.021
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "chapel",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 8.404,
+          "id": "buildings-6bd0800d6561be141579",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 15.679,
+          "id": "buildings-1adfd91950b5ef0d76a1",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "methodist",
+      "historical_identity_verified": false,
+      "id": "st-peter-methodist",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Peter's Methodist Church",
+      "notes": "Opened in 1812; historical Wesleyan congregation. Use Methodist for 1940 after the 1932 union.",
+      "osm_ref": "way/161422348",
+      "position_pixels": [
+        771.573,
+        774.583
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-aad0586d240f3a90e995",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "baptist",
+      "historical_identity_verified": false,
+      "id": "baptist",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Canterbury Baptist Church",
+      "notes": "Building opened in 1864; extended before 1940.",
+      "osm_ref": "way/150321308",
+      "position_pixels": [
+        932.336,
+        875.282
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.014,
+          "id": "buildings-4a6452f57a6814fd6517",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 3.779,
+          "id": "buildings-9ffc2c964623aaf7edb3",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 16.849,
+          "id": "buildings-bfad5b88ceb8b523aa47",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "salvation_army",
+      "historical_identity_verified": false,
+      "id": "salvation-army",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Salvation Army Citadel",
+      "notes": "Opened for worship in 1886.",
+      "osm_ref": "way/150763647",
+      "position_pixels": [
+        804.648,
+        803.986
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "citadel",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 2.514,
+          "id": "buildings-652c6b466bbc1630d034",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 6.016,
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 14.775,
+          "id": "buildings-aad0586d240f3a90e995",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "strict_baptist",
+      "historical_identity_verified": false,
+      "id": "zoar",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Zoar Chapel",
+      "notes": "Burgate Lane chapel occupied from 1845; do not lose the Christian site because modern religion tags are absent.",
+      "osm_ref": "way/151947794",
+      "position_pixels": [
+        905.963,
+        831.526
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "chapel",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 2.644,
+          "id": "buildings-8f0abf6c8a279ab2247e",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 3.686,
+          "id": "buildings-865af4a0e01d9b128ff6",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 4.398,
+          "id": "buildings-668843ca1d2e55d8712f",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "roman_catholic",
+      "historical_identity_verified": false,
+      "id": "st-thomas",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Thomas of Canterbury Catholic Church",
+      "notes": "Built in 1874–1875.",
+      "osm_ref": "way/1079321259",
+      "position_pixels": [
+        885.456,
+        815.281
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 7.021,
+          "id": "buildings-9ffc2c964623aaf7edb3",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 7.365,
+          "id": "buildings-5ad35246c07066d0e118",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 14.918,
+          "id": "buildings-6bd0800d6561be141579",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "unknown",
+      "historical_identity_verified": false,
+      "id": "eastbridge",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Eastbridge Hospital Chapel",
+      "notes": "Christian chapel identity; 1940 denomination and worship schedule need review.",
+      "osm_ref": "node/435798219",
+      "position_pixels": [
+        797.636,
+        779.112
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "chapel",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 3.59,
+          "id": "buildings-94c4c24da73baec2d294",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 9.671,
+          "id": "buildings-6bd0800d6561be141579",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 11.445,
+          "id": "buildings-ea5d33403684f0d8d184",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "unknown",
+      "historical_identity_verified": false,
+      "id": "greyfriars",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Greyfriars Chapel",
+      "notes": "Do not transfer a modern Catholic tag or medieval Franciscan affiliation into a verified 1940 denomination.",
+      "osm_ref": "way/1030134174",
+      "position_pixels": [
+        770.511,
+        804.566
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "historic_chapel",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-eccf24e16c37422348cb",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 16.113,
+          "id": "buildings-05ec6219a08f0c5caf4c",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 17.225,
+          "id": "buildings-0fa2b00f466f3835f50d",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "unknown",
+      "historical_identity_verified": false,
+      "id": "old-synagogue",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Old Synagogue",
+      "notes": "User-directed 1940 game setting: active Jewish religious/community centre. Historical sources describe closure in the 1920s and subsequent church-hall use; this game assignment is an explicit override, not an archival claim.",
+      "osm_ref": "way/151352708",
+      "position_pixels": [
+        831.869,
+        720.793
+      ],
+      "religion": "judaism",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "synagogue",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "spatial_review_required": true,
+      "worship_status_1940": "scenario_active"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "quaker",
+      "historical_identity_verified": false,
+      "id": "friends-1940",
+      "location_basis": "unlocated_historical_site",
+      "location_description": "Canterbury Lane; destroyed in 1942. The modern Friars meeting house is not this site.",
+      "name": "Friends Meeting House, Canterbury Lane",
+      "notes": "Historical institution identified; exact source-map footprint must be located before spatial gameplay.",
+      "osm_ref": null,
+      "position_pixels": null,
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "meeting_house",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "presbyterian",
+      "historical_identity_verified": false,
+      "id": "st-andrew-presbyterian",
+      "location_basis": "unlocated_historical_site",
+      "location_description": "Gas Street, opposite Canterbury East station; not the modern Watling Street URC building.",
+      "name": "St Andrew's Presbyterian Church",
+      "notes": "Historical institution identified; exact source-map footprint must be located before spatial gameplay.",
+      "osm_ref": null,
+      "position_pixels": null,
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "congregational",
+      "historical_identity_verified": false,
+      "id": "guildhall-congregational",
+      "location_basis": "unlocated_historical_site",
+      "location_description": "Guildhall Street; not the later Watling Street church.",
+      "name": "Guildhall Street Congregational Church",
+      "notes": "Historical institution identified; exact source-map footprint must be located before spatial gameplay.",
+      "osm_ref": null,
+      "position_pixels": null,
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "countess_of_huntingdon",
+      "historical_identity_verified": false,
+      "id": "countess-huntingdon",
+      "location_basis": "unlocated_historical_site",
+      "location_description": "Watling Street; destroyed in 1942.",
+      "name": "Countess of Huntingdon's Connexion Chapel",
+      "notes": "Historical institution identified; exact source-map footprint must be located before spatial gameplay.",
+      "osm_ref": null,
+      "position_pixels": null,
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.chapelssociety.org.uk/wp-content/uploads/2011/10/Canterbury-Notes.pdf"
+      ],
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-mary-bredin-1940",
+      "location_basis": "unlocated_historical_site",
+      "location_description": "Gravel Walk / Whitefriars; not the replacement church south of the walls.",
+      "name": "St Mary Bredin Church (pre-1942)",
+      "notes": "Historical institution identified; exact source-map footprint must be located before spatial gameplay.",
+      "osm_ref": null,
+      "position_pixels": null,
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [
+        "https://www.kfhs.org.uk/event-canterbury-report-canterbury-s-lost-churches-2022-07-08"
+      ],
+      "worship_status_1940": "active"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 3.09,
+          "id": "buildings-d41061a9050a9839a00f",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 7.406,
+          "id": "buildings-41c542ce5f5fcbc7049a",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 9.987,
+          "id": "buildings-79ac84de4e2c47660c54",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "garrison-church",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "Garrison Church of St Alban (later All Saints)",
+      "notes": "Modern name All Saints does not establish the 1940 name or congregation; retain Christian garrison site, worship operation requires review.",
+      "osm_ref": "way/32532552",
+      "position_pixels": [
+        1050.643,
+        631.601
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    },
+    {
+      "candidate_buildings": [
+        {
+          "distance_pixels": 0.0,
+          "id": "buildings-3ff983b8617854a6ea62",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 14.548,
+          "id": "buildings-6f52215d2fbdfb0e7205",
+          "identity_verified": false
+        },
+        {
+          "distance_pixels": 17.657,
+          "id": "buildings-072914a4379bfb23a20c",
+          "identity_verified": false
+        }
+      ],
+      "denomination": "anglican",
+      "historical_identity_verified": false,
+      "id": "st-gabriel",
+      "location_basis": "approximate_registration_of_reference_feature",
+      "name": "St Gabriel, Rough Common",
+      "notes": "Christian site candidate; opening date and use in 1940 need review before activation.",
+      "osm_ref": "way/766301622",
+      "position_pixels": [
+        211.103,
+        471.377
+      ],
+      "religion": "christianity",
+      "setting_assignment": "user_requested_religious_site",
+      "setting_year": 1940,
+      "site_type": "church",
+      "sources": [],
+      "spatial_review_required": true,
+      "worship_status_1940": "review_required"
+    }
+  ],
+  "scope": "exact supplied records; no inferred congregation, ownership, precinct boundary or current staffing"
+}

@@ -1,0 +1,33 @@
+{
+  "format": "canterbury-details-cycle19-23-native-ui",
+  "version": 1,
+  "inputs": {
+    "ui/CityApp.m": "779006de5c453d8c482c65e99b4e6dd4dcc1042872e3179d742ca455ffd124b1",
+    "ui/CitySession.m": "f9c2dce514c51690add016f5faa44173562715528bcacae82fcddeaaf6b66ae8",
+    "ui/CitySession.h": "e56a0a374814d91249d62befccdc54b750c133f2e367e489a9d3ab6bb043c415",
+    "src/cd_work.h": "679def2897d2b405414e96a19405362061fa0fb0cd8925dd72c0002a72ccb78d",
+    "src/cd_institutions.c": "47b48707b201e2360b9e5cb9238f723e6e2e28450d205d4e24059f3cc2b05d8d",
+    "tools/compile_runtime.py": "dd7a45e83bf3981f8b2e09e872541f6986a60596451d902d548cff4fab53a9e2"
+  },
+  "binary_sha256": "81678eae066f879b1c769ec449de253a1343ec970748f0c1ceebfe65cff60f99",
+  "observed": {
+    "startup_people": 27000,
+    "population_capacity": 30000,
+    "institution_records": 33,
+    "source_map": "exact json2png basemap",
+    "selected_institution": "St Peter’s Church",
+    "selection_recenters_map": true,
+    "source_worship_status": "closed_for_regular_worship",
+    "closure_year_in_source_notes": 1928,
+    "service_resumption_year_in_source_notes": 1953,
+    "operation_state": "unknown; no staffing inferred",
+    "linked_premises": 0,
+    "office": "unknown",
+    "congregation_and_precinct_boundary": "unknown",
+    "exact_source_record_visible": true,
+    "single_operation_block_after_async_callbacks": true
+  },
+  "scope": "Observed final native application through accessibility UI; operational employment/economy/development are qualified separately by native technical fixtures, not asserted as historical map staffing.",
+  "ok": true,
+  "qualification_state": "Historical Cycle 19–23 UI observation; current UI superseded by content/cycle-24-28-native-ui.json"
+}

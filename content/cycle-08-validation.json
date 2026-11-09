@@ -1,0 +1,71 @@
+{
+  "format": "canterbury-details-cycle08-validation",
+  "version": 1,
+  "inputs": {
+    "Makefile": "9f6be29f8aadf4d5f005c066aa30d0c6f2a25bcea8193b33c185145d95d4ee95",
+    "tools/verify_cycle08.py": "921a948113fea5725f0165630823c988f8ffe99141907c8e35f705b685930795",
+    "tools/compile_content.py": "cd819588851d39899ca2ad8d10ed7f42c2a6789ec6f016399aee6c35cb9569a7",
+    "tests/test_content.py": "c9e0f1c82e7a5f7e45ada70ec87ddbee5ba72cad23168c719b8766fd3c97a4e0",
+    "content/content-policy.json": "cc3b9922cd471cee8944dec30508c86b38ce9b6782df041b2f6906bf75d3cef6",
+    "content/review-annotations.json": "81e94a8ef7ec76267cd22106be2347a362114cf77876561c75044986987b5c88",
+    "content/content.schema.json": "f207763174039d3ae7eb48d347239034db354ea363335968f0af58251b97103c",
+    "docs/CONTENT.md": "4c4bb4afcf67a7b0f7a6ef4c2a2e97514211b06a0330e2dfe6e638c7edc06eae"
+  },
+  "compiler_owned_inputs": {
+    "tools/compile_content.py": "cd819588851d39899ca2ad8d10ed7f42c2a6789ec6f016399aee6c35cb9569a7",
+    "tools/audit_sources.py": "1936cffd8bbef37b21d3ad2ff2b2306de81e74ddc8d16a108cdef2c4d4a8c38c",
+    "content/content-policy.json": "cc3b9922cd471cee8944dec30508c86b38ce9b6782df041b2f6906bf75d3cef6",
+    "content/review-annotations.json": "81e94a8ef7ec76267cd22106be2347a362114cf77876561c75044986987b5c88",
+    "content/content.schema.json": "f207763174039d3ae7eb48d347239034db354ea363335968f0af58251b97103c",
+    "content/cycle-01-validation.json": "4242b1e9792ab8ad75a6837cc55672dfe934682c4ae3cb38d14a18fb3fbf1b73",
+    "content/source-manifest.json": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+    "docs/evidence/cycle01-1.log": "69449a1cba8d7935766017b430b798d9c3a9a38b4d4d79fc7229611f52e8d6b8",
+    "docs/evidence/cycle01-2.log": "1cf2945274655f0e22b0a152e71508dc24d2a9c09ec8430f0133ed465fc09421",
+    "docs/evidence/cycle01-3.log": "80a415945f4627effe97024012b4ef7f3d44fcfacdc48e735f52614bf1fd7b4c"
+  },
+  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+  "contract_tests": 30,
+  "artifact_path": "build/content/canterbury.json",
+  "artifact_bytes": 62691155,
+  "artifact_sha256": "9d17eae4606d72c878c92611ee81b8c7663c0dfe3094ebdf21e6530826dc0126",
+  "generation_id": "a8c11775e599e5b306890eec51962b97500db6e2243bedbbd9f4f3950a8ff420",
+  "repeat_byte_identical": true,
+  "cli_freshness_check_passed": true,
+  "statistics": {
+    "buildings": 3341,
+    "institutions": 33,
+    "networks": {
+      "historical_roads": {
+        "edges": 177,
+        "nodes": 142
+      },
+      "modern_roads": {
+        "edges": 15236,
+        "nodes": 12318
+      },
+      "rail_corridors": {
+        "edges": 5,
+        "nodes": 9
+      },
+      "rail_ink": {
+        "edges": 666,
+        "nodes": 715
+      },
+      "road_ink": {
+        "edges": 866,
+        "nodes": 1268
+      },
+      "waterways": {
+        "edges": 564,
+        "nodes": 523
+      }
+    },
+    "unlocated_institutions": 5
+  },
+  "historical_uncertainty_preserved": true,
+  "network_access_required": false,
+  "sibling_project_required": false,
+  "submodules_modified_by_compilation": false,
+  "runtime_content_api_implemented": false,
+  "ok": true
+}

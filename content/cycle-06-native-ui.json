@@ -1,0 +1,16 @@
+{
+  "format": "canterbury-details-cycle06-native-host-observation",
+  "version": 1,
+  "method": "Normal app launch and CUA accessibility observations; existing Cycle 05 clock UI with Cycle 06 person binding backend",
+  "binary_sha256": "3adae4040b227b6ebbb3884aa45250da273d0729d5fe2e54f2c8d805156dbe77",
+  "people": 27000,
+  "actor_records": 27000,
+  "bindings_valid": true,
+  "startup_native_minute": 1,
+  "after_step_10_native_minute": 11,
+  "callbacks_match_native_minutes": true,
+  "scenario_after_step": "1940-01-01 00:11",
+  "refresh_unchanged": true,
+  "quit_observed_process_ended": true,
+  "ok": true
+}

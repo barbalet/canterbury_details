@@ -1,0 +1,37 @@
+{
+  "format": "canterbury-details-cycle24-28-native-ui",
+  "version": 1,
+  "inputs": {
+    "src/cd_civic.h": "87b08f66f06b1d3b1167de947f8b6edb339c2e0d9b639c77458d597222e085af",
+    "src/cd_city.h": "58e7e35202daad73a39d84a832896e2644cdd4b2fb66ea0cd9e4dcafb4dc0393",
+    "src/cd_population.c": "07a6e42c4137c8cc8d0744008a2030ca5d4248a9c7129fae2a006e63a8f17488",
+    "src/cd_environment.c": "7eb251676463f0d82180e6290bd747f31fab7e1e537baf6be33d8d4e4820477f",
+    "ui/CityApp.m": "a2860216973069ae7f44dc8741a40c479ff25c0de6bc3569a27631ce21fcf2b3",
+    "ui/CitySession.h": "0c097d609853ac36289803c51ba575db5b0817efd61def5dcef2beb06a11c53f",
+    "ui/CitySession.m": "155c25cb140d10d8db9c3506b923098ef9e50c35b2e129b24f5293101a561571"
+  },
+  "binary_sha256": "61f166aa825ece987e31f2614268e5a023bb8adb2706ac23b801511536b607b2",
+  "observed": {
+    "startup_people": 27000,
+    "population_capacity": 30000,
+    "located": 0,
+    "selected_resident_id": 1,
+    "selected_name": "Ansel Morris-Berry",
+    "religious_affiliation": "unknown",
+    "service_request": "none",
+    "gathering": "none",
+    "passenger_vehicle": "none",
+    "crew_vehicle": "none",
+    "shelter": "none",
+    "explicit_service_permissions": "none",
+    "native_minute_before_step": 1,
+    "native_minute_after_step": 2,
+    "zoom_percent_before": 31,
+    "zoom_percent_after": 39,
+    "map_and_step_remained_responsive": true,
+    "source_renderer": "exact upstream json2png.c"
+  },
+  "scope": "Observed final native UI and copied civic/resident inspection. Operational offices, calendars, dispatch, vehicles and pressures are separately tested with explicit technical fixtures; no historical staffing or actual-map placement is asserted.",
+  "ok": true,
+  "qualification_state": "Observed UI source behavior; subsequent carried-passenger capacity correction is separately qualified by the final Cycle 27 fixture and current native builds. Binary hash identifies the observed UI build."
+}

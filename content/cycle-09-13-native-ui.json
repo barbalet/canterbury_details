@@ -1,0 +1,35 @@
+{
+  "format": "canterbury-details-cycle09-13-native-ui",
+  "version": 1,
+  "inputs": {
+    "ui/CityApp.m": "e449df728453f4ea51b3aaf591900aa74f03eeb508f4a625f084aea05e247f27",
+    "ui/CityMap.m": "07cdad4822f2e2116b39c749cc3dc7dc4df4ae52511936e59e5956d28676c115",
+    "ui/CityMap.h": "88b505524c1110573ea9693bfb0fe9390aa0dcffeb2430bcd85136d2f018cae5",
+    "ui/CitySession.m": "707866e5346b5745cc0b946fce996cacf480540510573815646df4818b691275",
+    "ui/CitySession.h": "3f73e952b03bfb7d0a338bbac457c8f83c44555117f73754e0c5f25645db17a5",
+    "src/cd_world.c": "344420f50f5071c879fc71d7700d27c0ec07a84f352cd198f38b4db7d7de787e",
+    "tools/native_sources.py": "4993761967460d53c57377af088d730279d0a2676d1bf4ce99620e54e2181859"
+  },
+  "observed": {
+    "population": 27000,
+    "households": 6750,
+    "housing_unknown": 27000,
+    "last_resident_search": 27000,
+    "last_resident_household": 6750,
+    "last_resident_age": 4,
+    "last_resident_birth": "1935-08-16",
+    "affiliation": "unknown",
+    "source_map": "upstream json2png.c",
+    "zoom_and_pan_with_worker_running": true,
+    "footprint_overlay_zoom": true,
+    "church_selection": "St Dunstan\u2019s recentred at 140%",
+    "user_confirmed_zoom_hang_fixed": true,
+    "capacity": 30000,
+    "final_capacity_build_step_10_native_minute": 11
+  },
+  "scope": "Native controls observed during development; final 30000-capacity build retested for 27000 startup, capacity display, minute stepping, zoom and church focus. User confirmed zoom fix. Not an automated latency benchmark or historical-data qualification.",
+  "ok": true,
+  "binary_sha256": "d964ef5e2547775b3fc4063c4e873240bc51e14c5688a0998168a47f35cb1b42",
+  "historical_observation": true,
+  "superseded_by": "content/agent-ui-validation.json"
+}

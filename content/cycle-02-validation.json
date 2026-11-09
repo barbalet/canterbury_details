@@ -1,0 +1,76 @@
+{
+  "format": "canterbury-details-cycle02-validation",
+  "version": 1,
+  "date": "2026-11-08",
+  "scope": "architecture admission and declaration syntax only; no runtime, linkage or SDK behavior qualification",
+  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+  "design_sha256": {
+    "content/architecture.json": "6216090ca6f575030336b80081390dec7f901bbb1f04c8b0f985310ef2fbb387",
+    "content/reuse-ledger.json": "1135d24acce3e55629432acc54733615a2bb74386ddb10d4a30c27cf49875271",
+    "src/cd_api.h": "90442e25e13590a77e49b1a258606552945f090551988d4083826b32b1fa3e93",
+    "docs/ARCHITECTURE.md": "2e851e4218fe9c72b5c929bbed553ae905ccc0adf08da9e5c645283d0fd6800a",
+    "docs/REUSE.md": "6caf646327a5fc25636730d26637e512076acdd4d4b501be30b8c7a980e867c2",
+    "tools/verify_cycle02.py": "f30cdfcdd5637244ae61b0517eab4690ee2393c286ea1f45d32e08dfd0ee2f91"
+  },
+  "checks": {
+    "dependency_nodes": 51,
+    "authoritative_field_groups": 87,
+    "owner_modules": 48,
+    "reviewed_reference_files": 24,
+    "public_functions": 17
+  },
+  "negative_contract_cases_rejected": 4,
+  "header_probes": [
+    {
+      "language": "c",
+      "profile": "city",
+      "expected_compile_success": true,
+      "observed_compile_success": true
+    },
+    {
+      "language": "c",
+      "profile": "missing_profile",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    },
+    {
+      "language": "c",
+      "profile": "disabled_city",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    },
+    {
+      "language": "c",
+      "profile": "missing_bridge",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    },
+    {
+      "language": "c++",
+      "profile": "city",
+      "expected_compile_success": true,
+      "observed_compile_success": true
+    },
+    {
+      "language": "c++",
+      "profile": "missing_profile",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    },
+    {
+      "language": "c++",
+      "profile": "disabled_city",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    },
+    {
+      "language": "c++",
+      "profile": "missing_bridge",
+      "expected_compile_success": false,
+      "observed_compile_success": false
+    }
+  ],
+  "reference_checkout_required": false,
+  "submodules_changed": false,
+  "ok": true
+}

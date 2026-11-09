@@ -1,0 +1,35 @@
+{
+  "format": "canterbury-details-civic-source-register",
+  "version": 1,
+  "inputs": {
+    "canterbury/simulation-map/derived/religious-sites-1940.json": "d9e6e83be3a218e64b6497256cd38163d5a6635a243c2c267e5fe0589455c7e3",
+    "canterbury/simulation-map/derived/buildings-enriched.json": "e11e2fa0660c082a68ff7dc1299b7ee5cc0578a0913b856230bcc71e651e4080",
+    "apesdk/bronze/content/bronze_age_full.bronze": "5052ecae8c8f860ea5189e512a3653276062627a9ec7d240d0e514483181cd3a",
+    "apesdk/bronze/work/bronze_work.c": "cfcd3c375f789e734c5fe4c557a5cc2b02e9c8356db90e9cae805fb7209f9105",
+    "apesdk/bronze/actors/bronze_actors.c": "2188bb038f71528f2dc270f94acdf79638eb3f656fb57f7c1d2f50a55d0c5353",
+    "src/cd_civic.h": "87b08f66f06b1d3b1167de947f8b6edb339c2e0d9b639c77458d597222e085af",
+    "tools/verify_civic_cycles.py": "c21d118d7ff3dd5a3c09bdfcd9853c9e23e5433dddd87ac8d43a25ab070e163e"
+  },
+  "sources": {
+    "institutions": "All exact Jewish/Christian records retained, including closures and scenario assignments",
+    "buildings": "Modern suggested uses/candidate footprints; not historical staffed services",
+    "sdk": "Shared native work, ordinary movement and resource concepts; ancient ritual professions remain disabled"
+  },
+  "technical_adaptations": [
+    "institution-specific ordinary offices",
+    "explicit recurring civil-minute schedules",
+    "permission-gated civic service experiments",
+    "human-carried handcart/stretcher with finite equipment",
+    "bounded rain/fire/damage/water/shelter/alert/blackout/ration experiments"
+  ],
+  "unknown_or_disabled": [
+    "historical staffing and employment schedules",
+    "historical policing/fire/medical organizations and licenses",
+    "holidays, worship calendars and time-zone conversions",
+    "historical weather/ration/raid/evacuation dates or rates",
+    "operational rail, motor/animal fleets and unsupported routes",
+    "fire spread and predictive casualty rates"
+  ],
+  "default_scenario": "No new offices, memberships, gatherings, rosters, dispatches, vehicles or pressures are invented for the shipped map.",
+  "persistence": "Calendar component canonical checkpoint only; coordinated full-city native/body/route/account save remains Cycle 31."
+}

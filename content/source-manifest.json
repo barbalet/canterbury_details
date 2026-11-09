@@ -1,0 +1,3338 @@
+{
+  "format": "canterbury-details-source-inventory",
+  "version": 1,
+  "audit_date": "2026-11-08",
+  "setting": {
+    "place": "Canterbury, Kent, England",
+    "year": 1940,
+    "population": "not historically established by this audit; SDK default is a capacity fixture",
+    "model": "ordinary human city; religion as occupations/institutions/community services"
+  },
+  "submodules": [
+    {
+      "path": "canterbury",
+      "revision": "c8dfee17622fcc903b247afcf4d6df4a70489e2a",
+      "origin": "git@github.com:barbalet/ds-canterbury1940.git",
+      "tracked_files": 76,
+      "reviewed_worktree_files": []
+    },
+    {
+      "path": "apesdk",
+      "revision": "abdde4b18b8ac96744b20c47bd9dfeeba96780bb",
+      "origin": "git@github.com:barbalet/apesdk.git",
+      "tracked_files": 471,
+      "reviewed_worktree_files": [
+        "bronze/CANTERBURY.md",
+        "bronze/actors/bronze_actors.c",
+        "bronze/actors/bronze_actors.h",
+        "entity/being.c",
+        "universe/sim.c",
+        "universe/universe.h"
+      ]
+    }
+  ],
+  "sdk_worktree_review": {
+    "path": "content/sdk-working-tree.json",
+    "sha256": "e2f70b648b786ca9a744f0e631069bb75902da51db1012242242031c681c884a"
+  },
+  "root_license": {
+    "path": "LICENSE",
+    "sha256": "79fcbda0f02281704b28e8bd499b85380fb23340239abdb4f112eaa2c46501a6"
+  },
+  "factual_inputs": [
+    {
+      "path": "canterbury/newcanterbury/canterbury.json",
+      "role": "source_vectors",
+      "selector": "objects[]; preserve classes, coordinates and provenance",
+      "sha256": "a57b24f69a9f4068ea487c05fc7b08b90f3b7e8c7d60dbe70a26570ae768444e",
+      "format": "canterbury-vectors",
+      "keys": [
+        "coordinate_system",
+        "features",
+        "format",
+        "geometry",
+        "height",
+        "label_source",
+        "labels",
+        "layer_order",
+        "palette",
+        "removed_orchard_symbols",
+        "source",
+        "version",
+        "width"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/road-traces.json",
+      "role": "source_guided_traces",
+      "selector": "routes[]; not survey-qualified",
+      "sha256": "4b8d88ac9f779b26947779dca5d3ce8e23bd9d1c8389c6727ba8563f6da7d7a0",
+      "format": "canterbury-road-traces",
+      "keys": [
+        "format",
+        "height",
+        "routes",
+        "source",
+        "status",
+        "version",
+        "width"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings.json",
+      "role": "building_candidates",
+      "selector": "objects[].id",
+      "sha256": "6acb75778cf8fc55ae9b33d5a783d339566153661870d2123b83c72dcb0361d7",
+      "format": "canterbury-simulation-candidates",
+      "keys": [
+        "coordinate_system",
+        "format",
+        "height",
+        "layer",
+        "objects",
+        "source_sha256",
+        "units",
+        "version",
+        "width"
+      ],
+      "objects_count": 3341,
+      "objects_sample_ids": [
+        "buildings-000510f28d2e55e745cc",
+        "buildings-000eed1ff81bbcc6c3fb",
+        "buildings-0017d98050b725a50f71"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings-enriched.json",
+      "role": "modern_enrichment",
+      "selector": "objects[].id; suggested use/labels are not 1940 facts",
+      "sha256": "e11e2fa0660c082a68ff7dc1299b7ee5cc0578a0913b856230bcc71e651e4080",
+      "format": "canterbury-enriched-buildings",
+      "keys": [
+        "attribution",
+        "control_points_sha256",
+        "format",
+        "generator_sha256",
+        "height",
+        "historical_buildings_sha256",
+        "license",
+        "license_url",
+        "matching_radius_pixels",
+        "objects",
+        "osm_sha256",
+        "registration",
+        "source_sha256",
+        "temporal_status",
+        "units",
+        "version",
+        "width"
+      ],
+      "objects_count": 3341,
+      "objects_sample_ids": [
+        "buildings-000510f28d2e55e745cc",
+        "buildings-000eed1ff81bbcc6c3fb",
+        "buildings-0017d98050b725a50f71"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings-1940.json",
+      "role": "institution_building_candidates",
+      "selector": "objects[].id; site association is a candidate",
+      "sha256": "52f2bd19619fab77b68dab66944751ee3582d6796a214bf1eb3f81746f92a36d",
+      "format": "canterbury-1940-building-religion-candidates",
+      "keys": [
+        "coordinate_system",
+        "format",
+        "height",
+        "layer",
+        "objects",
+        "qualification",
+        "setting_year",
+        "source_sha256",
+        "units",
+        "version",
+        "width"
+      ],
+      "objects_count": 3341,
+      "objects_sample_ids": [
+        "buildings-000510f28d2e55e745cc",
+        "buildings-000eed1ff81bbcc6c3fb",
+        "buildings-0017d98050b725a50f71"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-network.json",
+      "role": "modern_roads",
+      "selector": "network.nodes[].id, network.edges[].id; preserve source topology and traversable flags",
+      "sha256": "e91b463dd0ec38f6fbfb9770090cfd67755b8d822fe514614ac61ee8a25e0316",
+      "format": "canterbury-osm-road-network",
+      "keys": [
+        "attribution",
+        "control_points_sha256",
+        "format",
+        "generator_sha256",
+        "height",
+        "license",
+        "limitations",
+        "method",
+        "network",
+        "osm_roads_sha256",
+        "osm_sha256",
+        "pedestrian_areas",
+        "registration",
+        "source_sha256",
+        "source_turn_restrictions",
+        "statistics",
+        "units",
+        "version",
+        "width"
+      ],
+      "network_counts": {
+        "nodes": 12318,
+        "edges": 15236
+      },
+      "traversable_true": 0
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-network-historical-traces.json",
+      "role": "source_guided_roads",
+      "selector": "network.nodes[].id, network.edges[].id; not era-qualified",
+      "sha256": "396ff0ab32ae961d7195111fdd2e5752e8e4385448b14a675d9714076b534cd0",
+      "format": "canterbury-completed-road-network",
+      "keys": [
+        "format",
+        "height",
+        "limitations",
+        "method",
+        "network",
+        "routes",
+        "source_sha256",
+        "statistics",
+        "traces_sha256",
+        "units",
+        "version",
+        "width"
+      ],
+      "network_counts": {
+        "nodes": 142,
+        "edges": 177
+      },
+      "traversable_true": 0
+    },
+    {
+      "path": "canterbury/simulation-map/derived/waterways.json",
+      "role": "water_candidates",
+      "selector": "objects[].id, network nodes/edges",
+      "sha256": "324fde0566d5f8f74b5b251abba83e82faa2a9a148f4d31bf6c55d192cfe6f72",
+      "format": "canterbury-simulation-candidates",
+      "keys": [
+        "coordinate_system",
+        "format",
+        "height",
+        "layer",
+        "network",
+        "objects",
+        "source_sha256",
+        "units",
+        "version",
+        "width"
+      ],
+      "objects_count": 211,
+      "objects_sample_ids": [
+        "waterways-039e655139cae7936df9",
+        "waterways-058b1638f1d4c7db8e7c",
+        "waterways-06d7ad201a4406fe4c2f"
+      ],
+      "network_counts": {
+        "nodes": 523,
+        "edges": 564
+      },
+      "traversable_true": 0
+    },
+    {
+      "path": "canterbury/simulation-map/derived/rail.json",
+      "role": "rail_ink_candidates",
+      "selector": "objects[].id, network nodes/edges",
+      "sha256": "28b65eea636ec2a54503b8a7245932f9dca67f354870575cfb9ffe8fff45c012",
+      "format": "canterbury-simulation-candidates",
+      "keys": [
+        "coordinate_system",
+        "format",
+        "height",
+        "layer",
+        "network",
+        "objects",
+        "source_sha256",
+        "units",
+        "version",
+        "width"
+      ],
+      "objects_count": 345,
+      "objects_sample_ids": [
+        "rail-0094bdfd54f71cb74d82",
+        "rail-009ea01dd483fd0e05cc",
+        "rail-0113ff4f5d5397c8e1a1"
+      ],
+      "network_counts": {
+        "nodes": 715,
+        "edges": 666
+      },
+      "traversable_true": 0
+    },
+    {
+      "path": "canterbury/simulation-map/derived/rail-corridors.json",
+      "role": "rail_reference",
+      "selector": "nodes[].id, edges[].id; not an operating service",
+      "sha256": "bdda94f90134151d3b053c049019cd635fbe18d3cdefdf3ba282ba880bae1ba6",
+      "format": "canterbury-reference-rail-network",
+      "keys": [
+        "annotations_sha256",
+        "connection_policy",
+        "edges",
+        "format",
+        "nodes",
+        "units",
+        "version"
+      ],
+      "nodes_count": 9,
+      "nodes_sample_ids": [
+        "rail-corridor-node-1ac8627da3ffc399d433",
+        "rail-corridor-node-2f81c3c28387ec55ce7b",
+        "rail-corridor-node-5d9d3d943e2f3e07597f"
+      ],
+      "edges_count": 5,
+      "edges_sample_ids": [
+        "rail-corridor-edge-34909bf126b19abaf5f3",
+        "rail-corridor-edge-7c0198b050ab7f6ea014",
+        "rail-corridor-edge-8066df4231981c7ac2fe"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/religious-sites-1940.json",
+      "role": "curated_institutions",
+      "selector": "sites[].id; setting assignments, references and worship status",
+      "sha256": "8f5b3a1e7172483a2b885a779f18c3a3bb9bda02876b730171b4bd60dd62c51e",
+      "format": "canterbury-1940-religious-site-annotations",
+      "keys": [
+        "format",
+        "modern_reference_dispositions",
+        "old_synagogue_policy",
+        "policy",
+        "setting_year",
+        "sites",
+        "sources",
+        "version"
+      ],
+      "sites_count": 33,
+      "sites_sample_ids": [
+        "cathedral",
+        "st-dunstan",
+        "st-mildred"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/religious-sites-1940.json",
+      "role": "derived_institutions",
+      "selector": "sites[].id; preserve override, confidence and unresolved locations",
+      "sha256": "d9e6e83be3a218e64b6497256cd38163d5a6635a243c2c267e5fe0589455c7e3",
+      "format": "canterbury-1940-religious-sites",
+      "keys": [
+        "attribution",
+        "counts",
+        "format",
+        "input_sha256",
+        "license",
+        "modern_christian_worship_audit",
+        "policy",
+        "registration",
+        "setting_year",
+        "sites",
+        "version"
+      ],
+      "sites_count": 33,
+      "sites_sample_ids": [
+        "cathedral",
+        "st-dunstan",
+        "st-mildred"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/review-queue.json",
+      "role": "unresolved_geometry",
+      "selector": "candidates[]; unresolved, not approved links",
+      "sha256": "6243268a4b3096ab95b85c4aa381d5bc20dc90284ea474b40dcd6388020a19cb",
+      "format": "canterbury-map-review-queue",
+      "keys": [
+        "candidates",
+        "format",
+        "gap_radius_pixels",
+        "note",
+        "version"
+      ],
+      "candidates_count": 300,
+      "candidates_sample_ids": [
+        "crossing-004d72943b8578b5fa3b",
+        "crossing-04861a520b2ce88ebbc4",
+        "crossing-075a23a42bfb5245e47a"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/report.json",
+      "role": "assembly_provenance",
+      "selector": "inputs, parameters, layers and limitations",
+      "sha256": "44d414202e74cf132cabfddddd7dd484bc478593ce56e8e03be55f71c594560a",
+      "format": "canterbury-assembly-report",
+      "keys": [
+        "completed_roads",
+        "format",
+        "generator_sha256",
+        "inputs",
+        "layers",
+        "limitations",
+        "parameters",
+        "reference_rail_corridors",
+        "review_candidate_counts",
+        "road_builder_sha256",
+        "road_network_format",
+        "version"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-enrichment-report.json",
+      "role": "enrichment_provenance",
+      "selector": "reported matches and limitations",
+      "sha256": "ee93e892ed785863e0b8190a7591c52cf5ee759d7a84597b1d7987f2d533e483",
+      "format": "upstream JSON",
+      "keys": [
+        "confidence_counts",
+        "footprint_matches",
+        "landuse_only_estimates",
+        "matched",
+        "matching_radius_pixels",
+        "modern_buildings_in_canvas",
+        "modern_landuse_polygons",
+        "modern_pois_in_canvas",
+        "named_or_addressed",
+        "registration",
+        "total_historical_candidates",
+        "use_counts"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-connectivity-report.json",
+      "role": "topology_provenance",
+      "selector": "reported components and source connectivity",
+      "sha256": "ddc22deb983f172b69244d913daccf9b67ce84665c53f0556d4d42db4a207108",
+      "format": "canterbury-osm-connectivity-report",
+      "keys": [
+        "endpoints",
+        "format",
+        "policy",
+        "statistics",
+        "version"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/modern/sources.json",
+      "role": "modern_snapshot_provenance",
+      "selector": "attribution, license, retrieved_utc, tiles[].sha256, osm_sha256",
+      "sha256": "53c3fe3b9ea996133b0a22e8aff8a7dcde7e5cfddcd3a4c3fd0b6b07e76a20fa",
+      "format": "upstream JSON",
+      "keys": [
+        "attribution",
+        "dataset",
+        "incomplete_relation_members",
+        "license",
+        "license_url",
+        "normalized_elements",
+        "osm_sha256",
+        "retrieved_utc",
+        "tiles"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "canterbury/simulation-map/modern/control-points.json",
+      "role": "approximate_registration",
+      "selector": "control points and rejected controls",
+      "sha256": "b66ee82695cb5e81d6b4dcc9f8ad5347b0914c6f2c7d3b11662451ac27b1b496",
+      "format": "canterbury-georeference-controls",
+      "keys": [
+        "format",
+        "pixel_source",
+        "points",
+        "rejected_initial_controls",
+        "version"
+      ],
+      "network_counts": {}
+    },
+    {
+      "path": "apesdk/bronze/content/bronze_age_full.bronze",
+      "role": "engine_vocations",
+      "selector": "vocation identifiers; capabilities, not a 1940 occupation census",
+      "sha256": "5052ecae8c8f860ea5189e512a3653276062627a9ec7d240d0e514483181cd3a"
+    },
+    {
+      "path": "apesdk/universe/universe.h",
+      "role": "native_profile_contract",
+      "selector": "CANTERBURY_POPULATION, LARGE_SIM, canterbury_cycle_handler, sim_canterbury_configure",
+      "sha256": "50ba20da24eb3083f3451b942aa3f44d58191c5601e7c0f1b0922fac2fc5648a"
+    },
+    {
+      "path": "apesdk/universe/sim.c",
+      "role": "native_city_clock",
+      "selector": "guarded configure/init/cycle/close branches",
+      "sha256": "2ab2a8592dcc2aaf7c7241aba6655ad9e8477901933eba569190f2b9057ace97"
+    },
+    {
+      "path": "apesdk/entity/being.c",
+      "role": "native_body",
+      "selector": "native position/energy and city-specific awake behavior",
+      "sha256": "3d67ae71bb2396baf4a75c2b5e6c6496e8a25c2a50870b44194d942f1fadcce8"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_actors.h",
+      "role": "actor_contract",
+      "selector": "BronzeActorId, registry/reset/rebind and guarded slot APIs",
+      "sha256": "94733d1c711de77ee44b6a0684ab1b07b6c74bd6637e1c6108a11ed23dc691f0"
+    },
+    {
+      "path": "apesdk/bronze/work/bronze_work.h",
+      "role": "work_contract",
+      "selector": "guarded city work claims/close; one native budget",
+      "sha256": "fee47d605c88d4abb721c5baf291778f9355555357773340997fd27e3cbf8449"
+    },
+    {
+      "path": "apesdk/bronze/tasks/bronze_tasks.h",
+      "role": "task_contract",
+      "selector": "bounded resumable native/Bronze tasks",
+      "sha256": "dd40646779d0a076f31c6c042f7758564aca341150b5622ec3647014fe49bf97"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_hybrid.h",
+      "role": "render_contract",
+      "selector": "guarded city overlay registration and draw context",
+      "sha256": "56fc4f37875381eff72b84ba41ef7a80e194d186bfe4bb226bc3e152fe79e413"
+    },
+    {
+      "path": "apesdk/sim/sim.h",
+      "role": "landscape_checkpoint_contract",
+      "selector": "guarded land snapshot/install and Bronze weather continuation",
+      "sha256": "c10c814e2f3f30b2190e4649334f1eb084587f9fb5de595aa3005587f68c4962"
+    }
+  ],
+  "regression_entry_points": [
+    {
+      "submodule": "canterbury",
+      "command": [
+        "python3",
+        "simulation-map/validate.py"
+      ],
+      "purpose": "candidate geometry/schema validation"
+    },
+    {
+      "submodule": "canterbury",
+      "command": [
+        "python3",
+        "simulation-map/validate_buildings.py"
+      ],
+      "purpose": "building enrichment admission"
+    },
+    {
+      "submodule": "canterbury",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "simulation-map",
+        "-v"
+      ],
+      "purpose": "assembly, enrichment, OSM topology, road completion and religious-site fixtures"
+    },
+    {
+      "submodule": "apesdk",
+      "command": [
+        "bash",
+        "test.sh"
+      ],
+      "purpose": "native and included Bronze regression entry point"
+    },
+    {
+      "submodule": "apesdk",
+      "command": [
+        "python3",
+        "bronze/contract/check.py"
+      ],
+      "purpose": "native/Bronze build and observable contract"
+    },
+    {
+      "submodule": "apesdk",
+      "command": [
+        "bash",
+        "bronze/actors/test.sh"
+      ],
+      "purpose": "identity, lifecycle, rebind and sidecar tests"
+    },
+    {
+      "submodule": "apesdk",
+      "command": [
+        "bash",
+        "bronze/hybrid/test.sh"
+      ],
+      "purpose": "hybrid terrain, routing and bounded economy"
+    }
+  ],
+  "tracked_files": [
+    {
+      "path": "canterbury/Canterbury.txt",
+      "bytes": 874,
+      "sha256": "30f1b51d6a62b3ba1bc7f3d425f445e0c233c9b4018173848a5843de4ecef030"
+    },
+    {
+      "path": "canterbury/README.md",
+      "bytes": 5170,
+      "sha256": "ecfa0e950c0986d3ad453baaff3a572dbb051d5f697ac7ac311d5c2528f7b328"
+    },
+    {
+      "path": "canterbury/canterbury-mac/canterbury-mac.xcodeproj/project.pbxproj",
+      "bytes": 10682,
+      "sha256": "d5df7899935a6d91765415dc361fdc3a024e59ac6379fdd84c63cc80b4afee88"
+    },
+    {
+      "path": "canterbury/canterbury-mac/core1940/canterbury.c",
+      "bytes": 18524,
+      "sha256": "41cf0a00ebef0a9c2d32a3af162177e6a7427bbb698f453b0952bd3ea5e79607"
+    },
+    {
+      "path": "canterbury/canterbury-mac/core1940/canterbury.h",
+      "bytes": 2428,
+      "sha256": "f51c7996dbf9dfeda30b3cf90fa6da1a8818f54b100270794f38c2c80865dd12"
+    },
+    {
+      "path": "canterbury/canterbury-mac/png/pnglite.c",
+      "bytes": 23214,
+      "sha256": "9956c75917dd049536656683c60241022d914a722ee8815c1d7f653360d8ffa3"
+    },
+    {
+      "path": "canterbury/canterbury-mac/png/pnglite.h",
+      "bytes": 6147,
+      "sha256": "502d6d9ef773e29b2e0171691c66c8475ae75b081638d50f691e6b82eac24aa3"
+    },
+    {
+      "path": "canterbury/canterbury-mac/png/pngload.c",
+      "bytes": 3914,
+      "sha256": "0d3c11bf80a2bea32fe163e4e0a14638c78c1d51fbcc22bc91dbbefee79259ee"
+    },
+    {
+      "path": "canterbury/canterbury100.png",
+      "bytes": 3186572,
+      "sha256": "10e957674a78b77ed0e1182c8443a12da06985d82b2b0ff66e8e9f6d032e7deb"
+    },
+    {
+      "path": "canterbury/canterbury1600.png",
+      "bytes": 3382849,
+      "sha256": "193aba2559426abacedaa2f065b37c921e9730b20bc90a40913e7d2ceeed47e9"
+    },
+    {
+      "path": "canterbury/canterbury400.png",
+      "bytes": 231395,
+      "sha256": "51807ef2bc62855db4cba726c25668993e106c7d10248cbaa6170a37114f8921"
+    },
+    {
+      "path": "canterbury/canterbury_forms1600.png",
+      "bytes": 5419475,
+      "sha256": "141d63706531dd74ba6355f93aeceb8936f5657eda63fa72e930a2d8d3ca6bf0"
+    },
+    {
+      "path": "canterbury/fifth.c",
+      "bytes": 4590,
+      "sha256": "50d7488f1405dc6bb229d4b4c19cff2ef84d981eb46d534db46b8d447c6e48b4"
+    },
+    {
+      "path": "canterbury/newcanterbury/.gitignore",
+      "bytes": 34,
+      "sha256": "5dc84c173569901a876574ad9c40f186d1db513c2b118064471618a5d196684b"
+    },
+    {
+      "path": "canterbury/newcanterbury/Makefile",
+      "bytes": 682,
+      "sha256": "96490666dce4e9b9f4a7b66ccb6f0ad64a050a194e7fcf83f38611bc908275b0"
+    },
+    {
+      "path": "canterbury/newcanterbury/README.md",
+      "bytes": 6456,
+      "sha256": "344116b4d3cf39ebb7dc0dccefad481f422617462b2a3db210e007734ca63b22"
+    },
+    {
+      "path": "canterbury/newcanterbury/annotations.json",
+      "bytes": 27983,
+      "sha256": "915ee644a6882bfaa2452ba13880117c2cd7d6183bec19d1efd52944f2f61c44"
+    },
+    {
+      "path": "canterbury/newcanterbury/canterbury.json",
+      "bytes": 41299667,
+      "sha256": "a57b24f69a9f4068ea487c05fc7b08b90f3b7e8c7d60dbe70a26570ae768444e"
+    },
+    {
+      "path": "canterbury/newcanterbury/canterbury_orchards_grey.png",
+      "bytes": 870128,
+      "sha256": "0beb28b4c3278d101f5d472a09fbde220748f35bfe69a5068843f88b793051b3"
+    },
+    {
+      "path": "canterbury/newcanterbury/expand_orchards.py",
+      "bytes": 7220,
+      "sha256": "c5c7f38e8ebcdb1724fe9173d3a8674f06ebd7c4ed941a09ef2d94e748ef49de"
+    },
+    {
+      "path": "canterbury/newcanterbury/json2png.c",
+      "bytes": 9928,
+      "sha256": "5fcfa17f81c1c5a4804284269b23296cc81397cab0ca93d88d1939d348283999"
+    },
+    {
+      "path": "canterbury/newcanterbury/map.h",
+      "bytes": 6783,
+      "sha256": "34e719084c09d67c53f59401caabd2d705d2224ea497b9621bef7a445086c951"
+    },
+    {
+      "path": "canterbury/newcanterbury/orchard_edge_checks.json",
+      "bytes": 136409,
+      "sha256": "2a24127876ab55942ca3519b0fc96b44ca6fabe43233406090f44fd9eeb76449"
+    },
+    {
+      "path": "canterbury/newcanterbury/orchard_fields.json",
+      "bytes": 167336,
+      "sha256": "d0ea6a0680039f9f273e87686cec1c131204000ed1e86d2cd961845dc30778bf"
+    },
+    {
+      "path": "canterbury/newcanterbury/orchard_fields_seed.json",
+      "bytes": 29959,
+      "sha256": "7a59a1a78e0ececc9b734916f652f6045675e43d29fd6658b7a673606eb06708"
+    },
+    {
+      "path": "canterbury/newcanterbury/orchards.h",
+      "bytes": 13184,
+      "sha256": "9e38f88f6ca28192e592c9474638d12dfea26be47ad7484c91ba906a4e3c5795"
+    },
+    {
+      "path": "canterbury/newcanterbury/png2json.c",
+      "bytes": 17140,
+      "sha256": "7894b0976926c0b607f068e3a593e868bc9f10d7038a30bf73b0d0c6695ccd02"
+    },
+    {
+      "path": "canterbury/newcanterbury/test_maps.py",
+      "bytes": 13858,
+      "sha256": "1cd9dbc74224a6c5d0a675b3151b33e186911d942b169e2cf81623458ff672ea"
+    },
+    {
+      "path": "canterbury/newcanterbury/validation.json",
+      "bytes": 1615,
+      "sha256": "065b68cb416f82f58b17b7f02abec66992340280a15395ed52d0b0d77a823f99"
+    },
+    {
+      "path": "canterbury/reduction.c",
+      "bytes": 5845,
+      "sha256": "17a8fcf46a549833b32a402ff1162cf90c7651addb176fce2f0125aff745c062"
+    },
+    {
+      "path": "canterbury/simulation-map/.gitignore",
+      "bytes": 19,
+      "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
+    },
+    {
+      "path": "canterbury/simulation-map/README.md",
+      "bytes": 20074,
+      "sha256": "d79864de03631f0370229e9ee6f77dd61cf03f6364d1870198c210daf7731316"
+    },
+    {
+      "path": "canterbury/simulation-map/assemble.py",
+      "bytes": 27433,
+      "sha256": "a7de36b6fa579cc08580322c9912279412af08ead686f4ad644fe13a1817f0b0"
+    },
+    {
+      "path": "canterbury/simulation-map/complete_roads.py",
+      "bytes": 10633,
+      "sha256": "22031730217d1af404e3d3021953ffb1c989404183a773f727910a0d6e4f7f78"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-enrichment-report.json",
+      "bytes": 1800,
+      "sha256": "ee93e892ed785863e0b8190a7591c52cf5ee759d7a84597b1d7987f2d533e483"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-uses-preview.png",
+      "bytes": 273614,
+      "sha256": "06c37d310898ddc875e0a38f002e627e684dfa84ad7189005cb1713552551e7f"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-uses.svg",
+      "bytes": 4239044,
+      "sha256": "854ebf6d26ef9f4ce90ccce9ca6bbc18f258dd80f9d219b1cf1a747424864292"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings-1940.json",
+      "bytes": 2199606,
+      "sha256": "52f2bd19619fab77b68dab66944751ee3582d6796a214bf1eb3f81746f92a36d"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings-enriched.json",
+      "bytes": 3873143,
+      "sha256": "e11e2fa0660c082a68ff7dc1299b7ee5cc0578a0913b856230bcc71e651e4080"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/buildings.json",
+      "bytes": 1964555,
+      "sha256": "6acb75778cf8fc55ae9b33d5a783d339566153661870d2123b83c72dcb0361d7"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/modern-buildings-projected.json",
+      "bytes": 6971228,
+      "sha256": "26bbfa271dd29b723c1edb5a8f9310837ee68398d596029f0df966c980c307c5"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/overview-historical-traces.svg",
+      "bytes": 1483826,
+      "sha256": "459b180e50925e9c5fcb97293a943e813f5c3d7411ccdabfb0c5e724489ac6b0"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/overview-source.svg",
+      "bytes": 1480949,
+      "sha256": "5ad335cc125ac89f053ee2ba64a08b1b9114c823d146b0e1e0ab6c9c24aec107"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/overview.png",
+      "bytes": 293313,
+      "sha256": "6e0161081a68842bb9f78ed818e22379a9c896f4df270d8d059153d5ddc61186"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/overview.svg",
+      "bytes": 5497467,
+      "sha256": "3057b2b6512668dc936c68295e397aadf19b25a8afdf7bd69bf234da65982865"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/rail-corridors.json",
+      "bytes": 3701,
+      "sha256": "bdda94f90134151d3b053c049019cd635fbe18d3cdefdf3ba282ba880bae1ba6"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/rail.json",
+      "bytes": 633446,
+      "sha256": "28b65eea636ec2a54503b8a7245932f9dca67f354870575cfb9ffe8fff45c012"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/religious-sites-1940.json",
+      "bytes": 32497,
+      "sha256": "d9e6e83be3a218e64b6497256cd38163d5a6635a243c2c267e5fe0589455c7e3"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/religious-sites-1940.svg",
+      "bytes": 1491663,
+      "sha256": "fae9c991af182c1f9f6a7fcf45d5157979c23dc841c6e80ac4ac10e9b4b90720"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/report.json",
+      "bytes": 2834,
+      "sha256": "44d414202e74cf132cabfddddd7dd484bc478593ce56e8e03be55f71c594560a"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/review-queue.json",
+      "bytes": 119434,
+      "sha256": "6243268a4b3096ab95b85c4aa381d5bc20dc90284ea474b40dcd6388020a19cb"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-connectivity-report.json",
+      "bytes": 425913,
+      "sha256": "ddc22deb983f172b69244d913daccf9b67ce84665c53f0556d4d42db4a207108"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-network-historical-traces.json",
+      "bytes": 740204,
+      "sha256": "396ff0ab32ae961d7195111fdd2e5752e8e4385448b14a675d9714076b534cd0"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/road-network.json",
+      "bytes": 13116348,
+      "sha256": "e91b463dd0ec38f6fbfb9770090cfd67755b8d822fe514614ac61ee8a25e0316"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/roads.json",
+      "bytes": 1857468,
+      "sha256": "fb3733aac214d0a960cc39a81177f6faeba1fa035ca94b7358ebe39b29a55c02"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/waterways.json",
+      "bytes": 609789,
+      "sha256": "324fde0566d5f8f74b5b251abba83e82faa2a9a148f4d31bf6c55d192cfe6f72"
+    },
+    {
+      "path": "canterbury/simulation-map/download_modern.py",
+      "bytes": 7130,
+      "sha256": "75ca6264f1bc1854561a0cc9a748e95e91c94751b377f407df1e14207b2f5e72"
+    },
+    {
+      "path": "canterbury/simulation-map/enrich_buildings.py",
+      "bytes": 24532,
+      "sha256": "7ba67070009805e26135ef4ea94906e65e3043788cbbfcc265a9d599ee7f2b1e"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/README.md",
+      "bytes": 4608,
+      "sha256": "68767ea68b0476f35ab7fd97ab3d2b120c04fbb6093453388168c19810903695"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/canterbury.overpassql",
+      "bytes": 351,
+      "sha256": "857cc0a43ded8ddca76ed776fb054a898d00c908b82268aee7edf36e4f787923"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/control-point-index.json",
+      "bytes": 464859,
+      "sha256": "d9f92564187c2df806dbb3638e496b72812daca6ec44461800b69b8d7b562a03"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/control-points.json",
+      "bytes": 1603,
+      "sha256": "b66ee82695cb5e81d6b4dcc9f8ad5347b0914c6f2c7d3b11662451ac27b1b496"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/osm-canterbury.json",
+      "bytes": 13335131,
+      "sha256": "cd8e23a31668fa6b2955836d63d3c1045c0256c4dde4c1d6f23187b1c924bdfc"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/osm-roads.json",
+      "bytes": 5452784,
+      "sha256": "4a11148c586f99c5f0ec4101f40e9cf6a3fa825e8a3eb0a55f390f66eea23b3b"
+    },
+    {
+      "path": "canterbury/simulation-map/modern/sources.json",
+      "bytes": 4525,
+      "sha256": "53c3fe3b9ea996133b0a22e8aff8a7dcde7e5cfddcd3a4c3fd0b6b07e76a20fa"
+    },
+    {
+      "path": "canterbury/simulation-map/osm_roads.py",
+      "bytes": 16744,
+      "sha256": "a9efdc93f8525052b76df5531d2678cf325cb20d3d38f73098c0ea96fb324bb6"
+    },
+    {
+      "path": "canterbury/simulation-map/religion_1940.py",
+      "bytes": 7325,
+      "sha256": "c73377b0975350922ea1e892d541d476d70e6a16612ef3f6f6559faad406bf55"
+    },
+    {
+      "path": "canterbury/simulation-map/religious-sites-1940.json",
+      "bytes": 22263,
+      "sha256": "8f5b3a1e7172483a2b885a779f18c3a3bb9bda02876b730171b4bd60dd62c51e"
+    },
+    {
+      "path": "canterbury/simulation-map/road-traces.json",
+      "bytes": 26439,
+      "sha256": "4b8d88ac9f779b26947779dca5d3ce8e23bd9d1c8389c6727ba8563f6da7d7a0"
+    },
+    {
+      "path": "canterbury/simulation-map/test_assemble.py",
+      "bytes": 6362,
+      "sha256": "d0d9898a30bc9cccb0d58766d5943aea7ce8601983c7d41f21527f47738bd69a"
+    },
+    {
+      "path": "canterbury/simulation-map/test_complete_roads.py",
+      "bytes": 2828,
+      "sha256": "21639ede56754fe324624d7e03660dc5b426087c5d7e2d4e264b7180825d68f2"
+    },
+    {
+      "path": "canterbury/simulation-map/test_enrich_buildings.py",
+      "bytes": 5420,
+      "sha256": "fedf7ccc2cd828a536182c85055f5d5617ec7cfff93d06a82a436a1a81099b10"
+    },
+    {
+      "path": "canterbury/simulation-map/test_osm_roads.py",
+      "bytes": 5576,
+      "sha256": "8b310ebc0803eb99add26fc15cc30d9a09789fb528719e1af17dde5cdef2fcb2"
+    },
+    {
+      "path": "canterbury/simulation-map/test_religion_1940.py",
+      "bytes": 3136,
+      "sha256": "0303d7a12697313a9d8870d6834ddec082dcdee0e1b32e7adb3a1d055730ca0a"
+    },
+    {
+      "path": "canterbury/simulation-map/validate.py",
+      "bytes": 8491,
+      "sha256": "c5e22225937950cb937fa283fa30d39343da99e57460c30d84f747a71fa2202a"
+    },
+    {
+      "path": "canterbury/simulation-map/validate_buildings.py",
+      "bytes": 3813,
+      "sha256": "4a5b4c218e14114d38d76385a94a1a401b43c6e679375e1f61cce8a6998ca020"
+    },
+    {
+      "path": "apesdk/.github/FUNDING.yml",
+      "bytes": 17,
+      "sha256": "5663a513ab3e10e901ba15ab7e7ad750f84c22651bd6248372f1bd3d596c8516"
+    },
+    {
+      "path": "apesdk/.github/ISSUE_TEMPLATE/simulated_universe_documentation_gap.md",
+      "bytes": 617,
+      "sha256": "c1c2a8b78176c6f05e9d9d040d9f74d63a3ea5975a02478ec0872423fd8094d4"
+    },
+    {
+      "path": "apesdk/.github/ISSUE_TEMPLATE/simulated_universe_engine_bridge_bug.md",
+      "bytes": 625,
+      "sha256": "127f0b7a68c888150049f25b98c22f51a3043a7959a73ff6aac009e7d949985b"
+    },
+    {
+      "path": "apesdk/.github/ISSUE_TEMPLATE/simulated_universe_replay_bug.md",
+      "bytes": 678,
+      "sha256": "eca70b1a0d1b254430c733f28c2c72df86a08d796fd43aad1b9511973daed228"
+    },
+    {
+      "path": "apesdk/.github/ISSUE_TEMPLATE/simulated_universe_visual_interpretation_bug.md",
+      "bytes": 623,
+      "sha256": "f5828610ac5cb4b4ce5fdb68a584bf848fdd57917d1633dd8d8456238b5bc08e"
+    },
+    {
+      "path": "apesdk/.github/workflows/ci.yml",
+      "bytes": 3345,
+      "sha256": "ce86d26721baa9fc5eef2a5260c6cdf7090838a81ece91cbb237e83d77a1773c"
+    },
+    {
+      "path": "apesdk/.gitignore",
+      "bytes": 1220,
+      "sha256": "6e92aaec319162d34e2aaa722fba94f4ca74e8011288e6cfb3a490688a63555e"
+    },
+    {
+      "path": "apesdk/.gitlab-ci.yml",
+      "bytes": 3422,
+      "sha256": "c2e86d3648cb788e325df7321501fd1d64c335e908b8c165610c0837bff1324d"
+    },
+    {
+      "path": "apesdk/BUILD.md",
+      "bytes": 1502,
+      "sha256": "5ef2d334d9501857d28731a19006b7395f63eb7ef1288397907f377ec5a8c3b8"
+    },
+    {
+      "path": "apesdk/LICENSE",
+      "bytes": 1117,
+      "sha256": "1bb7ed5168c812da014af55bfcbf6db4253185023527ac463f300e6cab921fd4"
+    },
+    {
+      "path": "apesdk/Makefile",
+      "bytes": 733,
+      "sha256": "874a0dba575ee0136411b02873e88b16670acbc90f75d59ecfd7e2f9afa9aa06"
+    },
+    {
+      "path": "apesdk/README.md",
+      "bytes": 11402,
+      "sha256": "02db9552f3f59a42e42d203b45a20b2db10dd85d80e76c45bcdb630dbde06d82"
+    },
+    {
+      "path": "apesdk/RELEASE.md",
+      "bytes": 5098,
+      "sha256": "0c3dab1b7a7e69e410949a59d41ad7133f421a33a3f5b5ab32e0b73706618136"
+    },
+    {
+      "path": "apesdk/apemovie/.gitignore",
+      "bytes": 25,
+      "sha256": "860efe1aeb79d79133d7db264a1e88a9affebec790918e9238075564fc8e302e"
+    },
+    {
+      "path": "apesdk/apemovie/README.md",
+      "bytes": 2272,
+      "sha256": "1a0beb5f12cd782638e18f06c99fdfc560e9b5c68c8c588959ad85845f3e2faf"
+    },
+    {
+      "path": "apesdk/apemovie/apemovie_core.c",
+      "bytes": 2920,
+      "sha256": "aef92b88b66f7d5baca1860ad2fa0955c82cb38416d4c4e0e10d2220255fb797"
+    },
+    {
+      "path": "apesdk/apemovie/apemovie_core.h",
+      "bytes": 560,
+      "sha256": "8c35c421bd8abaf8ac12d23e013059c0070789d76451060cd753d1035a865f72"
+    },
+    {
+      "path": "apesdk/apemovie/build.sh",
+      "bytes": 1519,
+      "sha256": "1aea88ce98252f8cff12bec08f563316dc0be71762e4730f832d3dfea6eb87d2"
+    },
+    {
+      "path": "apesdk/apemovie/main.c",
+      "bytes": 12798,
+      "sha256": "1380611bd24fe876a8258ca9f17ebd2b7d333b58da3efb8fc41cfdaf980c4c99"
+    },
+    {
+      "path": "apesdk/book/README.md",
+      "bytes": 693,
+      "sha256": "f78bccebb89ba884d437a207926065678075555a9dfb408646c797c37721f850"
+    },
+    {
+      "path": "apesdk/book/chapter_01.md",
+      "bytes": 20552,
+      "sha256": "63c84ee18a5b082fb0b3dcbd5d174fd1bef6b9569d140a995147568827bb1032"
+    },
+    {
+      "path": "apesdk/book/chapter_02.md",
+      "bytes": 20899,
+      "sha256": "9538c423a45e9abb009115d559520e3d5d9e96b42e49dbb17bad60eb49c185b9"
+    },
+    {
+      "path": "apesdk/book/chapter_03.md",
+      "bytes": 19671,
+      "sha256": "66b683cda27cb34854452e07e88193e87b4cdca33e3079612423831fa869273d"
+    },
+    {
+      "path": "apesdk/book/chapter_04.md",
+      "bytes": 20086,
+      "sha256": "a526b7177c3e9d74596ffb7fada215401efe76ffcc02dc0b079ca463379e9024"
+    },
+    {
+      "path": "apesdk/book/chapter_05.md",
+      "bytes": 20200,
+      "sha256": "57b092b07ad6a645f2b3e60599ae80bd30cd7016f9156329deca4c29208b3f13"
+    },
+    {
+      "path": "apesdk/book/chapter_06.md",
+      "bytes": 20082,
+      "sha256": "6e1c022c32522750c9de71ef25b38e457226c5f0196e05061963e80de15d0e52"
+    },
+    {
+      "path": "apesdk/book/chapter_07.md",
+      "bytes": 19846,
+      "sha256": "684ece86b344d26ed75a2e6f3f3159a2c77cfc62656ece41a92b4304ca521ee4"
+    },
+    {
+      "path": "apesdk/book/chapter_08.md",
+      "bytes": 20773,
+      "sha256": "7e61704ed16ed58f631a8ec9591fede1bc2044ecce091773839201685476b595"
+    },
+    {
+      "path": "apesdk/book/chapter_09.md",
+      "bytes": 19951,
+      "sha256": "f4a83da231b4b59dc383dd7539bc70cbe1bc840a051ef4caf2f0d227b4a9db50"
+    },
+    {
+      "path": "apesdk/book/chapter_10.md",
+      "bytes": 19094,
+      "sha256": "8aa175eaaf1e7fdfe790d9974670db5715fb6af9fa9f0d2a3656f57b5351c2a4"
+    },
+    {
+      "path": "apesdk/book/chapter_11.md",
+      "bytes": 19368,
+      "sha256": "f1c90823aa8c3f3efcc0b836d6e8bab42e45c4e19dedc405d1e41dc391fc2b69"
+    },
+    {
+      "path": "apesdk/book/chapter_12.md",
+      "bytes": 19999,
+      "sha256": "be4658736529696840618c966654b8aef9a9a937c881ed68feac96317911b8d6"
+    },
+    {
+      "path": "apesdk/book/chapter_13.md",
+      "bytes": 5000,
+      "sha256": "4ef03caea54272c71fc9f43b4afb9677d6662cd36f9cb82e528903b946da8129"
+    },
+    {
+      "path": "apesdk/book/synopsis.md",
+      "bytes": 6665,
+      "sha256": "69c3abd29849ba91922d1892fecc70b274728e6b001ff5e5ddd82442ae8eaec7"
+    },
+    {
+      "path": "apesdk/bronze/CANTERBURY.md",
+      "bytes": 7940,
+      "sha256": "85921fe5fed33d2cffa1d69bcb9a2cf539cea71802aad0b008ace56e599edd81"
+    },
+    {
+      "path": "apesdk/bronze/Makefile",
+      "bytes": 1164,
+      "sha256": "a6abbe22c2caeae8fb6da632dbf26b81274c18a3b16577f4043c7c68c86f90d8"
+    },
+    {
+      "path": "apesdk/bronze/OWNERSHIP.md",
+      "bytes": 7119,
+      "sha256": "c5e622e8a65d23dca4bbec6fe3161525f2c9b16161f0039c8fa5a152257fc1af"
+    },
+    {
+      "path": "apesdk/bronze/PLAN.md",
+      "bytes": 40816,
+      "sha256": "c1ab29c09b79da81adc310391d5bff6373a812f0597ee518414fd3ea63c748a7"
+    },
+    {
+      "path": "apesdk/bronze/README.md",
+      "bytes": 7145,
+      "sha256": "deddb6f5fad54c33e8ea09d19ba54a542893bfdda92ed9c9943d341e3493417b"
+    },
+    {
+      "path": "apesdk/bronze/SAVE-FORMAT.md",
+      "bytes": 4996,
+      "sha256": "5912b4c74c5c41b0781254ced74f423eda029e2e732a87af6cbeededdada9807"
+    },
+    {
+      "path": "apesdk/bronze/TOWNSHIPS-PLAN.md",
+      "bytes": 13388,
+      "sha256": "997c367bd68e202a1aaeeb0f5f5c2f72e3380a14a9af185d31d19e11073ad94d"
+    },
+    {
+      "path": "apesdk/bronze/actors/PROFESSIONS.md",
+      "bytes": 5521,
+      "sha256": "c5da9c1ab06d63c431ac10b2b27c8bbb3feab542292eb0e6fbd8f49784f7a0e1"
+    },
+    {
+      "path": "apesdk/bronze/actors/README.md",
+      "bytes": 9399,
+      "sha256": "d7ce3621578ffd841d4ccf01a5afd09a1cb5fa8baf1177bca27ce00bd1885db2"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_actors.c",
+      "bytes": 21182,
+      "sha256": "e1b036dd099fb80c4fde1d2421e9260783243c7911630265cd467b4509742580"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_actors.h",
+      "bytes": 6079,
+      "sha256": "94733d1c711de77ee44b6a0684ab1b07b6c74bd6637e1c6108a11ed23dc691f0"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_profession_policy.h",
+      "bytes": 681,
+      "sha256": "132ec59166289c012c695bbc23612b6681d5f6ef20f8937fa22157622cf60962"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_settlement_sidecar.inc",
+      "bytes": 7228,
+      "sha256": "738f17d112ce499c4a76fe5e0457ee3ec534fc2ef3616a79f54c4ea73e6a24d8"
+    },
+    {
+      "path": "apesdk/bronze/actors/bronze_sidecar.inc",
+      "bytes": 21330,
+      "sha256": "269a8ac519e495f81f5d512788bf9b24c42774834e67ca1ea2bf78b89df74215"
+    },
+    {
+      "path": "apesdk/bronze/actors/test.sh",
+      "bytes": 2198,
+      "sha256": "d2545dc7828b0f8c0b920d156230fad0d8ff7e86e393533f53c8b438f666c1fa"
+    },
+    {
+      "path": "apesdk/bronze/actors/test_actors.c",
+      "bytes": 37075,
+      "sha256": "6f81df4fb7e9d37e72dc9f5e578843ea504e8a1a06b555f49f3d5d54fa2520d5"
+    },
+    {
+      "path": "apesdk/bronze/actors/test_settlement_render.inc",
+      "bytes": 5305,
+      "sha256": "2a3d95ac01cc494c42f6f28a3898c3f1b41ba5662adf3001b9af26eeb74ba5f3"
+    },
+    {
+      "path": "apesdk/bronze/actors/test_township_qualification.inc",
+      "bytes": 7618,
+      "sha256": "444870aad7412c12e4cb92c6de1a9c39490d71cd968d4a3f9cd2aa8a30451c3d"
+    },
+    {
+      "path": "apesdk/bronze/adapter/bronze_apesdk_adapter.c",
+      "bytes": 10334,
+      "sha256": "32bf1206fbb02475ec9d032d34a787b635cedd4c5650a486caa9de19545f6cff"
+    },
+    {
+      "path": "apesdk/bronze/adapter/bronze_apesdk_adapter.h",
+      "bytes": 4167,
+      "sha256": "13efaa1928341fb5aadb436bcfb053df0d9aabdcb2abbe8380458140201abd6f"
+    },
+    {
+      "path": "apesdk/bronze/adapter/bronze_apesdk_compiled.c",
+      "bytes": 2626,
+      "sha256": "128f104e24e75d28a8c5246ede44691410e68540126899d537e37d495ba72dd3"
+    },
+    {
+      "path": "apesdk/bronze/adapter/bronze_apesdk_compiled.h",
+      "bytes": 759,
+      "sha256": "d17ff88a5ad92343e27e3c60f2049e365c1dff3c76990b70c0e9d8478e7055c5"
+    },
+    {
+      "path": "apesdk/bronze/bronze_apesdk_adapter.h",
+      "bytes": 121,
+      "sha256": "ee517645871c0d3336d52db51322f45806a2a279d3ee64df5d85afd7790f8b8e"
+    },
+    {
+      "path": "apesdk/bronze/bronze_apesdk_adapter_test.c",
+      "bytes": 464,
+      "sha256": "fd812efc8c1b0a4a88f1db0829ca92283f88d448ab480914dcfbc14599e37610"
+    },
+    {
+      "path": "apesdk/bronze/bronze_apesdk_compiled.h",
+      "bytes": 107,
+      "sha256": "7e86ae723111cb9f95fc1eec3696bd108a77f233763f3459daff93d20a84df53"
+    },
+    {
+      "path": "apesdk/bronze/bronze_apesdk_land_harness.c",
+      "bytes": 6299,
+      "sha256": "a46f4b2231564ba06d75a7b4028090faf4ca516a76725469b3c05496b31f3ee0"
+    },
+    {
+      "path": "apesdk/bronze/content/README.md",
+      "bytes": 414,
+      "sha256": "45c91af43c1cf6f90e7748775e643afdd5ec6f90aca54a7811ca8b3ec3ed7f01"
+    },
+    {
+      "path": "apesdk/bronze/content/bronze_age_full.bronze",
+      "bytes": 32043,
+      "sha256": "5052ecae8c8f860ea5189e512a3653276062627a9ec7d240d0e514483181cd3a"
+    },
+    {
+      "path": "apesdk/bronze/content/example_large.bronze",
+      "bytes": 195826,
+      "sha256": "d741f296277e0a20d51b712da9cbaee6474e1770c4c10d8253ed9e45b93b7a97"
+    },
+    {
+      "path": "apesdk/bronze/content/first_slice.bronze",
+      "bytes": 2123,
+      "sha256": "9922dedf805a6916548bfe7845a444fd95f989305fe5f9b72103f46089a47691"
+    },
+    {
+      "path": "apesdk/bronze/content/vertical_slice.bronze",
+      "bytes": 1666,
+      "sha256": "fe4273ba4ff918df309da166faef8e4795ba63fb7bbc5d4ee8b094242475b451"
+    },
+    {
+      "path": "apesdk/bronze/contract/README.md",
+      "bytes": 19366,
+      "sha256": "321238d58051c2bb4e5be35ec45eee8976f020ab21e4be47299e90e378d16ed6"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE02.md",
+      "bytes": 3633,
+      "sha256": "1ce7bf2fae411cfaefd9966142726a3b3f739cb9ca9cd6dc17ff1244693ee140"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE03.md",
+      "bytes": 4612,
+      "sha256": "f39ec56dc0caeec3c336b14b44740c9bfb5a7591dd32b52d6fa860de4d2f646f"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE04.md",
+      "bytes": 7344,
+      "sha256": "142e70aaa803a76119fe6a916743a7b4f96407d3d725575edfa5c2b352a64d79"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE05.md",
+      "bytes": 4150,
+      "sha256": "56fdf8dd365935077edf2956a60bb3660855f4978eda56ba6dde35abb1234547"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE06.md",
+      "bytes": 1517,
+      "sha256": "d926ecba1c7edee69559f03722ac79394b3d4f3eeb831f1d79b75b762c894b1b"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE07.md",
+      "bytes": 1521,
+      "sha256": "dfaf28d336ebd3f8276a29291d945aab44cd54f4e47567cea89409fe20aa7d6f"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE08.md",
+      "bytes": 1720,
+      "sha256": "081c5a1fff63fa9d424e111f49859e6f8876359a8110faa1600f516907a12ecd"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE09.md",
+      "bytes": 1551,
+      "sha256": "a66ab372a7c1843e88e122c1d3ea0d01ad71eaab7559ee95f37defecde50951c"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE10.md",
+      "bytes": 1226,
+      "sha256": "6479087cc555ed392e5efbb987766aa2e82ea823680fd09fdb4fc7a33d8e5a43"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE11.md",
+      "bytes": 1304,
+      "sha256": "fa09c888b24f8fd632ed2340ed66ab3ce7240d1df9f88e38212fc462de3c07ab"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE12.md",
+      "bytes": 1451,
+      "sha256": "fc5ea503e2c92b67c4d99ff647330dab77227c052cf18873bffce0bd9fe60b8e"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE13.md",
+      "bytes": 703,
+      "sha256": "83845e013f96445466ce86f0aeb4d87adbda939b01f2cc7c2669de5cf7f9717f"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS-CYCLE18.md",
+      "bytes": 5003,
+      "sha256": "481f4781198cc928b24c5a2239f82903c1d30655e4b8f345f6d7df6862e1c452"
+    },
+    {
+      "path": "apesdk/bronze/contract/RESULTS.md",
+      "bytes": 2551,
+      "sha256": "36aaa3c16982698e085440eaf5190e0931299d85d3d99182cc35d724dd5fccf2"
+    },
+    {
+      "path": "apesdk/bronze/contract/baseline.c",
+      "bytes": 4672,
+      "sha256": "2e3771e8d1f8a99f0e138a41fe720d1436b9a4c527af403b7e11663cf862c331"
+    },
+    {
+      "path": "apesdk/bronze/contract/baselines.json",
+      "bytes": 3083,
+      "sha256": "e4b466b44f0c074dc309e45acd01715fb4ca7057ecbd077cb844c08649ce12e4"
+    },
+    {
+      "path": "apesdk/bronze/contract/check.py",
+      "bytes": 10691,
+      "sha256": "5a9b5409bc62b14232508494411e0a840d1db95383ad08ca382bbfd08102dea9"
+    },
+    {
+      "path": "apesdk/bronze/contract/cli_baselines.json",
+      "bytes": 634,
+      "sha256": "156775724eff1587905aac10c46e3807601c778a528aee7c63f9f672356800c9"
+    },
+    {
+      "path": "apesdk/bronze/contract/compiler_test.c",
+      "bytes": 2946,
+      "sha256": "96532a382dd85f21500552f4a6be113d036c9dd033f24fb5d0700fc2892d2f5b"
+    },
+    {
+      "path": "apesdk/bronze/contract/content_inventory.json",
+      "bytes": 108901,
+      "sha256": "fc40f2a6a12581baaf0d3acf86774edcbba3f8e95397cf623d72febb3705d975"
+    },
+    {
+      "path": "apesdk/bronze/contract/inventory.c",
+      "bytes": 2903,
+      "sha256": "e328c8aac51d007ebbfa78a1245989f9ed8ab76428a757ae0b91b62b084a925f"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_dsl.c",
+      "bytes": 31819,
+      "sha256": "490ae18c7098fd9b054360af712126eaf91449cd6a75bb911816408f99d6ac61"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_dsl.h",
+      "bytes": 5900,
+      "sha256": "7a5e2dac48420c4e706ae85fa55daa62720cd64ffdabbba232d6207a1c147b92"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_dsl_internal.h",
+      "bytes": 331,
+      "sha256": "6e6f90e8766817d1ce2a8448d13a2c2003a3de9761044c8df258b069ee966aea"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_kinds.c",
+      "bytes": 1566,
+      "sha256": "04f67e96a121f681d1cc003ff1d2ca8d44c8ff39d731cb5e087a0d88646662f4"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_kinds.h",
+      "bytes": 963,
+      "sha256": "5620ed24859e0f4097d59d45a1370a3aefd521f7926bf7457a2d55ed08d063d5"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_parser.c",
+      "bytes": 43510,
+      "sha256": "3fa424141e8110a1ad7180453ee7444523951a0a1704f9f7427f16b1142a62c3"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_parser.h",
+      "bytes": 775,
+      "sha256": "41f68d1b3c8f92ae623409fd9e79850ee710ebe902c7d48d5eddd9e6a878ea25"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_util.c",
+      "bytes": 1398,
+      "sha256": "6df041aedc04366df97129f1ea475b8d1ebce46cc63ee13b27cb39d3c892f482"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_util.h",
+      "bytes": 513,
+      "sha256": "41f1083a59b320a17365b4babb01044d4eb47890bd1833a388d6cd915b1c6ea2"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_vec.c",
+      "bytes": 2090,
+      "sha256": "05544cbced91007d8d70e1b704d7569c24abab2602808ae67f44028ba1c61198"
+    },
+    {
+      "path": "apesdk/bronze/dsl/brz_vec.h",
+      "bytes": 2037,
+      "sha256": "dd343d39f6dbdaf99c71ea7ad7171c6e1f61e429c109038b718f5a90156e8ceb"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/README.md",
+      "bytes": 18869,
+      "sha256": "28f1aca89aea155ebf703759c3eff542e419a9e9206f2899928971423e6a5af0"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze-Bridging-Header.h",
+      "bytes": 193,
+      "sha256": "9d8714c3b81b2d8617e19e93e64f5458cbde3190394cc2b53f338293c92f14f1"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_hybrid.c",
+      "bytes": 53329,
+      "sha256": "e9abb924038c3a9097c76d88738b78d6ef84d278c38dff5f91f696c34669af73"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_hybrid.h",
+      "bytes": 5995,
+      "sha256": "56fc4f37875381eff72b84ba41ef7a80e194d186bfe4bb226bc3e152fe79e413"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_land_policy.h",
+      "bytes": 705,
+      "sha256": "34857a54566538fc5c89250cf6565f8036dbba86c8ac5a171f2bbe0dc3e3b500"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_paths.inc",
+      "bytes": 10049,
+      "sha256": "7069c7a6f8ff5cbb54edb6d86adf2f61255becaa4cd508ef8eba316e9dd3213f"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_premises.inc",
+      "bytes": 5545,
+      "sha256": "941c60d17e363a4d1cdf8f06bf1966148fbbc48de61f21af865951d7928e6836"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/bronze_townships.inc",
+      "bytes": 11647,
+      "sha256": "bfe9d55b8f24a81ce2238c9f7265180f48ee24320effe0b20f123d9d0f9c340b"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test.sh",
+      "bytes": 1120,
+      "sha256": "3385b5b4acb7c5da58930c920607d07cd2f6d32ae75b485413c369b18175c3c4"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_gather_delivery.inc",
+      "bytes": 3642,
+      "sha256": "223d2c203b8ba8ea78e74e34b2a636d3386b291b0494dbff50e648d6f2b33727"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_hybrid.c",
+      "bytes": 48807,
+      "sha256": "d34762e5b9cffa19a33b9edf41b150ae1721060d543f902b4e9e3895930af29d"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_paths.inc",
+      "bytes": 4938,
+      "sha256": "ce059a98fc55b0e55ab3aed53aaf99820c02fd4f3a9482ff8e6cb80e088e01c2"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_premises.inc",
+      "bytes": 9342,
+      "sha256": "156929670ea335b7d3ef5e6b17b20235feb886341e78455a7e6d3cd4c4a7ad16"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_routes.inc",
+      "bytes": 2185,
+      "sha256": "9c628cac1d4590cf5b1679d15416267c6acdfe27ace4f9f48b91082083166dbc"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_starting_occupations.inc",
+      "bytes": 1697,
+      "sha256": "bafa431d7eb98d8ce33e0b7120f14104b210c2d89e687faea3b60e2d3196ad93"
+    },
+    {
+      "path": "apesdk/bronze/hybrid/test_townships.inc",
+      "bytes": 8891,
+      "sha256": "4c59ae2f8348fdce810c68264cbff1b588feb7508f8b7e428733466a927c0b69"
+    },
+    {
+      "path": "apesdk/bronze/runtime/bronze_main.c",
+      "bytes": 573,
+      "sha256": "aaf3bcc32a2697a3c0d972fe792ac325039a857df897eb3e82b80f315dfab837"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_agent.c",
+      "bytes": 21206,
+      "sha256": "26f181687fe2f0d9bb3a23a49ea52ab964fa79f808ff9f011e3b9a3b11439e38"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_agent.h",
+      "bytes": 1017,
+      "sha256": "8cc995d83841ee7913f7987a8f88247021cc9766b640300f592aa04db1ee4613"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_land.c",
+      "bytes": 5864,
+      "sha256": "e70e65be3844f710c7deb94a0254b9643311b071efdffa4d03ad80b2602ca1bd"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_land.h",
+      "bytes": 1071,
+      "sha256": "62f6505b758afca3c40f88f6ab4b7801a3c58d90ef6d5b5b7d99f981ed803edf"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_port.c",
+      "bytes": 3493,
+      "sha256": "94a6cdea961178aa97ddd2a1ae227ff02d87cf8e36fb4b1764062e873b937223"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_port.h",
+      "bytes": 2151,
+      "sha256": "8529ab9d294089ae6c23a4a1f79c32a1540e283e1e27fc42b67bf989b5d855ad"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_settlement.c",
+      "bytes": 3077,
+      "sha256": "99cfdc63f2901b4745641f9ae16c73752fec3a3dd484e18bfa2f210f121f6f32"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_settlement.h",
+      "bytes": 815,
+      "sha256": "cc6af537a246171855c342bb70122ad4ed1f7063dec946beeb6e7cc2e361903e"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_sim.c",
+      "bytes": 11704,
+      "sha256": "7e2903738b408b0ca679f22bb48d615ebccffefc508c7b57489d867565f93bef"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_sim.h",
+      "bytes": 360,
+      "sha256": "3206c19fa027c721643829033d2490251caf433ca6dda629c4da2db4500fe5c7"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_types.h",
+      "bytes": 570,
+      "sha256": "df81300be6412cece430ea1ea9f8aded8f2bc4c4f160534b845b15760424f7c7"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_world.c",
+      "bytes": 8786,
+      "sha256": "61fec25313f6c48d045190060c2a9716cf6c6ea9de71ddfb90b7571e25e8c48a"
+    },
+    {
+      "path": "apesdk/bronze/runtime/brz_world.h",
+      "bytes": 1458,
+      "sha256": "e94ede46ea4e763b54660d856fbd5cdfb4c63f64b9624cc17abd3aea83bccd9b"
+    },
+    {
+      "path": "apesdk/bronze/save/bronze_save.c",
+      "bytes": 3833,
+      "sha256": "0ce783016ab9fccc619e557e6b19ef0abb1fae9d8c2c33f1521d0c9cbd19d3bb"
+    },
+    {
+      "path": "apesdk/bronze/save/bronze_save.h",
+      "bytes": 685,
+      "sha256": "c31d87ceaa6940c58b9475b3c2c9917805351e18150d47eb398a22db4babbd8c"
+    },
+    {
+      "path": "apesdk/bronze/save/test_save.c",
+      "bytes": 2144,
+      "sha256": "407119be064d315b08465546686213bac9c75f3d333cd13475a41244aec34419"
+    },
+    {
+      "path": "apesdk/bronze/scenario-runtime/README.md",
+      "bytes": 929,
+      "sha256": "c44c8433a9b39d8a0fb7abdb03c9a1ada6ffec197a1c7b1bb6d2f0bef3123715"
+    },
+    {
+      "path": "apesdk/bronze/scenario-runtime/include/scenario_runtime.h",
+      "bytes": 2788,
+      "sha256": "1cac8d61d69fedccc8b2054b73a5a8e50a8d58ff8aaa1495fe907b1126aa3402"
+    },
+    {
+      "path": "apesdk/bronze/scenario-runtime/src/scenario_runtime.c",
+      "bytes": 3838,
+      "sha256": "a97f5d41f1dd149b91dba66da8deedd2eb4bef0bbafe03abb91514d45465de36"
+    },
+    {
+      "path": "apesdk/bronze/scenario/BundleTests.swift",
+      "bytes": 1912,
+      "sha256": "8c0a9e8b38f95eb51fd77d7034dafea8dacb9ec0691d202e7a3245e192b7656d"
+    },
+    {
+      "path": "apesdk/bronze/scenario/README.md",
+      "bytes": 4504,
+      "sha256": "4c166a66330dfe43d9b52f276c2e97c471501892190a5fcd30b91a1d4c06c4f3"
+    },
+    {
+      "path": "apesdk/bronze/scenario/bronze_declaration_defaults.h",
+      "bytes": 1924,
+      "sha256": "ed0c28ecb0fc5777183bef42a051852b5603fd9551f08b1c837762279011f961"
+    },
+    {
+      "path": "apesdk/bronze/scenario/bronze_scenario.c",
+      "bytes": 20115,
+      "sha256": "10fe4aafc0972104f2081d6b65e32ba2013e2c3958e8712d09387eabcf1c9d32"
+    },
+    {
+      "path": "apesdk/bronze/scenario/bronze_scenario.h",
+      "bytes": 1130,
+      "sha256": "4020f80058e0d0543c1c30bd1789507ccb82e3e5c48be4f4094c1860a60dbd36"
+    },
+    {
+      "path": "apesdk/bronze/scenario/test_bundle.sh",
+      "bytes": 558,
+      "sha256": "6a462eadbd448ac7098fb559306c1407fa5fe4227a80bd95bffa12e2ea8a67be"
+    },
+    {
+      "path": "apesdk/bronze/scenario/test_scenario.c",
+      "bytes": 6303,
+      "sha256": "020ba8d1e79b8e1fa63a90d6779713ce735fabdfa39f1862cf8a10022a3d201f"
+    },
+    {
+      "path": "apesdk/bronze/tasks/README.md",
+      "bytes": 8501,
+      "sha256": "d54b8896c04cb2a22c57ba3f10be24df5c8eff8252c2c86386ff4299659b341c"
+    },
+    {
+      "path": "apesdk/bronze/tasks/bronze_program.h",
+      "bytes": 873,
+      "sha256": "16c20a46ded89acf209c15335716fd4569db794a55fc1323531e7a5ec93ec601"
+    },
+    {
+      "path": "apesdk/bronze/tasks/bronze_task_state.h",
+      "bytes": 1240,
+      "sha256": "1ef9e4e0274b1e113194cd2cf1a4f610f5aa06cfeb158ef227a939803c5bad15"
+    },
+    {
+      "path": "apesdk/bronze/tasks/bronze_tasks.c",
+      "bytes": 32576,
+      "sha256": "6b6e5b1df3ebfb0a109bf7d970f8a63a6692bd219fd7ff714cd63b1f79a27c6b"
+    },
+    {
+      "path": "apesdk/bronze/tasks/bronze_tasks.h",
+      "bytes": 2054,
+      "sha256": "dd40646779d0a076f31c6c042f7758564aca341150b5622ec3647014fe49bf97"
+    },
+    {
+      "path": "apesdk/bronze/test.sh",
+      "bytes": 830,
+      "sha256": "2740d7ed41011b2a8514f28e83cb0baa05adf73fd87dda6627409343566b511a"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/FOUNDATION.md",
+      "bytes": 4730,
+      "sha256": "e9df2779c3341b9457969fe18b30e1fc7032f6be7d8f9e40853fe41fc28fd83a"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/LIVE-WORKSPACE.md",
+      "bytes": 5195,
+      "sha256": "c0a7f043cc6269c9d9a815b0bbb8bd4443cd25cd140d6c4876033f85a1c8aef5"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/PLAN.md",
+      "bytes": 18007,
+      "sha256": "d4b85cd0f3d07cb860a7939c7d428f26a2d5c4e93db51df1708e4efc904e02b2"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/README.md",
+      "bytes": 827,
+      "sha256": "41a68afb0e185a0040ad541ed2355b81fe418b11dd231125d40b8f0aba5127b5"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/reference/bronzesim-workspace-concept.png",
+      "bytes": 2724313,
+      "sha256": "526b808570a8449772e6a12db1249cc60504bfd22aef7f0b7bf7fcdcf04cd848"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/reference/shot-04.png",
+      "bytes": 4502697,
+      "sha256": "223d356cd4438b36b7340464520beef9ea3cca802a249b5053394867abe39f7b"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/reference/shot-26.png",
+      "bytes": 4494431,
+      "sha256": "20b67042c6c5275e43dcb530b6a1b19e71a609bb749fc5b8574d0dcca33347b0"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/reference/shot-27.png",
+      "bytes": 4533368,
+      "sha256": "35cb519b643b12f274cefa3b088f8da9afd4cdafa9066cfaaeca760869399746"
+    },
+    {
+      "path": "apesdk/bronze/ui-redesign/reference/shot-29.png",
+      "bytes": 4025498,
+      "sha256": "4614a40cb81ad86352da5942879776ee0f93b58e0fe980c07bcf57b82bd913d2"
+    },
+    {
+      "path": "apesdk/bronze/ui/BronzeScenarioUI.swift",
+      "bytes": 35424,
+      "sha256": "7e13cf33b6061c7aafbfb5767274503818542c543e85a71a13cc0a87e31a0f0a"
+    },
+    {
+      "path": "apesdk/bronze/ui/bronze_settlement_inspector.h",
+      "bytes": 417,
+      "sha256": "eb7b4843fd5558a2b3ca860cd998a06cfb8421b9327fd5619ebd0a3a3993e55c"
+    },
+    {
+      "path": "apesdk/bronze/ui/bronze_settlement_inspector.inc",
+      "bytes": 3460,
+      "sha256": "4c11c5d1303e099302763a201e69a585f068d5e3c2a6accb1880c16b54d0942e"
+    },
+    {
+      "path": "apesdk/bronze/ui/bronze_workspace_objects.h",
+      "bytes": 9436,
+      "sha256": "8d3e86424111fdc9a81486f6a84b17c25a64b27b1165ccf81cb8b0c6ca991c2b"
+    },
+    {
+      "path": "apesdk/bronze/ui/bronze_workspace_render.h",
+      "bytes": 31088,
+      "sha256": "0626c210a4a26b438a8eca0482546783b19e8e93917cbe9d52ae1474b4536aa0"
+    },
+    {
+      "path": "apesdk/bronze/validation/townships/README.md",
+      "bytes": 4405,
+      "sha256": "7ccd3d01d79ba2a1c18d63d1e39a61cbab2a357fc4082b37776bc1ffdc45a6e1"
+    },
+    {
+      "path": "apesdk/bronze/validation/townships/agent/README.md",
+      "bytes": 1254,
+      "sha256": "c4a932e9809a702ac25eba0c4188ea8b12fb4376b5418bd565329f8c4f925cda"
+    },
+    {
+      "path": "apesdk/bronze/work/README.md",
+      "bytes": 5569,
+      "sha256": "384170d7ed4d65abd1f5eaef1ea49a52a65dabccf0ddbad5c053a63da8acac20"
+    },
+    {
+      "path": "apesdk/bronze/work/bronze_work.c",
+      "bytes": 8809,
+      "sha256": "cfcd3c375f789e734c5fe4c557a5cc2b02e9c8356db90e9cae805fb7209f9105"
+    },
+    {
+      "path": "apesdk/bronze/work/bronze_work.h",
+      "bytes": 1955,
+      "sha256": "fee47d605c88d4abb721c5baf291778f9355555357773340997fd27e3cbf8449"
+    },
+    {
+      "path": "apesdk/bronze/work/bronze_work_types.h",
+      "bytes": 935,
+      "sha256": "21937f7333d763a538157909b6f92eb6c15d82b0e92686b410a4f01f33ecfe60"
+    },
+    {
+      "path": "apesdk/bronze/work/test_work.c",
+      "bytes": 9347,
+      "sha256": "fce022f54652adf257d5da335ff20b0a52574c431a8ee921d7a0510bf4d8695c"
+    },
+    {
+      "path": "apesdk/build.sh",
+      "bytes": 2522,
+      "sha256": "5c06a671591c4e17a0b98cff7e856e189c554c970b4a59575257e00a930d91a1"
+    },
+    {
+      "path": "apesdk/build_testcommand.sh",
+      "bytes": 2139,
+      "sha256": "2372280afad08b364023e5321a3c810bb359ca83801595f6f165bcc0cf130590"
+    },
+    {
+      "path": "apesdk/build_win.bat",
+      "bytes": 2304,
+      "sha256": "61ef5a1b9be18c39f299fb12d9ec1ddd9fe8fda064f4addb62f2e3209bf5ce36"
+    },
+    {
+      "path": "apesdk/build_win_dll.bat",
+      "bytes": 2252,
+      "sha256": "a4bbe6aee38f8e082f5833c582b5909b527e62695c3217ff5e0df27baf569527"
+    },
+    {
+      "path": "apesdk/build_win_gui.bat",
+      "bytes": 2420,
+      "sha256": "b3397be0debd4d407910aa6673ba95bae7a8d06993f6dc283b85ba708da04f90"
+    },
+    {
+      "path": "apesdk/dist/apesdk-0.711-release-notes.md",
+      "bytes": 1262,
+      "sha256": "4517676863ec29e78e6b9e5a28b53691a281dd80ea07d0e3da9acd7c1474f562"
+    },
+    {
+      "path": "apesdk/dist/apesdk-0.712-release-notes.md",
+      "bytes": 1203,
+      "sha256": "c56eecc597a0240702c0e8240d63ce3df61420e94ebb0c9a5734d47a9f6efb39"
+    },
+    {
+      "path": "apesdk/dist/apesdk-src-0.711.zip",
+      "bytes": 4988756,
+      "sha256": "5a3c63eb3ced18bb68c275345f3e015af057758594f2c73a097aa89149f53a0b"
+    },
+    {
+      "path": "apesdk/dist/simulated-ape-mac-intel-0.711.dmg",
+      "bytes": 1803981,
+      "sha256": "f0b59873ccd8ba8a9a6eb2ee1e30099188c62741e85a4b1ef30a85280d38de34"
+    },
+    {
+      "path": "apesdk/dist/simulated-ape-mac-silicon-0.711.dmg",
+      "bytes": 1791815,
+      "sha256": "07b80fa340fc593c50cf158059021f5b2ee7a058418f2e7b75b3df978a3e037e"
+    },
+    {
+      "path": "apesdk/dll/apesdk_include.c",
+      "bytes": 2254,
+      "sha256": "7d17b3f3578fac3e8d10e0836ccdb7fbecba2324f4271ffb2a7efd086cddf17a"
+    },
+    {
+      "path": "apesdk/dll/apesdk_include.h",
+      "bytes": 2094,
+      "sha256": "0b01c215e1ace8a0c87f212daa74c998944f15bbc326e609ce3c19ebaac6a712"
+    },
+    {
+      "path": "apesdk/entity/being.c",
+      "bytes": 61985,
+      "sha256": "3d67ae71bb2396baf4a75c2b5e6c6496e8a25c2a50870b44194d942f1fadcce8"
+    },
+    {
+      "path": "apesdk/entity/body.c",
+      "bytes": 32453,
+      "sha256": "89d036cbc401a31c8adcdcade7c3fc198851f81d06ff9ce014f8d93217ef662e"
+    },
+    {
+      "path": "apesdk/entity/brain.c",
+      "bytes": 64614,
+      "sha256": "cd354869a54d3dd9a4850219ca0acd4bc1c8b0df1ef12969974d38aca967c2d7"
+    },
+    {
+      "path": "apesdk/entity/drives.c",
+      "bytes": 9413,
+      "sha256": "dd715a453d4b4e3503d2190eb0cdfbfd64ade2f96fd3ff925a16f06115fdf304"
+    },
+    {
+      "path": "apesdk/entity/entity.h",
+      "bytes": 23840,
+      "sha256": "7093a1ee5caf1b0afa5efaf764fbf11a51b56a86a29415f9279651948e7439cf"
+    },
+    {
+      "path": "apesdk/entity/entity_internal.h",
+      "bytes": 7402,
+      "sha256": "48052632176277ced78f98ad2c9a6e588ffac5d2ebc8062bf457b6441e45f17e"
+    },
+    {
+      "path": "apesdk/entity/episodic.c",
+      "bytes": 25155,
+      "sha256": "ff761e4f0ca110c8e7577fbe4cd56fcef59333c0cfefb1e61b1af22959f8e51f"
+    },
+    {
+      "path": "apesdk/entity/food.c",
+      "bytes": 9148,
+      "sha256": "fe3a51b33854118405a90001b4aabed8d861e4f0b18ec7370fc2299befc0495d"
+    },
+    {
+      "path": "apesdk/entity/immune.c",
+      "bytes": 11190,
+      "sha256": "df70fdd7b9f38ed6ec285414234e55b27094a0227ff32e16e7b00a33f2e22d22"
+    },
+    {
+      "path": "apesdk/entity/profession.c",
+      "bytes": 1373,
+      "sha256": "dbf7cd12fe53093ac32dd3db82973abd1fe27643e4f3fec16752a54f6ef778f2"
+    },
+    {
+      "path": "apesdk/entity/profession.h",
+      "bytes": 1416,
+      "sha256": "666e407096be70a193fe1f9f9ba8d145e27087fa12e91639da5909350f5600b5"
+    },
+    {
+      "path": "apesdk/entity/skeleton.c",
+      "bytes": 50448,
+      "sha256": "493b63df12fa1c0d7526ad2ee886e96b27b4f3ae1ae42f2ea56d7f41e54cd09d"
+    },
+    {
+      "path": "apesdk/entity/social.c",
+      "bytes": 65199,
+      "sha256": "3ad6af8aeeaa5956c7570273437d1fb6c2e87a52a344d39a3d684bd2be8d3971"
+    },
+    {
+      "path": "apesdk/entity/speak.c",
+      "bytes": 7164,
+      "sha256": "80e2f508167eddc8d00451b8166a7e3f7da6d49064fc885038f83a812125b373"
+    },
+    {
+      "path": "apesdk/entity/test/test_immune.c",
+      "bytes": 2533,
+      "sha256": "b0d96acab0c601a577cd160447447a9e4554e5376b05981b19cbfe1807e290a6"
+    },
+    {
+      "path": "apesdk/entity/test/test_immune.sh",
+      "bytes": 2485,
+      "sha256": "d50a84ee2c9da6f6f2ead2da628b4726d218740219d9d8c27162970e5091f9b0"
+    },
+    {
+      "path": "apesdk/entity/unit/entity_tests.c",
+      "bytes": 8991,
+      "sha256": "050fd3bc6d716e36c1f4cbb23fe1a3732f470d4da6d70da957fac4e023ff4a28"
+    },
+    {
+      "path": "apesdk/entity/unit/entity_tests.sh",
+      "bytes": 1936,
+      "sha256": "8466d06f46c46a162b64eda93392cdec81be09e38c3befc9ba471d9ebb255e28"
+    },
+    {
+      "path": "apesdk/external/png/pnglite.c",
+      "bytes": 16780,
+      "sha256": "314073dd990fd239a9baf92de7270ad46483915aaa440077941fc7a6b05fb8a4"
+    },
+    {
+      "path": "apesdk/external/png/pnglite.h",
+      "bytes": 6147,
+      "sha256": "502d6d9ef773e29b2e0171691c66c8475ae75b081638d50f691e6b82eac24aa3"
+    },
+    {
+      "path": "apesdk/external/png/pngload.c",
+      "bytes": 3059,
+      "sha256": "48b83a09709aa61e20234864086119100392250b27b92f3828a72fc3b9049c1d"
+    },
+    {
+      "path": "apesdk/gui/app_shell.c",
+      "bytes": 5733,
+      "sha256": "5f0fb59037f1938e4cc56353005077caafbfe64f44562ff90cd4536de339ddd3"
+    },
+    {
+      "path": "apesdk/gui/app_shell.h",
+      "bytes": 3843,
+      "sha256": "915db308d4f426d53a9af125bfbbcb08081c2bfbb2299b7a10a09f795473cce0"
+    },
+    {
+      "path": "apesdk/gui/buffer.c",
+      "bytes": 2718,
+      "sha256": "fd26b436523eecdf86484a79768e952fadcb832f8583621d5fbaef8efb0f9db5"
+    },
+    {
+      "path": "apesdk/gui/buffer.h",
+      "bytes": 1792,
+      "sha256": "cb17185bf9faa322d0b74d29c6db8857e493f482328e2716b45e75843dad7143"
+    },
+    {
+      "path": "apesdk/gui/draw.c",
+      "bytes": 75214,
+      "sha256": "b7fdeb6984fe4995f344d844a6c707852516a072dcbe5eea0a38ca03c1712ffa"
+    },
+    {
+      "path": "apesdk/gui/gui.h",
+      "bytes": 3841,
+      "sha256": "c711836195d427acd25b30a59a48f07b6c06ae91b97caeeac063d97f1e052867"
+    },
+    {
+      "path": "apesdk/gui/message.c",
+      "bytes": 4538,
+      "sha256": "7f9dcb2e5de208cc394283a5c8fe360697ff4af1a98cae7b064fa42042a90b1e"
+    },
+    {
+      "path": "apesdk/gui/shared.c",
+      "bytes": 70426,
+      "sha256": "f61085ce4f581097ebfea8de502401b254b08ceb46fa3b83c8a42749accc4bd5"
+    },
+    {
+      "path": "apesdk/gui/tutorial.c",
+      "bytes": 5706,
+      "sha256": "492dfcc2dc814a954ba669868cfb09bb80b3b95b267651e30b3594b4564aaecc"
+    },
+    {
+      "path": "apesdk/icons/1024.png",
+      "bytes": 669400,
+      "sha256": "74380b51adb300068868d62f27e2a309d92fafff9d219851b6e6f92a6300f096"
+    },
+    {
+      "path": "apesdk/icons/120.png",
+      "bytes": 15838,
+      "sha256": "5253da7b4d45b093ee253fcf758c992da449ec882d0d5e7df6193ba67ba39ec5"
+    },
+    {
+      "path": "apesdk/icons/128.png",
+      "bytes": 18141,
+      "sha256": "869fa7d89cac0dd63e55394d27700152b3eb401733fe240ce2c5a7eb27504c09"
+    },
+    {
+      "path": "apesdk/icons/152.png",
+      "bytes": 22700,
+      "sha256": "b3c4ea109cd6602a1b1c4559abd9455f3a60ccfb6931f7b13434ef88810212d0"
+    },
+    {
+      "path": "apesdk/icons/16.png",
+      "bytes": 2161,
+      "sha256": "e23233e6abdcd9c5ceda40fbb0f51d17646cdc97e61d878929063af1a581e3bf"
+    },
+    {
+      "path": "apesdk/icons/167.png",
+      "bytes": 26657,
+      "sha256": "4bb0569e2d1a3b30ddd2256c7c66d0bba39f22885d9862f2f8cf4fcdf22778c5"
+    },
+    {
+      "path": "apesdk/icons/180.png",
+      "bytes": 30398,
+      "sha256": "bc9487376897f97258eaecf066ee6c7172c47c56a2535899f5034d1324278542"
+    },
+    {
+      "path": "apesdk/icons/20.png",
+      "bytes": 2359,
+      "sha256": "553738ea138d93c5a348009bd4148c4015fa4d534e1c720bd1284597ca3154ce"
+    },
+    {
+      "path": "apesdk/icons/256.png",
+      "bytes": 55845,
+      "sha256": "04c61b7ab608f292cc8e8d056d28ab37eb6437b5793def11709a5e5dc771ccde"
+    },
+    {
+      "path": "apesdk/icons/29.png",
+      "bytes": 2986,
+      "sha256": "4f3ea10c3e9f7f625e3174465ec5d550b256bd8a53567040dbb416dfadfdb719"
+    },
+    {
+      "path": "apesdk/icons/32.png",
+      "bytes": 3373,
+      "sha256": "d0715a5cc0a65125b65497e1794502783a1c6f98a9d39a1ec6f0c30262662ab9"
+    },
+    {
+      "path": "apesdk/icons/40.png",
+      "bytes": 3862,
+      "sha256": "4162a25dc29412fa3521c14e377e68ce5658826f8599e0facea6838aabb97e69"
+    },
+    {
+      "path": "apesdk/icons/512.png",
+      "bytes": 210747,
+      "sha256": "793b062030e5923383e90ab4a4deea12f81f0d2ed2b73d24a039d0b5cd53f27d"
+    },
+    {
+      "path": "apesdk/icons/58.png",
+      "bytes": 5856,
+      "sha256": "b72ecb64e97809ffdc9953aa4078cdaa3e41fc082739da55c519b224f867740b"
+    },
+    {
+      "path": "apesdk/icons/60.png",
+      "bytes": 6060,
+      "sha256": "87e8cb8f10872458571053be3de2896bca120e998a71c27bfd366b512ed0667a"
+    },
+    {
+      "path": "apesdk/icons/64.png",
+      "bytes": 6861,
+      "sha256": "9e1913eb37615fc2daf927230048f3b4003dbfe42d118231b52485d6944527fe"
+    },
+    {
+      "path": "apesdk/icons/76.png",
+      "bytes": 8034,
+      "sha256": "d0289227915949950b9316de9b3e2b5342a482e8ec1b61d013a0aa45ad1f50c8"
+    },
+    {
+      "path": "apesdk/icons/80.png",
+      "bytes": 8557,
+      "sha256": "933cb6cb89905fede95286199d6a781097025c71983da1cc1b101fbb73818baf"
+    },
+    {
+      "path": "apesdk/icons/87.png",
+      "bytes": 9702,
+      "sha256": "bafaed0cf5b1ec477e7fbec87b0cb8cc83d4b56655757d5749c6132b067bee4e"
+    },
+    {
+      "path": "apesdk/ios/ApeSimApp.swift",
+      "bytes": 47261,
+      "sha256": "f23bc45e66e2c897e83859961b6307320b833425b08c824d1c0aa62bb28ba311"
+    },
+    {
+      "path": "apesdk/longterm.c",
+      "bytes": 11132,
+      "sha256": "d534cfd7cd1eab029a5cbd08a7f1b27d16187196c029162a4299cc8d55fd4dd8"
+    },
+    {
+      "path": "apesdk/longterm/longterm.xcodeproj/project.pbxproj",
+      "bytes": 22006,
+      "sha256": "9a6a8326ab4630206426fc2a9fa3206a9855d533f336d9c91a96c23604055091"
+    },
+    {
+      "path": "apesdk/longterm_old/longterm_old.xcodeproj/project.pbxproj",
+      "bytes": 24393,
+      "sha256": "9132686534ded5ca84eebf858f7e8b77a5379b3cf2216c878108f425425a1bce"
+    },
+    {
+      "path": "apesdk/longterm_testcommand.c",
+      "bytes": 2890,
+      "sha256": "a2dfb9ecedd5684cdfba5caf51f4aeadbc0e58615fc5a240e063950142ed2010"
+    },
+    {
+      "path": "apesdk/mac/ASMacView.swift",
+      "bytes": 1517,
+      "sha256": "d470da4c152423eed559cf33a5a7deda4cfd3256c5ccef68b4084c19daecbd1a"
+    },
+    {
+      "path": "apesdk/mac/ASShared.swift",
+      "bytes": 4353,
+      "sha256": "ca88da7b2fad5b0b8bb95c47265be97c9caaf434cc35d41cda5b9b7d58f702ca"
+    },
+    {
+      "path": "apesdk/mac/AppDelegate.swift",
+      "bytes": 1964,
+      "sha256": "b4c9292e30866d3654dc4538773536609e14d0239ea134590c9b893fd0b143de"
+    },
+    {
+      "path": "apesdk/mac/SimulationBindings.swift",
+      "bytes": 13399,
+      "sha256": "263ef4e74dcdd96f9b0b1acb1750d26eb8fb20d81f7159f9463581f7b0bec84a"
+    },
+    {
+      "path": "apesdk/mac/mac.xib",
+      "bytes": 48110,
+      "sha256": "1973fed61a6643098b341688e5016bae20c8548aabd76b099743521b4bb13f92"
+    },
+    {
+      "path": "apesdk/mac/newmac.xib",
+      "bytes": 51181,
+      "sha256": "a6c0715a2319467536ad7fdf9b52c60ab7f21179c15ae0cdf1ca2d613e49e117"
+    },
+    {
+      "path": "apesdk/mac/urban.xib",
+      "bytes": 51156,
+      "sha256": "787d834a2ae6e1f0a9668b9e77d8aec5c2503334d510019a6ddd464bb066944d"
+    },
+    {
+      "path": "apesdk/maccatalyst/PLAN.md",
+      "bytes": 79894,
+      "sha256": "22d4ead1145811a6212ee5822807d94e61d75797705a37ea702f3dcb0303ca98"
+    },
+    {
+      "path": "apesdk/maccatalyst/Tests/SimMacParityTests.swift",
+      "bytes": 40156,
+      "sha256": "d1f13298bd1d0966744f982a81a98dbe2a8f60eee184300fa9c58f289a00061c"
+    },
+    {
+      "path": "apesdk/maccatalyst/maccatalyst.xcodeproj/project.pbxproj",
+      "bytes": 63312,
+      "sha256": "e5edbc5614ef6636d4a480ada5b48d1e682c8a64f3c28ed9144cd1b9aa6efc80"
+    },
+    {
+      "path": "apesdk/maccatalyst/maccatalyst.xcodeproj/xcshareddata/xcschemes/ApeSim-MacCatalyst.xcscheme",
+      "bytes": 3471,
+      "sha256": "5b085a660a033d3e65e1b9782f4f2953dadbcd166e2176817abca76f5654c6ff"
+    },
+    {
+      "path": "apesdk/maccatalyst/maccatalyst.xcodeproj/xcshareddata/xcschemes/sim-mac.xcscheme",
+      "bytes": 3414,
+      "sha256": "ad996ab66f423feef6d2df98567bd4f7c49a1970c7f5b6438bb0840dcea54751"
+    },
+    {
+      "path": "apesdk/maccatalyst/source-links/ios",
+      "kind": "internal_symlink",
+      "target": "../../ios",
+      "sha256": "fbff71229d3d226d28654b684a11355b3de494cd569907059869da50b3cdb138"
+    },
+    {
+      "path": "apesdk/maccatalyst/source-links/sim-mac",
+      "kind": "internal_symlink",
+      "target": "../../toolchains/sim-mac",
+      "sha256": "214f9ee3ced176da2160ecd465809a2b5a1d34868193c8c1f1f041fd32bc436a"
+    },
+    {
+      "path": "apesdk/macsim/ASSimulationView.swift",
+      "bytes": 6443,
+      "sha256": "ec9d43f9b3eaff0ba6dcdcb0a95d03c39fe81194fe5a998581cd2fd12a87bfbf"
+    },
+    {
+      "path": "apesdk/macsim/apesdk.xib",
+      "bytes": 20862,
+      "sha256": "1daafea9dc2d7515efb463f3f31ad5db2eea049faa82c5102955e1f2700dffa5"
+    },
+    {
+      "path": "apesdk/prototypejson/prototypejson.c",
+      "bytes": 1343,
+      "sha256": "bff032db851d3e5bf4efb056895c6cbbe82f6754f684df490c1dba9d5d10fc72"
+    },
+    {
+      "path": "apesdk/prototypejson/prototypejson.h",
+      "bytes": 5187,
+      "sha256": "25fd408449474e854b8586bdac12cb6b753b12b9ce444e6ebb89dc807f7280d6"
+    },
+    {
+      "path": "apesdk/prototypejson/prototypejson.sh",
+      "bytes": 1255,
+      "sha256": "61d4fc4541287190880c4402d3c79436ce2406cd744f8dfcfe68803bf76cb2b1"
+    },
+    {
+      "path": "apesdk/prototypejson/prototypejson/prototypejson.xcodeproj/project.pbxproj",
+      "bytes": 13013,
+      "sha256": "8956507dfc06ed65b75f3aa182cc5d6234f6898e63449a9030f339cdff3a6806"
+    },
+    {
+      "path": "apesdk/prototypejson/prototypejson/prototypejson/prototypejsonmain.c",
+      "bytes": 3902,
+      "sha256": "2f2d87e6adbc293eb58e6eb9514759e59f7f7db83d80f05235e54803de05a74a"
+    },
+    {
+      "path": "apesdk/python/.gitignore",
+      "bytes": 20,
+      "sha256": "ca188a317b063951997a1fa9c1554fe590136311b6b4b35d01fc6c7e3e0c923f"
+    },
+    {
+      "path": "apesdk/python/apesim.py",
+      "bytes": 549,
+      "sha256": "1930ee94c8590bb9d95dc67c94a6e532da272858a9eaa7a1aeddcea5aae75692"
+    },
+    {
+      "path": "apesdk/python/mylib.sh",
+      "bytes": 605,
+      "sha256": "558df572f683edbb8a7c70a8ed46f75300486dce8b2e4e7ea5a9d0cde81cb979"
+    },
+    {
+      "path": "apesdk/reduced_shared.txt",
+      "bytes": 2819,
+      "sha256": "f4d4ecc858be3dbb382f33a67f99f9dd31bcecd87cc2089d45a91ae78b3ba284"
+    },
+    {
+      "path": "apesdk/render/glrender.c",
+      "bytes": 14413,
+      "sha256": "d43da6765d91342919583be0768694055e538d070db5c63c632e3b70a87a3079"
+    },
+    {
+      "path": "apesdk/render/glrender.h",
+      "bytes": 3128,
+      "sha256": "25a90e937a25ceee2f5d03d50fc5a54ecac83656b2e2c8d24f3c208e008a1cd8"
+    },
+    {
+      "path": "apesdk/render/graph.c",
+      "bytes": 13849,
+      "sha256": "85ae845f231aab4354ac61ee692538c27907e2222c390eb4a34d6074fd061c18"
+    },
+    {
+      "path": "apesdk/render/graph.h",
+      "bytes": 2304,
+      "sha256": "cfbfcba4be4d0bd940843e4134aba10eaa08398c7e5051cb4a7221f18b20461a"
+    },
+    {
+      "path": "apesdk/render/unit/render_tests.c",
+      "bytes": 21438,
+      "sha256": "7082642fb6106ef6380fe8bc5f0ac7b7c4895c1e0d20702a30fdd3ed55b14018"
+    },
+    {
+      "path": "apesdk/render/unit/render_tests.sh",
+      "bytes": 1048,
+      "sha256": "b216675b882577530b04dfadbe50a314d6ce0e80fb47be552606bd45f7382bfa"
+    },
+    {
+      "path": "apesdk/script/interpret.c",
+      "bytes": 25145,
+      "sha256": "b000f08085f95c49663d293ad9efa01d0137f1c140cb9d3228df3397f1c66e0c"
+    },
+    {
+      "path": "apesdk/script/parse.c",
+      "bytes": 15476,
+      "sha256": "6bc6258909692359f998ebd339b83d458ff17b0de9d7ba79f0bbc725e57ebc68"
+    },
+    {
+      "path": "apesdk/script/script.h",
+      "bytes": 15393,
+      "sha256": "f7d1a0499ad3bea418a88a1d20f40448b6408a5720b1cb12ca033dc36b263ffa"
+    },
+    {
+      "path": "apesdk/script/unit/script_tests.c",
+      "bytes": 18490,
+      "sha256": "0f827106bc13afd75e2cb74843059f58d85dec3c19fc5d574bd710c631922642"
+    },
+    {
+      "path": "apesdk/script/unit/script_tests.sh",
+      "bytes": 1048,
+      "sha256": "2de422aa379d0ed24dda39a284749523f1116902bd3ef9c4043886f5022755f7"
+    },
+    {
+      "path": "apesdk/script_examples/brain_flash.txt",
+      "bytes": 374,
+      "sha256": "892f20238192cdd611fd68c76fd153f8ef549a93d1322cb07d5b174f7883e581"
+    },
+    {
+      "path": "apesdk/script_examples/emulate_rand_brain.txt",
+      "bytes": 322,
+      "sha256": "1775baf1c9c67142d82b46b773ec14c0d7e2d232b0ecb1573143a86e8d732e64"
+    },
+    {
+      "path": "apesdk/script_examples/infinite_loop.txt",
+      "bytes": 165,
+      "sha256": "0818b5964546d04875519f983bc6936f0fb2c8efd676b0dba14558a4471cdb02"
+    },
+    {
+      "path": "apesdk/script_examples/is_visible.txt",
+      "bytes": 272,
+      "sha256": "c782ed4e2a3f2d42596c81591b37ea8793a545393607179af834125f6bdcc101"
+    },
+    {
+      "path": "apesdk/script_examples/most_basic.txt",
+      "bytes": 114,
+      "sha256": "536ce507d3252a6ca01ef6630c07fe424903173cbcacd8d2c9a19645e63aade4"
+    },
+    {
+      "path": "apesdk/script_examples/test_operator.txt",
+      "bytes": 533,
+      "sha256": "8a6977acbaa7c5d790bae7e6bb0f0ce2ce03bf4cb5ee0c98b4bc2f9dd024e837"
+    },
+    {
+      "path": "apesdk/shared.h",
+      "bytes": 9223,
+      "sha256": "0db91deff5c58cbd96895e3a416623ff27723602a0eeb94ec2f90046beef7b7d"
+    },
+    {
+      "path": "apesdk/sim/audio.c",
+      "bytes": 13544,
+      "sha256": "178b2bc24dc908607587bf7a8cd9aa5755ca6b74211dc1eccb68b4e8d5c1ae1f"
+    },
+    {
+      "path": "apesdk/sim/console.c",
+      "bytes": 7891,
+      "sha256": "891976eb51be6874d40da4fa41e53e6feca6c734ea344354b2f45dc414ac5906"
+    },
+    {
+      "path": "apesdk/sim/land.c",
+      "bytes": 17923,
+      "sha256": "cef18bf1cea20682e4b945eb89f6b88006cdc3e5606e7544dc7f08de4e1b3371"
+    },
+    {
+      "path": "apesdk/sim/sim.h",
+      "bytes": 14085,
+      "sha256": "c10c814e2f3f30b2190e4649334f1eb084587f9fb5de595aa3005587f68c4962"
+    },
+    {
+      "path": "apesdk/sim/spacetime.c",
+      "bytes": 3364,
+      "sha256": "eccaffa6debace3ed20fa638dcfab06cc11dbedf8585bde2043205a0466537a6"
+    },
+    {
+      "path": "apesdk/sim/territory.c",
+      "bytes": 5453,
+      "sha256": "d0a85ef0ad518fd85b56c6f2f4b4b7dfd6135f03386a3c15af324c2c2790b925"
+    },
+    {
+      "path": "apesdk/sim/tile.c",
+      "bytes": 38263,
+      "sha256": "7f604dc77d2567273ba88f1e586892de8ecd391e3cab1449d58489f67a8f4e1a"
+    },
+    {
+      "path": "apesdk/sim/unit/sim_tests.c",
+      "bytes": 16275,
+      "sha256": "35d0d5c8dbfa4396f5f38b9f5c5206467166f624ee2ccc2244e354f16646cac1"
+    },
+    {
+      "path": "apesdk/sim/unit/sim_tests.sh",
+      "bytes": 1012,
+      "sha256": "61eb636674492aabea93bf384f892e6197059665f94b6bf44507b2e889a8f7ac"
+    },
+    {
+      "path": "apesdk/test.sh",
+      "bytes": 2010,
+      "sha256": "695dd8b6914537905e0dfcf38fa7b08d27042b7f4792859cc8974db95313bc84"
+    },
+    {
+      "path": "apesdk/test/check_apescript.txt",
+      "bytes": 484,
+      "sha256": "615f4bfb58931a8f40973a0f2d4635b17b8d3794c64c75ff36f7d7e4f7696175"
+    },
+    {
+      "path": "apesdk/test/test_apescript.c",
+      "bytes": 12164,
+      "sha256": "be21dccd180489f5db398ec8203b1df5f7ae9ba989c7533d948c3b534b9a0ea4"
+    },
+    {
+      "path": "apesdk/test/test_gui.c",
+      "bytes": 3583,
+      "sha256": "10c8fd39810e6e1bc27e8555ff0437a8bb42baecdd01ffd12cea50a03fb8b3d3"
+    },
+    {
+      "path": "apesdk/test/test_gui_wo_exec.sh",
+      "bytes": 2269,
+      "sha256": "f4286aebe4b3df91dd18850a159ca78fb487d03d89b4fe1e41d50c181909569f"
+    },
+    {
+      "path": "apesdk/test/test_script_wo_exec.sh",
+      "bytes": 1882,
+      "sha256": "5e32b48e14d088cdad44eb3c6a32dc293d7fccf2ef2a63769c822d53c34c2d3b"
+    },
+    {
+      "path": "apesdk/test/test_sim.c",
+      "bytes": 9070,
+      "sha256": "6e1fd68878b5a6896ec5b386582af9d3f7186a832eeab165511b5b170f026893"
+    },
+    {
+      "path": "apesdk/test/test_sim_time.c",
+      "bytes": 2665,
+      "sha256": "bd76743f46f5acf750bb8dc1c61c3d6d200edab0be2e7b1e34547c3f5bdc3328"
+    },
+    {
+      "path": "apesdk/test/test_wo_exec.sh",
+      "bytes": 2394,
+      "sha256": "6491a2c13d3f3af82e0666cac7d02e872972337c97d00cac46bc972e695f4497"
+    },
+    {
+      "path": "apesdk/toolchains/bronze-mac/.gitignore",
+      "bytes": 122,
+      "sha256": "a7331dd5918c4d9a279cfd2e32bdcb3aad97fcee785f40916aa771b5757a196d"
+    },
+    {
+      "path": "apesdk/toolchains/bronze-mac/bronze-mac.xcodeproj/project.pbxproj",
+      "bytes": 53036,
+      "sha256": "3136fe68e37f4637a4aae26853821d7ba2d233b6c8ab7dc131716164da6025f0"
+    },
+    {
+      "path": "apesdk/toolchains/bronze-mac/bronze-mac.xcodeproj/xcshareddata/xcschemes/bronze-mac.xcscheme",
+      "bytes": 2357,
+      "sha256": "03faa74afc945ce55942a6882b544603d0767194b7cc2e32a3496a5b3b7050d2"
+    },
+    {
+      "path": "apesdk/toolchains/planet/Planet Noble Ape/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "bytes": 903,
+      "sha256": "884db26f7c9de0dd3e0542d616ba109636a804283b72dc2939a4c572a640d51a"
+    },
+    {
+      "path": "apesdk/toolchains/planet/Planet Noble Ape/Info.plist",
+      "bytes": 1058,
+      "sha256": "04e4667b8cd2172dc4b1e080c4e3235255be103fef84a616413abc76359355e0"
+    },
+    {
+      "path": "apesdk/toolchains/planet/Planet Noble Ape/Planet_Noble_Ape.entitlements",
+      "bytes": 322,
+      "sha256": "4fac1e8d6c1678dc0ca36b0711bb8ee505279b72e1a38cbd0f6b5f4f36fb1cd3"
+    },
+    {
+      "path": "apesdk/toolchains/planet/gui/draw.c",
+      "bytes": 6093,
+      "sha256": "bf5233996cbd588c472af0d8192dadc8b4bea5517b7c3b0e892bc6ce88de6fc2"
+    },
+    {
+      "path": "apesdk/toolchains/planet/gui/shared.c",
+      "bytes": 7840,
+      "sha256": "4be1d6b777c1b3f59d69311b10f79766c9f2a79d1bbbd6110c7524955ef73d12"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet-Bridging-Header.h",
+      "bytes": 144,
+      "sha256": "0bdad4813a8105834e71d63c5307fc9c6dc1dd423b17dda6396af90377b57511"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet.xcodeproj/project.pbxproj",
+      "bytes": 25467,
+      "sha256": "cfc81518110a96b3973e635617b02a69508bc29325330f0ed806b0da4e6ccdec"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet/newmac.xib",
+      "bytes": 51174,
+      "sha256": "79ad5e51d5828239190a6d0265082b6d4d474d5ebd5fe088b36971895529fb3d"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet/planet.c",
+      "bytes": 3720,
+      "sha256": "430ccbc4589355a30fdc90dae6305384c42704a7a691e6c4de3728b3b35943f2"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet/planet.h",
+      "bytes": 1473,
+      "sha256": "4239cb5284fc79165fdb1a9ba126e5499771e6536d1aa94ea5e482797477ae75"
+    },
+    {
+      "path": "apesdk/toolchains/planet/planet/planet.xib",
+      "bytes": 50130,
+      "sha256": "dbbb19f66d5c068ca3af16be8a08abd01e5401a93c23659aca6914c024cb36d6"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/render/sim-mac-Bridging-Header.h",
+      "bytes": 1467,
+      "sha256": "bca10b25da87583cb0600f8b8e30dca3fb8e66499fce12e8bcdfd4a6718f86d8"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac.xcodeproj/project.pbxproj",
+      "bytes": 29199,
+      "sha256": "050ff17d45c4565ce067d2fea4efda045623547d79d78e25f613a3248ae0a5ec"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/AppDelegate.swift",
+      "bytes": 4281,
+      "sha256": "29693a2ab1b4573be36be2a1528615a119238b8cfd1184c5057884d8e19fe3e0"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "bytes": 3623,
+      "sha256": "84c075716c82083e7e1eae7dabcd08cdb72457d70dee43766ec7431fb3cdd6ae"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png",
+      "bytes": 669400,
+      "sha256": "74380b51adb300068868d62f27e2a309d92fafff9d219851b6e6f92a6300f096"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_128x128.png",
+      "bytes": 18141,
+      "sha256": "869fa7d89cac0dd63e55394d27700152b3eb401733fe240ce2c5a7eb27504c09"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png",
+      "bytes": 55845,
+      "sha256": "04c61b7ab608f292cc8e8d056d28ab37eb6437b5793def11709a5e5dc771ccde"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_16x16.png",
+      "bytes": 2161,
+      "sha256": "e23233e6abdcd9c5ceda40fbb0f51d17646cdc97e61d878929063af1a581e3bf"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_16x16@2x.png",
+      "bytes": 3373,
+      "sha256": "d0715a5cc0a65125b65497e1794502783a1c6f98a9d39a1ec6f0c30262662ab9"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
+      "bytes": 55845,
+      "sha256": "04c61b7ab608f292cc8e8d056d28ab37eb6437b5793def11709a5e5dc771ccde"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png",
+      "bytes": 210747,
+      "sha256": "793b062030e5923383e90ab4a4deea12f81f0d2ed2b73d24a039d0b5cd53f27d"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_32x32.png",
+      "bytes": 3373,
+      "sha256": "d0715a5cc0a65125b65497e1794502783a1c6f98a9d39a1ec6f0c30262662ab9"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_32x32@2x.png",
+      "bytes": 6861,
+      "sha256": "9e1913eb37615fc2daf927230048f3b4003dbfe42d118231b52485d6944527fe"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_512x512.png",
+      "bytes": 210747,
+      "sha256": "793b062030e5923383e90ab4a4deea12f81f0d2ed2b73d24a039d0b5cd53f27d"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png",
+      "bytes": 669400,
+      "sha256": "74380b51adb300068868d62f27e2a309d92fafff9d219851b6e6f92a6300f096"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_120.png",
+      "bytes": 15838,
+      "sha256": "5253da7b4d45b093ee253fcf758c992da449ec882d0d5e7df6193ba67ba39ec5"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_152.png",
+      "bytes": 22700,
+      "sha256": "b3c4ea109cd6602a1b1c4559abd9455f3a60ccfb6931f7b13434ef88810212d0"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_167.png",
+      "bytes": 26657,
+      "sha256": "4bb0569e2d1a3b30ddd2256c7c66d0bba39f22885d9862f2f8cf4fcdf22778c5"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_180.png",
+      "bytes": 30398,
+      "sha256": "bc9487376897f97258eaecf066ee6c7172c47c56a2535899f5034d1324278542"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_20.png",
+      "bytes": 2359,
+      "sha256": "553738ea138d93c5a348009bd4148c4015fa4d534e1c720bd1284597ca3154ce"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_29.png",
+      "bytes": 2986,
+      "sha256": "4f3ea10c3e9f7f625e3174465ec5d550b256bd8a53567040dbb416dfadfdb719"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_40.png",
+      "bytes": 3862,
+      "sha256": "4162a25dc29412fa3521c14e377e68ce5658826f8599e0facea6838aabb97e69"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_58.png",
+      "bytes": 5856,
+      "sha256": "b72ecb64e97809ffdc9953aa4078cdaa3e41fc082739da55c519b224f867740b"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_60.png",
+      "bytes": 6060,
+      "sha256": "87e8cb8f10872458571053be3de2896bca120e998a71c27bfd366b512ed0667a"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_76.png",
+      "bytes": 8034,
+      "sha256": "d0289227915949950b9316de9b3e2b5342a482e8ec1b61d013a0aa45ad1f50c8"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_80.png",
+      "bytes": 8557,
+      "sha256": "933cb6cb89905fede95286199d6a781097025c71983da1cc1b101fbb73818baf"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/AppIcon.appiconset/icon_ios_87.png",
+      "bytes": 9702,
+      "sha256": "bafaed0cf5b1ec477e7fbec87b0cb8cc83d4b56655757d5749c6132b067bee4e"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/Assets.xcassets/Contents.json",
+      "bytes": 62,
+      "sha256": "3068ae11b833a8ea03990d2ea2a2b5fe7b3c47fbda56de956a4b84888f6c6af8"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/CustomDrawingView.swift",
+      "bytes": 10143,
+      "sha256": "e0945334d610b6d93e7de59cf7176fe27c5f633d87c97c9b4af672fbb235a3d2"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/InitialTutorialController.swift",
+      "bytes": 8168,
+      "sha256": "b257317b6163cdfd8ad6ee625daf409f5859a84a7e0089d2cbd94468624b7cee"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/SimMacApp.swift",
+      "bytes": 6884,
+      "sha256": "88b99c80b29a52241ccd8255b6bf9f5b60d1135d32d8154b1f4d25b0f94694f3"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/ViewWrapper.swift",
+      "bytes": 2059,
+      "sha256": "49915cff507e0abac58bb98049e722b984fdd2c3d278d8e698bae7010a35ab07"
+    },
+    {
+      "path": "apesdk/toolchains/sim-mac/sim-mac/sim_mac.entitlements",
+      "bytes": 311,
+      "sha256": "f2e96d699140991e813f28f42f418789a730336e0a4c569806e3c0ffafca91fd"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/gui/urban-compat.h",
+      "bytes": 1673,
+      "sha256": "2fd73132618c734e1fa15e0964b246272ec7e584e6c4309d1f90be3f0734fa20"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/gui/urban-mac-Bridging-Header.h",
+      "bytes": 145,
+      "sha256": "a1f0f9d774262a7120d9d8a2f0c800b561d9a3126506f97331e152b498fe0e4e"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac.xcodeproj/project.pbxproj",
+      "bytes": 35615,
+      "sha256": "c6faedfb533369da6d2d30cee75a6e560ed5e41db34a110f691dcae870101906"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "bytes": 123,
+      "sha256": "9af65086fa30b49252fae1a1225731691de794f7775af74d71befeb507d12b7c"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "bytes": 1300,
+      "sha256": "60bfa3e1a7282b11ad18fc8e61874393338d1bb2a1ac92294eb1fda9f4da639e"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_128x128.png",
+      "bytes": 18617,
+      "sha256": "892ad22a477952bc649250d8f212d671665a2fa29e94b9b765e43cc4c6f0b10c"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png",
+      "bytes": 53367,
+      "sha256": "9de8aeff9aab53464ace295c79aa303c2de26ed8c1c9f86a3b830b21dcfe1519"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_16x16.png",
+      "bytes": 4011,
+      "sha256": "826b3812f86d8fe57139178aae438964f4d87ad0d4dc4624001c1a97916ba52f"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_16x16@2x.png",
+      "bytes": 5324,
+      "sha256": "cb45ad8d029ccb8391f9fa8becaac789fdbd8b48d3a4fcfe868c88f99c264480"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
+      "bytes": 53367,
+      "sha256": "9de8aeff9aab53464ace295c79aa303c2de26ed8c1c9f86a3b830b21dcfe1519"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_256x256@2x.png",
+      "bytes": 249179,
+      "sha256": "789a3fdcf1e9bdf9617ed6a13c18fa37ef22d40c7c46e06282035f24c17cbda4"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_32x32.png",
+      "bytes": 5324,
+      "sha256": "cb45ad8d029ccb8391f9fa8becaac789fdbd8b48d3a4fcfe868c88f99c264480"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_32x32@2x.png",
+      "bytes": 8677,
+      "sha256": "4493a5e2c540757d3added27402d052761ef170eadb17b8644376ba52477146a"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_512x512.png",
+      "bytes": 249179,
+      "sha256": "789a3fdcf1e9bdf9617ed6a13c18fa37ef22d40c7c46e06282035f24c17cbda4"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/AppIcon.appiconset/icon_512x512@2x.png",
+      "bytes": 793179,
+      "sha256": "906374dcba023ca83b2bc01efc59a885aea8af4a0285564f3a49f061c00d5993"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/Assets.xcassets/Contents.json",
+      "bytes": 62,
+      "sha256": "3068ae11b833a8ea03990d2ea2a2b5fe7b3c47fbda56de956a4b84888f6c6af8"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/ContentView.swift",
+      "bytes": 277,
+      "sha256": "4cd816d7ffaa890ac927c29f037142be41c5efddc57540fa376d81e5029ce78d"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/CoreGraphicsViewWrapper.swift",
+      "bytes": 6330,
+      "sha256": "d7197230b767b1848a4545ca67d385f29c50aa45fafe4966112e6f7bf913454e"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/urban_mac.entitlements",
+      "bytes": 310,
+      "sha256": "476a55c835e39b5334f09ecec40b574c0c959137d5d5e6273050cfa24870280d"
+    },
+    {
+      "path": "apesdk/toolchains/urban-mac/urban-mac/urban_macApp.swift",
+      "bytes": 327,
+      "sha256": "bd81716d1c62a890bd448974e74e1013a07a0bc77c7d31f3f8666badacf67cab"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/gui/war-mac-Bridging-Header.h",
+      "bytes": 132,
+      "sha256": "3b74d457ef02f3a7618ab8e36e3a87f3afa38e6115d0f141ad95f8c7033637f8"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/gui/war-mac-bridge.c",
+      "bytes": 13341,
+      "sha256": "957b0dbd909b00430bf4db54b333cb95353e258d1b74c24475a80e1755f399b8"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/gui/war-mac-bridge.h",
+      "bytes": 2585,
+      "sha256": "574bad728356de341e7d29b9f70ed4806d8b92420f18ab1fa14794fa33cb775b"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac.xcodeproj/project.pbxproj",
+      "bytes": 18978,
+      "sha256": "127fe6445835e36574743cae85da12caafdf2fc7d74f845614ce4318e87d3337"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "bytes": 123,
+      "sha256": "9af65086fa30b49252fae1a1225731691de794f7775af74d71befeb507d12b7c"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "bytes": 904,
+      "sha256": "a93d059297d6108109bbdf46e8424cb53bb45d141a98de62122c9ab8ec8709b7"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/Assets.xcassets/Contents.json",
+      "bytes": 63,
+      "sha256": "0fd49ba3c3585c709678e0046a821c3c60685ec7063720d30d3a3448be3a208b"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/ContentView.swift",
+      "bytes": 14968,
+      "sha256": "3183faa98a48623c559fe30e59200acdee483f98c24aecbae6f4c205cee6ba36"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/CoreGraphicsView.swift",
+      "bytes": 8671,
+      "sha256": "1baefc706496b5b0a73c5e6f57693f8566d29311f1f6fcbf0a0f989ba31ea510"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/war_mac.entitlements",
+      "bytes": 310,
+      "sha256": "476a55c835e39b5334f09ecec40b574c0c959137d5d5e6273050cfa24870280d"
+    },
+    {
+      "path": "apesdk/toolchains/war-mac/war-mac/war_macApp.swift",
+      "bytes": 1639,
+      "sha256": "d844fead25afbc4ea36ba9e7fea4a83264fa0eaae466c2ae8b28fd41bc1bfaa9"
+    },
+    {
+      "path": "apesdk/toolkit/apesdk-json.sh",
+      "bytes": 1738,
+      "sha256": "dec6a9ab9d2ea7c87be410a23cc875412e65e798a89457f40ea034babe6894cd"
+    },
+    {
+      "path": "apesdk/toolkit/file.c",
+      "bytes": 52034,
+      "sha256": "4bc9ab4e696bb1d28aaff7dc4943d9422221038662a2dcd9c6c780b155ed3559"
+    },
+    {
+      "path": "apesdk/toolkit/io.c",
+      "bytes": 11008,
+      "sha256": "14fda087dcc9c1a3663e3fd03d139e47f00860dd18c7ac4d8d0df8c4861f2600"
+    },
+    {
+      "path": "apesdk/toolkit/json/README.md",
+      "bytes": 3797,
+      "sha256": "d86b1aa815894617b1f60d08318265157116df174940713e5997d05163145dd0"
+    },
+    {
+      "path": "apesdk/toolkit/json/battle.json",
+      "bytes": 2204,
+      "sha256": "13d5c5153c88cf08886e87c7ae912c4a86460276f28385b5a2a2a43e6606f91c"
+    },
+    {
+      "path": "apesdk/toolkit/json/example0c.json",
+      "bytes": 35,
+      "sha256": "9c92ae0909c168b115f8f0bc8a3c8d4d725737e328d7293c617efcb295830439"
+    },
+    {
+      "path": "apesdk/toolkit/json/example1.json",
+      "bytes": 28,
+      "sha256": "b09a6edc3646ae8388ded8aead7518569eb2f4775f8268356f32dc69ce4401bf"
+    },
+    {
+      "path": "apesdk/toolkit/json/example1b.json",
+      "bytes": 28,
+      "sha256": "89fef70e35a0a12a2e0cc72a87749f002dbd9d83c58bcff86f42b817affb6d52"
+    },
+    {
+      "path": "apesdk/toolkit/json/example1c.json",
+      "bytes": 61,
+      "sha256": "1eba432aa66fae1224c631bb42fc8126c60f8344a7bd149e5c2c6e2c6693f3b0"
+    },
+    {
+      "path": "apesdk/toolkit/json/example2.json",
+      "bytes": 85,
+      "sha256": "d396734824d907e7fab37d00b53b319adcf11d0a7d3151d2eeca603aa4d558a0"
+    },
+    {
+      "path": "apesdk/toolkit/json/example2c.json",
+      "bytes": 82,
+      "sha256": "4063af7994e6f58dce9bda7d0ed320e666c672f0e1c70fb0227209e70dffb029"
+    },
+    {
+      "path": "apesdk/toolkit/json/example3.json",
+      "bytes": 84,
+      "sha256": "1fa9736b60221ab5e2e93a877e328267a17fab97a539900d837f4856bfb964d1"
+    },
+    {
+      "path": "apesdk/toolkit/json/example3c.json",
+      "bytes": 176,
+      "sha256": "02e952f7cf3ece814e15d5f9b487c838702094f8389a8baee1acc29dfc23f722"
+    },
+    {
+      "path": "apesdk/toolkit/json/example3d.json",
+      "bytes": 117,
+      "sha256": "5aa6f59c3d67e51ab67547f9c3f5a92f3affc1744ef7766b61dbd13f8df56144"
+    },
+    {
+      "path": "apesdk/toolkit/json/example3e.json",
+      "bytes": 59,
+      "sha256": "41a53fce1f9fa2fd5bf4180578dfe714152b5c193eaa669e26dbc2599da710aa"
+    },
+    {
+      "path": "apesdk/toolkit/json/example4.json",
+      "bytes": 240,
+      "sha256": "af9728d00b3713576d7d94d727ddb3ad1eb2fc24ba9c612c93dce411aee0ed53"
+    },
+    {
+      "path": "apesdk/toolkit/json/example4b.json",
+      "bytes": 130,
+      "sha256": "341ebd9c1260ea2745866285b1fb3c725c8d1a81003d8448b780f8b319e2ba25"
+    },
+    {
+      "path": "apesdk/toolkit/json/example5.json",
+      "bytes": 266,
+      "sha256": "68c168ab0b39435bc67acece334c190259c4e2917bd69081b1dc1cd30e8b43c9"
+    },
+    {
+      "path": "apesdk/toolkit/json/example6.json",
+      "bytes": 350,
+      "sha256": "ab1b262fbaa992bb5ec7524604c8b5c813be2984daff07e7ce441e37f8d9fe50"
+    },
+    {
+      "path": "apesdk/toolkit/json/example7.json",
+      "bytes": 73,
+      "sha256": "cf167a3d5de401b8a15af200e2c257c279d36e9376e5c38812db22e107286542"
+    },
+    {
+      "path": "apesdk/toolkit/json/example_four_two_vect2.json",
+      "bytes": 3787,
+      "sha256": "fce9c56dd3880080ea51993acb4204ee6c1cf90521b3d35d1c8411c71b476487"
+    },
+    {
+      "path": "apesdk/toolkit/json/example_road.json",
+      "bytes": 1500,
+      "sha256": "09b1535bc9baab328f2cf8de9f2a0b54a6a4ce2a47d9da9caf29300ea57ac524"
+    },
+    {
+      "path": "apesdk/toolkit/json/example_urban.json",
+      "bytes": 479,
+      "sha256": "456c54f8f2d249f7f1339c1d581776dfc0de501fbdf364f934df5d4e7968c1b4"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/embedded_nul.json",
+      "bytes": 6,
+      "sha256": "4b5072f280ec9874581e4c7d0991f4b1f0af701df679451a9d08c0bc04aecc98"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/forbidden_whitespace.json",
+      "bytes": 7,
+      "sha256": "1167816920fc5e8d2144855e94ff1ad8551be424edb2046ab06841a0262d049b"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/leading_zero.json",
+      "bytes": 13,
+      "sha256": "50bca59f28ed8f8b7c329284b2f79c552ff7ef1fdd377b500f1a1b40f3926357"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/missing_exponent.json",
+      "bytes": 14,
+      "sha256": "f91edeba229d37812cc1c9f507188a33d3a360e26a7d60a420a77aa6952e339a"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/missing_fraction.json",
+      "bytes": 6,
+      "sha256": "ab388bc5f0a498eb4836e8af39e3006cac6a2c6059c385cc7c87e31d189a0bf1"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/null_suffix.json",
+      "bytes": 8,
+      "sha256": "a5cdc38efdcbe33f3b477d4f2826137cbfb6ce0a57ef524f2e77945f4fcfa98e"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/null_truncated.json",
+      "bytes": 14,
+      "sha256": "a7c51c59bfcf6be12da1b6c799aedb8de26dbbd4b5c7a388799413b0970158d9"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/split_number.json",
+      "bytes": 7,
+      "sha256": "d7fd56cf79515dd9d3b4d33ba9989eedca3b1f9db7a09884d537da610531df23"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/trailing_value.json",
+      "bytes": 10,
+      "sha256": "4a761d1433cd11b6588a79484a8b29b162c3864ff2c83164cb2575dad80d5de7"
+    },
+    {
+      "path": "apesdk/toolkit/json/invalid/truncated_container.json",
+      "bytes": 20,
+      "sha256": "a85ddc4f1fabf5fcf9d8258aa1465485984caff33a52feebc809c5e81bdc3f14"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_empty_containers.json",
+      "bytes": 162,
+      "sha256": "55d2bb099e4d0340822ce38aebffdc342f8a8a3745ca8c5b4c6a806bc63ee747"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_mixed.json",
+      "bytes": 80,
+      "sha256": "be2f794e2040a7eea0827f8962b2365b25faab71a0fea90aa32d031f14ffa4ff"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_null_positions.json",
+      "bytes": 179,
+      "sha256": "1b946cba7b586a4889433c8d403248313f247bae8accd875cbf9a45e0ee19a55"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_nulls.json",
+      "bytes": 101,
+      "sha256": "6562f3fea7b7604e9a87f00b6803ece4d6e4402b701dba66bec77c45a30523bd"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_number_boundaries.json",
+      "bytes": 218,
+      "sha256": "bc368cf894f49645eb2d8706322353e2545a7f0778466e50e80fad3c72860a47"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_numbers.json",
+      "bytes": 179,
+      "sha256": "b3ad075493151a4b20d7d879834ec4e7997d20d085c0065f6154372f8b958422"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_root_decimal.json",
+      "bytes": 11,
+      "sha256": "933d332d301e8a978c017f567afed939de8e2aacdb072881e2486c8d3bdda582"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_root_negative.json",
+      "bytes": 4,
+      "sha256": "012afc755e9b5f3c266526a8e42a581db2ebadaa9ce194fc26ba830a52912b6c"
+    },
+    {
+      "path": "apesdk/toolkit/json/json_root_null.json",
+      "bytes": 4,
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "path": "apesdk/toolkit/json/neighborhood.json",
+      "bytes": 802907,
+      "sha256": "4b5ba9d3458920391ad1e9f2876e8f2eee1834d336bb6d212b8a3f58ee26e644"
+    },
+    {
+      "path": "apesdk/toolkit/json/new_ashford.json",
+      "bytes": 191268,
+      "sha256": "232a35fefba555abb64b64815ab2f62f3c9a961c56512df0cb74d503bb63a84d"
+    },
+    {
+      "path": "apesdk/toolkit/json/new_folkestone.json",
+      "bytes": 104536,
+      "sha256": "a1474b7c014a2576a0eb9a6929cc0cdd21977ad24f979b46cdcdfc5e74134693"
+    },
+    {
+      "path": "apesdk/toolkit/json/newvector1.json",
+      "bytes": 282,
+      "sha256": "ae977862a20237dc278366c1b5e2ddbd148c6e44ca379dac37db034da48a47b1"
+    },
+    {
+      "path": "apesdk/toolkit/json/newvector2.json",
+      "bytes": 281,
+      "sha256": "ac78d99c8490dd663f815f3bd0dfc87e9b912988d66973d89f428c987ffd3639"
+    },
+    {
+      "path": "apesdk/toolkit/json/newvector3.json",
+      "bytes": 532,
+      "sha256": "7101b4e9f651e898a7bb3dfcac43c99ae334a91328e5e93a53c91449082fa2a1"
+    },
+    {
+      "path": "apesdk/toolkit/json/random.json",
+      "bytes": 184,
+      "sha256": "381148f88ff38ec3008e633a13afe142ad72ef97628ee93015c3302f0cd56597"
+    },
+    {
+      "path": "apesdk/toolkit/json/random2.json",
+      "bytes": 471,
+      "sha256": "989e096afd141abc4b45f5ff2fb90e0be461f6d2485209be6570316b6dd63b78"
+    },
+    {
+      "path": "apesdk/toolkit/json/randomb.json",
+      "bytes": 8742,
+      "sha256": "e5e7f91d545b8f9beb628c069f24687f54595f914a43f3e0ae3565d43c47b360"
+    },
+    {
+      "path": "apesdk/toolkit/json/randomc.json",
+      "bytes": 8611,
+      "sha256": "93f64672e8a3499c2ae862848260a73c02380bdccb0ebfae3c39973cda851f6b"
+    },
+    {
+      "path": "apesdk/toolkit/json/sim.json",
+      "bytes": 40947,
+      "sha256": "e0d6eec3b243bc5d10e448cf2c0e16cc006b6ef2c61c88d214970c1400f28098"
+    },
+    {
+      "path": "apesdk/toolkit/math.c",
+      "bytes": 14290,
+      "sha256": "00342c0c7e5be4e42a9591dcff3d2689f7e49d84b376e24cb71c1d5c61bdb3d4"
+    },
+    {
+      "path": "apesdk/toolkit/memory.c",
+      "bytes": 9156,
+      "sha256": "10cf4e9934b5530fabcbb0bf8a3b72992f5d4344317443bd113f94a236a6ba52"
+    },
+    {
+      "path": "apesdk/toolkit/object.c",
+      "bytes": 38119,
+      "sha256": "fa2685c42ae18acc8e8491300e6f4d7ab7ea87ca757e63621c93ba8031542eb9"
+    },
+    {
+      "path": "apesdk/toolkit/test/fuzz_object_json.c",
+      "bytes": 2081,
+      "sha256": "ec48729015d658557ba12edaebc8978e49fdb58c7b9329bf4f1d09de392d6e42"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_math.c",
+      "bytes": 4874,
+      "sha256": "7f2c9edcdb3e8f6f3207dd79817e8a382584baa0baa1d3e778a0dbabf87ca3ac"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_memory.c",
+      "bytes": 3233,
+      "sha256": "35a4626edfd98bba556d4f8e8a5e3273acf5de9b2bcd0079b948222240cc58fc"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_memory_list.c",
+      "bytes": 4272,
+      "sha256": "cda0d82fb790ef87a88b2a59d84cb0626b2f128dbc6e55e3092a8fab56b8e1d2"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_memory_list.sh",
+      "bytes": 1837,
+      "sha256": "55869e1ab53404a423072018da4a8acd7aaa98560c55baf1ba8f98a2a3fe0b59"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_memory_list/test_memory_list.xcodeproj/project.pbxproj",
+      "bytes": 12115,
+      "sha256": "d02c428080ece5ac279da3dccbcf3eb099ad6d0d96978020037164f573609c1c"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object.c",
+      "bytes": 7894,
+      "sha256": "ddb50cf1d29097c1a851bf8fb5d84ee8df729e543b5cf29991da6275f47e7ca5"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_file.c",
+      "bytes": 4770,
+      "sha256": "38d168ba09b3e1c1c547cc95e25e0edce62cf997d2627a33f1dc20765fb16592"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_file.sh",
+      "bytes": 3492,
+      "sha256": "aa7c810eba334b8bac195341b664229bef5c9f627e54122c823e481433d0774c"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_file_vect2.c",
+      "bytes": 11226,
+      "sha256": "f2421b64f763c3d6acb45c8fa7e96fdca9a2d36658dd94bca97226559c60b474"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_file_vect2.sh",
+      "bytes": 1868,
+      "sha256": "68362e99b21b58ae0c47d7a6311cb309785595ea907178a1363136552af59694"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json.c",
+      "bytes": 18774,
+      "sha256": "b21a94ba2d1aed00dd459f7159a3f6f0407b507a63e4bd5097e9b3eb0111f03f"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json.sh",
+      "bytes": 358,
+      "sha256": "5e4f7e3ed3e58c8ccf86b0a6a1b3a0217d2dc1f6c026ae0bbc3e1e7a046e0e1e"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json_alloc.c",
+      "bytes": 4621,
+      "sha256": "677a53c0f2c44e2083acb04d767d69885b9d39625d46d8d0984ff4e62023a299"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json_alloc.sh",
+      "bytes": 602,
+      "sha256": "08ea8bdd60e7e65787b13d722639980bf11bc01098582deb5f5b74fa3f3090ac"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json_fuzz.c",
+      "bytes": 2102,
+      "sha256": "ebbe3faf9e54f3a293cf8beb0cf30c0b427f3d441e41c63b4c2c1659a2b702ca"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_json_fuzz.sh",
+      "bytes": 528,
+      "sha256": "87faa4c99ae05603a08e9e58d8c17086bcf0efea66fe593ec2fc8abdfa00fa66"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_object_string.c",
+      "bytes": 6133,
+      "sha256": "b2e0fafa20132377f768bdff0953ffcf3ae2a08d93c56250dc472ec5949d19dc"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_prototype.c",
+      "bytes": 6602,
+      "sha256": "44bb6246b2a124555bcb1093a22ed9bd80c67cf0a9624e43cbc2e410641d2c5d"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_prototype.sh",
+      "bytes": 1274,
+      "sha256": "eeb5c835e900689e4ceb36cba7d9cfe6559bebb88aeee8c35e2ca245a6bb4ee2"
+    },
+    {
+      "path": "apesdk/toolkit/test/test_toolkit_wo_exec.sh",
+      "bytes": 3154,
+      "sha256": "2a4895cfb32ca6b9fd68846d18745736b953d19f343a1f719aa46080dd368aaf"
+    },
+    {
+      "path": "apesdk/toolkit/toolkit.h",
+      "bytes": 27951,
+      "sha256": "3ddefb6a5bfb9f06a524e772d08cbdba401349e9bb3816f1e615325d42e6a6f3"
+    },
+    {
+      "path": "apesdk/toolkit/unit/toolkit_tests.c",
+      "bytes": 19950,
+      "sha256": "a90804e803646e1cad44bf67100ed58cf8be5a286e6417467f7956390b7a4927"
+    },
+    {
+      "path": "apesdk/toolkit/unit/toolkit_tests.sh",
+      "bytes": 1861,
+      "sha256": "4f91002271a2c6a3cc8ada47efbc4a8293333d0ac982f312e70e70ab66a1ea34"
+    },
+    {
+      "path": "apesdk/toolkit/vect.c",
+      "bytes": 20351,
+      "sha256": "4a2fb273f82c6196edc5bfea8bf881c8050c8b78810515a895affefd0cec02f2"
+    },
+    {
+      "path": "apesdk/universe/command.c",
+      "bytes": 88911,
+      "sha256": "9c4c5c4c26a7c104635518219ca33ba88bc0573df01a6dfc1f7cbbe660b86b6e"
+    },
+    {
+      "path": "apesdk/universe/loop.c",
+      "bytes": 69562,
+      "sha256": "9be60c304e7e3fedd96e1bf737079c24cb5ce1028e364f78d16134ba19228a4e"
+    },
+    {
+      "path": "apesdk/universe/sim.c",
+      "bytes": 66344,
+      "sha256": "2ab2a8592dcc2aaf7c7241aba6655ad9e8477901933eba569190f2b9057ace97"
+    },
+    {
+      "path": "apesdk/universe/transfer.c",
+      "bytes": 50396,
+      "sha256": "91c46c9f820de6be70f7c5782e5ac650a3de9d8b36b376ac50e6e1e8d158ae8b"
+    },
+    {
+      "path": "apesdk/universe/unit/universe_tests.c",
+      "bytes": 7892,
+      "sha256": "444fcffe0635693773ffecb6cb8ce742569d569932747596b608d126f1e3069a"
+    },
+    {
+      "path": "apesdk/universe/unit/universe_tests.sh",
+      "bytes": 1948,
+      "sha256": "edc3d6a7a5cd0138688cebdc0f0b8197cbe7a6bc47c1deead80360571bbe3d64"
+    },
+    {
+      "path": "apesdk/universe/universe.h",
+      "bytes": 40853,
+      "sha256": "50ba20da24eb3083f3451b942aa3f44d58191c5601e7c0f1b0922fac2fc5648a"
+    },
+    {
+      "path": "apesdk/universe/universe_internal.h",
+      "bytes": 11986,
+      "sha256": "72fcb7d79134217ca57d7af38a0bb6c56f2f29641d42b0d401a02259702acdbc"
+    },
+    {
+      "path": "apesdk/web/Makefile",
+      "bytes": 1631,
+      "sha256": "60415e0a5d68149055c348af266186d35b1cc8c0b4cec7e494384e0d8c326496"
+    },
+    {
+      "path": "apesdk/web/README.md",
+      "bytes": 2713,
+      "sha256": "ee31323baaa225bd53a84ef00f81c03ed7bc4b85724adb9349cd88f71aa5d2d2"
+    },
+    {
+      "path": "apesdk/web/install-emsdk.sh",
+      "bytes": 639,
+      "sha256": "54a193098799df441248e9b2392e4588f3f96c38fd9b99041f1f44313ae3a262"
+    },
+    {
+      "path": "apesdk/web/src/apesdk_web.c",
+      "bytes": 1872,
+      "sha256": "9f0e058c23cc045337cd63bd667e5452c10e6478c573030123a76b1e4596c1cc"
+    },
+    {
+      "path": "apesdk/web/web/app.js",
+      "bytes": 5921,
+      "sha256": "a81df15893793b116f738094f86e7ca1bb1ac50ff8ab8e2c8f4eb545fd8f3d74"
+    },
+    {
+      "path": "apesdk/web/web/index.html",
+      "bytes": 1225,
+      "sha256": "2a1f49a4e45538c30b011879f8cbfbfce0366cbdcd33c00e50b234926afa1acb"
+    },
+    {
+      "path": "apesdk/web/web/style.css",
+      "bytes": 1197,
+      "sha256": "f9f514958f042e1c091eab26125fe4cbde219f54e7fe31e734196f3632d3226a"
+    },
+    {
+      "path": "apesdk/win/platform.c",
+      "bytes": 22177,
+      "sha256": "00633fab6c051a0b42bd8f7281e255b765085eab44d272d1ba723ed9b5e0f68f"
+    },
+    {
+      "path": "apesdk/win/platform.h",
+      "bytes": 2486,
+      "sha256": "fc4f7c1cbacdf279e95af71cec9080d64e737aa56ad99af1bac4ca8505bd5bf3"
+    }
+  ]
+}

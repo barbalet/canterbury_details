@@ -1,0 +1,55 @@
+{
+  "format": "canterbury-details-cycle14-18-native-ui",
+  "version": 1,
+  "inputs": {
+    "ui/CityApp.m": "7bed8cddfea6be1a2a617b3dd19fea763171b9dc99c0cdd57370477415a68522",
+    "ui/CityMap.m": "227bfb966d31b639b0d856b2d4792bfc5a69643fd9e0e12405729562c2734fa1",
+    "ui/CityMap.h": "2b1c5979658225ae655930455fd59ca7a6e9f8eb67ba063aaf6c194a23d0b583",
+    "ui/CitySession.m": "0e9a4a5b7b6e700aceed4b79e0fad6164db3713e0aa8f57853cb048a706f4a22",
+    "ui/CitySession.h": "b45e161804f91bafd92d672f126c447fc2978bacaf42fe173cacfb327282f256",
+    "src/cd_population.c": "4228e8054cb6730a29caee397274747cabcf70d6b75c742947d1c0d3066befe1",
+    "src/cd_lifecycle.c": "3d3734e0fab72c9eb69e953f6d2085f697154abc8e1a03500f5bb70c14d3b051",
+    "src/cd_native.h": "de2f817e0f80c98b8f91b5ac1a7f636f2ce9621b0aff8b2e3c0e3191be82c807",
+    "src/cd_adapter.c": "7a662372f04a5e10cb01a8fd4f3a2e1590422c63f77b32d7fa10a7ed9adc74b8"
+  },
+  "binary_sha256": "0bb8334dd129369143b5843f99e0abd3886c3b3c5e9acb7b5ccbf16940feb3dd",
+  "observed": {
+    "startup_population": 27000,
+    "capacity": 30000,
+    "households": 6750,
+    "unplaced": 27000,
+    "native_minutes": [
+      1,
+      2
+    ],
+    "names": [
+      "Ansel Morris-Berry",
+      "Amery Morris-Berry",
+      "Grant Morris-Berry",
+      "Morgan Morris-Berry",
+      "Wilbur Haines-Bond",
+      "Lulu Haines-Bond",
+      "Kelsey Haines-Bond"
+    ],
+    "resident_id": 1,
+    "resident_energy": 3840,
+    "resident_fatigue": 0,
+    "resident_sleeping": true,
+    "resident_meals": 3,
+    "clergy_role": "Enabled technical role; age 18; community qualification; Canterbury cathedral evidence; no job or affiliation assigned",
+    "catalogue_enabled_roles": 8,
+    "catalogue_disabled_specializations": 58
+  },
+  "name_regression": {
+    "cycle": 0,
+    "ok": true,
+    "closed_bytes": 0,
+    "population": 27000,
+    "unique_names": 26898,
+    "deterministic": true,
+    "seed_sensitive": true
+  },
+  "scope": "CUA native controls and read-only resident/catalogue inspection; physical food/care/lifecycle acceptance has separate native-backed evidence",
+  "ok": true,
+  "qualification_state": "historical Cycle 14\u201318 UI observation; current UI superseded by content/cycle-19-23-native-ui.json"
+}

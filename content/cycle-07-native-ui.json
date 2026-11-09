@@ -1,0 +1,15 @@
+{
+  "format": "canterbury-details-cycle07-native-host-observation",
+  "version": 1,
+  "method": "Normal app launch with heap-backed storage, CUA accessibility observations; existing Cycle 05 clock view",
+  "binary_sha256": "5c7ddcad27f8e9b109f299fedf6ca4bdd3333b7c5825a2547cb6ea921bcbac5d",
+  "people": 27000,
+  "actor_records": 27000,
+  "bindings_valid": true,
+  "initial_native_minute": 1,
+  "after_step_10_native_minute": 11,
+  "scenario_after_step": "1940-01-01 00:11",
+  "refresh_unchanged": true,
+  "quit_observed_process_ended": true,
+  "ok": true
+}

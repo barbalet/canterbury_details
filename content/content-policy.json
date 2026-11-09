@@ -1,0 +1,87 @@
+{
+  "format": "canterbury-details-content-policy",
+  "version": 1,
+  "setting_year": 1940,
+  "canvas": {
+    "width": 1600,
+    "height": 1600,
+    "origin": "top-left",
+    "y_axis": "down"
+  },
+  "units": "pixels",
+  "routing_enabled": false,
+  "formats": {
+    "vectors": {
+      "format": "canterbury-vectors",
+      "version": 1
+    },
+    "buildings": {
+      "format": "canterbury-simulation-candidates",
+      "version": 1
+    },
+    "buildings_modern": {
+      "format": "canterbury-enriched-buildings",
+      "version": 1
+    },
+    "buildings_1940": {
+      "format": "canterbury-1940-building-religion-candidates",
+      "version": 1
+    },
+    "road_ink": {
+      "format": "canterbury-simulation-candidates",
+      "version": 1
+    },
+    "modern_roads": {
+      "format": "canterbury-osm-road-network",
+      "version": 1
+    },
+    "historical_roads": {
+      "format": "canterbury-completed-road-network",
+      "version": 1
+    },
+    "waterways": {
+      "format": "canterbury-simulation-candidates",
+      "version": 1
+    },
+    "rail_ink": {
+      "format": "canterbury-simulation-candidates",
+      "version": 1
+    },
+    "rail_corridors": {
+      "format": "canterbury-reference-rail-network",
+      "version": 1
+    },
+    "institutions": {
+      "format": "canterbury-1940-religious-sites",
+      "version": 1
+    },
+    "institution_policy": {
+      "format": "canterbury-1940-religious-site-annotations",
+      "version": 1
+    },
+    "review_candidates": {
+      "format": "canterbury-map-review-queue",
+      "version": 1
+    },
+    "assembly_report": {
+      "format": "canterbury-assembly-report",
+      "version": 1
+    },
+    "connectivity_report": {
+      "format": "canterbury-osm-connectivity-report",
+      "version": 1
+    },
+    "road_traces": {
+      "format": "canterbury-road-traces",
+      "version": 1
+    },
+    "controls": {
+      "format": "canterbury-georeference-controls",
+      "version": 1
+    },
+    "osm_roads": {
+      "format": "canterbury-osm-highways",
+      "version": 1
+    }
+  }
+}

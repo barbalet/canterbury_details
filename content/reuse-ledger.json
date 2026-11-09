@@ -1,0 +1,204 @@
+{
+  "format": "canterbury-details-reuse-review",
+  "version": 1,
+  "review_date": "2026-11-08",
+  "reference_repository": "barbalet/nosferatu-era",
+  "reference_revision": "924c4a788e1ba17116dbe6487007e2beb57f491d",
+  "authority": "User authorized consultation/adaptation as a basis; factual input authority remains only the two pinned submodules.",
+  "implementation_copied_in_cycle02": false,
+  "licensing": "No top-level LICENSE/COPYING was found in this reference checkout during review. No implementation text is copied in this cycle. Prefer new implementations against the approved submodule contracts; record origins and applicable notices for any later selected code copy. Root host MIT does not replace upstream SDK/data notices.",
+  "entries": [
+    {
+      "reference_path": "rules/src/nr.h",
+      "reviewed_sha256": "6e80d5b2a6725f089465646dc1625427de764346733672d22b937d091cb1fa9a",
+      "decision": "reimplement",
+      "reusable_pattern": "Define new opaque CdWorld/CdContent and ordinary view types.",
+      "required_changes_or_exclusion": "Remove NRCount, being-kind distinctions, supernatural policy, magic objects, campaign/earth/Progeny state; do not rename the old aggregate.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_buildings.c",
+      "reviewed_sha256": "37741e641c56f3b75cc2b387bc66fea4c39532d0449957b04f9b88faad30a053",
+      "decision": "adapt_selected_algorithms",
+      "reusable_pattern": "Polygon rings/holes, point projection, collision masks, candidate connectors.",
+      "required_changes_or_exclusion": "Review access calls; remove any sacred/actor-kind gating. Keep confidence/review state and upstream candidate flags.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_movement.c",
+      "reviewed_sha256": "f88cb4114a56251ad1bb8f98c32fc8e760111015f3338e130240132f0fb7a339",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Polyline positions, connected routing, interrupted endpoint recovery and physical connectors.",
+      "required_changes_or_exclusion": "Remove supernatural forms, tide/carried exceptions and sacred segment checks; replace all-pairs assumptions for the larger upstream OSM graph.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_population.c",
+      "reviewed_sha256": "f8ada98c1dc7d52a44223aa6cd2f9326fee3203f9275d0dcb1edec934bf1e1fa",
+      "decision": "reimplement",
+      "reusable_pattern": "Civil dates, ordinary names/households and capacity accounting.",
+      "required_changes_or_exclusion": "No extra special actor, inherited demographic weights or affiliation assignment; default population remains a disclosed SDK fixture.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_needs.c",
+      "reviewed_sha256": "5b4f77be3f6f2de6c04c9bfe373ae8cf7153ee73f2f77f5777c60abc26de5ef9",
+      "decision": "adapt_selected_algorithms",
+      "reusable_pattern": "Native energy bounds, finite meals/rest, ordinary care and retirement ordering.",
+      "required_changes_or_exclusion": "Remove campaign appointments, human-vampire branches and supernatural retirement; re-derive model values from approved sources/SDK.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_employment.c",
+      "reviewed_sha256": "416aa55202d601d613b6ee83f3264d5a55b1066753c12c2b9cbb2b95c205628c",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Separate role/job/shift/skill/mentor, finite workplaces and shared work claims.",
+      "required_changes_or_exclusion": "Remove actor-kind shortcuts and hardcoded faith-to-profession matching; period role enablement and hiring constraints are explicit data.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_economy.c",
+      "reviewed_sha256": "e2f31128e6b1a38836bf652843458c0d7cce7300be0e4413f0cfc9b475438cd4",
+      "decision": "adapt_selected_algorithms",
+      "reusable_pattern": "Stock conservation, transfers, employment income and delivery custody.",
+      "required_changes_or_exclusion": "Remove inherited campaign/task signals and assumed rail service; no imported historical prices or demographic claims.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_city.c",
+      "reviewed_sha256": "77a54d30a159de0cbc3b25bfb0fe0466dba65f9bb3859ecf9912550d3bd3b2f9",
+      "decision": "reimplement",
+      "reusable_pattern": "Single native callback orchestration, staged construction and owned cleanup.",
+      "required_changes_or_exclusion": "No campaign callback, special admission, mythology arrays or duplicate native autonomy. Use the new ownership contract.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_io.c",
+      "reviewed_sha256": "c95ff3c06d5adf7430b12969dff2712f7e9eb0b07d5614c1f95a282de87a16fa",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Stable-ID exports, deterministic digest and escaped diagnostics.",
+      "required_changes_or_exclusion": "Hash only ordinary authoritative state; remove supernatural/campaign fields and special inspection modes.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_presentation.c",
+      "reviewed_sha256": "a96c4bda838d069694033e8708c16560dc9d8d5a9f8ba2639c3a5d369f3fbef8",
+      "decision": "adapt_selected_algorithms",
+      "reusable_pattern": "Read-only snapshots, camera transforms, source basemap compositing and picking.",
+      "required_changes_or_exclusion": "Remove Count-knowledge/power/animal/earth overlays and alternate city maps; source site access is ordinary human access.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/ui/CityApp.m",
+      "reviewed_sha256": "248fe1381994fa18bfb76ced9a164ed56f72fb97e4db94aaa02d49000c1f9f85",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Native panels, keyboard/controller focus, zoom/pan, inspection and scenario inputs.",
+      "required_changes_or_exclusion": "Neutral Canterbury Details title; no Count selection, powers, stories, campaign destinations, native-earth saves or special actor defaults.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_save.c",
+      "reviewed_sha256": "fc18353549222240e8b4e2ff517bc67aa34a2b836547f58825e51d35bdf0da33",
+      "decision": "reimplement",
+      "reusable_pattern": "Atomic generation publication, pointer-free staging and corrupt-input checks as design patterns.",
+      "required_changes_or_exclusion": "New standalone schema/content identity; no imported payload/ABI compatibility list or original-world saves.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_orders.c",
+      "reviewed_sha256": "7e724e863d5cd53af5ea4f42e3235ec5c213a79fba4f1db7cb10514eafd2c69d",
+      "decision": "reimplement",
+      "reusable_pattern": "Reservations, bounded queue admission, deadlines and cancellation patterns.",
+      "required_changes_or_exclusion": "Human operation catalogue and operator authority; no feed/convert/mesmerize/form/earth operations or special issuer authority.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_community.c",
+      "reviewed_sha256": "9c7da7b8cdd5d40f57077e09f28d79869efdeb461d25dbccbaaca692ac26ef5f",
+      "decision": "reimplement",
+      "reusable_pattern": "Explicit membership, ordinary offices, custody and staff retirement as patterns.",
+      "required_changes_or_exclusion": "Remove consecration exclusion, sanctity, holy objects, temporary protection and belief multipliers; preserve sourced institutions and scenario qualifications.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_society.c",
+      "reviewed_sha256": "a0be9f2192459c6e15c93d8f4eb5506ff691d37e7adee5127c427013cab2d674",
+      "decision": "reimplement",
+      "reusable_pattern": "Ordinary provenance, household relationships and institutional continuity.",
+      "required_changes_or_exclusion": "Remove Dominion, faith corruption gameplay and supernatural suspicion/protection semantics; model only supported human events.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/tools/import_canterbury.py",
+      "reviewed_sha256": "eff593d2559f8dd5357a54c7f1bc8a3568f24b79734ae3932c91acc0d4d0da40",
+      "decision": "reimplement",
+      "reusable_pattern": "Offline ID/schema checks, generated-content hashes and atomic publication patterns.",
+      "required_changes_or_exclusion": "Read only local submodules/project data; no retained mythology chapters, old scenario/release manifests or copied generated tables.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/tools/build_basemap.py",
+      "reviewed_sha256": "d17e84ea73f98aec0913db420383cf4dfe396fa75553ada08c434abaa6c1c652",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Source-map raster generation and freshness checks.",
+      "required_changes_or_exclusion": "Source assets/font inputs must be local and declared; no developer absolute paths or sibling resources.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_supernatural.c",
+      "reviewed_sha256": "19a64f6cee9111e1d629da1dc696f7abce6c03281e8d5b2c03dd3a0269632924",
+      "decision": "exclude",
+      "reusable_pattern": "None.",
+      "required_changes_or_exclusion": "Entire subsystem excluded.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_campaign.c",
+      "reviewed_sha256": "55a6737b188ef999b5e6b7ecc614f020ce896b75ca073e33efe1887c1462d249",
+      "decision": "exclude",
+      "reusable_pattern": "None.",
+      "required_changes_or_exclusion": "Entire campaign and special-actor transition model excluded.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_episode.c",
+      "reviewed_sha256": "59976be524a8250243624c427a595b0d8eb4a5dc4b0df4a041a355c5742ae936",
+      "decision": "exclude",
+      "reusable_pattern": "None.",
+      "required_changes_or_exclusion": "Entire narrative/power/objective model excluded.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/tools/build_campaign.py",
+      "reviewed_sha256": "71fcea0f653d3e675015db91d44b56c84a50f68ff6c4f791c60366a21579ebba",
+      "decision": "exclude",
+      "reusable_pattern": "None.",
+      "required_changes_or_exclusion": "Historical schematic campaign content generation excluded.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_logistics.c",
+      "reviewed_sha256": "85fad90df429d8f283ffcb8768856d41221d557014636ed18172a99d769e3c43",
+      "decision": "reimplement_around_selected_algorithms",
+      "reusable_pattern": "Ordinary vehicle capacity, load reservations and custody patterns.",
+      "required_changes_or_exclusion": "Do not copy earth boxes, native-soil checks, supernatural passengers or carried-water exceptions.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_access.c",
+      "reviewed_sha256": "b0720cda20e472d190b1190daccbc9752e1a2246852b87560e652b9f63318cbe",
+      "decision": "exclude",
+      "reusable_pattern": "Only the general idea of ordinary household/workplace access is relevant.",
+      "required_changes_or_exclusion": "Supernatural invitations, holy exclusion, ward generations and threshold fading are not this human model.",
+      "runtime_dependency": false
+    },
+    {
+      "reference_path": "rules/src/nr_forms.c",
+      "reviewed_sha256": "f1074f821168e67c70b9734c2a5183b043a26cd783f91a9d834e6f2cbfb65a04",
+      "decision": "exclude",
+      "reusable_pattern": "None.",
+      "required_changes_or_exclusion": "Entire supernatural form/passages and day-power model excluded.",
+      "runtime_dependency": false
+    }
+  ]
+}

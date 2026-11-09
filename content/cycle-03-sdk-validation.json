@@ -1,0 +1,98 @@
+{
+  "format": "canterbury-details-sdk-population-qualification",
+  "version": 1,
+  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+  "tool_sha256": "d256e323ac8b819d5500b2af86d6bee3c3e1e26cd7bb2a318be8a71f2dff216f",
+  "population": 27000,
+  "capacity": 30000,
+  "storage_scope": "Cycle 07 guarded host-owned storage",
+  "change_scope": "CANTERBURY_SIM-only population and host-owned heap/startup/registry storage seams",
+  "probes": [
+    {
+      "profile": "native",
+      "source": "universe/sim.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "c402431b2b641cdaef38eeba351091bebd4b20100381350b4a1ce6d3c4ca4eea"
+    },
+    {
+      "profile": "native",
+      "source": "entity/being.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "3ddf28d228d6552f57147be50dc2736f8267fe2da97e5588693c46bb36c50bfd"
+    },
+    {
+      "profile": "native",
+      "source": "bronze/actors/bronze_actors.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "ceadaec467f86ef70fad3a5ce1083e2a55c0afb35b544c52bf0bab5bdffc377d"
+    },
+    {
+      "profile": "bronze",
+      "source": "universe/sim.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "1b188b77d0c9e75d1262f93edf1dde1ef1d866f9934c009aca37cd66efc5f2f4"
+    },
+    {
+      "profile": "bronze",
+      "source": "entity/being.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "54201941c6df8e7155200ceed7bccb3bb31da6ba75bb5e42ab7b86c63d7ea954"
+    },
+    {
+      "profile": "bronze",
+      "source": "bronze/actors/bronze_actors.c",
+      "preprocessed_simulation_equal": true,
+      "sha256": "74c8eb641ac268ec8028133907db790dc6021ddb61cd7ebbe9a579c64da9e4b3"
+    },
+    {
+      "profile": "native",
+      "unchanged_layout": true,
+      "unchanged_body_layout": true,
+      "capacity_body_group_bytes": "256 70292 17994840",
+      "base_capacity_body_group_bytes": "256 70292 17994840"
+    },
+    {
+      "profile": "bronze",
+      "unchanged_layout": true,
+      "unchanged_body_layout": true,
+      "capacity_body_group_bytes": "256 70292 17994840",
+      "base_capacity_body_group_bytes": "256 70292 17994840"
+    },
+    {
+      "profile": "city",
+      "unchanged_layout": false,
+      "unchanged_body_layout": true,
+      "capacity_body_group_bytes": "30000 70292 2108760088",
+      "base_capacity_body_group_bytes": "27000 70292 1897884088"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "native",
+      "passed": true,
+      "log": "build/cycle03-sdk-native.log",
+      "log_sha256": "ec0dd9fbaefdafe815bf45a84789cad27715ca860f1cc0f16570d7187508eedf"
+    },
+    {
+      "suite": "contract",
+      "passed": true,
+      "log": "build/cycle03-sdk-contract.log",
+      "log_sha256": "30f341383894c82bd94d95b7ea43b11c44aba0966945ada55add274ef8da5a02"
+    },
+    {
+      "suite": "actors",
+      "passed": true,
+      "log": "build/cycle03-sdk-actors.log",
+      "log_sha256": "00aa83d82f28dd0b016d3052bba5a0af00a38f99c20bb5968660bd22d62e52a5"
+    },
+    {
+      "suite": "hybrid",
+      "passed": true,
+      "log": "build/cycle03-sdk-hybrid.log",
+      "log_sha256": "8c13429836dc2272f42ec70f127f4e77e517dcf1f9ea9c73ec734523ccaa2c15"
+    }
+  ],
+  "original_checkout_untouched_by_tests": true,
+  "sdk_changes_uncommitted": true,
+  "ok": true
+}

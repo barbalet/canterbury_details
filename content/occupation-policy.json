@@ -1,0 +1,90 @@
+{
+  "format": "canterbury-details-occupation-policy",
+  "version": 1,
+  "roles": [
+    {
+      "key": "crop_farmer",
+      "name": "Crop farmer",
+      "sdk_vocation": "farmer_crop_tender",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "finite raw food inputs",
+      "minimum_age": 18,
+      "skills": 1
+    },
+    {
+      "key": "brewer",
+      "name": "Brewer",
+      "sdk_vocation": "brewer_ale_maker",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "processed food inputs; no alcohol behavior inferred",
+      "minimum_age": 18,
+      "skills": 1
+    },
+    {
+      "key": "carpenter",
+      "name": "Carpenter",
+      "sdk_vocation": "carpenter",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "maintained or repaired premises",
+      "minimum_age": 18,
+      "skills": 2
+    },
+    {
+      "key": "weaver",
+      "name": "Textile weaver",
+      "sdk_vocation": "textile_weaver",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "textile goods",
+      "minimum_age": 18,
+      "skills": 2
+    },
+    {
+      "key": "potter",
+      "name": "Potter",
+      "sdk_vocation": "pottery_maker",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "ordinary containers",
+      "minimum_age": 18,
+      "skills": 2
+    },
+    {
+      "key": "care_worker",
+      "name": "Care worker",
+      "sdk_vocation": "",
+      "site_ids": [],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "basic care service, not a historical clinical license",
+      "minimum_age": 18,
+      "skills": 4
+    },
+    {
+      "key": "clergy",
+      "name": "Clergy",
+      "sdk_vocation": "",
+      "site_ids": [
+        "cathedral"
+      ],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "ordinary worship and community service",
+      "minimum_age": 18,
+      "skills": 8
+    },
+    {
+      "key": "religious_lay_caretaker",
+      "name": "Religious lay caretaker",
+      "sdk_vocation": "",
+      "site_ids": [
+        "cathedral"
+      ],
+      "basis": "technical adaptation: explicit ordinary role definition; no historical staffing or vacancy claim",
+      "output": "institution maintenance and community assistance",
+      "minimum_age": 18,
+      "skills": 2
+    }
+  ]
+}
