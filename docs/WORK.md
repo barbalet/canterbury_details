@@ -15,7 +15,7 @@ Inputs and the full worker/mentor wage budget are reserved before publication.
 Every successful minute pays its reserved wages once. Completion consumes the
 reserved inputs and publishes outputs once. Cancellation returns unused materials
 and unpaid wages once, retaining earned wages and completed outputs. Work and
-trade keep their latest result; durable history is a later records cycle.
+trade keep their latest result; privacy-scoped causal history is implemented in [RECORDS.md](RECORDS.md).
 
 Requests allocate no memory at publication. The world preallocates bounded job,
 project, account and institution state. Restart stages an entire candidate world

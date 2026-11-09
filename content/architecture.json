@@ -1,7 +1,7 @@
 {
   "format": "canterbury-details-architecture",
   "version": 1,
-  "status": "Implemented through Cycle 28: ordinary offices, explicit community calendars, capability-checked civic services, conserved hand-carried transport and bounded scenario pressures. Full coordinated city checkpoints remain Cycle 31.",
+  "status": "Implemented through Cycle 34: causal continuity, bounded operations, complete atomic checkpoints, deterministic replay, source-map rendering and live stable-ID inspection.",
   "project": {
     "name": "Canterbury Details",
     "c_prefix": "cd_",
@@ -73,7 +73,7 @@
     {
       "id": "project.world",
       "scope": "project",
-      "state": "implemented_cycles24_28",
+      "state": "implemented_cycles29_34",
       "path": "src/cd_world.c",
       "depends_on": [
         "project.api",
@@ -238,7 +238,7 @@
     {
       "id": "project.records",
       "scope": "project",
-      "state": "planned",
+      "state": "implemented_cycles29_34",
       "path": "src/cd_records.c",
       "depends_on": [
         "project.api",
@@ -248,7 +248,7 @@
     {
       "id": "project.operations",
       "scope": "project",
-      "state": "planned",
+      "state": "implemented_cycles29_34",
       "path": "src/cd_operations.c",
       "depends_on": [
         "project.api",
@@ -258,7 +258,7 @@
     {
       "id": "project.persistence",
       "scope": "project",
-      "state": "planned",
+      "state": "implemented_cycles29_34",
       "path": "src/cd_persistence.c",
       "depends_on": [
         "project.api",
@@ -269,7 +269,7 @@
     {
       "id": "project.readmodel",
       "scope": "project",
-      "state": "planned",
+      "state": "implemented_cycles29_34",
       "path": "src/cd_readmodel.c",
       "depends_on": [
         "project.api"
@@ -278,8 +278,8 @@
     {
       "id": "project.renderer",
       "scope": "project",
-      "state": "planned",
-      "path": "src/cd_renderer.c",
+      "state": "implemented_cycle33",
+      "path": "ui/CityMap.m",
       "depends_on": [
         "project.api",
         "project.readmodel",
@@ -289,7 +289,7 @@
     {
       "id": "project.ui",
       "scope": "project",
-      "state": "visual_native_city_frontend",
+      "state": "implemented_cycles29_34",
       "path": "ui/CityApp.m",
       "depends_on": [
         "project.api",
@@ -432,7 +432,7 @@
       "id": "project.city_ui_session",
       "scope": "project",
       "path": "ui/CitySession.m",
-      "state": "implemented_cycles24_28",
+      "state": "implemented_cycles29_34",
       "depends_on": [
         "project.api",
         "project.world"
@@ -546,6 +546,67 @@
       "state": "implemented_cycles24_28",
       "depends_on": [
         "project.api"
+      ]
+    },
+    {
+      "id": "project.checkpoint_validation",
+      "scope": "project",
+      "state": "implemented_cycle31",
+      "path": "src/cd_checkpoint_validation.c",
+      "depends_on": [
+        "project.api",
+        "project.adapter",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.checkpoint_abi",
+      "scope": "project",
+      "state": "implemented_cycle31",
+      "path": "tools/checkpoint_abi.py",
+      "depends_on": [
+        "project.api",
+        "project.sdk"
+      ]
+    },
+    {
+      "id": "project.management",
+      "scope": "project",
+      "path": "src/cd_management.c",
+      "state": "implemented_cycles35_39",
+      "depends_on": [
+        "project.api",
+        "project.content"
+      ]
+    },
+    {
+      "id": "project.core",
+      "scope": "project",
+      "path": "src/cd_core.c",
+      "state": "implemented_cycles35_39",
+      "depends_on": [
+        "project.api"
+      ]
+    },
+    {
+      "id": "project.management_ui",
+      "scope": "project",
+      "path": "ui/CityManagement.m",
+      "state": "implemented_cycles35_39",
+      "depends_on": [
+        "project.api",
+        "project.management",
+        "project.city_ui_session"
+      ]
+    },
+    {
+      "id": "project.core_build",
+      "scope": "project",
+      "path": "tools/build_core.py",
+      "state": "implemented_cycles35_39",
+      "depends_on": [
+        "project.api",
+        "project.sdk"
       ]
     }
   ],
@@ -758,7 +819,7 @@
         "operations.request_status",
         "operations.cancellation_state"
       ],
-      "qualification": "Cycle 30; preview is read-only, submit owns reservations"
+      "qualification": "Cycle 30: queue owns requests/results; ordinary operation execution owns finite reservations."
     },
     {
       "module": "project.persistence",
@@ -782,7 +843,7 @@
       "module": "project.ui",
       "owner": "native_ui",
       "authoritative_field_groups": [],
-      "qualification": "Visual native frontend and record inspectors implemented by explicit user request; physical model/routing and full management UI remain planned."
+      "qualification": "Cycles 33\u201334: copied source-map/agent views, live stable-ID inspection and serial checkpoint/operation tools; full management layout remains Cycle 35."
     },
     {
       "module": "project.cli",
@@ -942,6 +1003,42 @@
       "module": "project.civic_digest",
       "authoritative_field_groups": [],
       "qualification": "Native bounded ordinary-city state, explicitly qualified technical scenarios"
+    },
+    {
+      "module": "project.checkpoint_validation",
+      "owner": "checkpoint_validation",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 31: staged cross-owner checks only"
+    },
+    {
+      "module": "project.checkpoint_abi",
+      "owner": "checkpoint_abi",
+      "authoritative_field_groups": [],
+      "qualification": "Cycle 31: generated format/layout/source identity; no runtime state"
+    },
+    {
+      "module": "project.management",
+      "owner": "management",
+      "authoritative_field_groups": [],
+      "qualification": "Copied diagnostics, pure extension helpers or presentation/build only; no second model owner"
+    },
+    {
+      "module": "project.core",
+      "owner": "core",
+      "authoritative_field_groups": [],
+      "qualification": "Copied diagnostics, pure extension helpers or presentation/build only; no second model owner"
+    },
+    {
+      "module": "project.management_ui",
+      "owner": "management_ui",
+      "authoritative_field_groups": [],
+      "qualification": "Copied diagnostics, pure extension helpers or presentation/build only; no second model owner"
+    },
+    {
+      "module": "project.core_build",
+      "owner": "core_build",
+      "authoritative_field_groups": [],
+      "qualification": "Copied diagnostics, pure extension helpers or presentation/build only; no second model owner"
     }
   ],
   "public_header": "src/cd_api.h",

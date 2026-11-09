@@ -1,14 +1,7 @@
 {
   "format": "canterbury-details-reviewed-sdk-worktree",
   "version": 1,
-  "base_revision": "abdde4b18b8ac96744b20c47bd9dfeeba96780bb",
-  "reason": "Reviewed CANTERBURY_SIM-only population/storage seams plus caller-owned, pointer-free native/Bronze checkpoint staging and no-tick storage installation.",
-  "files": {
-    "bronze/CANTERBURY.md": "85921fe5fed33d2cffa1d69bcb9a2cf539cea71802aad0b008ace56e599edd81",
-    "bronze/actors/bronze_actors.c": "e1b036dd099fb80c4fde1d2421e9260783243c7911630265cd467b4509742580",
-    "bronze/actors/bronze_actors.h": "94733d1c711de77ee44b6a0684ab1b07b6c74bd6637e1c6108a11ed23dc691f0",
-    "entity/being.c": "3d67ae71bb2396baf4a75c2b5e6c6496e8a25c2a50870b44194d942f1fadcce8",
-    "universe/sim.c": "2ab2a8592dcc2aaf7c7241aba6655ad9e8477901933eba569190f2b9057ace97",
-    "universe/universe.h": "50ba20da24eb3083f3451b942aa3f44d58191c5601e7c0f1b0922fac2fc5648a"
-  }
+  "base_revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
+  "reason": "Guarded checkpoint fixes are committed; SDK overlay is clean.",
+  "files": {}
 }

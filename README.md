@@ -4,130 +4,100 @@ Model ordinary human Canterbury in 1940 using the pinned `canterbury` data and
 `apesdk` engine submodules. Religious information is retained for occupations,
 institutions and community services. No supernatural model is part of this host.
 
-The project implements **Cycles 01–18**. The native visual app admits **27,000
-ordinary humans** in **6,750 explicitly synthetic households**. Geometry, ordinary
-access, continuous native movement, qualified routing and civil records now have
-runtime implementations and acceptance fixtures. Lifecycle, daily needs, finite
-food, configured ordinary health/care and the audited occupation catalogue are
-also implemented. The repeated-name bug is fixed: the default population has
-26,898 distinct full names, with stable IDs kept separate from display names. The real map retains unreviewed
-routes/entrances and unknown housing; it does not invent a historical census.
-The exact upstream json2png map remains zoomable and pannable. A serial simulation
-worker keeps map interaction independent of native stepping and population scans.
+All **40 cycles are complete**, including the offline clean-checkout release gate.
+The native app starts with **27,000 ordinary humans**, **6,750 synthetic households**
+and capacity for **30,000 people**. It implements native street/building movement,
+configured births/admissions/retirement, needs/care, finite work/economy/development,
+ordinary religious and civic services, operations, causal records and checkpoints.
+Command-M opens the native management interface; the same core is available to
+an independent frontend through the packaged CanterburyCore library.
+
+The final assembled map with cropped OpenStreetMap connections is rendered by
+`json2png2.c` using the upstream core. Zoom/pan and inspection stay independent of
+native stepping on the serial worker. Names, households and technical rates are
+explicit fixtures. Unreviewed source routes/doors, capacities, housing and initial
+map positions remain unknown. Completion of the model does not establish a
+historical census or supply missing historical evidence.
+
+The standalone phase is concluded. The next phase is the separately requested
+vampire simulation using this released core and its documented boundaries; no
+supernatural rules are part of this ordinary city application.
 
 ```sh
 git submodule update --init --recursive
+make check-deps
 make all
 make app
 make content
 make content-check
 make runtime-content
-make city-check
 ./build/CanterburyDetails --city build/content/CanterburyCity.bin --minutes 5
-make test
 ```
 
+The qualified platform is macOS with Xcode/Apple command-line tools, Python and
+Make. Map generation also needs pkg-config, libpng and FreeType. See the
+[build guide](docs/BUILD.md) for dependencies, source admission and commands.
 Open **CanterburyDetails.xcodeproj**, choose **Canterbury Details / My Mac**, and
-press **Command-R**. Or launch `build/CanterburyDetails.app` after `make app`.
-The visual map supports zoom, pan, church/building inspection and resident search.
-**All agents…** shows every resident as a zoomable `+` roster glyph; amber means
-unplaced, teal means a known map position. **Agents (+)** toggles known-position
-map markers. Roster cells are explicitly nongeographic; no locations are invented.
-Selecting a located church recenters the map even at unchanged zoom. Run/Pause
-and Step controls advance the sole native clock; map inspection stays read-only. The scenario calendar
-derives from native elapsed time, with an explicit 1940-01-01 00:00 origin.
-Startup includes one binding minute, so the paused opening display is 00:01. See [build instructions](docs/BUILD.md).
+press **Command-R**, or launch `build/CanterburyDetails.app` normally after building.
 
-- [Geometry, ordinary access and entrance review](docs/GEOMETRY.md)
-- [Native movement, coordinates and budgets](docs/MOVEMENT.md)
-- [Qualified topology, closures and crowds](docs/ROUTING.md)
-- [Synthetic population and historical limits](docs/POPULATION.md)
-- [Households, housing, visitors and ownership](docs/HOUSEHOLDS.md)
-- [UI worker ownership and responsiveness](docs/UI-THREADING.md)
-- [Current native UI validation](content/cycle-14-18-native-ui.json)
-- [Xcode setup, visual controls and json2png renderer](docs/XCODE.md)
-- [Reusable foundation for the later game](docs/REUSE-FOUNDATION.md)
-- [Offline content schema, provenance and generation commands](docs/CONTENT.md)
-- [Cycle 08 content compiler evidence](content/cycle-08-validation.json)
-- [Memory inventory, publication and RNG contract](docs/MEMORY.md)
-- [Cycle 07 fault-injection and memory evidence](content/cycle-07-validation.json)
-- [Cycle 07 native host observation](content/cycle-07-native-ui.json)
-- [Person identity and binding contract](docs/IDENTITY.md)
-- [Cycle 06 identity evidence](content/cycle-06-validation.json)
-- [Cycle 06 native host observation](content/cycle-06-native-ui.json)
-- [Native time and lifecycle contract](docs/TIME-LIFECYCLE.md)
-- [Cycle 05 clock/lifecycle evidence](content/cycle-05-validation.json)
-- [Cycle 05 native clock observation](content/cycle-05-native-ui.json)
-- [SDK capacity, admission and ABI contract](docs/SDK-INTEGRATION.md)
-- [Cycle 04 capacity/profile evidence](content/cycle-04-validation.json)
-- [Cycle 03 build/startup evidence](content/cycle-03-validation.json)
-- [Native UI observation](content/cycle-03-native-ui.json)
-- [SDK regression evidence](content/cycle-03-sdk-validation.json)
+The app opens paused at 1940-01-01 00:01, including the documented native binding
+minute. Run/Pause, simulation speed and Step controls advance the sole native
+clock. Zoom, pan, search and inspection remain read-only. Selecting a located
+church or resident focuses its map position. **All agents…** shows every resident
+as a nongeographic roster mark: `×` is unplaced and `+` is located; color is
+supplementary. Unknown positions are never invented.
 
-The reviewed population changes in `apesdk` remain uncommitted. Commit those
-before updating the parent submodule pointer; see the build instructions for
-refreshing the audited source baseline afterward. No user-repository commits
-were made during qualification.
+**City management (Command-M)** provides all 45 ordinary operation verbs,
+preview/queue/cancel/query/apply, 11 paged status categories and save/load.
+Interventions require explicit permission. Complete checkpoints preserve native
+and city state with strict profile/ABI/content compatibility; implicit migration
+and cross-architecture raw-layout portability are not claimed.
 
-- [Standalone architecture and public API contract](docs/ARCHITECTURE.md)
-- [Reuse and attribution review](docs/REUSE.md)
-- [Cycle 02 validation evidence](content/cycle-02-validation.json)
-- [Sources, licenses and available SDK contracts](docs/SOURCES.md)
-- [Historical/data uncertainties and downstream decisions](docs/UNCERTAINTIES.md)
-- [Exact source/pin/file inventory](content/source-manifest.json)
-- [Cycle 01 validation evidence](content/cycle-01-validation.json)
+- [User guide and management controls](docs/USER-GUIDE.md)
+- [Map provenance and final assembled rendering](docs/MAP.md)
+- [Live inspection and stable-ID selection](docs/INSPECTION.md)
+- [Accessibility and tested input scope](docs/ACCESSIBILITY.md)
+- [Source uncertainties and historical limits](docs/UNCERTAINTIES.md)
+- [Operations](docs/OPERATIONS.md), [causal records](docs/RECORDS.md),
+  [checkpoints](docs/PERSISTENCE.md) and [replay](docs/REPLAY.md)
 
-After initializing the submodules, verify the recorded source baseline offline:
+Use `make core` to package `build/core/libCanterburyCore.a`, eight public headers,
+resources and the independent ordinary frontend. The core has one SDK owner,
+clock and population; it links without Cocoa or an application entry point.
+The [developer guide](docs/DEVELOPER-GUIDE.md), [architecture](docs/ARCHITECTURE.md)
+and [reuse handoff](docs/REUSE-FOUNDATION.md) define IDs, policy boundaries,
+checkpoint compatibility and independent extension RNG domains.
+
+The SDK fixes are committed at `3892ece`, with the parent gitlink committed at
+`e242c5d`. Exact pins/file hashes are in the [source manifest](content/source-manifest.json);
+the reviewed SDK tree is clean. The remaining parent implementation/documentation
+changes are left for review/commit. Qualification uses an exact temporary source
+snapshot without committing those pending parent files or publishing remotely.
 
 ```sh
-python3 tools/audit_sources.py --check
-python3 tools/verify_cycle01.py --check
+make test
+make final-check
+make performance
+python3 tools/verify_release.py --check
 ```
 
-Repeat the upstream map validators and tests in an isolated temporary copy:
+The completed gate passed runtime/fault/replay suites, isolated original SDK
+regressions, Xcode Debug/Release builds, independent core linking, normal native
+UI checks and five 1,440-minute population workloads. Measured actual-map step
+times were 22.3 seconds at 27,000 people and 25.4 seconds at 30,000; the separate
+30,000-glyph AppKit capture benchmark measured 18.4 ms p95. These are measurements
+on the qualified host, not universal timing or physical-display FPS guarantees.
 
-```sh
-python3 tools/verify_cycle01.py --run
-```
+- [Performance scope and budgets](docs/PERFORMANCE.md)
+- [Robustness and SDK isolation](docs/ROBUSTNESS.md)
+- [Release procedure and compatibility limits](docs/RELEASE.md)
+- [Current native UI evidence](content/cycle-35-40-native-ui.json)
+- [Measured performance results](content/cycle-37-validation.json)
+- [Versioned evidence index](content/evidence-index.json)
+- [Passing release gate](content/cycle-40-validation.json)
+- [Completed 40-cycle plan](PLAN.md)
 
-Review source/pin changes before using `python3 tools/audit_sources.py --write`
-to record a new baseline. Validation does not establish historical truth or
-approve candidate routes for movement. Broader simulation and lifecycle checks
-belong to later cycles. All project code/data inputs stay in this checkout and
-its two submodules; no prior application or uploaded web page is required.
-
-Validate the Cycle 02 ownership/dependency contract and declaration-only API:
-
-```sh
-python3 tools/verify_cycle02.py --run
-python3 tools/verify_cycle02.py --check
-```
-
-The checks compile C/C++ header probes without linking a city implementation;
-these Cycle 02 checks alone do not qualify runtime behavior.
-
-The default population is **27,000**, distinct from the **30,000** native/identity
-capacity. The 3,000 spare slots support later growth; configured births/admissions are implemented in Cycle 14.
-
-Human model acceptance: `make human-check`. See [lifecycle](docs/LIFECYCLE.md),
-[needs](docs/NEEDS.md), [food](docs/FOOD.md), [health](docs/HEALTH.md) and
-[occupation definitions](docs/OCCUPATIONS.md). The native resident inspector shows
-current energy/fatigue/activity, and the catalogue distinguishes role eligibility
-from workplace assignments and shifts implemented in Cycles 19–20.
-
-Cycles 19–23 add bounded qualified employment, actual street commutes, resumable
-shared-minute work, finite goods/wages/purchases, scenario premises works and all
-33 exact institution records. See [employment](docs/EMPLOYMENT.md),
-[work](docs/WORK.md), [economy](docs/ECONOMY.md),
-[development](docs/DEVELOPMENT.md) and [institutions](docs/INSTITUTIONS.md).
-Run `make work-check` for native acceptance fixtures. Technical scenario rates
-remain explicit; the real map still requires spatial qualification before staffing.
-
-Cycles 24–28 add distinct ordinary religious offices and succession, explicit
-community calendars and attendance, permission-checked civic dispatch, finite
-handcart/stretcher transport and explicit environmental experiments. See
-[religious employment](docs/RELIGIOUS-EMPLOYMENT.md), [community](docs/COMMUNITY.md),
-[services](docs/SERVICES.md), [logistics](docs/LOGISTICS.md) and
-[environment](docs/ENVIRONMENT.md). `make civic-check` runs the native fixtures.
-No historical staffing, fleet, holiday, raid, weather or damage is inferred.
-Calendar component checkpoints are available; full atomic city saves remain Cycle 31.
+All source, data and documentation required for this ordinary release live here
+and in the two declared submodules. No sibling application or deleted web upload
+is required. New historical data or game integration is a separate phase with its
+own review and qualification; no additional implementation cycle is outstanding.

@@ -32,7 +32,8 @@ The 5 GiB payload ceiling permits one live resource set and one staged replaceme
 at the current layout. More staging may be refused. An unchanged small population
 still reserves full capacity. Prepared native storage is zeroed allocation, not an
 extra simulated population: only the published resource set binds the SDK. Peak
-resident memory, save staging and full performance qualification remain Cycle 37.
+RSS, save staging and full-day budgets are measured in Cycle 37; see
+[PERFORMANCE.md](PERFORMANCE.md).
 
 ## Prepare and publish
 
@@ -53,9 +54,10 @@ registry and initializes the native bodies/clock with the prepared seed. This
 serialized commit performs no allocation. The prepared, fixed-layout fresh city
 profile has no recoverable startup operation left: callback/initialization failure
 here indicates an internal invariant defect and terminates rather than returning
-a partially valid world. Future content/restore features must stage all fallible
-work before entering this commit. This is resource staging, not concurrent SDK
-worlds or a save-state restore mechanism.
+a partially valid world. Content admission and checkpoint restoration stage all fallible work before
+publication. This low-level bootstrap transaction is resource staging; full
+checkpoint restoration is documented in [PERSISTENCE.md](PERSISTENCE.md). Only one
+native SDK owner is active.
 
 The caller's handle changes only on successful publication; the stage pointer is
 consumed and cleared. Old value references fail in the new world. `cd_smoke_open`
@@ -76,9 +78,9 @@ attempts and staging/discard do not enter either seed.
 refresh never draw. `cd_smoke_admit_next` stages a draw on the admission stream,
 uses its low 32 bits as the technical native fixture seed, and commits that draw
 only after successful admission. A refused full-capacity admission consumes no RNG.
-The explicit-seed admission API remains available for fixtures. Domain use by
-future human routines/services is not implemented in this cycle. Save/replay
-serialization of stream state remains later work.
+The explicit-seed admission API remains available for fixtures. The three streams and native RNG state are included in complete checkpoints and
+replay qualification. The independent extension-RNG function is documented in
+[DEVELOPER-GUIDE.md](DEVELOPER-GUIDE.md).
 
 ## Qualification
 

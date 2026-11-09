@@ -8,6 +8,9 @@ from compile_runtime import build
 FILES=sorted(set(CORE+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['ui/CityMap.h','ui/CitySession.h','tools/verify_city_cycles.py','tools/city_fixtures.py','tools/compile_runtime.py','tools/native_sources.py','tools/build.py','content/spatial-review.json','tests/city.c','docs/GEOMETRY.md','docs/MOVEMENT.md','docs/ROUTING.md','docs/POPULATION.md','docs/HOUSEHOLDS.md','docs/UI-THREADING.md']))
 FILES=sorted(set(FILES+['src/cd_adapter.c', 'src/cd_population.c', 'src/cd_random.c', 'src/cd_health.c', 'src/cd_movement.c', 'src/cd_content.c', 'src/cd_people.c', 'src/cd_memory.c', 'src/cd_households.c', 'src/cd_routing.c', 'src/cd_world.c', 'src/cd_needs.c', 'src/cd_geometry.c', 'src/cd_food.c', 'src/cd_lifecycle.c', 'src/cd_human_digest.c', 'src/cd_occupations.c', 'src/cd_city_internal.h', 'src/cd_bootstrap.h', 'src/cd_native.h', 'src/cd_human.h', 'src/cd_random.h', 'src/cd_city.h', 'src/cd_api.h', 'src/cd_people.h', 'src/cd_memory.h', 'tools/compile_occupations.py', 'content/occupation-policy.json']))
 SCOPES={9:'rings, holes, water, rail, entrance qualification, confidence and ordinary access',10:'native position, shared minute claim, bounded polyline/door travel and interruption',11:'source components, per-link qualification, grade rejection, detour, closure and crowd',12:'27,000 unique native-backed IDs; explicit synthetic names/dates/categories; unknown faith',13:'households, guardians, spouse consistency, capacity, ownership, visitor reservations and housing uncertainty'}
+from native_sources import UI
+FILES=sorted(set(FILES+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'ui').glob('*.h')]+['tools/compile_controls.py','content/operation-controls.json']))
+
 def run(cmd):
     p=subprocess.run(list(map(str,cmd)),cwd=ROOT,capture_output=True,text=True)
     if p.returncode:raise RuntimeError(str(cmd)+'\n'+p.stdout[-1500:]+p.stderr[-3000:])

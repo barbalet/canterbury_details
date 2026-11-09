@@ -1,12 +1,14 @@
 # Source uncertainties and downstream decisions
 
 Cycle 01 records these gaps; it does not silently supply historical facts.
-“Open” below is a downstream data/model decision, not an incomplete source audit.
+The ordinary implementation and all 40 qualification cycles are complete.
+The historical gaps below remain source uncertainties, not unfinished cycles.
+Technical fixtures exercise the model without resolving those historical claims.
 Sources and selectors are reproducible through `content/source-manifest.json`.
 
 | ID | Evidence / unknown | Required treatment and owning cycle |
 | --- | --- | --- |
-| U01 | `universe/universe.h` supplies an SDK default/capacity, not a 1940 census; source map spans city and surrounding settlements | User requires 27,000 ordinary humans (implemented as Cycle 03 default), not a verified census. Do not invent extra troops/evacuees. Define fixture boundaries in 04/12; historical total remains unknown |
+| U01 | `universe/universe.h` supplies an SDK default/capacity, not a 1940 census; source map spans city and surrounding settlements | User requires 27,000 ordinary humans (implemented as Cycle 03 default), not a verified census. Do not invent extra troops/evacuees. Synthetic fixture boundaries are defined in 04/12; historical total remains unknown |
 | U02 | `derived/road-network.json` explicitly describes modern OSM layout and approximate registration | Keep modern labels/date separate; qualify topology and historical applicability before routing, 08–11 |
 | U03 | Historical traces are source-guided, incomplete and not era-qualified; their edges remain non-traversable | Do not infer bridges, walkability or missing joins; explicit review required, 09–11 |
 | U04 | Candidate footprints may combine structures, fragments or symbols; entrances are not surveyed | Preserve rings/confidence; review ordinary door connectors and building capacity, 09/13 |

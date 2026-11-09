@@ -20,11 +20,18 @@ void cd_native_awake(CdSmokeSession *, CdPersonRef, int);
 void cd_native_block(CdSmokeSession *, CdPersonRef, int sleeping);
 unsigned cd_native_hungry(void);
 unsigned cd_native_full(void);
-typedef int (*CdCheckpointIo)(void *,void *,size_t);
-CdStatus cd_native_checkpoint(const CdSmokeSession *,CdCheckpointIo,void *,CdDiagnostic *);
-CdStatus cd_native_checkpoint_stage(CdCheckpointIo,void *,CdSmokeStage **,CdDiagnostic *);
-void cd_native_checkpoint_publish(CdSmokeStage **,CdSmokeSession **);
+typedef int (*CdCheckpointIo)(void *, void *, size_t);
+CdStatus cd_native_checkpoint(const CdSmokeSession *, CdCheckpointIo, void *,
+                              CdDiagnostic *);
+CdStatus cd_native_checkpoint_stage(CdCheckpointIo, void *, CdSmokeStage **,
+                                    CdDiagnostic *);
+int cd_native_checkpoint_owner(const CdSmokeSession *);
+void cd_native_checkpoint_publish(CdSmokeStage **, CdSmokeSession **);
 uint64_t cd_native_stage_digest(const CdSmokeStage *);
+uint64_t cd_native_stage_minutes(const CdSmokeStage *);
+size_t cd_native_stage_count(const CdSmokeStage *);
+int cd_native_stage_has(const CdSmokeStage *, CdPersonId);
+uint64_t cd_native_checkpoint_abi(void);
 uint64_t cd_native_stage_token(const CdSmokeStage *);
 uint64_t cd_native_full_digest(const CdSmokeSession *);
 #endif

@@ -8,7 +8,7 @@ this cycle. The declaration-only `src/cd_api.h` is a new local interface design.
 `content/reuse-ledger.json` records the reviewed reference repository/revision,
 per-file SHA-256, selected patterns and required removals. These are archival
 review facts. The local architecture checker never opens that reference checkout;
-its removal cannot break this project's checks, build or future runtime.
+its removal cannot break this project's checks, build or runtime.
 
 ## Dispositions
 

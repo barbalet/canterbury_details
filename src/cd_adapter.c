@@ -6,6 +6,7 @@
 #include "bronze/work/bronze_work.h"
 #include "bronze/actors/bronze_actors.h"
 #include "entity/entity.h"
+#include "sim/sim.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +32,8 @@ struct CdSmokeSession {
 struct CdSmokeStage {
   CdSmokeSession *session;
   uint32_t seed;
-  n_land *land_image;simulated_timing timing_image;
+  n_land *land_image;
+  simulated_timing timing_image;
 };
 static CdSmokeSession *active_session;
 static uint64_t
@@ -667,50 +669,197 @@ int cd_native_can_work(const CdSmokeSession *s, CdPersonRef ref) {
 }
 
 /* Closed city checkpoint seam; all staging allocations precede publication. */
-typedef struct {uint64_t magic,count,callbacks,selected;CdRandom random;} CdNativeImage;
-static int compare_id(const void *a,const void *b){uint64_t x=*(const uint64_t *)a,y=*(const uint64_t *)b;return (x>y)-(x<y);}
-static uint64_t native_hash_bytes(uint64_t h,const void *data,size_t n){const unsigned char *p=data;while(n--)h=mix(h,*p++);return h;}
-static uint64_t complete_native_digest(const CdSmokeSession *s,const simulated_group *g){
- uint64_t h=mix(UINT64_C(1469598103934665603),s->callbacks);h=mix(h,bronze_actors_next_id(s->registry));
- h=native_hash_bytes(h,&s->random,sizeof s->random);
- const BronzeClock *c=bronze_actors_clock(s->registry);h=native_hash_bytes(h,c,sizeof *c);
- for(size_t i=0;i<g->num;i++){BronzeActorId id=bronze_actors_canterbury_slot_id(s->registry,i);h=mix(h,id);h=native_hash_bytes(h,&g->beings[i],sizeof g->beings[i]);BronzeActor *a=bronze_actors_find(s->registry,id);if(a){h=native_hash_bytes(h,&a->work,sizeof a->work);h=mix(h,a->remaining_ticks);h=mix(h,a->task);}}
- return h;
+typedef struct {
+  uint64_t magic, count, callbacks, selected;
+  CdRandom random;
+} CdNativeImage;
+static int compare_id(const void *a, const void *b) {
+  uint64_t x = *(const uint64_t *)a, y = *(const uint64_t *)b;
+  return (x > y) - (x < y);
 }
-uint64_t cd_native_full_digest(const CdSmokeSession *s){return identity_ready(s)?complete_native_digest(s,sim_group()):0;}
-uint64_t cd_native_stage_digest(const CdSmokeStage *stage){return stage&&stage->session?complete_native_digest(stage->session,stage->session->native_storage):0;}
-uint64_t cd_native_stage_token(const CdSmokeStage *stage){return stage?cd_people_token(stage->session->people):0;}
-CdStatus cd_native_checkpoint(const CdSmokeSession *s,CdCheckpointIo io,void *ctx,CdDiagnostic *d){
- if(!identity_ready(s)||!io)return diagnostic(d,CD_INVALID_STATE,"Checkpoint needs sole closed native owner");
- simulated_group *g=sim_group();CdNativeImage h={0};h.magic=UINT64_C(0x314e544443);h.count=g->num;h.callbacks=s->callbacks;h.random=s->random;
- BronzeActor *selected=bronze_actors_for_being(s->registry,g->select);h.selected=selected?selected->id:0;
- size_t size=bronze_actors_canterbury_checkpoint_bytes(g->num);void *blob=cd_memory_calloc(1,size,CD_MEM_TEMP);if(!blob)return diagnostic(d,CD_CAPACITY,"Native checkpoint buffer allocation failed");
- int valid=bronze_actors_canterbury_checkpoint(s->registry,blob,size)&&io(ctx,&h,sizeof h)&&io(ctx,(void *)land_canterbury_snapshot(),sizeof(n_land))&&io(ctx,sim_timing(),sizeof(simulated_timing))&&io(ctx,&g->remains,sizeof g->remains);
- for(size_t i=0;valid&&i<g->num;i++)valid=io(ctx,&g->beings[i],sizeof g->beings[i]);
- if(valid)valid=io(ctx,blob,size);cd_memory_free(blob);return diagnostic(d,valid?CD_OK:CD_IO_ERROR,valid?"Complete native/Bronze checkpoint written":"Unsupported native extension or checkpoint write failed");
+static uint64_t native_hash_bytes(uint64_t h, const void *data, size_t n) {
+  const unsigned char *p = data;
+  while (n--)
+    h = mix(h, *p++);
+  return h;
 }
-CdStatus cd_native_checkpoint_stage(CdCheckpointIo io,void *ctx,CdSmokeStage **out,CdDiagnostic *d){
- CdNativeImage h;if(!out||*out||!io||!io(ctx,&h,sizeof h)||h.magic!=UINT64_C(0x314e544443)||h.count>LARGE_SIM||!h.callbacks)return diagnostic(d,CD_INVALID_DATA,"Invalid native checkpoint header");
- CdSmokeStage *stage=NULL;CdStatus status=cd_smoke_prepare(h.count?h.count:1,0,&stage,d);if(status!=CD_OK)return status;
- CdSmokeSession *s=stage->session;s->requested=h.count;s->callbacks=h.callbacks;s->random=h.random;s->native_storage->num=h.count;s->native_storage->max=LARGE_SIM;
- stage->land_image=cd_memory_calloc(1,sizeof(n_land),CD_MEM_TEMP);size_t bytes=bronze_actors_canterbury_checkpoint_bytes(h.count);void *blob=cd_memory_calloc(1,bytes,CD_MEM_TEMP);
- if(!stage->land_image||!blob){status=diagnostic(d,CD_CAPACITY,"Native restore staging allocation failed");goto done;}
- int valid=io(ctx,stage->land_image,sizeof(n_land))&&io(ctx,&stage->timing_image,sizeof stage->timing_image)&&io(ctx,&s->native_storage->remains,sizeof s->native_storage->remains);
- for(size_t i=0;valid&&i<h.count;i++)valid=io(ctx,&s->native_storage->beings[i],sizeof(simulated_being));
- valid=valid&&io(ctx,blob,bytes)&&bronze_actors_canterbury_checkpoint_stage(s->registry,blob,bytes,s->native_storage);
- const BronzeClock *clock=bronze_actors_clock(s->registry);
- if(!valid||clock->elapsed!=h.callbacks||stage->land_image->time>=1440||clock->tick!=(uint64_t)stage->land_image->date*1440+stage->land_image->time){status=diagnostic(d,CD_INVALID_DATA,"Native/Bronze clock or actor checkpoint mismatch");goto done;}
- for(size_t i=0;i<h.count;i++)s->ids[i]=bronze_actors_canterbury_slot_id(s->registry,i);qsort(s->ids,h.count,sizeof *s->ids,compare_id);
- for(size_t i=0;i<h.count;i++){size_t slot=bronze_actors_canterbury_record_slot(s->registry,s->ids[i]);if(slot>=h.count||cd_people_add(s->people,s->ids[i],slot)!=CD_OK){status=diagnostic(d,CD_INVALID_DATA,"Duplicate or invalid restored actor IDs");goto done;}}
- if(h.selected){size_t slot=bronze_actors_canterbury_record_slot(s->registry,h.selected);if(slot>=h.count){status=diagnostic(d,CD_INVALID_DATA,"Invalid native selection");goto done;}s->native_storage->select=&s->native_storage->beings[slot];}
- s->seeded=1;*out=stage;stage=NULL;status=CD_OK;
- done:cd_memory_free(blob);cd_smoke_discard(stage);return status;
+static uint64_t complete_native_digest(const CdSmokeSession *s,
+                                       const simulated_group *g) {
+  uint64_t h = mix(UINT64_C(1469598103934665603), s->callbacks);
+  h = mix(h, bronze_actors_next_id(s->registry));
+  h = native_hash_bytes(h, &s->random, sizeof s->random);
+  const BronzeClock *c = bronze_actors_clock(s->registry);
+  h = native_hash_bytes(h, c, sizeof *c);
+  for (size_t i = 0; i < g->num; i++) {
+    BronzeActorId id = bronze_actors_canterbury_slot_id(s->registry, i);
+    h = mix(h, id);
+    h = native_hash_bytes(h, &g->beings[i], sizeof g->beings[i]);
+    BronzeActor *a = bronze_actors_find(s->registry, id);
+    if (a) {
+      h = native_hash_bytes(h, &a->work, sizeof a->work);
+      h = mix(h, a->remaining_ticks);
+      h = mix(h, a->task);
+    }
+  }
+  return h;
 }
-void cd_native_checkpoint_publish(CdSmokeStage **out,CdSmokeSession **current){
- CdSmokeStage *stage=*out;CdSmokeSession *s=stage->session;
- cd_smoke_close(active_session);
- if(!sim_canterbury_install_storage(s->native_storage,s->sdk_buffer,s->sdk_buffer_bytes,native_minute,s)){fputs("Validated native storage install invariant failed\n",stderr);abort();}
- land_canterbury_install(stage->land_image);*sim_timing()=stage->timing_image;bronze_actors_activate(s->registry);
- if(!bronze_actors_rebind(s->registry,s->native_storage)){fputs("Validated native rebind invariant failed\n",stderr);abort();}
- s->started=1;active_session=s;*current=s;stage->session=NULL;cd_memory_free(stage->land_image);cd_memory_free(stage);*out=NULL;
+uint64_t cd_native_full_digest(const CdSmokeSession *s) {
+  return identity_ready(s) ? complete_native_digest(s, sim_group()) : 0;
+}
+uint64_t cd_native_stage_digest(const CdSmokeStage *stage) {
+  return stage && stage->session
+             ? complete_native_digest(stage->session,
+                                      stage->session->native_storage)
+             : 0;
+}
+uint64_t cd_native_stage_token(const CdSmokeStage *stage) {
+  return stage ? cd_people_token(stage->session->people) : 0;
+}
+CdStatus cd_native_checkpoint(const CdSmokeSession *s, CdCheckpointIo io,
+                              void *ctx, CdDiagnostic *d) {
+  if (!identity_ready(s) || !io)
+    return diagnostic(d, CD_INVALID_STATE,
+                      "Checkpoint needs sole closed native owner");
+  simulated_group *g = sim_group();
+  CdNativeImage h = {0};
+  h.magic = UINT64_C(0x314e544443);
+  h.count = g->num;
+  h.callbacks = s->callbacks;
+  h.random = s->random;
+  BronzeActor *selected = bronze_actors_for_being(s->registry, g->select);
+  h.selected = selected ? selected->id : 0;
+  size_t size = bronze_actors_canterbury_checkpoint_bytes(g->num);
+  void *blob = cd_memory_calloc(1, size, CD_MEM_TEMP);
+  if (!blob)
+    return diagnostic(d, CD_CAPACITY,
+                      "Native checkpoint buffer allocation failed");
+  int valid = bronze_actors_canterbury_checkpoint(s->registry, blob, size) &&
+              io(ctx, &h, sizeof h) &&
+              io(ctx, (void *)land_canterbury_snapshot(), sizeof(n_land)) &&
+              io(ctx, sim_timing(), sizeof(simulated_timing)) &&
+              io(ctx, &g->remains, sizeof g->remains);
+  for (size_t i = 0; valid && i < g->num; i++)
+    valid = io(ctx, &g->beings[i], sizeof g->beings[i]);
+  if (valid)
+    valid = io(ctx, blob, size);
+  cd_memory_free(blob);
+  return diagnostic(
+      d, valid ? CD_OK : CD_IO_ERROR,
+      valid ? "Complete native/Bronze checkpoint written"
+            : "Unsupported native extension or checkpoint write failed");
+}
+CdStatus cd_native_checkpoint_stage(CdCheckpointIo io, void *ctx,
+                                    CdSmokeStage **out, CdDiagnostic *d) {
+  CdNativeImage h;
+  if (!out || *out || !io || !io(ctx, &h, sizeof h) ||
+      h.magic != UINT64_C(0x314e544443) || h.count > LARGE_SIM || !h.callbacks)
+    return diagnostic(d, CD_INVALID_DATA, "Invalid native checkpoint header");
+  CdSmokeStage *stage = NULL;
+  CdStatus status = cd_smoke_prepare(h.count ? h.count : 1, 0, &stage, d);
+  if (status != CD_OK)
+    return status;
+  CdSmokeSession *s = stage->session;
+  s->requested = h.count;
+  s->callbacks = h.callbacks;
+  s->random = h.random;
+  s->native_storage->num = h.count;
+  s->native_storage->max = LARGE_SIM;
+  stage->land_image = cd_memory_calloc(1, sizeof(n_land), CD_MEM_TEMP);
+  size_t bytes = bronze_actors_canterbury_checkpoint_bytes(h.count);
+  void *blob = cd_memory_calloc(1, bytes, CD_MEM_TEMP);
+  if (!stage->land_image || !blob) {
+    status =
+        diagnostic(d, CD_CAPACITY, "Native restore staging allocation failed");
+    goto done;
+  }
+  int valid =
+      io(ctx, stage->land_image, sizeof(n_land)) &&
+      io(ctx, &stage->timing_image, sizeof stage->timing_image) &&
+      io(ctx, &s->native_storage->remains, sizeof s->native_storage->remains);
+  for (size_t i = 0; valid && i < h.count; i++)
+    valid = io(ctx, &s->native_storage->beings[i], sizeof(simulated_being));
+  valid = valid && io(ctx, blob, bytes) &&
+          bronze_actors_canterbury_checkpoint_stage(s->registry, blob, bytes,
+                                                    s->native_storage);
+  const BronzeClock *clock = bronze_actors_clock(s->registry);
+  if (!valid || clock->elapsed != h.callbacks ||
+      stage->land_image->time >= 1440 ||
+      clock->tick !=
+          (uint64_t)stage->land_image->date * 1440 + stage->land_image->time) {
+    status = diagnostic(d, CD_INVALID_DATA,
+                        "Native/Bronze clock or actor checkpoint mismatch");
+    goto done;
+  }
+  for (size_t i = 0; i < h.count; i++)
+    s->ids[i] = bronze_actors_canterbury_slot_id(s->registry, i);
+  qsort(s->ids, h.count, sizeof *s->ids, compare_id);
+  for (size_t i = 0; i < h.count; i++) {
+    size_t slot = bronze_actors_canterbury_record_slot(s->registry, s->ids[i]);
+    if (slot >= h.count || cd_people_add(s->people, s->ids[i], slot) != CD_OK) {
+      status = diagnostic(d, CD_INVALID_DATA,
+                          "Duplicate or invalid restored actor IDs");
+      goto done;
+    }
+  }
+  if (h.selected) {
+    size_t slot = bronze_actors_canterbury_record_slot(s->registry, h.selected);
+    if (slot >= h.count) {
+      status = diagnostic(d, CD_INVALID_DATA, "Invalid native selection");
+      goto done;
+    }
+    s->native_storage->select = &s->native_storage->beings[slot];
+  }
+  s->seeded = 1;
+  *out = stage;
+  stage = NULL;
+  status = CD_OK;
+done:
+  cd_memory_free(blob);
+  cd_smoke_discard(stage);
+  return status;
+}
+int cd_native_checkpoint_owner(const CdSmokeSession *s) {
+  return s ? identity_ready(s) : !active_session && !bronze_actors_current();
+}
+void cd_native_checkpoint_publish(CdSmokeStage **out,
+                                  CdSmokeSession **current) {
+  CdSmokeStage *stage = *out;
+  CdSmokeSession *s = stage->session;
+  cd_smoke_close(active_session);
+  if (!sim_canterbury_install_storage(s->native_storage, s->sdk_buffer,
+                                      s->sdk_buffer_bytes, native_minute, s)) {
+    fputs("Validated native storage install invariant failed\n", stderr);
+    abort();
+  }
+  land_canterbury_install(stage->land_image);
+  *sim_timing() = stage->timing_image;
+  bronze_actors_activate(s->registry);
+  if (!bronze_actors_rebind(s->registry, s->native_storage)) {
+    fputs("Validated native rebind invariant failed\n", stderr);
+    abort();
+  }
+  s->started = 1;
+  active_session = s;
+  *current = s;
+  stage->session = NULL;
+  cd_memory_free(stage->land_image);
+  cd_memory_free(stage);
+  *out = NULL;
+}
+
+size_t cd_native_stage_count(const CdSmokeStage *s) {
+  return s ? s->session->requested : 0;
+}
+int cd_native_stage_has(const CdSmokeStage *s, CdPersonId id) {
+  return s && bronze_actors_canterbury_record_slot(s->session->registry, id) <
+                  s->session->requested;
+}
+uint64_t cd_native_checkpoint_abi(void) {
+  return sizeof(simulated_being) ^ ((uint64_t)sizeof(n_land) << 20) ^
+         ((uint64_t)sizeof(BronzeActor) << 40) ^
+         bronze_actors_canterbury_checkpoint_bytes(0);
+}
+
+uint64_t cd_native_stage_minutes(const CdSmokeStage *s) {
+  return s ? s->session->callbacks : 0;
 }

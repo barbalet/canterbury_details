@@ -1,8 +1,11 @@
 PYTHON ?= python3
-.PHONY: all cli app smoke test check check-deps audit run clean capacity lifecycle identity memory content content-check runtime-content city-check human-check
+.PHONY: core final-check performance release json2png2 map observer-check civic-check work-check all cli app smoke test check check-deps audit run clean capacity lifecycle identity memory content content-check runtime-content city-check human-check
 all: cli
 cli:
 	$(PYTHON) tools/build.py cli
+json2png2:
+	$(PYTHON) tools/build_basemap.py --write
+map: json2png2
 app:
 	$(PYTHON) tools/build.py app
 smoke:
@@ -29,6 +32,8 @@ runtime-content:
 	$(PYTHON) tools/compile_runtime.py --write
 city-check:
 	$(PYTHON) tools/verify_city_cycles.py --run
+observer-check:
+	$(PYTHON) tools/verify_observer_cycles.py --run
 civic-check:
 	$(PYTHON) tools/verify_civic_cycles.py --run
 work-check:
@@ -46,7 +51,17 @@ test check:
 	$(PYTHON) tools/verify_human_cycles.py --run
 	$(PYTHON) tools/verify_work_cycles.py --run
 	$(PYTHON) tools/verify_civic_cycles.py --run
+	$(PYTHON) tools/verify_observer_cycles.py --run
 run: cli
 	./build/CanterburyDetails --minutes 5
 clean:
 	$(PYTHON) -c 'import shutil; shutil.rmtree("build", ignore_errors=True)'
+
+core:
+	$(PYTHON) tools/build_core.py
+final-check:
+	$(PYTHON) tools/verify_final_cycles.py --run
+performance:
+	$(PYTHON) tools/verify_final_cycles.py --performance
+release:
+	$(PYTHON) tools/verify_release.py --prepare

@@ -1,12 +1,12 @@
 {
   "format": "canterbury-details-sdk-population-qualification",
   "version": 1,
-  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
-  "tool_sha256": "d256e323ac8b819d5500b2af86d6bee3c3e1e26cd7bb2a318be8a71f2dff216f",
+  "source_manifest_sha256": "dc7cbb075d67a6951a2c75dd3d4bc1d027e0257363e31c16f5e9a3669d4b2073",
+  "tool_sha256": "c6f26c3eca9a5d503cb0e2b69b66731d67d101565f2591a02d31d08eed8a8001",
   "population": 27000,
   "capacity": 30000,
   "storage_scope": "Cycle 07 guarded host-owned storage",
-  "change_scope": "CANTERBURY_SIM-only population and host-owned heap/startup/registry storage seams",
+  "change_scope": "CANTERBURY_SIM-only capacity/storage and native/Bronze checkpoint staging/validation; unflagged profiles unchanged",
   "probes": [
     {
       "profile": "native",
@@ -60,10 +60,10 @@
     },
     {
       "profile": "city",
-      "unchanged_layout": false,
+      "unchanged_layout": true,
       "unchanged_body_layout": true,
       "capacity_body_group_bytes": "30000 70292 2108760088",
-      "base_capacity_body_group_bytes": "27000 70292 1897884088"
+      "base_capacity_body_group_bytes": "30000 70292 2108760088"
     }
   ],
   "suites": [
@@ -71,7 +71,7 @@
       "suite": "native",
       "passed": true,
       "log": "build/cycle03-sdk-native.log",
-      "log_sha256": "ec0dd9fbaefdafe815bf45a84789cad27715ca860f1cc0f16570d7187508eedf"
+      "log_sha256": "eacb0b8634620ea8891194e557a460a5688254c71863a72d754c8e6af50e3083"
     },
     {
       "suite": "contract",
@@ -83,7 +83,7 @@
       "suite": "actors",
       "passed": true,
       "log": "build/cycle03-sdk-actors.log",
-      "log_sha256": "00aa83d82f28dd0b016d3052bba5a0af00a38f99c20bb5968660bd22d62e52a5"
+      "log_sha256": "4130762dcb2b9532e368ebd0061075d64638a377a120d4773d92757290ec006f"
     },
     {
       "suite": "hybrid",
@@ -93,6 +93,8 @@
     }
   ],
   "original_checkout_untouched_by_tests": true,
-  "sdk_changes_uncommitted": true,
+  "sdk_changes_uncommitted": false,
+  "comparison_revision": "e44fd93cb07ff20b643b4747c595b0fef294748d",
+  "baseline_file_sha256": "4a8b5427761c608e3ebc723a46b0a0c4c2e859b5cd14e819690f30552c6964c0",
   "ok": true
 }

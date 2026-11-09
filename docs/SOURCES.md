@@ -19,10 +19,10 @@ The audit establishes no historical population count, age distribution, househol
 composition or religious census. The pinned SDK originally declared a 26,999
 default and 27,000 capacity, reserving the final slot during initialization.
 At the user's request, Cycle 03 changes the city-only default/admission to 27,000
-ordinary humans with no reserved actor. Exact working SDK changes are recorded in
-`content/sdk-working-tree.json` and included in the source inventory; they remain
-uncommitted. This required simulation total is not historical census evidence.
-Broader capacity/lifecycle qualification remains Cycle 04.
+ordinary humans with no reserved actor. The committed SDK pin is recorded in the source manifest;
+`content/sdk-working-tree.json` records a clean tree. The default is 27,000 and
+capacity is 30,000. Capacity/lifecycle and ordinary-profile isolation are qualified.
+This required simulation total is not historical census evidence.
 The map includes surrounding settlements; a city/borough total must not be spread
 across this canvas and described as a recovered enumeration without a supported
 boundary/population mapping.
@@ -49,7 +49,7 @@ proposed persistent object identity.
 | `modern/sources.json`, `osm-canterbury.json`, `osm-roads.json` under `simulation-map/` | Stored snapshot, original OSM IDs/tags and download provenance | Retrieved in 2026; not a 1940 census or historical road inventory |
 | `modern/control-points.json`, `control-point-index.json` | Registration/control evidence | Approximate landmark-based registration; rejected controls stay rejected |
 | `canterbury/simulation-map/religious-sites-1940.json` | Curated site register, references and setting assignments | Read explicit status, location basis, notes and scenario overrides |
-| `derived/religious-sites-1940.json` | Reproducible institution register for later import | 32 Christian records and one Jewish centre; not resident demographics |
+| `derived/religious-sites-1940.json` | Reproducible imported institution register | 32 Christian records and one Jewish centre; not resident demographics |
 
 The shortened `derived/` and `modern/` paths in this table are inside
 `canterbury/simulation-map/`. The primary inventory file records fully qualified
@@ -89,7 +89,7 @@ clergy headcounts, lay staffing and local service routines are not supplied here
 | `bronze/actors/bronze_actors.{h,c}` | World-scoped IDs, lookup, reset, compaction/rebind, staged sidecars | Persistent pointers or cross-world ID equivalence |
 | `bronze/work/bronze_work.{h,c}` | Guarded city claim/close and one native work interval | A separate per-job ticking clock |
 | `bronze/tasks/bronze_tasks.{h,c}` | Bounded resumable task infrastructure | Period-correct city jobs or employer/service policy |
-| `bronze/content/bronze_age_full.bronze` | Vocation IDs and engine occupation capability examples | An approved 1940 occupation distribution; audit period suitability later |
+| `bronze/content/bronze_age_full.bronze` | Vocation IDs and engine occupation capability examples | An approved 1940 occupation distribution; use the audited occupation catalogue and explicit policy |
 | `bronze/hybrid/bronze_hybrid.{h,c}`, `gui/draw.c` | Guarded overlay/native drawing bridge | A ready-made standalone Canterbury UI |
 | `sim/sim.h` and actor/sidecar modules | Landscape/weather continuation and serialized actor mechanisms | A complete city household/job/route/inventory checkpoint |
 | `bronze/CANTERBURY.md`, actors/work/tasks/contract READMEs | Existing profile and module contracts | Prior client-specific special actors or qualification results are not new-project requirements |
@@ -97,7 +97,7 @@ clergy headcounts, lay staffing and local service routines are not supplied here
 The current bridge requires `CANTERBURY_SIM=1` with `BRONZE_SIM=1` consistently
 across translation units. Native time and the observed actor clock advance before
 the city callback; the callback replaces island autonomy. Human semantics and
-ordinary city policy must be implemented by the future host. Further SDK changes
+ordinary city policy are implemented by this host. Further SDK changes
 are authorized only behind the city guard and require baseline native/Bronze
 regressions in their implementation cycles.
 

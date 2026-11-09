@@ -18,22 +18,15 @@
     },
     {
       "path": "apesdk",
-      "revision": "abdde4b18b8ac96744b20c47bd9dfeeba96780bb",
+      "revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
       "origin": "git@github.com:barbalet/apesdk.git",
       "tracked_files": 471,
-      "reviewed_worktree_files": [
-        "bronze/CANTERBURY.md",
-        "bronze/actors/bronze_actors.c",
-        "bronze/actors/bronze_actors.h",
-        "entity/being.c",
-        "universe/sim.c",
-        "universe/universe.h"
-      ]
+      "reviewed_worktree_files": []
     }
   ],
   "sdk_worktree_review": {
     "path": "content/sdk-working-tree.json",
-    "sha256": "e2f70b648b786ca9a744f0e631069bb75902da51db1012242242031c681c884a"
+    "sha256": "d3294190c4d9e117329bc0924c9eda3cd55a6661ecbaf47995ada94225a3a917"
   },
   "root_license": {
     "path": "LICENSE",
@@ -1194,8 +1187,8 @@
     },
     {
       "path": "apesdk/bronze/actors/bronze_actors.c",
-      "bytes": 21182,
-      "sha256": "e1b036dd099fb80c4fde1d2421e9260783243c7911630265cd467b4509742580"
+      "bytes": 21612,
+      "sha256": "ace69fbd389abea5c61dbddd23c18bb9967986d9e1bcf622f0f6b5a59e48e1b5"
     },
     {
       "path": "apesdk/bronze/actors/bronze_actors.h",

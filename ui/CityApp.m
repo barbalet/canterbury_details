@@ -1,5 +1,6 @@
 #import "CityMap.h"
 #import "CitySession.h"
+#import "CityManagement.h"
 #include "cd_bootstrap.h"
 #include "cd_city.h"
 #include "cd_human.h"
@@ -76,7 +77,7 @@ static NSDictionary *resource(NSString *name) {
 @property(nonatomic, strong) CdMapView *map;
 @property(nonatomic, strong) NSScrollView *mapScroll;
 @property(nonatomic, strong) NSTextField *clockLabel, *population, *status,
-    *zoomLabel, *inspectorTitle;
+    *zoomLabel, *inspectorTitle, *agentLocation;
 @property(nonatomic, strong) NSTextView *inspector;
 @property(nonatomic, strong) NSButton *runButton;
 @property(nonatomic, strong) NSPopUpButton *speed, *mode;
@@ -86,15 +87,19 @@ static NSDictionary *resource(NSString *name) {
     *rows, *occupations;
 @property(nonatomic, strong) NSTimer *timer;
 @property(nonatomic, strong) CdCitySession *citySession;
+@property(nonatomic, strong) CdManagementController *management;
+@property(nonatomic) CGFloat textScale;
 @property(nonatomic, strong) CdCityState *cityState;
 @property(nonatomic) BOOL busy, terminating;
 @property(nonatomic, strong) NSDictionary *inspected;
+@property(nonatomic, copy) NSString *inspectedKind;
 @property(nonatomic) BOOL running;
 @end
 @implementation CdApplication
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
   (void)notification;
   self.busy = YES;
+  self.textScale = 1;
   self.citySession = [CdCitySession new];
   NSMutableArray *roles = [NSMutableArray new];
   for (size_t i = 0; i < cd_occupation_count(); i++) {
@@ -137,6 +142,7 @@ static NSDictionary *resource(NSString *name) {
                   backing:NSBackingStoreBuffered
                     defer:NO];
   self.window.title = @"Canterbury Details · 1940";
+  self.window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
   self.window.minSize = NSMakeSize(1060, 720);
   self.window.backgroundColor = [NSColor colorWithCalibratedRed:.96
                                                           green:.95
@@ -312,12 +318,15 @@ static NSDictionary *resource(NSString *name) {
     [weakSelf toggle:nil];
   };
   NSTextField *legend =
-      wrap(@"json2png reference · red/orange roads · blue water · green "
-           @"woodland · grey orchards\nDrag/scroll to pan · pinch or "
+      wrap(@"Final assembled map · connected OSM roads · blue water · dark "
+           @"buildings · reference rail\nDrag/scroll to pan · pinch or "
            @"Option-scroll to zoom · click to inspect",
            11);
   legend.textColor = NSColor.secondaryLabelColor;
   self.inspectorTitle = label(@"Explore Canterbury", 17, NSFontWeightSemibold);
+  self.agentLocation = label(@"", 12, NSFontWeightMedium);
+  self.agentLocation.lineBreakMode = NSLineBreakByWordWrapping;
+  self.agentLocation.maximumNumberOfLines = 2;
   self.inspector = [NSTextView new];
   self.inspector.editable = NO;
   self.inspector.selectable = YES;
@@ -330,7 +339,10 @@ static NSDictionary *resource(NSString *name) {
   detail.drawsBackground = NO;
   detail.borderType = NSNoBorder;
   NSStackView *right = stack(
-      @[ mapToolbar, self.mapScroll, legend, self.inspectorTitle, detail ],
+      @[
+        mapToolbar, self.mapScroll, legend, self.inspectorTitle,
+        self.agentLocation, detail
+      ],
       NSUserInterfaceLayoutOrientationVertical, 10);
   pin(right, main, 18);
   for (NSView *v in @[ mapToolbar, self.mapScroll, legend, detail ]) {
@@ -405,6 +417,19 @@ static NSDictionary *resource(NSString *name) {
   [app addItemWithTitle:@"Quit Canterbury Details"
                  action:@selector(terminate:)
           keyEquivalent:@"q"];
+  NSMenuItem *edit = [NSMenuItem new];
+  edit.title = @"Edit";
+  NSMenu *editing = [[NSMenu alloc] initWithTitle:@"Edit"];
+  edit.submenu = editing;
+  [main addItem:edit];
+  for (NSArray *entry in @[
+         @[ @"Undo", @"undo:", @"z" ], @[ @"Cut", @"cut:", @"x" ],
+         @[ @"Copy", @"copy:", @"c" ], @[ @"Paste", @"paste:", @"v" ],
+         @[ @"Select All", @"selectAll:", @"a" ]
+       ])
+    [editing addItemWithTitle:entry[0]
+                       action:NSSelectorFromString(entry[1])
+                keyEquivalent:entry[2]];
   NSMenuItem *view = [NSMenuItem new];
   view.title = @"View";
   NSMenu *menu = [[NSMenu alloc] initWithTitle:@"View"];
@@ -412,14 +437,203 @@ static NSDictionary *resource(NSString *name) {
   [main addItem:view];
   for (NSArray *entry in @[
          @[ @"Fit map", @"fit:", @"0" ], @[ @"City centre", @"city:", @"1" ],
-         @[ @"Zoom in", @"zoomIn:", @"+" ], @[ @"Zoom out", @"zoomOut:", @"-" ]
+         @[ @"Zoom in", @"zoomIn:", @"+" ], @[ @"Zoom out", @"zoomOut:", @"-" ],
+         @[ @"Larger text", @"largerText:", @"]" ],
+         @[ @"Smaller text", @"smallerText:", @"[" ]
        ]) {
     NSMenuItem *item = [menu addItemWithTitle:entry[0]
                                        action:NSSelectorFromString(entry[1])
                                 keyEquivalent:entry[2]];
     item.target = self;
   }
+  NSMenuItem *simulation = [NSMenuItem new];
+  simulation.title = @"Simulation";
+  NSMenu *controls = [[NSMenu alloc] initWithTitle:@"Simulation"];
+  simulation.submenu = controls;
+  [main addItem:simulation];
+  for (NSArray *entry in @[
+         @[ @"Save checkpoint…", @"saveCheckpoint:", @"s" ],
+         @[ @"Load checkpoint…", @"loadCheckpoint:", @"o" ],
+         @[ @"City management…", @"showManagement:", @"m" ],
+         @[ @"Scenario operation…", @"scenarioOperation:", @"i" ],
+         @[ @"Export causal records…", @"exportRecords:", @"e" ]
+       ]) {
+    NSMenuItem *item = [controls addItemWithTitle:entry[0]
+                                           action:NSSelectorFromString(entry[1])
+                                    keyEquivalent:entry[2]];
+    item.target = self;
+  }
   NSApp.mainMenu = main;
+}
+- (void)largerText:(id)sender {
+  (void)sender;
+  self.textScale = MIN(1.5, self.textScale + .1);
+  [self applyTextScale];
+}
+- (void)smallerText:(id)sender {
+  (void)sender;
+  self.textScale = MAX(1, self.textScale - .1);
+  [self applyTextScale];
+}
+- (void)applyTextScale {
+  self.inspector.font = [NSFont systemFontOfSize:12 * self.textScale];
+  self.agentLocation.font = [NSFont systemFontOfSize:12 * self.textScale];
+  self.table.rowHeight = 32 * self.textScale;
+  [self.table reloadData];
+}
+- (void)showManagement:(id)sender {
+  (void)sender;
+  if (!self.cityState)
+    return;
+  if (!self.management) {
+    self.management = [CdManagementController new];
+    self.management.session = self.citySession;
+    __weak CdApplication *weakSelf = self;
+    self.management.beginMutation = ^BOOL {
+      CdApplication *owner = weakSelf;
+      if (!owner || owner.busy)
+        return NO;
+      owner.running = NO;
+      owner.busy = YES;
+      [owner refresh];
+      return YES;
+    };
+    self.management.publish = ^(CdCityState *state, NSString *error) {
+      CdApplication *owner = weakSelf;
+      owner.busy = NO;
+      if (state)
+        owner.cityState = state;
+      else if (error)
+        [owner failure:error];
+      [owner refresh];
+    };
+    self.management.cityAction = ^(NSString *action) {
+      CdApplication *owner = weakSelf;
+      if ([action isEqual:@"run"])
+        [owner toggle:nil];
+      else if ([action isEqual:@"step"])
+        [owner stepOne:nil];
+      else if ([action isEqual:@"save"])
+        [owner saveCheckpoint:nil];
+      else if ([action isEqual:@"load"])
+        [owner loadCheckpoint:nil];
+    };
+  }
+  [self.management showWindow:nil];
+  [self.management.window makeKeyAndOrderFront:nil];
+}
+- (void)exportRecords:(id)sender {
+  (void)sender;
+  if (self.busy || !self.cityState)
+    return;
+  self.running = NO;
+  NSSavePanel *panel = [NSSavePanel savePanel];
+  panel.nameFieldStringValue = @"Canterbury-records.json";
+  NSButton *scope = [NSButton
+      checkboxWithTitle:@"Diagnostic scope: include private/household records"
+                 target:nil
+                 action:nil];
+  panel.accessoryView = scope;
+  [panel beginSheetModalForWindow:self.window
+                completionHandler:^(NSModalResponse response) {
+                  if (response != NSModalResponseOK)
+                    return;
+                  self.busy = YES;
+                  [self.citySession
+                      exportRecords:panel.URL.path
+                         diagnostic:scope.state == NSControlStateValueOn
+                         completion:^(NSString *message) {
+                           self.busy = NO;
+                           [self refresh];
+                           [self failure:message];
+                         }];
+                }];
+}
+- (void)saveCheckpoint:(id)sender {
+  (void)sender;
+  [self checkpoint:NO];
+}
+- (void)loadCheckpoint:(id)sender {
+  (void)sender;
+  [self checkpoint:YES];
+}
+- (void)checkpoint:(BOOL)load {
+  if (self.busy || !self.cityState)
+    return;
+  self.running = NO;
+  NSSavePanel *panel =
+      load ? (NSSavePanel *)[NSOpenPanel openPanel] : [NSSavePanel savePanel];
+  if (!load)
+    panel.nameFieldStringValue = @"Canterbury.city";
+  [panel beginSheetModalForWindow:self.window
+                completionHandler:^(NSModalResponse response) {
+                  if (response != NSModalResponseOK)
+                    return;
+                  self.busy = YES;
+                  [self.citySession
+                      checkpoint:panel.URL.path
+                            load:load
+                      completion:^(CdCityState *state, NSString *error) {
+                        self.busy = NO;
+                        if (state) {
+                          self.cityState = state;
+                          self.people = state.people;
+                          [self listChanged:nil];
+                        } else
+                          [self failure:error];
+                        [self refresh];
+                      }];
+                }];
+}
+- (void)scenarioOperation:(id)sender {
+  (void)sender;
+  if (self.busy || !self.cityState)
+    return;
+  self.running = NO;
+  NSAlert *alert = [NSAlert new];
+  alert.messageText = @"Ordinary scenario operation";
+  alert.informativeText =
+      @"Observer by default. Interventions change city state. Use the "
+      @"documented 15-field pipe command; Query/Cancel take an operation ID. "
+      @"Deadlines and eligibility are rechecked at execution. See "
+      @"docs/OPERATIONS.md.";
+  NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 650, 90)];
+  NSTextField *line =
+      [[NSTextField alloc] initWithFrame:NSMakeRect(0, 55, 650, 26)];
+  line.placeholderString =
+      @"key|verb|actorID|target|secondary|units|value|starts|duration|earliest|"
+      @"deadline|flags|auxiliary|label|basis";
+  NSButton *permission =
+      [NSButton checkboxWithTitle:@"Enable explicit scenario interventions"
+                           target:nil
+                           action:nil];
+  permission.frame = NSMakeRect(0, 15, 650, 24);
+  [view addSubview:line];
+  [view addSubview:permission];
+  alert.accessoryView = view;
+  for (NSString *title in
+       @[ @"Preview", @"Queue", @"Flush", @"Query", @"Cancel", @"Close" ])
+    [alert addButtonWithTitle:title];
+  [alert beginSheetModalForWindow:self.window
+                completionHandler:^(NSModalResponse response) {
+                  NSInteger action = response - NSAlertFirstButtonReturn;
+                  if (action < 0 || action >= 5)
+                    return;
+                  self.busy = YES;
+                  [self.citySession
+                       operation:line.stringValue
+                          action:@[
+                            @"Preview", @"Queue", @"Flush", @"Query", @"Cancel"
+                          ][action]
+                       intervene:permission.state == NSControlStateValueOn
+                      completion:^(CdCityState *state, NSString *message) {
+                        self.busy = NO;
+                        if (state)
+                          self.cityState = state;
+                        [self refresh];
+                        [self failure:message];
+                      }];
+                }];
 }
 - (void)failure:(NSString *)message {
   NSAlert *a = [NSAlert new];
@@ -472,6 +686,8 @@ static NSDictionary *resource(NSString *name) {
     self.status.stringValue = @"Loading city on simulation worker…";
     return;
   }
+  if (self.management.window.isVisible)
+    [self.management refresh];
   CdCitySummary r = self.cityState.summary;
   CdCivicSummary civic = self.cityState.civic;
   self.status.toolTip = [NSString
@@ -482,6 +698,35 @@ static NSDictionary *resource(NSString *name) {
           civic.offices, civic.gatherings, civic.rosters, civic.requests,
           civic.vehicles, civic.pressures, civic.rain, civic.alert,
           civic.blackout, civic.ration_limit];
+  self.people = self.cityState.people;
+  if (self.inspected && self.inspectedKind) {
+    NSDictionary *selected = self.inspected;
+    if ([self.inspectedKind isEqual:@"person"]) {
+      NSString *identifier = selected[@"id"];
+      NSDictionary *current = nil;
+      for (NSDictionary *person in self.people)
+        if ([person[@"id"] isEqual:identifier]) {
+          current = person;
+          break;
+        }
+      if (current)
+        selected = current;
+      else {
+        self.agentLocation.stringValue =
+            @"Selected agent is no longer active in this city; no current "
+            @"location is available.";
+        self.inspectorTitle.stringValue = @"Resident no longer active";
+        self.inspector.string =
+            @"The selected stable ID is retained for inspection. This person "
+            @"cannot act in the current city.";
+      }
+      if (current) {
+        self.map.selected = current;
+        [self inspect:current kind:@"person"];
+      }
+    } else
+      [self inspect:selected kind:self.inspectedKind];
+  }
   self.map.agentGlyphs = self.cityState.agentGlyphs;
   self.map.needsDisplay = YES;
   if (self.agentsView) {
@@ -567,10 +812,10 @@ static NSDictionary *resource(NSString *name) {
     self.agentsWindow.title = @"All agents · population overview";
     self.agentsWindow.minSize = NSMakeSize(700, 500);
     NSTextField *title =
-        label(@"Every agent, one + each", 21, NSFontWeightSemibold);
+        label(@"Every agent, one mark each", 21, NSFontWeightSemibold);
     self.agentsSummary = label(@"", 13, NSFontWeightMedium);
     NSTextField *legend = wrap(
-        @"Roster order, NOT city locations. Amber +: unplaced. Teal +: "
+        @"Roster order, NOT city locations. ×: unplaced. +: "
         @"located. Click a + to inspect; use zoom to separate small marks.",
         12);
     self.agentsScroll = [NSScrollView new];
@@ -588,6 +833,8 @@ static NSDictionary *resource(NSString *name) {
       if (!owner)
         return;
       [owner selectRecord:@{
+        @"id" : [NSString
+            stringWithFormat:@"%llu", (unsigned long long)ref.person_id],
         @"name" : [NSString
             stringWithFormat:@"Agent #%llu", (unsigned long long)ref.person_id],
         @"ref" : [NSValue valueWithBytes:&ref objCType:@encode(CdPersonRef)]
@@ -701,6 +948,7 @@ static NSDictionary *resource(NSString *name) {
     view.identifier = @"record";
     view.lineBreakMode = NSLineBreakByTruncatingTail;
   }
+  view.font = [NSFont systemFontOfSize:12 * self.textScale];
   NSDictionary *item = self.rows[row];
   NSString *name = item[@"name"];
   view.stringValue =
@@ -732,10 +980,31 @@ static NSDictionary *resource(NSString *name) {
                 kind:@[ @"institution", @"building", @"person",
                         @"occupation" ][self.mode.indexOfSelectedItem]];
 }
+- (void)locatePerson:(NSDictionary *)item center:(BOOL)center {
+  CdPersonRef ref = {0};
+  [item[@"ref"] getValue:&ref size:sizeof ref];
+  CdPoint point;
+  CdStatus status = cd_glyph_location(self.cityState.agentGlyphs.bytes,
+                                      self.cityState.agentGlyphs.length /
+                                          sizeof(CdAgentGlyph),
+                                      ref.person_id, &point, NULL);
+  if (status == CD_OK) {
+    self.agentLocation.stringValue = [NSString
+        stringWithFormat:
+            @"Agent #%llu · map position %.1f, %.1f · highlighted on map",
+            (unsigned long long)ref.person_id, point.x, point.y];
+    if (center)
+      [self.map centerOn:NSMakePoint(point.x, point.y)];
+  } else
+    self.agentLocation.stringValue =
+        @"No map location assigned to this agent. Its + in All agents is a "
+        @"roster cell, not a geographic position.";
+}
 - (void)selectRecord:(NSDictionary *)item kind:(NSString *)kind {
   [self inspect:item kind:kind];
-  self.map.selected =
-      ([kind isEqual:@"person"] || [kind isEqual:@"occupation"]) ? nil : item;
+  if ([kind isEqual:@"person"])
+    [self locatePerson:item center:YES];
+  self.map.selected = [kind isEqual:@"occupation"] ? nil : item;
   NSArray *xy = item[@"position_pixels"];
   if ([xy isKindOfClass:NSArray.class]) {
     [self.map centerOn:NSMakePoint([xy[0] doubleValue], [xy[1] doubleValue])];
@@ -749,12 +1018,19 @@ static NSDictionary *resource(NSString *name) {
 }
 - (void)inspect:(NSDictionary *)item kind:(NSString *)kind {
   self.inspected = item;
+  self.inspectedKind = kind;
+  uint64_t revision = self.cityState.revision;
+  if ([kind isEqual:@"person"])
+    [self locatePerson:item center:NO];
+  else
+    self.agentLocation.stringValue = @"";
   if (!item) {
     self.inspectorTitle.stringValue = @"Explore Canterbury";
     self.inspector.string =
-        @"The map is rendered directly from Canterbury vector JSON by the "
-        @"upstream json2png.c core, with source colors, labels and grey "
-        @"orchard fields.\nSelect a marker, footprint or record to inspect it. "
+        @"The final assembled Canterbury map is rendered by json2png2.c using "
+        @"the upstream json2png.c core, with cropped OpenStreetMap road "
+        @"connections and the assembled overview palette.\nSelect a marker, "
+        @"footprint or record to inspect it. "
         @"Locations and modern use labels are candidates, not verified 1940 "
         @"identities. © OpenStreetMap contributors (ODbL-1.0) applies to "
         @"modern annotations.";
@@ -777,7 +1053,8 @@ static NSDictionary *resource(NSString *name) {
     [self.citySession
         institution:item[@"id"]
          completion:^(NSDictionary *details) {
-           if (self.inspected != item || !details)
+           if (self.inspected != item || self.cityState.revision != revision ||
+               !details)
              return;
            self.inspector.string = [sourceDescription
                stringByAppendingFormat:
@@ -789,6 +1066,9 @@ static NSDictionary *resource(NSString *name) {
                    [details[@"office"] length] ? details[@"office"]
                                                : @"unknown",
                    details[@"source"]];
+           self.inspector.string = [self.inspector.string
+               stringByAppendingFormat:@"\nRuntime institution ID %@",
+                                       details[@"runtimeID"]];
          }];
   } else if ([kind isEqual:@"occupation"]) {
     NSMutableArray *skills = [NSMutableArray new];
@@ -812,9 +1092,11 @@ static NSDictionary *resource(NSString *name) {
     [self.citySession
           resident:ref
         completion:^(CdResidentView resident, CdStatus status) {
-          if (self.inspected != item)
+          if (self.inspected != item || self.cityState.revision != revision)
             return;
           if (status == CD_OK) {
+            self.inspectorTitle.stringValue =
+                [NSString stringWithUTF8String:resident.name];
             self.inspector.string = [NSString
                 stringWithFormat:
                     @"Resident #%llu · synthetic fixture · age %u · born "
@@ -860,9 +1142,15 @@ static NSDictionary *resource(NSString *name) {
                     permissions.count
                         ? [permissions componentsJoinedByString:@", "]
                         : @"none"];
-            if (resident.position_known)
-              [self.map centerOn:NSMakePoint(resident.position.x,
-                                             resident.position.y)];
+            NSString *base = [self.inspector.string copy];
+            [self.citySession context:resident.ref
+                           completion:^(NSString *context) {
+                             if (self.inspected == item &&
+                                 self.cityState.revision == revision)
+                               self.inspector.string =
+                                   [base stringByAppendingString:context];
+                           }];
+
           } else
             self.inspector.string = @"Resident reference is no longer active.";
         }];
@@ -875,6 +1163,14 @@ static NSDictionary *resource(NSString *name) {
             @"and access have not yet been established.",
             item[@"id"], item[@"use"] ?: @"unknown", item[@"area_pixels"],
             item[@"status"]];
+    NSString *base = [self.inspector.string copy];
+    [self.citySession
+          building:item[@"id"]
+        completion:^(NSString *details) {
+          if (self.inspected == item && self.cityState.revision == revision)
+            self.inspector.string =
+                [base stringByAppendingFormat:@"\n%@", details];
+        }];
   }
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)app {

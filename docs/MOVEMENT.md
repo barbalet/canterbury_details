@@ -33,9 +33,10 @@ each minute. Door interruption retains position; repeating the same entry/exit i
 resumes its connector in place. A new endpoint intention cannot skip it.
 
 The public MOVE/node preview reads state and uses scratch routing arrays, consumes
-no RNG or native time, and publishes no intention. General scheduling and other
-operation kinds belong to later cycles and return unsupported now. Save/load remain
-reserved for their persistence cycle. Immutable snapshots outlive their worlds.
+no RNG or native time, and publishes no intention. The bounded operation queue supports all 45 ordinary verbs through the same
+permission-checked core paths; see [OPERATIONS.md](OPERATIONS.md). Full atomic
+save/load is implemented; see [PERSISTENCE.md](PERSISTENCE.md). Immutable snapshots
+outlive their worlds.
 
 Native-backed fixtures verify paused steps, bounded displacement, exact native
 position agreement, interruption/resume, arrival, keys and continuous door travel.

@@ -1,25 +1,17 @@
-# Standalone builds — Cycle 03
+# Standalone builds
 
-Cycle 03 implements a **minimal native bootstrap**, not the human city routines
-or map import. It starts with 27,000 ordinary-person native bodies, as requested
-by the user, binds the actual Bronze actor IDs, observes the native callback
-and clock, and provides CLI and native macOS step controls. There is no special
-actor, second population, independent simulation timer or inherited campaign.
-
-The public `CdWorld`/content/operation/snapshot API in `src/cd_api.h` remains a
-future implementation contract. The small `src/cd_bootstrap.h` adapter is a separate
-bootstrap interface implemented in `src/cd_adapter.c`. Its callback validates
-native binding/counts and deliberately performs no city movement, metabolism,
-work, historical demography or institution simulation. Those have later cycles.
-Native island autonomy is already bypassed by the pinned SDK city profile.
+The completed ordinary Canterbury 1940 application provides the CLI, native macOS
+UI and independently linkable CanterburyCore package. The native SDK owns all
+people, positions and time; the project implements civil records, movement, needs,
+jobs, services, development, operations and complete checkpoints. The bootstrap
+adapter remains a separate low-level qualification interface.
 
 ## Toolchain and setup
 
 The verified platform is macOS with the Apple C/C++ compiler, command-line build
 tools, macOS SDK, Python 3.10+ and Make. The native app uses the system Cocoa
 framework. zlib, math and pthread linkage use the platform toolchain. A portable
-CLI is intended, but other operating systems have not been qualified in this
-cycle. The native app target diagnoses non-macOS platforms explicitly.
+CLI is intended, but other operating systems have not been qualified for this release. The native app target diagnoses non-macOS platforms explicitly.
 
 ```sh
 git submodule update --init --recursive
@@ -46,14 +38,14 @@ The initial native binding cycle is observed and included in the result: five
 requested additional minutes produce six callbacks and native elapsed minutes.
 Zero requested minutes leaves that initial binding unchanged. The seed and people
 count are technical fixtures, not historical Canterbury population evidence.
-The default and capacity are both 27,000, with no reserved special-character
+The default is 27,000 and capacity is 30,000, with no reserved special-character
 slot. Smaller 32-person and one-person fixtures keep smoke checks inexpensive.
-The default full-population startup is checked explicitly; capacity/ABI qualification is recorded in Cycle 04, and the full city lifecycle
-is qualified for the bootstrap in Cycle 05; human routines remain in later cycles.
+Capacity/ABI and bootstrap lifecycle are qualified in Cycles 04–05. Human routines,
+configured lifecycle changes and services are qualified in Cycles 14–28.
 
-The native fixed-capacity body layout still requests roughly 1.90 GB at the city
-profile even for a small initial population. This cycle does not claim compact
-memory, full-population performance or production memory qualification.
+Small populations still reserve the full 30,000-body native layout. See
+[MEMORY.md](MEMORY.md) for the 5 GiB owned allocation ceiling and
+[PERFORMANCE.md](PERFORMANCE.md) for measured RSS and full-day budgets.
 
 ## Build ownership and isolation
 
@@ -81,12 +73,11 @@ submodule. Six reviewed SDK files implement the requested city-only population
 and host-owned heap/startup storage seams; ordinary native/Bronze branches retain
 their behavior and layouts. See `docs/MEMORY.md` for ownership and accounting.
 
-`content/sdk-working-tree.json` records the exact reviewed SDK file hashes against
-the pinned base. The audit rejects extra or changed SDK modifications. These SDK
-changes are uncommitted: commit them in `apesdk` before updating the parent gitlink.
-After that, update the recorded revision, retire the working-tree review, refresh
-the source manifest and regenerate validation evidence before committing the host.
-The temporary clean-room build includes the exact reviewed SDK changes.
+`content/sdk-working-tree.json` records a clean committed SDK tree. The guarded
+checkpoint staging/validation fixes are committed at `3892ece`; the parent gitlink
+pins that revision. `content/sdk-profile-baseline.json` separately retains the
+pre-fix revision for meaningful ordinary native/Bronze isolation comparisons.
+After any future SDK edits, review their scope and refresh source/profile evidence.
 
 ## Qualification commands
 
@@ -116,7 +107,7 @@ The verifier creates a disposable independent repository containing the current
 owned files and real local clones of the pinned dependencies, with their origins
 restored to the recorded upstream URLs. It commits only that temporary fixture,
 with hooks/signing disabled, builds CLI and native app from it, and compares the
-CLI report to the working checkout. No commit is made in the user's repository.
+CLI report to the working checkout. This verifier makes no commit in the user's repository.
 It then removes each dependency *only in the disposable copy* to verify explicit
 missing-submodule errors. No network or previous application checkout is needed.
 This tests the uncommitted working snapshot as a clean-checkout equivalent; actual
@@ -127,9 +118,8 @@ normal native-app observation record (`content/cycle-03-native-ui.json`).
 The SDK evidence records isolated native, contract, actor and hybrid suites, layout
 probes, and ordinary-profile preprocessor comparisons excluding preprocessing indentation/blank lines and diagnostic line
 numbers that shift when guarded source lines are added. CLI/build qualification is distinct from
-GUI launch evidence and from later simulation/profile/performance qualification.
-Cycle 01 input inventory and Cycle 02 ownership/API checks are revalidated; later
-cycles must continue extending their contracts as implementation grows.
+normal GUI launch evidence. The completed release also qualifies runtime,
+profile isolation and performance; see [RELEASE.md](RELEASE.md).
 
 ## Offline candidate content
 
@@ -137,9 +127,9 @@ Cycle 08 supplies `make content` and `make content-check` without starting a
 native population. The ignored output is `build/content/canterbury.json`;
 `docs/CONTENT.md` defines its versioned schema, locked source/review inputs and
 atomic publication. `make test` includes full reproducibility and rejection tests.
-The visual client now separately displays the exact upstream json2png map resource
-and source-record candidates. Physical access/routing and the C content loader
-remain later-cycle work.
+The visual client displays the final assembled map through json2png2 and the
+upstream json2png core. The C runtime loader and physical access/routing are
+implemented; source routes, doors and capacities still require explicit review.
 
 The default population is **27,000**, distinct from the **30,000** native/identity
-capacity. The 3,000 spare slots support later growth; births remain Cycle 14 work.
+capacity. The 3,000 spare slots support configured births/admissions implemented in Cycle 14.

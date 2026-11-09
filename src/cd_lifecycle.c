@@ -129,6 +129,7 @@ CdStatus cd_world_admit(CdWorld *w, const CdAdmission *a, CdPersonRef *out,
   w->admissions++;
   cd_native_city_body(w->native, ref);
   cd_native_energy_set(w->native, ref, cd_native_full());
+  cd_record_emit(w,CD_EVENT_ADMISSION,ref,(CdPersonRef){0},p->civil.household,0,CD_RECORD_HOUSEHOLD,a->basis,"Explicit ordinary admission");
   *out = ref;
   return cd_diag(d, CD_OK,
                  "Explicit ordinary admission committed without invented "
@@ -180,6 +181,7 @@ CdStatus cd_world_birth(CdWorld *w, CdPersonRef guardian, CdPersonRef other,
     snprintf(child->civil.name, sizeof child->civil.name, "%s", combined);
   }
   w->births++;
+  cd_record_emit(w,CD_EVENT_BIRTH,*out,guardian,child->civil.household,0,CD_RECORD_HOUSEHOLD,basis,"Configured birth and household parentage");
   return cd_diag(d, CD_OK,
                  "Configured birth; no demographic rate or location inferred");
 }
@@ -233,6 +235,9 @@ CdStatus cd_world_retire(CdWorld *w, CdPersonRef ref, CdRetirement reason,
   CdStatus status = cd_smoke_retire(w->native, ref, d);
   if (status != CD_OK)
     return status;
+  uint64_t retirement=cd_record_emit(w,CD_EVENT_RETIREMENT,ref,(CdPersonRef){0},p->civil.household,0,CD_RECORD_HOUSEHOLD,basis,reason==CD_DEATH?"Ordinary death archived":"Ordinary departure archived");
+  uint64_t previous_cause=w->current_cause;w->current_cause=retirement;
+  if(reason==CD_DEATH)for(size_t i=0;i<w->count;i++){CdCitizen *q=&w->people[i];if(q!=p&&q->civil.household==p->civil.household){q->support_until=cd_native_minutes(w->native)+1440;q->bereavement_event=cd_record_emit(w,CD_EVENT_BEREAVEMENT,q->civil.ref,ref,q->civil.household,retirement,CD_RECORD_HOUSEHOLD,basis,"One-day technical bereavement support context; ordinary visitation available");}}
   if (p->held_edge != CD_NONE && w->traffic[p->held_edge])
     w->traffic[p->held_edge]--;
   if (p->presence) {
@@ -270,6 +275,7 @@ CdStatus cd_world_retire(CdWorld *w, CdPersonRef ref, CdRetirement reason,
   w->count--;
   memset(&w->people[w->count], 0, sizeof *p);
   w->life[w->life_count++] = record;
+  w->current_cause=previous_cause;
   if (reason == CD_DEATH)
     w->deaths++;
   else

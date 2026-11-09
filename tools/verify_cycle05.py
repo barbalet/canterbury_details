@@ -8,6 +8,12 @@ INPUTS=sorted(set(INPUTS+['src/cd_city.h', 'src/cd_city_internal.h', 'src/cd_nat
 INPUTS=sorted(set(INPUTS+['src/cd_adapter.c', 'src/cd_population.c', 'src/cd_random.c', 'src/cd_health.c', 'src/cd_movement.c', 'src/cd_content.c', 'src/cd_people.c', 'src/cd_memory.c', 'src/cd_households.c', 'src/cd_routing.c', 'src/cd_world.c', 'src/cd_needs.c', 'src/cd_geometry.c', 'src/cd_food.c', 'src/cd_lifecycle.c', 'src/cd_human_digest.c', 'src/cd_occupations.c', 'src/cd_city_internal.h', 'src/cd_bootstrap.h', 'src/cd_native.h', 'src/cd_human.h', 'src/cd_random.h', 'src/cd_city.h', 'src/cd_api.h', 'src/cd_people.h', 'src/cd_memory.h', 'tools/compile_occupations.py', 'content/occupation-policy.json']))
 INPUTS=sorted(set(INPUTS+['src/cd_jobs.c', 'src/cd_work.c', 'src/cd_economy.c', 'src/cd_development.c', 'src/cd_institutions.c', 'src/cd_work_digest.c', 'src/cd_work.h', 'tools/compile_runtime.py']))
 INPUTS=sorted(set(INPUTS+['src/cd_civic.h', 'src/cd_civic_internal.h', 'src/cd_offices.c', 'src/cd_community.c', 'src/cd_services.c', 'src/cd_logistics.c', 'src/cd_environment.c', 'src/cd_civic_digest.c', 'src/cd_calendar.c']))
+from native_sources import CORE
+INPUTS=sorted(set(INPUTS+CORE+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['tools/checkpoint_abi.py']))
+
+from native_sources import UI
+INPUTS=sorted(set(INPUTS+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'ui').glob('*.h')]+['tools/compile_controls.py','content/operation-controls.json']))
+
 def run(args):
     p=subprocess.run(list(map(str,args)),cwd=ROOT,text=True,capture_output=True)
     if p.returncode:raise RuntimeError(str(args)+'\n'+p.stdout[-1200:]+p.stderr[-2000:])

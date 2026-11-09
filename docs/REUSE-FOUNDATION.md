@@ -1,11 +1,11 @@
 # Canterbury as the foundation for the later game
 
-The user intends to complete the 40 Canterbury Details cycles first, then use the
-finished city simulation as the foundation of the vampire simulation. This is a
+All 40 Canterbury Details cycles are complete. The finished ordinary city is
+ready to serve as the foundation for the separately requested vampire simulation. This is a
 reuse requirement for the current architecture, not an additional supernatural
 mode to implement in the ordinary city model.
 
-## Boundaries to preserve through all cycles
+## Released reuse boundaries
 
 The Canterbury core owns ordinary people, stable native identities, physical
 movement, time, work budgets, housing, occupations, institutions, economy,
@@ -19,8 +19,8 @@ must explicitly respect the released capacity and identity contract.
 Keep presentation separate: `CdMapView` receives map records and selection
 callbacks; it neither runs simulation minutes nor implements game rules. The
 current shared Make/Xcode source definitions already keep native city code apart
-from the Cocoa frontend. Future release packaging must make the completed core
-linkable by another frontend without pulling in `CityApp.m` or its main function.
+from the Cocoa frontend. Cycle 39 packages the completed core in `build/core/libCanterburyCore.a`,
+linkable without `CityApp.m`, the CLI main or any Cocoa code.
 The exact `json2png.c` reference-rendering pipeline and map provenance can be
 reused independently of either game interface.
 
@@ -48,19 +48,20 @@ the base city's institutional semantics.
 
 ## Handoff after Cycle 40
 
-Cycle 39 must document and package the complete neutral C core for reuse, including
+Cycle 39 packages and documents the neutral C core for reuse, including
 its source/link boundaries, SDK profile/pin, headers, content schema, stable-ID
 contract, policy seams, save compatibility, RNG domains and renderer resources.
-Provide an ordinary mock consumer (no supernatural mechanics) to demonstrate that
-the core links and runs independently of the Canterbury application entry point.
+The ordinary mock consumer demonstrates linking and running independently of
+the Canterbury application entry point.
 
-Cycle 40 must qualify that consumer's startup, one-minute advance, read-only
+Cycle 40 qualified that consumer's startup, one-minute advance, read-only
 inspection and checkpoint continuation along with the standalone city release.
-The base-default replay must remain unchanged when no extension policy is present.
+Base-default replay is preserved when no extension policy is present.
 The later game integration begins after this gate, using the released contracts
 and evidence rather than copying the city implementation or inheriting unchecked
 historical claims.
 
-These are future acceptance requirements. They do not claim that the current
-bootstrap APIs, the full `CdWorld` implementation or the reusable release library
-are already complete.
+The packaged core, public headers and ordinary mock consumer now implement this
+handoff contract. Cycle 40 release evidence qualifies their independent linking,
+sole ownership, extension-RNG purity and checkpoint continuation. The later game
+remains a separate consumer; no supernatural rules are added to this base.

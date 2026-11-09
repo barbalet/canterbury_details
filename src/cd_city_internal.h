@@ -284,6 +284,7 @@ CdStatus cd_care_begin(CdWorld *, CdPersonRef, CdPersonRef, CdEntityId,
                        unsigned, CdDiagnostic *);
 CdStatus cd_world_allocate(const CdContent *,const CdScenario *,CdWorld **,CdDiagnostic *);
 void cd_world_destroy_staged(CdWorld *);
+int cd_world_is_owner(const CdWorld *);
 void cd_world_publish_checkpoint(CdWorld **,CdWorld *,CdSmokeStage **);
 uint64_t cd_world_state_digest(const CdWorld *,uint64_t);
 uint64_t cd_record_emit(CdWorld *,CdEventKind,CdPersonRef,CdPersonRef,CdEntityId,uint64_t,CdRecordPrivacy,const char *,const char *);

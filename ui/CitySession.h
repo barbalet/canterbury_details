@@ -1,14 +1,12 @@
 #include "cd_city.h"
 #include "cd_civic.h"
+#include "cd_observer.h"
+#include "cd_management.h"
 #import <Foundation/Foundation.h>
 /* Only the serial worker touches the native singleton. Completion blocks run on
  * main. */
-typedef struct {
-  CdPersonRef ref;
-  CdPoint position;
-  int located;
-} CdAgentGlyph;
 @interface CdCityState : NSObject
+@property(nonatomic) uint64_t revision;
 @property(nonatomic) CdClockView clock;
 @property(nonatomic) CdCitySummary summary;
 @property(nonatomic) CdCivicSummary civic;
@@ -25,5 +23,21 @@ typedef struct {
       completion:(void (^)(CdResidentView, CdStatus))completion;
 - (void)institution:(NSString *)sourceID
          completion:(void (^)(NSDictionary *))completion;
+- (void)checkpoint:(NSString *)path
+              load:(BOOL)load
+        completion:(void (^)(CdCityState *, NSString *))completion;
+- (void)operation:(NSString *)line
+           action:(NSString *)action
+        intervene:(BOOL)intervene
+       completion:(void (^)(CdCityState *, NSString *))completion;
+- (void)context:(CdPersonRef)ref completion:(void (^)(NSString *))completion;
+- (void)building:(NSString *)sourceID
+      completion:(void (^)(NSString *))completion;
+- (void)exportRecords:(NSString *)path
+           diagnostic:(BOOL)diagnostic
+           completion:(void (^)(NSString *))completion;
+- (void)management:(CdManagementKind)kind
+            offset:(size_t)offset
+        completion:(void (^)(NSString *, size_t))completion;
 - (void)close:(void (^)(void))completion;
 @end

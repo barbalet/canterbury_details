@@ -1,7 +1,7 @@
 #ifndef CANTERBURY_DETAILS_API_H
 #define CANTERBURY_DETAILS_API_H
-/* Neutral public contract. Content/world/snapshot and MOVE/node are implemented
- * through Cycle 13; broader operations and persistence remain later cycles.
+/* Neutral public contract: content/world/snapshot, MOVE/node and complete city
+ * save/load. Supplemental ordinary scenario commands are in cd_observer.h.
  * No native layout, persistent pointer or serialized ABI is exposed here. */
 #include <stddef.h>
 #include <stdint.h>

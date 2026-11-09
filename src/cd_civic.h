@@ -223,7 +223,8 @@ CdStatus cd_snapshot_civic_summary(const CdSnapshot *, CdCivicSummary *,
 CdStatus cd_world_civic_summary(const CdWorld *, CdCivicSummary *,
                                 CdDiagnostic *);
 /* Calendar-only component checkpoint, bound to the same native instant/content.
-   Full atomic city checkpoints remain Cycle 31. Caller owns returned memory. */
+   Use cd_world_save/load for complete atomic city checkpoints. Caller owns
+   returned memory. */
 CdStatus cd_world_calendar_save(const CdWorld *, void **, size_t *,
                                 CdDiagnostic *);
 CdStatus cd_world_calendar_restore(CdWorld *, const void *, size_t,

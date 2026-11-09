@@ -12,6 +12,9 @@ def build(target):
     if target=='check':print('PASS local submodule inputs, pinned revisions and build-wide profile flags');return
     if target=='app' and platform.system()!='Darwin':raise ValueError('The native application target requires macOS and the Apple SDK; use cli on other platforms')
     subprocess.run([sys.executable,str(ROOT/'tools/compile_occupations.py'),'--write'],cwd=ROOT,check=True)
+    subprocess.run([sys.executable,str(ROOT/'tools/compile_controls.py')],cwd=ROOT,check=True)
+    from checkpoint_abi import build as checkpoint_abi
+    checkpoint_abi()
     compiler=shlex.split(os.environ.get('CC','cc'))
     if not compiler or not shutil.which(compiler[0]):raise ValueError('C compiler unavailable; install the platform C toolchain or set CC')
     if target=='app':
@@ -24,8 +27,8 @@ def build(target):
     if target=='app':command+=['-framework','Cocoa']
     command+=['-lz','-lm','-lpthread']
     output=ROOT/({'cli':'build/CanterburyDetails','smoke':'build/smoke-test','app':'build/CanterburyDetails.app/Contents/MacOS/CanterburyDetails'}[target])
-    inputs=set(sources)|set((ROOT/'src').glob('*.h'))|set((ROOT/'apesdk').rglob('*.h'))|set((ROOT/'apesdk').rglob('*.inc'))|{ROOT/'tools/build.py',ROOT/'tools/native_sources.py',ROOT/'tools/native_profile.py',ROOT/'content/source-manifest.json',ROOT/'tools/compile_occupations.py',ROOT/'content/occupation-policy.json',ROOT/'build/content/OccupationCatalogue.inc'}
-    if target=='app':inputs.update([ROOT/'ui/Info.plist',ROOT/'ui/CityMap.h',ROOT/'ui/CitySession.h',*(ROOT/p for p in native_sources.RESOURCES)])
+    inputs=set(sources)|set((ROOT/'src').glob('*.h'))|set((ROOT/'apesdk').rglob('*.h'))|set((ROOT/'apesdk').rglob('*.inc'))|{ROOT/'tools/build.py',ROOT/'tools/native_sources.py',ROOT/'tools/native_profile.py',ROOT/'content/source-manifest.json',ROOT/'tools/compile_occupations.py',ROOT/'content/occupation-policy.json',ROOT/'build/content/OccupationCatalogue.inc',ROOT/'build/content/CheckpointABI.inc',ROOT/'tools/checkpoint_abi.py'}
+    if target=='app':inputs.update([ROOT/'ui/Info.plist',ROOT/'ui/CityMap.h',ROOT/'ui/CitySession.h',ROOT/'ui/CityManagement.h',*(ROOT/p for p in native_sources.RESOURCES)])
     identity={'command':command,'compiler':subprocess.check_output([*compiler,'--version'],text=True).splitlines()[0],'sources':{str(p.relative_to(ROOT)):sha(p) for p in sorted(inputs)}}
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest();stamp=ROOT/f'build/{target}-build.json'
     if output.is_file() and stamp.is_file():

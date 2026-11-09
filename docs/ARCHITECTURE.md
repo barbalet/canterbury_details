@@ -1,6 +1,7 @@
 # Standalone human-city architecture
 
-Cycle 02, 8 November 2026. This is the design and public declaration contract.
+Release conclusion after Cycles 01–40, 8 November 2026. This document describes
+the implemented ownership and public-interface contracts.
 Cycle 03 adds a separately scoped native bootstrap CLI/app; Cycle 05 implements
 its native clock/session lifecycle and derived 1940 calendar view. Cycle 06 adds
 live person records, world-scoped stable references and native binding operations
@@ -11,17 +12,21 @@ adds a separate offline content compiler and versioned candidate bundle
 a native-backed world coordinator, geometry/access, movement/routing and explicit
 synthetic civil/household models. `src/cd_city.h` supplies the current supplemental
 interfaces. The core API now implements world/content/snapshot and MOVE/node
-operations; general operations and save/load remain reserved for later cycles.
+operations. Cycles 29–34 add causal records, bounded ordinary operations, full atomic
+city checkpoints, replay qualification and live stable-ID map inspection.
+Cycles 35–40 complete native management, input/accessibility qualification,
+measured full-population budgets, robustness/SDK isolation and independent
+CanterburyCore packaging. The offline clean-checkout release gate passed.
 Syntax-only Cycle 02 checks still do not qualify runtime behavior. The visual app
 uses `CitySession` to serialize all native work off the AppKit thread.
 
 ## Names, layout and dependency boundary
 
-Product: **Canterbury Details**. Proposed CLI: `CanterburyDetails`. Project C
+Product: **Canterbury Details**. CLI: `CanterburyDetails`. Project C
 functions use `cd_`; types use `Cd`; constants use `CD_`. No special actor kind is
 needed: every admitted person is human. Use `src/` for the model/CLI, `ui/` for the
 native app, `content/` for schemas/policies/manifests, `tools/` for offline generators
-and checks, `tests/` for future runtime fixtures, `docs/` for local documentation,
+and checks, `tests/` for runtime fixtures, `docs/` for local documentation,
 and ignored `build/` for reproducible outputs. Build/toolchain definitions are
 implemented in Cycle 03, including the requested 27,000-person default/admission.
 Broader capacity/lifecycle qualification remains Cycle 04.
@@ -56,7 +61,7 @@ native/project arrays directly.
 
 `src/cd_api.h` is self-contained C11, with C++ linkage support and no SDK struct
 layout exposed. It requires both `CANTERBURY_SIM=1` and the current bridge's
-`BRONZE_SIM=1`. All future runtime translation units must use the same flags.
+`BRONZE_SIM=1`. All runtime translation units must use the same flags.
 
 - `CdContent` admits immutable, source-qualified data; it outlives its worlds and
   snapshots. Imported policies and review flags are explicit inputs, not globals
@@ -81,8 +86,8 @@ layout exposed. It requires both `CANTERBURY_SIM=1` and the current bridge's
   aliases or special location/rest conditions.
 
 The initial operation catalogue is move, assign job, deliver, repair, dispatch an
-ordinary service, and set a qualified closure. These are design contracts for
-later cycles, not advertised executable operations. Unsupported operations return
+ordinary service, and set a qualified closure. These operations are implemented through `cd_observer.h`; see
+`docs/OPERATIONS.md`. Unsupported operations return
 `CD_UNSUPPORTED`; no placeholder is allowed to report a fabricated success.
 Errors use `CdStatus` and caller-owned `CdDiagnostic` storage.
 
@@ -186,7 +191,8 @@ later code must live here, with its original notices and a local acceptance test
 Mixed old modules are not accepted merely by renaming their prefix.
 
 The current adapter uses existing guarded clock, ID, work and draw facilities.
-No SDK changes are needed for this design cycle. If later cycles require changes,
+The committed SDK pin includes guarded capacity/storage/checkpoint seams. For
+any additional SDK change,
 put declarations, storage, bounds and call sites entirely behind
 `CANTERBURY_SIM`. Ordinary native/Bronze builds retain their behavior/layouts.
 Generic city data stays project-owned; do not expand Bronze fixture arrays into a
@@ -201,10 +207,10 @@ absence of forbidden implementation symbols/sibling includes in owned source.
 opens only local project/submodule files and uses installed C/C++ compilers.
 Cycle 01 source/pin checks remain independent and continue to pass.
 
-Implementation, linkage, build entry points, memory, actor admission, runtime
-behavior, save formats and native UI acceptance remain future cycle exits. This
-architecture qualification does not substitute for those tests or resolve the
-historical/licensing uncertainties already recorded in Cycle 01.
+The separate runtime/build, memory, lifecycle, checkpoint, native UI and release
+gates have passed. The Cycle 02 architecture check retains its narrower design/
+syntax scope; it does not replace those gates or resolve source uncertainties.
+See [RELEASE.md](RELEASE.md) and the versioned evidence index.
 
 ## Reusable foundation and visual client
 
@@ -225,7 +231,7 @@ ordinary needs, finite food, explicit health experiments and an immutable audite
 role catalogue. Their orchestration runs only in the native callback and commits
 mortality at each closed native minute. The SDK retains position/energy/time/ID
 authority; city modules retain their own ordinary records. Employment assignment
-and generic work are implemented in Cycles 19–20; persistence remains its later cycle.
+and generic work are implemented in Cycles 19–20; complete persistence is implemented in Cycle 31.
 
 ## Cycles 19–23
 
@@ -246,3 +252,8 @@ people retain their one native body; vehicle custody blocks independent action.
 `cd_civic_digest.c` hashes logical fields without padding or pointers. Calendar
 component serialization is explicitly distinct from the Cycle 31 whole-city save.
 The native UI receives copied civic summaries and resident custody/service facts.
+
+Cycles 29–34 contracts: [records](RECORDS.md), [operations](OPERATIONS.md),
+[checkpoints](PERSISTENCE.md), [replay](REPLAY.md), [map](MAP.md),
+[inspection](INSPECTION.md). The checkpoint validator stages other owners
+without owning duplicate state. ABI generation accounts for every world pointer.

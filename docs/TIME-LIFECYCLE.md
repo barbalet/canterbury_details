@@ -82,9 +82,10 @@ replaces that context, and startup without a
 new configuration fails after close. Calendar-only fixtures cover minute/hour/day,
 leap-day/year and century boundaries without advancing a second clock.
 
-Run `make lifecycle`, or `make test` for Cycles 03–05. The verifier also checks the
+Run `make lifecycle` for the bootstrap contract; `make test` also runs the
+implemented human, work, civic and observer suites. The verifier also checks the
 CLI's midnight display. Evidence: `content/cycle-05-validation.json`; native app
-observations are separate in `content/cycle-05-native-ui.json`. No SDK edits were
-needed; the reviewed Cycle 03 SDK patch and ordinary-profile evidence are
-unchanged. Full human behavior, persistence, memory-failure injection and concurrent
-world switching remain in their later cycles.
+observations are separate in `content/cycle-05-native-ui.json`. Cycle 05 needed no additional SDK edits. Subsequent cycles qualify human
+behavior, persistence and allocation failures. Save/load stages state before
+replacing the sole active owner; concurrent independently ticking SDK worlds
+are unsupported.

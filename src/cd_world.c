@@ -3,13 +3,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 static CdWorld *active_world;
+int cd_world_is_owner(const CdWorld *w){return w==active_world;}
 static void destroy(CdWorld *w) {
   if (!w)
     return;
   if (w->native)
     cd_smoke_close(w->native);
   cd_content_close(w->content);
-  cd_memory_free(w->records);cd_memory_free(w->record_cursors);cd_memory_free(w->operations);
+  cd_memory_free(w->records);
+  cd_memory_free(w->record_cursors);
+  cd_memory_free(w->operations);
   cd_memory_free(w->offices);
   cd_memory_free(w->rosters);
   cd_memory_free(w->services);
@@ -40,7 +43,8 @@ static void destroy(CdWorld *w) {
   cd_memory_free(w->heap_pos);
   cd_memory_free(w);
 }
-CdStatus cd_world_allocate(const CdContent *content,const CdScenario *s,CdWorld **out,CdDiagnostic *d){
+CdStatus cd_world_allocate(const CdContent *content, const CdScenario *s,
+                           CdWorld **out, CdDiagnostic *d) {
   CdWorld *w = cd_memory_calloc(1, sizeof *w, CD_MEM_CITY);
   if (!w)
     return cd_diag(d, CD_CAPACITY, "Cannot allocate world");
@@ -63,10 +67,10 @@ CdStatus cd_world_allocate(const CdContent *content,const CdScenario *s,CdWorld 
     }                                                                          \
   } while (0)
   w->life_capacity = cd_smoke_capacity() * 2;
-  w->record_next=1;
-  ALLOC(records,CD_RECORD_LIMIT,CD_MEM_CITY);
-  ALLOC(record_cursors,cd_record_cursor_count(content),CD_MEM_CITY);
-  ALLOC(operations,CD_OPERATION_LIMIT,CD_MEM_CITY);
+  w->record_next = 1;
+  ALLOC(records, CD_RECORD_LIMIT, CD_MEM_CITY);
+  ALLOC(record_cursors, cd_record_cursor_count(content), CD_MEM_CITY);
+  ALLOC(operations, CD_OPERATION_LIMIT, CD_MEM_CITY);
   ALLOC(people, cd_smoke_capacity(), CD_MEM_CITY);
   ALLOC(homes, cd_smoke_capacity(), CD_MEM_CITY);
   ALLOC(home_meals, cd_smoke_capacity(), CD_MEM_CITY);
@@ -100,11 +104,27 @@ CdStatus cd_world_allocate(const CdContent *content,const CdScenario *s,CdWorld 
     w->locks[i] = (unsigned char)content->polygons[i].locked;
     w->premises[i].condition = 1000;
   }
-  *out=w;return CD_OK;
-capacity:destroy(w);return cd_diag(d,CD_CAPACITY,"City allocation failed; live world retained");
+  *out = w;
+  return CD_OK;
+capacity:
+  destroy(w);
+  return cd_diag(d, CD_CAPACITY, "City allocation failed; live world retained");
 }
-void cd_world_destroy_staged(CdWorld *w){destroy(w);}
-void cd_world_publish_checkpoint(CdWorld **out,CdWorld *w,CdSmokeStage **stage){CdWorld *old=*out;CdSmokeSession *native=old?old->native:NULL;cd_native_checkpoint_publish(stage,&native);w->native=native;cd_native_client(native,cd_city_minute,w);if(old){old->native=NULL;destroy(old);}active_world=w;*out=w;}
+void cd_world_destroy_staged(CdWorld *w) { destroy(w); }
+void cd_world_publish_checkpoint(CdWorld **out, CdWorld *w,
+                                 CdSmokeStage **stage) {
+  CdWorld *old = *out;
+  CdSmokeSession *native = old ? old->native : NULL;
+  cd_native_checkpoint_publish(stage, &native);
+  w->native = native;
+  cd_native_client(native, cd_city_minute, w);
+  if (old) {
+    old->native = NULL;
+    destroy(old);
+  }
+  active_world = w;
+  *out = w;
+}
 CdStatus cd_world_open(const CdContent *content, const CdScenario *s,
                        CdWorld **out, CdDiagnostic *d) {
   if (!content || !s || !out || (*out && *out != active_world) ||
@@ -118,7 +138,10 @@ CdStatus cd_world_open(const CdContent *content, const CdScenario *s,
     return cd_diag(d, CD_UNSUPPORTED,
                    "No sourced historical demographic distribution is "
                    "supplied; select synthetic-ordinary-v1 explicitly");
-  CdWorld *w=NULL;CdStatus allocation=cd_world_allocate(content,s,&w,d);if(allocation!=CD_OK)return allocation;
+  CdWorld *w = NULL;
+  CdStatus allocation = cd_world_allocate(content, s, &w, d);
+  if (allocation != CD_OK)
+    return allocation;
   CdSmokeStage *stage = NULL;
   CdStatus status = cd_smoke_prepare(
       w->count, (uint32_t)(s->seed ^ (s->seed >> 32)), &stage, d);
@@ -148,7 +171,9 @@ CdStatus cd_world_open(const CdContent *content, const CdScenario *s,
   }
   active_world = w;
   cd_human_init(w);
-  cd_record_emit(w,CD_EVENT_WORLD,(CdPersonRef){0},(CdPersonRef){0},w->count,0,CD_RECORD_PUBLIC,"synthetic-ordinary-v1","Ordinary city created with explicit synthetic demographics");
+  cd_record_emit(w, CD_EVENT_WORLD, (CdPersonRef){0}, (CdPersonRef){0},
+                 w->count, 0, CD_RECORD_PUBLIC, "synthetic-ordinary-v1",
+                 "Ordinary city created with explicit synthetic demographics");
   *out = w;
   return cd_diag(d, CD_OK,
                  "Ordinary city world published; demographics are an explicit "
@@ -243,9 +268,10 @@ CdStatus cd_world_digest(const CdWorld *w, uint64_t *out, CdDiagnostic *d) {
   CdStatus s = cd_smoke_read(w->native, &native, d);
   if (s != CD_OK)
     return s;
-  *out=cd_world_state_digest(w,cd_native_full_digest(w->native));return cd_diag(d,CD_OK,"Authoritative complete city digest");
+  *out = cd_world_state_digest(w, cd_native_full_digest(w->native));
+  return cd_diag(d, CD_OK, "Authoritative complete city digest");
 }
-uint64_t cd_world_state_digest(const CdWorld *w,uint64_t native_hash){
+uint64_t cd_world_state_digest(const CdWorld *w, uint64_t native_hash) {
   uint64_t h = hash(native_hash, w->seed);
   h = hash(h, w->origin_offset);
   h = hash(h, w->next_request);
@@ -306,7 +332,7 @@ uint64_t cd_world_state_digest(const CdWorld *w,uint64_t native_hash){
   h = cd_human_digest(w, h);
   h = cd_work_digest(w, h);
   h = cd_civic_digest(w, h);
-  return cd_observer_digest(w,h);
+  return cd_observer_digest(w, h);
 }
 
 CdStatus cd_snapshot_capture(const CdWorld *w, CdSnapshot **out,
@@ -317,9 +343,14 @@ CdStatus cd_snapshot_capture(const CdWorld *w, CdSnapshot **out,
   if (!s)
     return cd_diag(d, CD_CAPACITY, "Snapshot owner allocation failed");
   s->count = w->count;
-  s->records=cd_memory_calloc(CD_RECORD_LIMIT,sizeof *s->records,CD_MEM_CITY);
-  if(!s->records){cd_snapshot_close(s);return cd_diag(d,CD_CAPACITY,"Record snapshot allocation failed");}
-  memcpy(s->records,w->records,CD_RECORD_LIMIT*sizeof *s->records);cd_world_record_summary(w,&s->record_summary,NULL);
+  s->records =
+      cd_memory_calloc(CD_RECORD_LIMIT, sizeof *s->records, CD_MEM_CITY);
+  if (!s->records) {
+    cd_snapshot_close(s);
+    return cd_diag(d, CD_CAPACITY, "Record snapshot allocation failed");
+  }
+  memcpy(s->records, w->records, CD_RECORD_LIMIT * sizeof *s->records);
+  cd_world_record_summary(w, &s->record_summary, NULL);
   s->people = cd_memory_calloc(s->count, sizeof *s->people, CD_MEM_CITY);
   s->travel = cd_memory_calloc(s->count, sizeof *s->travel, CD_MEM_CITY);
   s->institutions =

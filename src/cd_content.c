@@ -206,6 +206,7 @@ CdStatus cd_content_open(const char *path, CdContent **out, CdDiagnostic *d) {
     return cd_diag(d, CD_CAPACITY, "Cannot allocate content owner");
   }
   c->refs = 1;
+  c->file_bytes=(size_t)length;
   c->file = cd_memory_calloc((size_t)length, 1, CD_MEM_CITY);
   if (!c->file) {
     fclose(f);

@@ -4,8 +4,9 @@ A live project person has a `CdPersonRef`: a nonzero world token plus the existi
 SDK `BronzeActorId`. IDs are never names or array indices. The SDK owns identity
 allocation and physical membership. `cd_people.c` owns the project live-person
 record and its derived native-slot binding. Native bodies continue to own physical
-traits, position and energy. This does not implement civil names, households,
-demographics, birth/death narratives or archived life records from later cycles.
+traits, position and energy. The civil layer adds synthetic names/households, configured births/admissions,
+retirement and archived life records; see [POPULATION.md](POPULATION.md),
+[LIFECYCLE.md](LIFECYCLE.md) and [RECORDS.md](RECORDS.md).
 
 ## Records and references
 
@@ -20,7 +21,8 @@ A process-wide monotonically increasing token identifies each independently
 opened session. Failed construction may consume a token; tokens are never reused.
 Exhaustion rejects construction. A restarted SDK may allocate actor ID 1 again,
 but its new world token makes it a different project person. Tokens are runtime
-namespaces, not a portable save-file identity. Save/load namespaces are later work.
+namespaces, not a portable save-file identity. Load preserves logical IDs while assigning a fresh runtime token; callers must
+reacquire references after load. See [PERSISTENCE.md](PERSISTENCE.md).
 Do not pass closed session pointers or borrowed native/record pointers; retain
 value references and resolve them within a live owning session instead.
 
@@ -38,8 +40,9 @@ seed, admits its identity through the SDK birth hook, and publishes a project
 record and incremented native count together. Capacity/ID bounds are checked before
 body initialization. A full 30,000-person world refuses admission; no reserved
 actor or overflow population exists. The explicit seed is fixture input, not a
-second simulation RNG stream. Biological birth, immigration rules, visitor queues
-and trait distributions are later cycles.
+second simulation RNG stream. Configured ordinary birth/admission and bounded visitor policy are implemented
+in the civil layer. Historical demographic rates and trait distributions remain
+unsupported source claims.
 
 `cd_smoke_retire` validates the complete value reference before mutation. It
 retires the native actor, compacts the last surviving native body into the vacant
@@ -59,14 +62,14 @@ without changing live records, actor IDs, body order, selection or native time.
 The SDK validates and publishes its complete binding order before the serialized,
 non-failing body permutation and project slot commit. No observer/callback runs
 inside that transaction. A cycle permutation uses one body scratch buffer rather
-than another full 1.90 GB body array. Selection follows actor identity.
+than another full-capacity body array. Selection follows actor identity.
 
 `cd_smoke_rebind` reconstructs the full native binding order from existing project
 records, verifies unique complete slot coverage, and uses the SDK's atomic
 `bronze_actors_bind_order` API. It can rebind an existing owning registry after
 reactivation invalidates physical bindings. It does not reset identities, replace
-the registry, or load arbitrary native data. New content/save publication remains
-later work. Direct out-of-band SDK births, deaths or body changes bypass project
+the registry, or load arbitrary native data. Content admission and complete save publication use separately validated staging
+paths documented in [CONTENT.md](CONTENT.md) and [PERSISTENCE.md](PERSISTENCE.md). Direct out-of-band SDK births, deaths or body changes bypass project
 membership and are unsupported: use the host APIs to keep both sides consistent.
 The minute callback and report inspection check project/native correspondence.
 
@@ -84,5 +87,6 @@ Rejected duplicate/incomplete/unknown/foreign permutations and repeated retireme
 preserve the population digest and live lookups. Existing capacity tests now use
 host admission/retirement so they also maintain project records. The source and
 behavioral evidence is `content/cycle-06-validation.json`. No SDK edits were needed.
-Allocation-failure injection, staged world replacement and comprehensive memory
-accounting remain Cycle 07; no sanitizer or thread-safety claim is made here.
+Allocation failures, staged replacement and memory accounting are qualified in
+Cycles 07/31/38. Native state remains serialized; these tests do not establish
+general concurrent SDK access or sanitizer coverage.

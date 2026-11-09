@@ -15,13 +15,11 @@ bundle, and Command-U is not a replacement for that suite.
 
 ## Renderer and resources
 
-The map is produced by compiling and executing the **exact upstream
-`canterbury/newcanterbury/json2png.c`**, with its `map.h`, original vector JSON,
-`--text` and the macOS Times New Roman Italic font. This is the same renderer
-pipeline used for the earlier simulation. There is no dependency on that sibling
-application or its files. Background/foreground passes, even-odd polygons, grey
-orchard fields, full source palette and all 89 labels come from the renderer.
-The map is not a screenshot of the old game or a substitute modern basemap.
+The map is produced by `tools/json2png2.c`, using the unmodified upstream
+`json2png.c` core and the final assembled building/water/rail/connected-OSM-road
+JSON layers. It matches the agreed `simulation-map/derived/overview.png` pixel
+for pixel. The older full-color source-vector map is not the display input.
+See [MAP.md](MAP.md) for standalone renderer usage and the exact input contract.
 
 Build-time requirements are Xcode, Python 3, pkg-config, libpng and FreeType.
 On macOS with Homebrew these libraries are normally installed with:
@@ -30,9 +28,8 @@ On macOS with Homebrew these libraries are normally installed with:
 brew install pkg-config libpng freetype
 ```
 
-No dependency installation/download occurs during a build. The renderer uses
-`/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf`, whose bytes are
-hashed with source files, library/compiler versions and the render settings.
+No dependency installation/download occurs during a build. The renderer hashes assembled geometry/style/reference inputs, the C core,
+library/compiler versions and render settings. No label font is required.
 Missing dependencies produce a named build error. Xcode searches the standard
 Apple Silicon and Intel Homebrew binary directories for Python/pkg-config.
 `CANTERBURY_PYTHON` can select an installed Python executable in build settings.
@@ -70,15 +67,16 @@ rendering does not resolve historical-asset rights questions.
   building focuses the map; five unlocated institutions stay unlocated.
 - The resident register uses live world-scoped native person references. Names, civil dates and households
   are explicit synthetic fixtures, and the inspector shows their basis. Source
-  housing and spatial positions remain unknown until admitted. Jobs and human
-  routines remain later cycles; the map draws no invented resident positions.
+  housing and spatial positions remain unknown until admitted. Jobs, needs and services are implemented; the map draws no invented resident
+  positions.
 
 Modern building names/uses are labeled suggestions. Institution locations require
 review and the Old Synagogue scenario override retains its historical note.
 Religion is institution/community information only. Cycles 09–13 implement ordinary doors/access and native physical navigation with
 qualified fixtures. Visual picking is not approval for physical movement: real
-source links, capacities and entrances still require per-feature review. Human
-routines remain later cycles.
+source links, capacities and entrances still require per-feature review.
+Command-M opens all 45 ordinary operations and paged management status; see
+[USER-GUIDE.md](USER-GUIDE.md).
 
 ## Project maintenance and verification
 

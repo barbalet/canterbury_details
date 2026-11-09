@@ -6,6 +6,9 @@ from audit_sources import ROOT,MANIFEST,inventory,sha
 from native_sources import CORE,UI
 FILES=sorted(set(CORE+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['ui/CitySession.h','ui/CityMap.h','tools/verify_civic_cycles.py','tools/compile_runtime.py','tools/city_fixtures.py','tools/native_sources.py','tools/build.py','tests/civic.c','docs/RELIGIOUS-EMPLOYMENT.md','docs/COMMUNITY.md','docs/SERVICES.md','docs/LOGISTICS.md','docs/ENVIRONMENT.md','content/architecture.json','content/civic-source-register.json','content/religious-worksite-matrix.json']))
 SCOPES={24:'distinct source-compatible offices, explicit permissions/qualifications, succession, vacancies and staff retirement',25:'explicit schedules, membership, physical attendance, finite meal transfers, Gregorian boundaries, batch equivalence and same-instant calendar component checkpoint',26:'ordinary rosters, actual dispatch travel, capability/permission gates, care/beds/medicine, deadline/cancel/staff-loss and finite wages',27:'qualified crew, real native movement, exclusive handcart/stretcher custody, loading/unloading, interruption/replacement/local cancellation and rail rejection',28:'explicit weather/fire/damage/closure/alert/blackout/ration experiments, finite water, physical shelter travel and deterministic recovery/persistence'}
+from native_sources import UI
+FILES=sorted(set(FILES+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'ui').glob('*.h')]+['tools/compile_controls.py','content/operation-controls.json']))
+
 def run(cmd):
  p=subprocess.run(list(map(str,cmd)),cwd=ROOT,capture_output=True,text=True)
  if p.returncode:raise RuntimeError(str(cmd)+'\n'+p.stdout[-1500:]+p.stderr[-4000:])

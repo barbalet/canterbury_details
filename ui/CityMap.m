@@ -38,7 +38,7 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
   return NSAccessibilityImageRole;
 }
 - (NSString *)accessibilityLabel {
-  return @"Canterbury city map, rendered by json2png";
+  return @"Canterbury assembled city map, rendered by json2png2";
 }
 - (NSString *)accessibilityHelp {
   return @"Drag or scroll to pan. Pinch or Option-scroll to zoom. Plus/minus "
@@ -88,6 +88,21 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
       p.lineWidth = 3 / z;
       [p stroke];
     }
+  }
+  if (self.selected[@"ref"]) {
+    uint64_t selected = [self.selected[@"id"] longLongValue];
+    const CdAgentGlyph *glyph = self.agentGlyphs.bytes;
+    for (size_t i = 0; i < self.agentGlyphs.length / sizeof *glyph; i++)
+      if (glyph[i].located && glyph[i].ref.person_id == selected) {
+        [NSColor.systemBlueColor setStroke];
+        NSBezierPath *halo = [NSBezierPath
+            bezierPathWithOvalInRect:NSMakeRect(glyph[i].position.x - 7 / z,
+                                                glyph[i].position.y - 7 / z,
+                                                14 / z, 14 / z)];
+        halo.lineWidth = 2 / z;
+        [halo stroke];
+        break;
+      }
   }
   if (self.showAgents) {
     NSBezierPath *markers = [NSBezierPath bezierPath];
@@ -193,6 +208,34 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
       }
     }
   NSString *kind = @"institution";
+  if (self.showAgents) {
+    const CdAgentGlyph *agents = self.agentGlyphs.bytes;
+    size_t count = self.agentGlyphs.length / sizeof *agents;
+    const CdAgentGlyph *nearest = NULL;
+    double best = 8 / MAX(.1, self.enclosingScrollView.magnification);
+    for (size_t i = 0; i < count; i++)
+      if (agents[i].located) {
+        double d =
+            hypot(p.x - agents[i].position.x, p.y - agents[i].position.y);
+        if (d < best || (d == best && nearest &&
+                         agents[i].ref.person_id < nearest->ref.person_id)) {
+          best = d;
+          nearest = &agents[i];
+        }
+      }
+    if (nearest) {
+      CdPersonRef ref = nearest->ref;
+      pick = @{
+        @"id" : [NSString
+            stringWithFormat:@"%llu", (unsigned long long)ref.person_id],
+        @"name" : [NSString stringWithFormat:@"Resident #%llu",
+                                             (unsigned long long)ref.person_id],
+        @"ref" : [NSValue valueWithBytes:&ref objCType:@encode(CdPersonRef)],
+        @"position_pixels" : @[ @(nearest->position.x), @(nearest->position.y) ]
+      };
+      kind = @"person";
+    }
+  }
   if (!pick) {
     kind = @"building";
     for (NSUInteger i = 0; i < self.footprints.count; i++)
@@ -249,7 +292,13 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
 }
 @end
 
+@interface CdPopulationView ()
+@property(nonatomic) CdPersonId selectedPerson;
+@end
 @implementation CdPopulationView
+- (BOOL)acceptsFirstResponder {
+  return YES;
+}
 - (BOOL)isFlipped {
   return YES;
 }
@@ -260,15 +309,24 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
   return NSAccessibilityImageRole;
 }
 - (NSString *)accessibilityLabel {
-  return @"All agents roster, one plus per agent; not geographic locations";
+  return @"All agents roster; plus means located, cross means unplaced; not "
+         @"geographic locations. Arrow keys select, Return inspects.";
 }
 - (NSString *)accessibilityValue {
   const CdAgentGlyph *p = self.agentGlyphs.bytes;
   size_t n = self.agentGlyphs.length / sizeof *p, located = 0;
   for (size_t i = 0; i < n; i++)
     located += p[i].located != 0;
-  return [NSString stringWithFormat:@"%zu agents, %zu located, %zu unplaced", n,
-                                    located, n - located];
+  NSString *selection = @"none";
+  for (size_t i = 0; i < n; i++)
+    if (p[i].ref.person_id == self.selectedPerson)
+      selection =
+          [NSString stringWithFormat:@"resident %llu, %@",
+                                     (unsigned long long)p[i].ref.person_id,
+                                     p[i].located ? @"located" : @"unplaced"];
+  return [NSString
+      stringWithFormat:@"%zu agents, %zu located, %zu unplaced. Selected %@", n,
+                       located, n - located, selection];
 }
 - (void)setAgentGlyphs:(NSData *)data {
   if ([_agentGlyphs isEqualToData:data])
@@ -293,10 +351,24 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
     if (x < NSMinX(dirty) - 2 || x > NSMaxX(dirty) + 2)
       continue;
     NSBezierPath *p = paths[agents[i].located ? 1 : 0];
-    [p moveToPoint:NSMakePoint(x - 1.3, y)];
-    [p lineToPoint:NSMakePoint(x + 1.3, y)];
-    [p moveToPoint:NSMakePoint(x, y - 1.3)];
-    [p lineToPoint:NSMakePoint(x, y + 1.3)];
+    if (agents[i].located) {
+      [p moveToPoint:NSMakePoint(x - 1.3, y)];
+      [p lineToPoint:NSMakePoint(x + 1.3, y)];
+      [p moveToPoint:NSMakePoint(x, y - 1.3)];
+      [p lineToPoint:NSMakePoint(x, y + 1.3)];
+    } else {
+      [p moveToPoint:NSMakePoint(x - 1.2, y - 1.2)];
+      [p lineToPoint:NSMakePoint(x + 1.2, y + 1.2)];
+      [p moveToPoint:NSMakePoint(x + 1.2, y - 1.2)];
+      [p lineToPoint:NSMakePoint(x - 1.2, y + 1.2)];
+    }
+    if (agents[i].ref.person_id == self.selectedPerson) {
+      [NSColor.blackColor setStroke];
+      NSBezierPath *box = [NSBezierPath
+          bezierPathWithRect:NSMakeRect(x - 2.2, y - 2.2, 4.4, 4.4)];
+      box.lineWidth = 1;
+      [box stroke];
+    }
   }
   for (unsigned i = 0; i < 2; i++) {
     [(i ? [NSColor colorWithCalibratedRed:0 green:.42 blue:.40 alpha:1]
@@ -313,7 +385,66 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
   size_t column = (size_t)((p.x - 12) / 4.5), row = (size_t)((p.y - 12) / 4.5),
          i = row * 200 + column;
   const CdAgentGlyph *agents = self.agentGlyphs.bytes;
-  if (i < self.agentGlyphs.length / sizeof *agents && self.inspectAgent)
-    self.inspectAgent(agents[i].ref);
+  if (i < self.agentGlyphs.length / sizeof *agents) {
+    [self.window makeFirstResponder:self];
+    self.selectedPerson = agents[i].ref.person_id;
+    self.needsDisplay = YES;
+    if (self.inspectAgent)
+      self.inspectAgent(agents[i].ref);
+  }
 }
+- (void)keyDown:(NSEvent *)event {
+  const CdAgentGlyph *agents = self.agentGlyphs.bytes;
+  size_t count = self.agentGlyphs.length / sizeof *agents;
+  if (!count)
+    return;
+  size_t current = 0;
+  for (size_t i = 0; i < count; i++)
+    if (agents[i].ref.person_id == self.selectedPerson) {
+      current = i;
+      break;
+    }
+  unichar key = event.charactersIgnoringModifiers.length
+                    ? [event.charactersIgnoringModifiers characterAtIndex:0]
+                    : 0;
+  CdRosterDirection direction;
+  if (key == '\r' || key == ' ') {
+    self.selectedPerson = agents[current].ref.person_id;
+    if (self.inspectAgent)
+      self.inspectAgent(agents[current].ref);
+    self.needsDisplay = YES;
+    return;
+  }
+  switch (key) {
+  case NSLeftArrowFunctionKey:
+    direction = CD_ROSTER_LEFT;
+    break;
+  case NSRightArrowFunctionKey:
+    direction = CD_ROSTER_RIGHT;
+    break;
+  case NSUpArrowFunctionKey:
+    direction = CD_ROSTER_UP;
+    break;
+  case NSDownArrowFunctionKey:
+    direction = CD_ROSTER_DOWN;
+    break;
+  case NSHomeFunctionKey:
+    direction = CD_ROSTER_FIRST;
+    break;
+  case NSEndFunctionKey:
+    direction = CD_ROSTER_LAST;
+    break;
+  default:
+    [super keyDown:event];
+    return;
+  }
+  size_t next;
+  if (cd_roster_navigate(count, current, direction, &next) != CD_OK)
+    return;
+  self.selectedPerson = agents[next].ref.person_id;
+  [self scrollRectToVisible:NSMakeRect(12 + (next % 200) * 4.5,
+                                       12 + (next / 200) * 4.5, 4.5, 4.5)];
+  self.needsDisplay = YES;
+}
+
 @end

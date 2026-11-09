@@ -87,6 +87,7 @@ CdStatus cd_world_household_move(CdWorld *w, CdEntityId id, CdEntityId dwelling,
     w->housing[h->dwelling] -= (uint32_t)h->members;
   if (next != CD_NONE)
     w->housing[next] += (uint32_t)h->members;
+  cd_record_emit(w,CD_EVENT_HOUSEHOLD,(CdPersonRef){0},(CdPersonRef){0},id,0,CD_RECORD_DIAGNOSTIC,"explicit household operation","Household housing changed without spatial teleport");
   h->dwelling = next;
   h->housing_known = 1;
   for (size_t i = 0; i < w->count; i++)

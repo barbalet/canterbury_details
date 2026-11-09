@@ -1,0 +1,9 @@
+{
+ "format":"canterbury-performance-budgets","version":1,
+ "scope":"Measured local macOS build; actual source populations unplaced; busy/crowded/churn workloads explicitly technical",
+ "minutes":1440,
+ "step_seconds":{"actual-27000":90,"actual-30000":110,"crowded-30000":180,"busy-30000":180,"churn-30000":180},
+ "save_seconds":60,"load_seconds":60,"peak_rss_bytes":6442450944,"owned_peak_bytes":5368709120,
+ "presentation_p95_ms":250,"presentation_scope":"Full-map offscreen AppKit raster capture with 30,000 copied technical glyphs; not a display-refresh FPS claim",
+ "recommended_host_ram_gib":16
+}

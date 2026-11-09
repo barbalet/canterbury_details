@@ -6,9 +6,9 @@
     "canterbury/simulation-map/derived/buildings-enriched.json": "e11e2fa0660c082a68ff7dc1299b7ee5cc0578a0913b856230bcc71e651e4080",
     "apesdk/bronze/content/bronze_age_full.bronze": "5052ecae8c8f860ea5189e512a3653276062627a9ec7d240d0e514483181cd3a",
     "apesdk/bronze/work/bronze_work.c": "cfcd3c375f789e734c5fe4c557a5cc2b02e9c8356db90e9cae805fb7209f9105",
-    "apesdk/bronze/actors/bronze_actors.c": "2188bb038f71528f2dc270f94acdf79638eb3f656fb57f7c1d2f50a55d0c5353",
-    "src/cd_civic.h": "87b08f66f06b1d3b1167de947f8b6edb339c2e0d9b639c77458d597222e085af",
-    "tools/verify_civic_cycles.py": "c21d118d7ff3dd5a3c09bdfcd9853c9e23e5433dddd87ac8d43a25ab070e163e"
+    "apesdk/bronze/actors/bronze_actors.c": "ace69fbd389abea5c61dbddd23c18bb9967986d9e1bcf622f0f6b5a59e48e1b5",
+    "src/cd_civic.h": "65ddd7c6ad05ec47485dd4288f9b99152819014dbebbc593a6366647f5f55f5f",
+    "tools/verify_civic_cycles.py": "5c0a49bd744ffd800312b81886cc6d5af65585b63e30e75ff9bffd989baa0a2f"
   },
   "sources": {
     "institutions": "All exact Jewish/Christian records retained, including closures and scenario assignments",

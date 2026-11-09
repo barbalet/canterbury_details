@@ -1,6 +1,6 @@
 # Canterbury Details — 40-cycle implementation plan
 
-Prepared 8 November 2026. **Cycles 01–28 are complete within their documented scope; Cycles 29–40 remain planned, not implemented.**
+Prepared 8 November 2026. **Cycles 01–40 are complete within their documented scope.**
 A cycle is a reviewable implementation/documentation milestone, not a simulation
 tick. Existing submodule capabilities are starting points, not evidence that the
 new standalone application has passed its own acceptance gates.
@@ -35,7 +35,8 @@ contracts throughout these cycles. Do not add supernatural rules to this base.
 A native Xcode project and json2png visual map UI were added at the user's request
 between Cycles 08 and 09. This pulls forward presentation/build work only; later
 physical geometry, access and routing are now implemented in Cycles 09–13 below;
-remaining human routines and lifecycle behavior retain their later exit gates.
+human routines and configured lifecycle behavior were subsequently completed
+and qualified in Cycles 14–18.
 
 ## Source authority and repository independence
 
@@ -209,7 +210,7 @@ every planned authoritative field has one owner and no supernatural subsystem.
 small deterministic smoke tests, 27,000-person default startup, dependency errors
 and independent clean-room builds pass. Native controls were observed with all
 27,000 bodies bound. See `docs/BUILD.md` and the Cycle 03 validation records.
-SDK changes remain uncommitted and must precede the parent gitlink update.
+The SDK changes and parent gitlink are committed; see the final release pin.
 
 **Depends on:** 02.
 Create CLI and native-app build definitions, consistent profile flags, local
@@ -228,7 +229,8 @@ identity replacements pass. Native, Bronze and city ABI probes are independent;
 exact-source ordinary-profile regression evidence remains current. No additional
 SDK edits were needed. See `docs/SDK-INTEGRATION.md`,
 `content/cycle-04-validation.json` and `tools/verify_cycle04.py`.
-Demographic births and visitor policy remain later-cycle work.
+Configured births/admissions and visitor policy were subsequently implemented
+in the civil layer; historical demographic rates remain unsupported.
 
 **Depends on:** 03.
 The initial 27,000-person admission/default change was implemented in Cycle 03
@@ -250,8 +252,8 @@ binding minute and returns paused at 00:01. Real native midnight, pure inspectio
 restart/seed isolation, late-call and stale-context tests pass. Native app clock
 and Refresh were observed at 27,000 people. No further SDK edits were required.
 See `docs/TIME-LIFECYCLE.md`, `content/cycle-05-validation.json` and
-`content/cycle-05-native-ui.json`. CdWorld model APIs and persistent session
-switching remain in later cycles.
+`content/cycle-05-native-ui.json`. CdWorld APIs and staged checkpoint replacement were subsequently completed in
+Cycles 09/31; concurrent independently ticking SDK worlds remain unsupported.
 
 **Depends on:** 04.
 Configure the native city callback, initialization, pause, minute advance, close
@@ -272,8 +274,8 @@ reject duplicate, incomplete, retired, unknown and foreign-world references befo
 publication. Empty-after-retirement/readmission also passes. Native app startup
 and stepping remain valid at 27,000. No SDK edits were needed. See
 `docs/IDENTITY.md`, `content/cycle-06-validation.json` and
-`content/cycle-06-native-ui.json`. Civil demographics and archived life records
-remain later-cycle work.
+`content/cycle-06-native-ui.json`. Synthetic civil demographics and archived life records were subsequently
+completed in Cycles 12/14/29.
 
 **Depends on:** 05.
 Implement project person records bound to native actors, ID lookup, relocation,
@@ -294,9 +296,8 @@ world, publication allocates nothing, and cleanup returns tracked payloads/block
 to zero. Three deterministic city RNG streams pass vectors/isolation and rejected
 admission rollback. Exact memory categories/peak and ordinary-profile regression
 evidence are recorded. See `docs/MEMORY.md`, `content/cycle-07-validation.json`
-and `content/cycle-07-native-ui.json`. SDK changes remain uncommitted; commit
-those before the parent gitlink. General content/save staging and process RSS
-qualification remain later cycles.
+and `content/cycle-07-native-ui.json`. The SDK fixes and parent gitlink are now committed. Content/checkpoint staging
+and process RSS qualification were subsequently completed in Cycles 08/31/37.
 
 **Depends on:** 06.
 Allocate city-scale arrays safely on the heap, check sizes/overflow, and centralize
@@ -694,7 +695,8 @@ respect geometry/resources, and recover or persist without duplicated minute wor
 
 ## Cycle 29 — Build causal records and ordinary social continuity
 
-**Next cycle — planned.**
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+Bounded causal records, scoped observations/copies, household bereavement support context, and staffing-loss → job → service traces are implemented. Retired actors cannot act. Retention gaps and diagnostic versus household/personal visibility are explicit. See `docs/RECORDS.md` and `content/cycle-29-validation.json`.
 
 **Depends on:** 14, 17, 21–28.
 Record events, observations, household ties, service interruptions, institutional
@@ -707,6 +709,9 @@ retired actors cannot act and copied ordinary records preserve their provenance.
 
 ## Cycle 30 — Expose bounded scenario operations and diagnostics
 
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+The 45-command ordinary catalogue supports permission-gated read-only preview, bounded idempotent queue/results, current-state execution validation, cancellation and deadlines in CLI programs and native controls. Finite reservations remain with their ordinary task owners. See `docs/OPERATIONS.md` and `content/cycle-30-validation.json`.
+
 **Depends on:** 20, 26–29.
 Provide CLI/native operations for ordinary dispatch, scheduling, closures,
 inventory, repairs and scenario experiments. Validate IDs, permissions, target
@@ -717,6 +722,9 @@ observer tools versus interventions; no campaign route/era selector is imported.
 operation has a real human/civic purpose and deterministic exactly-once effects.
 
 ## Cycle 31 — Implement complete atomic city checkpoints
+
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+Complete ABI/content-qualified city/native/Bronze checkpoints stage and validate all owners, arrays, routes, reservations, calendars, records and RNGs before no-tick publication. Active-task continuation, full 27,000-person restoration, empty worlds, allocation/corruption/publication failures and owner isolation pass. See `docs/PERSISTENCE.md` and `content/cycle-31-validation.json`.
 
 **Depends on:** 07, 14, 20–30.
 Coordinate native/Bronze state and all project arrays, RNGs, tasks, routes,
@@ -730,6 +738,9 @@ state and the preceding checkpoint without pointer/identity confusion.
 
 ## Cycle 32 — Prove replay, session and batch equivalence
 
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+Batch versus single-minute/pause/snapshot schedules, matching record exports, optimized/unoptimized builds and separate-process checkpoint continuation agree. The native clock remains authoritative. See `docs/REPLAY.md` and `content/cycle-32-validation.json`.
+
 **Depends on:** 05, 29–31.
 Add seeded replay inputs, deterministic order/event ordering and separate-process
 continuation checks. Compare normal/fast/pause, interrupted tasks, session switches,
@@ -739,6 +750,9 @@ exports and redraw schedules. Keep host wall time out of authoritative decisions
 boundaries across supported build configurations and checkpoint continuations.
 
 ## Cycle 33 — Render the actual Canterbury source map
+
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+The requested json2png2.c renderer uses the pinned upstream core to reproduce the agreed final assembled overview pixel for pixel, including cropped connected OSM roads, dark buildings, water and reference rail with its restrained palette. Copied people/model/selection overlays and camera state are separate. Actual source qualification and unplaced residents remain explicit. See `docs/MAP.md` and `content/cycle-33-validation.json`.
 
 Agent presentation was pulled forward at the user’s request: the native app now
 has known-position map plus signs and an all-agent nongeographic roster overview.
@@ -755,6 +769,9 @@ rendering and camera changes cannot modify authoritative simulation state.
 
 ## Cycle 34 — Add camera, selection and human/institution inspection
 
+**Complete — 8 November 2026, qualified ordinary-model scope.**
+Camera transforms, stable-ID map/name/roster selection, live human/building/institution cards and retained unlocated records are implemented. Agent names center immediately from copied known positions; absent positions are prominently identified. Selection rebinds after compaction/load, revision guards reject stale cards, and contrast remains readable in macOS dark mode. See `docs/INSPECTION.md`, `content/cycle-34-validation.json` and `content/cycle-29-34-native-ui.json`.
+
 **Depends on:** 29, 33.
 Implement zoom, pan, fit, stable-ID picking, people/building/institution lists and
 inspectors. Expose household, occupation, needs, job, service and source-confidence
@@ -765,6 +782,8 @@ visible. Support unlocated institutions without inventing map markers.
 and readable cards explain actual model state without stale actor references.
 
 ## Cycle 35 — Build the native city management interface
+
+**Status: complete.** Persistent native management exposes all 45 ordinary operations, typed CLI-equivalent requests, preview/queue/cancel/query/apply, 11 paged status views, and worker-owned save/load. Native paused operation checks and CLI/read-model parity pass. Evidence: `content/cycle-35-validation.json` and `content/cycle-35-40-native-ui.json`.
 
 **Depends on:** 30–34.
 Expose ordinary scenarios, pause/speed, operation preview/queue/cancel, work and
@@ -777,6 +796,8 @@ its CLI/state behavior; decisions and inspections obey the sole-clock contract.
 
 ## Cycle 36 — Qualify accessibility and alternative input
 
+**Status: complete.** Native keyboard/focus, editable fields, scalable text and color-independent roster symbols are qualified. End/Left/Return selected resident #26999 without ticking. Synthetic boundary tests cover 1–30000 entries; physical assistive-device/controller certification is not claimed. Evidence: `content/cycle-36-validation.json` and `content/cycle-35-40-native-ui.json`.
+
 **Depends on:** 34, 35.
 Use native accessibility labels/focus, scalable readable text, color-independent
 legends, reduced motion and keyboard traversal. Add controller navigation if
@@ -787,6 +808,8 @@ Declare synthetic versus physical-device test coverage explicitly.
 focus, dialogs, paused navigation and input do not corrupt or advance model state.
 
 ## Cycle 37 — Measure full-population performance and memory
+
+**Status: complete.** Five 1440-minute workloads pass declared CPU/wall/RSS/owned-memory/save/load budgets at 27000/30000 people, including crowded streets, loaded civic/environment and configured lifecycle churn. The normally launched 30000-glyph AppKit benchmark passes at p95 18.41 ms; this is offscreen capture, not physical display FPS. Evidence: `content/cycle-37-validation.json` and `content/cycle-35-40-native-ui.json`.
 
 **Depends on:** 04, 07, 27–36.
 Measure full days, busy travel, care/service loads, lifecycle churn, environmental
@@ -800,6 +823,8 @@ city profile, preserving ordinary native/Bronze behavior.
 
 ## Cycle 38 — Qualify robustness, isolation and dependency purity
 
+**Status: complete.** Clean offline checkout passes owned allocation/publication, malformed/checkpoint, bounded queue, reference/session and replay suites. Isolated original native/contract/actor/hybrid SDK regressions and independent baseline/profile comparisons pass; SDK and parent pin are committed. Evidence: `content/cycle-38-validation.json` and `content/cycle-35-40-native-ui.json`.
+
 **Depends on:** 31, 32, 36, 37.
 Exercise every owned allocation-failure point, malformed content/checkpoints,
 queue saturation, invalid IDs, interrupted publication and repeated sessions.
@@ -811,6 +836,8 @@ artifacts; clean-clone/offline tests pass; unflagged SDK layouts/behavior match 
 baseline and failure paths preserve authoritative state and published generations.
 
 ## Cycle 39 — Complete the standalone documentation and provenance pack
+
+**Status: complete.** User/developer/accessibility/performance/robustness/release documentation and provenance are reconciled. The relocatable CanterburyCore archive, eight public headers, resources and ordinary independent frontend pass without Cocoa or an application entry point; extension RNG remains separate from city streams. Evidence: `content/cycle-39-validation.json` and `content/cycle-35-40-native-ui.json`.
 
 **Depends on:** 01–38.
 Reconcile source manifests, model assumptions, supported features, limitations,
@@ -830,6 +857,8 @@ needed to understand or validate the model.
 
 ## Cycle 40 — Run and publish the standalone release gate
 
+**Status: complete.** Fresh independent checkout passes Cycles 01–39, SDK isolation, Xcode Debug/Release targets, all full-population budgets and normal native release-app launch/zoom/selection/management checks. Exact source/pins, native observations and report hashes are published locally in content/evidence-index.json and content/cycle-40-validation.json. No remote publication was performed. Evidence: `content/cycle-40-validation.json` and `content/cycle-35-40-native-ui.json`.
+
 **Depends on:** all preceding cycles.
 Run a fresh clean-clone release qualification covering source/ABI identity,
 all-human population accounting, daily routines and lifecycle, occupations,
@@ -844,6 +873,17 @@ as a command-line simulation. Record exact submodule commits and report hashes.
 unknown/unsupported historical claim is explicit, no blocking model/identity/
 clock/persistence defect remains, and the release contains only the independent
 Canterbury human-city source/documentation with its two declared submodules.
+
+## Completion conclusion
+
+All 40 implementation cycles and the standalone release gate have passed. The
+ordinary city, native management UI, reusable core and local documentation are
+ready for the separate game integration phase. No implementation cycle remains.
+The release qualifies explicit technical scenarios and the final assembled map;
+it does not establish missing historical staffing, housing, routes or demographic
+rates. Those source uncertainties remain visible and require reviewed evidence.
+Current results and exact pins are indexed in `content/evidence-index.json` and
+`content/cycle-40-validation.json`; detailed limits are in `docs/RELEASE.md`.
 
 ## Final acceptance invariants
 

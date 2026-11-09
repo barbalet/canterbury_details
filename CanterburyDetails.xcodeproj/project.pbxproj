@@ -11,6 +11,18 @@
 			"path" = "ui/CityApp.m";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"062644D7E35ADF0CCB2587A0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "ui/CityManagement.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"22E350DD49B00E4A4291C517" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.objc";
+			"path" = "ui/CityManagement.m";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"80300C1277CE4A1253E3A82E" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
@@ -46,6 +58,8 @@
 			"name" = "Application";
 			"children" = (
 				"D33A6A4C4C92FE91C19FF807",
+				"062644D7E35ADF0CCB2587A0",
+				"22E350DD49B00E4A4291C517",
 				"80300C1277CE4A1253E3A82E",
 				"38387BDDACBE92DB92C08B84",
 				"E4D2FA1934DF90A6569B130F",
@@ -76,6 +90,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.c";
 			"path" = "src/cd_calendar.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"316B5B192FA0A49AB7B51B86" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_checkpoint_validation.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"5E4903F49AB82EAFDAFCA3E5" = {
@@ -118,6 +138,18 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.c";
 			"path" = "src/cd_content.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"752DE11382B2B8546AAF85A4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_core.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"9055939B44DC77B02A86495A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "src/cd_core.h";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"3606386C3E6AE3DEBF77FAEC" = {
@@ -198,6 +230,18 @@
 			"path" = "src/cd_logistics.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"321113BE364A993AD446FFBC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_management.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"D2B53CC487A6E48C105AD2AE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "src/cd_management.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"5DE3F3D076DE969B85DBE980" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.c";
@@ -228,6 +272,18 @@
 			"path" = "src/cd_needs.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"6513C7EA69814DA54F9C54BE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "src/cd_observer.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"AA32672FC22977F663408E08" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.h";
+			"path" = "src/cd_observer_internal.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"37B9D99104532A15B21001C9" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.c";
@@ -240,6 +296,12 @@
 			"path" = "src/cd_offices.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"B89B5F497C05F7ECDBC4CC05" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_operations.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"A3C4074F2E96BECC72F6184F" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.c";
@@ -250,6 +312,12 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
 			"path" = "src/cd_people.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"3D5FC08B2D84F9AFA76FA219" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_persistence.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"D3FD0FA7F97BC868E90E40F8" = {
@@ -268,6 +336,18 @@
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "sourcecode.c.h";
 			"path" = "src/cd_random.h";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"BCC497EA4DB1C897DF859126" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_readmodel.c";
+			"sourceTree" = "SOURCE_ROOT";
+		};
+		"614CB04896E2C4A12492CC1D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.c.c";
+			"path" = "src/cd_records.c";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"D43FC5A1BAE87DDAF65BCA69" = {
@@ -320,6 +400,7 @@
 				"840A82AFA5E749E8D2A9DD82",
 				"79AD5AD3A2AF88E1AEA5AD04",
 				"45523D2FE34227C0643C1E80",
+				"316B5B192FA0A49AB7B51B86",
 				"5E4903F49AB82EAFDAFCA3E5",
 				"040D75EB24C24B4AE2ACEE79",
 				"155A5C5A74EF6230F5B066E7",
@@ -327,6 +408,8 @@
 				"FD829CEB13FEC3FEB028BB8C",
 				"2D277A4FAF6ED573A1A4C864",
 				"2DA9855169FCFD7C5BAF7EEC",
+				"752DE11382B2B8546AAF85A4",
+				"9055939B44DC77B02A86495A",
 				"3606386C3E6AE3DEBF77FAEC",
 				"DC19509BE32370BDC05351B2",
 				"27CDE3AE1484B2D0B5A724BF",
@@ -340,18 +423,26 @@
 				"82586EE116643973720F8E84",
 				"F2F549E4B8B3EB0E7EDA9A90",
 				"37D7C2F75FEAC194B11EFF6C",
+				"321113BE364A993AD446FFBC",
+				"D2B53CC487A6E48C105AD2AE",
 				"5DE3F3D076DE969B85DBE980",
 				"6A974A834DCE32653D83FC9F",
 				"469F97947E7234DB724C3CAE",
 				"1334E9C7E8486B7EBE873AEB",
 				"E1A2B1B49A5E19ABB9BF79E3",
+				"6513C7EA69814DA54F9C54BE",
+				"AA32672FC22977F663408E08",
 				"37B9D99104532A15B21001C9",
 				"3E6B19DBBAEDC8ED3C4C7E65",
+				"B89B5F497C05F7ECDBC4CC05",
 				"A3C4074F2E96BECC72F6184F",
 				"EA6A200AE8D7346D49F0E81A",
+				"3D5FC08B2D84F9AFA76FA219",
 				"D3FD0FA7F97BC868E90E40F8",
 				"4F3F7E2BCE52BF84E9662ACC",
 				"C0AEEE7636371F66928E3490",
+				"BCC497EA4DB1C897DF859126",
+				"614CB04896E2C4A12492CC1D",
 				"D43FC5A1BAE87DDAF65BCA69",
 				"349D34ECBC558BB67E54977D",
 				"41CA573E2E240BA44DCB832A",
@@ -649,6 +740,12 @@
 			);
 			"sourceTree" = "<group>";
 		};
+		"9683C0E3FF4DBEDB6D447424" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.json";
+			"path" = "content/operation-controls.json";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"E17D70BD4BCE4A91F506934C" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text";
@@ -677,6 +774,7 @@
 			"isa" = "PBXGroup";
 			"name" = "Map resources";
 			"children" = (
+				"9683C0E3FF4DBEDB6D447424",
 				"E17D70BD4BCE4A91F506934C",
 				"70F5E478861EBD685C75253F",
 				"73549845F534177589DE8143",
@@ -881,6 +979,34 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "45523D2FE34227C0643C1E80";
 		};
+		"7A7DB95982A4B4EEB7A24FE2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "614CB04896E2C4A12492CC1D";
+		};
+		"E552D810C5CCD5FF32CD5FB9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B89B5F497C05F7ECDBC4CC05";
+		};
+		"69EF6BF5BECA27D93B0DDFD6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3D5FC08B2D84F9AFA76FA219";
+		};
+		"0E1310F4D56B7670F7D3B567" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "316B5B192FA0A49AB7B51B86";
+		};
+		"6F618AD03F4F674653537E9E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "BCC497EA4DB1C897DF859126";
+		};
+		"646B863E8C28F3F424DE565C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "321113BE364A993AD446FFBC";
+		};
+		"6B97ABE828B795C1DB173FE8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "752DE11382B2B8546AAF85A4";
+		};
 		"D5F4745EC7AFFA79DDFB54C5" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "D33A6A4C4C92FE91C19FF807";
@@ -892,6 +1018,10 @@
 		"DF0E840C771550A0D49184B4" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "B7680DD311E832D7B2C7E8BD";
+		};
+		"30A901D40F6E98E9CD007E9B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "22E350DD49B00E4A4291C517";
 		};
 		"7347330B0AC496971CD2F6AF" = {
 			"isa" = "PBXBuildFile";
@@ -1079,9 +1209,17 @@
 				"99E9AB0FD9E891D923CD0172",
 				"CF36BBCE1DF814D9BB59F121",
 				"5B9952BDD7D89EC48D7EEDB1",
+				"7A7DB95982A4B4EEB7A24FE2",
+				"E552D810C5CCD5FF32CD5FB9",
+				"69EF6BF5BECA27D93B0DDFD6",
+				"0E1310F4D56B7670F7D3B567",
+				"6F618AD03F4F674653537E9E",
+				"646B863E8C28F3F424DE565C",
+				"6B97ABE828B795C1DB173FE8",
 				"D5F4745EC7AFFA79DDFB54C5",
 				"C09E2666F69FD61E3990720F",
 				"DF0E840C771550A0D49184B4",
+				"30A901D40F6E98E9CD007E9B",
 				"7347330B0AC496971CD2F6AF",
 				"AF53024F11D9BCDCA7E02CD5",
 				"E6952DF78CE5E74F06908314",
@@ -1150,8 +1288,12 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/build_basemap.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_runtime.py --write\n";
+			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_controls.py\n\"${CANTERBURY_PYTHON:-python3}\" tools/checkpoint_abi.py\n\"${CANTERBURY_PYTHON:-python3}\" tools/build_basemap.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_runtime.py --write\n";
 			"showEnvVarsInLog" = 0;
+		};
+		"DB70542E293CD6095A4F3484" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9683C0E3FF4DBEDB6D447424";
 		};
 		"D34D0BAFE2D9619A843EEC5B" = {
 			"isa" = "PBXBuildFile";
@@ -1173,6 +1315,7 @@
 			"isa" = "PBXResourcesBuildPhase";
 			"buildActionMask" = 2147483647;
 			"files" = (
+				"DB70542E293CD6095A4F3484",
 				"D34D0BAFE2D9619A843EEC5B",
 				"DEDBB46BFAF9D84BC86706BA",
 				"6FA8BF2BA25D3579AEADB7ED",
@@ -1374,6 +1517,34 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "45523D2FE34227C0643C1E80";
 		};
+		"38E1C4A1EAE1D5473165CC9A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "614CB04896E2C4A12492CC1D";
+		};
+		"891118D42121B1ABF1AB407B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B89B5F497C05F7ECDBC4CC05";
+		};
+		"E2FD3E4F9003F1E99ACA964B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3D5FC08B2D84F9AFA76FA219";
+		};
+		"F7E3E04A55F2EFA8ECB3219B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "316B5B192FA0A49AB7B51B86";
+		};
+		"7DFC4C808BFFF1C36ABF936B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "BCC497EA4DB1C897DF859126";
+		};
+		"B910BC132B9E38219A3647FC" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "321113BE364A993AD446FFBC";
+		};
+		"3F5DBD361F75E79C8B6939CB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "752DE11382B2B8546AAF85A4";
+		};
 		"7C4F9C2B125984DD9A5CEFF3" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "C41EDE517C7DD8E8AC32E5E2";
@@ -1564,6 +1735,13 @@
 				"F423BF35780765B445B1CA4B",
 				"200F0E95110349F08F7E858E",
 				"C88E81449FF83D98CE5C2BE3",
+				"38E1C4A1EAE1D5473165CC9A",
+				"891118D42121B1ABF1AB407B",
+				"E2FD3E4F9003F1E99ACA964B",
+				"F7E3E04A55F2EFA8ECB3219B",
+				"7DFC4C808BFFF1C36ABF936B",
+				"B910BC132B9E38219A3647FC",
+				"3F5DBD361F75E79C8B6939CB",
 				"7C4F9C2B125984DD9A5CEFF3",
 				"030D2C9FBD82F2173E0CFDBD",
 				"DF412067DC8FFDD5FC004630",
@@ -1626,7 +1804,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n";
+			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_controls.py\n\"${CANTERBURY_PYTHON:-python3}\" tools/checkpoint_abi.py\n";
 			"showEnvVarsInLog" = 0;
 		};
 		"EE97A52BBECB82F341A0C0CB" = {
@@ -1807,6 +1985,34 @@
 		"684D75D4CFE29C2AD775E743" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "45523D2FE34227C0643C1E80";
+		};
+		"4C287F6BBA73CF90DCED891A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "614CB04896E2C4A12492CC1D";
+		};
+		"5D7357D6FBD9DA8E704F0E9D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B89B5F497C05F7ECDBC4CC05";
+		};
+		"638E5DA1810D9FFC0EA8682A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "3D5FC08B2D84F9AFA76FA219";
+		};
+		"61C261D7D2884FC87577F305" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "316B5B192FA0A49AB7B51B86";
+		};
+		"0B32AAEC85EFB6C6F183A182" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "BCC497EA4DB1C897DF859126";
+		};
+		"9FA0563DF3FA46834A33D1D4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "321113BE364A993AD446FFBC";
+		};
+		"35C9F849078F3F1CC4459666" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "752DE11382B2B8546AAF85A4";
 		};
 		"04D6081F88D0DE317C761FB5" = {
 			"isa" = "PBXBuildFile";
@@ -1998,6 +2204,13 @@
 				"00E066AA3E2E25A3CBB2362B",
 				"6E35769B6C790B6DDF5174A0",
 				"684D75D4CFE29C2AD775E743",
+				"4C287F6BBA73CF90DCED891A",
+				"5D7357D6FBD9DA8E704F0E9D",
+				"638E5DA1810D9FFC0EA8682A",
+				"61C261D7D2884FC87577F305",
+				"0B32AAEC85EFB6C6F183A182",
+				"9FA0563DF3FA46834A33D1D4",
+				"35C9F849078F3F1CC4459666",
 				"04D6081F88D0DE317C761FB5",
 				"CC0192272987C2F0AECE5E64",
 				"1389CE4B4DC6371797D206F8",
@@ -2060,7 +2273,7 @@
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 			"shellPath" = "/bin/sh";
-			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n";
+			"shellScript" = "set -eu\nexport PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\ncd \"$SRCROOT\"\n\"${CANTERBURY_PYTHON:-python3}\" tools/build.py check\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_occupations.py --write\n\"${CANTERBURY_PYTHON:-python3}\" tools/compile_controls.py\n\"${CANTERBURY_PYTHON:-python3}\" tools/checkpoint_abi.py\n";
 			"showEnvVarsInLog" = 0;
 		};
 		"A74ACEEC47C22886FE0C221F" = {

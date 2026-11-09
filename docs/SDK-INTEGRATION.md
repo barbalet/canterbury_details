@@ -1,10 +1,9 @@
 # SDK capacity and profile contract — Cycle 04
 
 The host starts with **27,000 ordinary humans**, as required by the user. This is
-a simulation total, not a recovered 1940 census. The default fills every available
-native slot; no special actor is appended or reserved. Smaller seeded fixtures
-are technical tests. City routines, demographic rules and visitor scheduling
-remain later cycles.
+a simulation total, not a recovered 1940 census. The default leaves 3,000 slots below the 30,000 capacity; no special actor is
+appended or reserved. Smaller seeded fixtures are technical tests. Ordinary city
+routines and configured lifecycle/visitor policy are implemented in the host.
 
 ## Profile and ABI
 
@@ -45,9 +44,9 @@ session and its read-only digest.
 ## Bounded additional people
 
 A birth or visitor must use the same native array and actor registry as every
-other ordinary person. There is no overflow population. At the 27,000 default,
-additional admissions must wait for a released slot or be refused by later host
-policy; the capacity is not automatically increased.
+other ordinary person. There is no overflow population. The 27,000 default permits growth to 30,000. At capacity, additional admissions
+are refused; capacity is not automatically increased. Housing and guardian
+requirements apply independently of available native slots.
 
 At a serialized native lifecycle boundary, the existing SDK identity hook
 `bronze_actors_birth(group, &group->beings[group->num])` admits only a valid next
@@ -63,18 +62,17 @@ A later person occupying a released slot receives a new ID; retired IDs must not
 resolve. The capacity fixture uses the last slot to avoid relocation and performs
 32 remove/readmit replacements at full population. Small/near-full fixtures also
 exercise spare-slot admission. These fixtures manipulate only identity capacity,
-not demographic physiology, histories, queues or visitor policy. Those features
-must implement their own complete lifecycle in later cycles.
+not demographic physiology, histories, queues or visitor policy. The project civil layer owns those features and their complete lifecycle; the
+SDK hook alone does not supply or validate them.
 
 ## Upstream change and regression evidence
 
 Cycle 03 already made the user-requested city-only default/configure/body-bound
 change. Cycle 04 makes no further SDK edits. Cycle 07 subsequently adds guarded heap/storage seams; see `docs/MEMORY.md`.
-The exact six reviewed SDK files
-and base revision are in `content/sdk-working-tree.json`; the source audit rejects
-unreviewed changes. Changes are still uncommitted. Commit the SDK before updating
-the parent gitlink, then refresh the source baseline and evidence as described in
-`docs/BUILD.md`.
+The SDK working tree is clean and the parent pins committed revision `3892ece`,
+including guarded checkpoint staging/validation fixes. The independent pre-fix
+comparison revision is recorded in `content/sdk-profile-baseline.json`; source
+admission and profile regression reject unreviewed changes.
 
 `content/cycle-03-sdk-validation.json` remains valid for the exact current source
 manifest. It compares native/Bronze preprocessed changed code with the pinned
@@ -92,12 +90,12 @@ python3 tools/verify_cycle04.py --check
 ```
 
 The verifier compiles `tests/capacity.c` against the same SDK source set/profile
-as the CLI, with assertions enabled. It runs real native sessions at 1, 26,999
-and 27,000, checks the separate default CLI startup, and runs independent ABI
+as the CLI, with assertions enabled. It runs real native sessions at 1, 27,000,
+29,999 and 30,000, checks the separate default CLI startup, and runs independent ABI
 probes. Evidence is in `content/cycle-04-validation.json`; generated binaries and
 logs remain ignored under `build/`. No sanitizer or cross-platform qualification
 is claimed by this cycle.
 
 The starting population remains 27,000. Capacity is 30,000, leaving 3,000 native
-and identity slots for growth. Birth/demographic admission is Cycle 14; this
-change provides headroom without claiming that lifecycle implementation.
+and identity slots for growth. Configured births/admissions are implemented and
+qualified in Cycle 14; historical demographic rates remain unsupported.

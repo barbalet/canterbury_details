@@ -7,6 +7,9 @@ from native_sources import CORE,UI
 from compile_runtime import build
 FILES=sorted(set(CORE+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['ui/CitySession.h','ui/CityMap.h','tools/verify_work_cycles.py','tools/city_fixtures.py','tools/compile_runtime.py','tools/native_sources.py','tools/build.py','tests/work.c','docs/EMPLOYMENT.md','docs/WORK.md','docs/ECONOMY.md','docs/DEVELOPMENT.md','docs/INSTITUTIONS.md','content/architecture.json','content/institution-source-matrix.json']))
 SCOPES={19:'bounded employers, reachable qualified jobs, secondary and overnight shifts, apprenticeship and deterministic mentor loss',20:'single native-minute arbitration, real commute, interruption/resume, batch equivalence, exactly-once wages/materials/output and cancellation',21:'finite production chains, shortages, household purchases, escrow, retry/cancel safety, goods/food/money conservation and death possessions',22:'material/labor gated repair and capacity/use projects, publication validation, cancellation and immutable source geometry',23:'all 33 exact Jewish/Christian source records, closure/unlocated distinction, explicit operations, retained review evidence and immutable snapshots'}
+from native_sources import UI
+FILES=sorted(set(FILES+UI+[str(p.relative_to(ROOT)) for p in (ROOT/'ui').glob('*.h')]+['tools/compile_controls.py','content/operation-controls.json']))
+
 def run(cmd):
  p=subprocess.run(list(map(str,cmd)),cwd=ROOT,capture_output=True,text=True)
  if p.returncode:raise RuntimeError(str(cmd)+'\n'+p.stdout[-1800:]+p.stderr[-3500:])

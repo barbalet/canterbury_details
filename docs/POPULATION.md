@@ -39,7 +39,7 @@ footprints are passed off as census residences. Full-map acceptance checks every
 ID/date/guardian and reconciles 27,000 records with 6,750 households.
 
 The default population is **27,000**, distinct from the **30,000** native/identity
-capacity. The 3,000 spare slots support later growth; births remain Cycle 14 work.
+capacity. The 3,000 spare slots support configured births/admissions implemented in Cycle 14.
 
 The full-population naming regression measures 26,898 distinct full names among
 27,000 residents for the default seed, without counting IDs or display suffixes.

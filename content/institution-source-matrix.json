@@ -1,7 +1,7 @@
 {
   "format": "canterbury-details-institution-source-matrix",
-  "generation_id": "a8c11775e599e5b306890eec51962b97500db6e2243bedbbd9f4f3950a8ff420",
-  "source_manifest_sha256": "29e67433d7ec2de8266bf2b8f375126b83e05af0c29ca34fdf30b54612af12a4",
+  "generation_id": "5fd18e50a4cfeeb3ed554438098b3de206aa2bc090693adcbd37ccbb64a1a6ab",
+  "source_manifest_sha256": "dc7cbb075d67a6951a2c75dd3d4bc1d027e0257363e31c16f5e9a3669d4b2073",
   "sites": [
     {
       "candidate_buildings": [

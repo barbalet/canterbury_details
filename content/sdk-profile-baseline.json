@@ -1,0 +1,6 @@
+{
+  "format": "canterbury-sdk-profile-baseline",
+  "version": 1,
+  "revision": "e44fd93cb07ff20b643b4747c595b0fef294748d",
+  "reason": "Pre-Cycles-35\u201340 guarded checkpoint-fix baseline; compare committed and working SDK changes against this independent revision."
+}

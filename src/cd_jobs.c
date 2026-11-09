@@ -233,6 +233,7 @@ CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
                    "Workplace is not reachable on currently qualified links");
   if (!cd_usable(w, b) || w->premises[b].closed)
     return cd_diag(d, CD_INVALID_STATE, "Employer premises unavailable");
+  cd_record_emit(w,CD_EVENT_JOB,ref,mentor,id,0,CD_RECORD_DIAGNOSTIC,j->view.basis,"Qualified workplace assignment committed");
   j->view.worker = ref;
   j->view.mentor = mentor;
   p->jobs[secondary] = id;
@@ -241,6 +242,7 @@ CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
       "Reachable qualified assignment committed; no position changed");
 }
 static void unassign_one(CdWorld *w, CdJob *j) {
+  if(j->view.worker.person_id)cd_record_emit(w,CD_EVENT_JOB,j->view.worker,j->view.mentor,j->view.id,0,CD_RECORD_DIAGNOSTIC,j->view.basis,"Workplace assignment released; dependent work revalidated");
   CdCitizen *p = cd_citizen(w, j->view.worker);
   if (p) {
     if (p->work.view.job == j->view.id)

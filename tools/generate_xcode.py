@@ -22,7 +22,7 @@ def generate():
         ext=Path(path).suffix;types={'.c':'sourcecode.c.c','.h':'sourcecode.c.h','.m':'sourcecode.c.objc','.png':'image.png','.json':'text.json','.md':'net.daringfireball.markdown','.plist':'text.plist.xml','.py':'text.script.python'}
         files[path]=add('file:'+path,'PBXFileReference',lastKnownFileType=kind or types.get(ext,'text'),path=path,sourceTree=source);return files[path]
     native=n.sdk_sources();core=n.CORE;app=n.UI
-    project_files=sorted(set(core+['src/main.c','tests/smoke.c']+app+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['ui/CityMap.h','ui/CitySession.h','ui/Info.plist']))
+    project_files=sorted(set(core+['src/main.c','tests/smoke.c']+app+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+['ui/CityMap.h','ui/CitySession.h','ui/CityManagement.h','ui/Info.plist','tools/json2png2.c','tools/assembled_map.py','tools/build_basemap.py']))
     groups=[]
     for name,paths in [('Application',[p for p in project_files if p.startswith('ui/')]),('City model',[p for p in project_files if p.startswith('src/')]),('Smoke fixture',['tests/smoke.c']),('ApeSDK',native),('Map resources',n.RESOURCES),('Build and documentation',['README.md','PLAN.md','docs/XCODE.md','tools/native_sources.py','tools/native_profile.py','tools/build_basemap.py','tools/generate_xcode.py'])]:
         groups.append(add('group:'+name,'PBXGroup',name=name,children=[file(p) for p in paths],sourceTree='<group>'))
@@ -34,7 +34,7 @@ def generate():
         for path in n.sources(kind):builds.append(add('compile:'+kind+':'+path,'PBXBuildFile',fileRef=file(path)))
         sources=add('sources:'+kind,'PBXSourcesBuildPhase',buildActionMask=2147483647,files=builds,runOnlyForDeploymentPostprocessing=0)
         frameworks=add('frameworks:'+kind,'PBXFrameworksBuildPhase',buildActionMask=2147483647,files=[add('link:'+kind,'PBXBuildFile',fileRef=cocoa)] if app_target else [],runOnlyForDeploymentPostprocessing=0)
-        script='set -eu\nexport PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"\ncd "$SRCROOT"\n"${CANTERBURY_PYTHON:-python3}" tools/build.py check\n"${CANTERBURY_PYTHON:-python3}" tools/compile_occupations.py --write\n'
+        script='set -eu\nexport PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"\ncd "$SRCROOT"\n"${CANTERBURY_PYTHON:-python3}" tools/build.py check\n"${CANTERBURY_PYTHON:-python3}" tools/compile_occupations.py --write\n"${CANTERBURY_PYTHON:-python3}" tools/compile_controls.py\n"${CANTERBURY_PYTHON:-python3}" tools/checkpoint_abi.py\n'
         if app_target:script+='"${CANTERBURY_PYTHON:-python3}" tools/build_basemap.py --write\n"${CANTERBURY_PYTHON:-python3}" tools/compile_runtime.py --write\n'
         phase=add('preflight:'+kind,'PBXShellScriptBuildPhase',name='Audit local profile and render json2png map' if app_target else 'Audit local profile',alwaysOutOfDate=1,buildActionMask=2147483647,files=[],inputPaths=[],outputPaths=['$(SRCROOT)/build/map/CanterburyMap.png','$(SRCROOT)/build/map/render.json'] if app_target else [],runOnlyForDeploymentPostprocessing=0,shellPath='/bin/sh',shellScript=script,showEnvVarsInLog=0)
         phases=[phase,sources,frameworks]

@@ -1,0 +1,204 @@
+{
+  "format": "canterbury-operation-controls",
+  "version": 1,
+  "scenario": "Canterbury 1940 \u2014 synthetic ordinary population; actual assembled map",
+  "permission_default": "observer",
+  "fields": [
+    "key",
+    "actorID",
+    "target",
+    "secondary",
+    "units",
+    "value",
+    "starts",
+    "duration",
+    "earliest",
+    "deadline",
+    "flags",
+    "auxiliary",
+    "label",
+    "basis"
+  ],
+  "commands": [
+    {
+      "name": "place",
+      "help": "actor, target source node; initial placement / physical travel"
+    },
+    {
+      "name": "move",
+      "help": "actor, target source node; initial placement / physical travel"
+    },
+    {
+      "name": "enter",
+      "help": "actor, target reviewed door; flags bit0 key, bit1 emergency authorization"
+    },
+    {
+      "name": "exit",
+      "help": "actor, target reviewed door; flags bit0 key, bit1 emergency authorization"
+    },
+    {
+      "name": "close-road",
+      "help": "target walk edge; flags 0 reopen / 1 close"
+    },
+    {
+      "name": "lock",
+      "help": "target building; flags 0 unlock / 1 lock"
+    },
+    {
+      "name": "train",
+      "help": "actor, units skill mask / civic permission mask"
+    },
+    {
+      "name": "authorize",
+      "help": "actor, units skill mask / civic permission mask"
+    },
+    {
+      "name": "employer",
+      "help": "target building, units work capacity, label employer name"
+    },
+    {
+      "name": "assign-job",
+      "help": "actor worker, target job, secondary mentor logical ID (0 none), flags secondary-job slot"
+    },
+    {
+      "name": "work",
+      "help": "actor, target job, secondary project ID, value recipe enum, units production quantity"
+    },
+    {
+      "name": "cancel-work",
+      "help": "actor, target own work ID"
+    },
+    {
+      "name": "import-goods",
+      "help": "target building, value good enum, units finite imported quantity"
+    },
+    {
+      "name": "import-food",
+      "help": "target building, units meals, value raw food, flags producer bool; configures store and imports finite stocks"
+    },
+    {
+      "name": "cargo",
+      "help": "actor physically at target seller building, value good enum, units load, flags delivery-to-household bool"
+    },
+    {
+      "name": "import-money",
+      "help": "actor for personal account; target household/employer ID otherwise; units model tokens; flags account kind"
+    },
+    {
+      "name": "project",
+      "help": "target building, flags development kind (repair/capacity/use), units new capacity, duration labor minutes, label use"
+    },
+    {
+      "name": "cancel-project",
+      "help": "target building, secondary project ID"
+    },
+    {
+      "name": "dispatch",
+      "help": "actor column recipient (burial may reference archive), target roster/office, flags religious-provider bool, secondary destination, value service kind, units deadline horizon, duration work minutes"
+    },
+    {
+      "name": "cancel-service",
+      "help": "target service request ID"
+    },
+    {
+      "name": "gathering",
+      "help": "target office, value service kind, starts future civil minute, duration window, units attendee cap, flags members-only bool; one occurrence"
+    },
+    {
+      "name": "attend",
+      "help": "actor, target gathering, flags participation bool"
+    },
+    {
+      "name": "pressure",
+      "help": "target building/edge or 0 citywide, flags pressure kind, value intensity, starts future civil minute, duration window"
+    },
+    {
+      "name": "cancel-pressure",
+      "help": "target pressure ID"
+    },
+    {
+      "name": "shelter",
+      "help": "target reviewed building, units capacity"
+    },
+    {
+      "name": "shelter-person",
+      "help": "actor, target shelter building (0 releases intention)"
+    },
+    {
+      "name": "link-institution",
+      "help": "target institution, secondary reviewed premises"
+    },
+    {
+      "name": "operate-institution",
+      "help": "target institution, flags bit0 operating / bit1 explicit scenario override, label ordinary office"
+    },
+    {
+      "name": "create-job",
+      "help": "target workplace, secondary door, units occupation ID, value wage, starts/duration shift start/end (minute of day), auxiliary institution; flags bit0 apprenticeship, bit1 key"
+    },
+    {
+      "name": "unassign-job",
+      "help": "target job; release worker / close vacancy"
+    },
+    {
+      "name": "close-job",
+      "help": "target job; release worker / close vacancy"
+    },
+    {
+      "name": "roster",
+      "help": "target job, units capability mask, label ordinary service name"
+    },
+    {
+      "name": "office",
+      "help": "target institution, secondary job, flags ordinary title enum"
+    },
+    {
+      "name": "qualify",
+      "help": "actor, target institution, flags supported clerical title"
+    },
+    {
+      "name": "membership",
+      "help": "actor, target institution, flags join bool"
+    },
+    {
+      "name": "food-store",
+      "help": "target building, flags producer bool; explicit store configuration"
+    },
+    {
+      "name": "clinic",
+      "help": "target building, units beds, value imported medicine"
+    },
+    {
+      "name": "import-water",
+      "help": "target building, units finite response water"
+    },
+    {
+      "name": "wear",
+      "help": "target building, units technical condition loss"
+    },
+    {
+      "name": "open-employer",
+      "help": "target configured employer, flags 0 close / 1 open"
+    },
+    {
+      "name": "vehicle",
+      "help": "target crew job, flags handcart/stretcher kind, units carrying capacity"
+    },
+    {
+      "name": "transport",
+      "help": "target vehicle, secondary source, auxiliary destination, actor column passenger (0 none), value good enum, units cargo, flags meals bool"
+    },
+    {
+      "name": "stop-vehicle",
+      "help": "target vehicle, flags stop bool"
+    },
+    {
+      "name": "unload",
+      "help": "target vehicle; physically unload current custody here"
+    },
+    {
+      "name": "condition",
+      "help": "actor, flags condition enum, units severity, value recovery minutes"
+    }
+  ]
+}
