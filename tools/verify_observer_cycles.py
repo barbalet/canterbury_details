@@ -66,7 +66,7 @@ def main():
  program=ROOT/'build/ordinary-example.txt';program.write_text('1|train|1|0|0|15|0|0|0|0|1000|0|0||explicit ordinary training experiment\nflush\nstep 1\n')
  cli=[ROOT/'build/CanterburyDetails','--city','build/fixtures/civic.bin','--people','20','--program',program]
  run(cli,1);first=json.loads(run(cli+['--intervene','--save','build/cli.city']).splitlines()[-1]);restored=json.loads(run([ROOT/'build/CanterburyDetails','--city','build/fixtures/civic.bin','--load','build/cli.city','--minutes','0']).splitlines()[-1]);assert first==restored
- baseline=json.loads(run(['python3','tools/build_basemap.py','--check']).splitlines()[-1]);assert baseline['reference_pixel_match'] and baseline['png_sha256']=='9c966e034f05d2be66a8a1e1e2271fa0c86cce6a3d3f4e3215ac058ffa1fe257'
+ baseline=json.loads(run(['python3','tools/build_basemap.py','--check']).splitlines()[-1]);assert baseline['reference_pixel_match'] and baseline['png_sha256']=='c6c3b07bd101ce01eb6952413cacc50215daf2fbc387eb6fb2226e1340c53e81'
  run(['python3','tests/test_assembled_map.py'])
  for n,scope in SCOPES.items():
   report={'format':f'canterbury-details-cycle{n:02}-validation','version':1,**expected,'scope':scope,'fixture':results[n],'continuation_digest':expected_digest,'separate_process':True,'optimized_unoptimized_match':True,'malformed_files_rejected_preserving_live':8,'cli_checkpoint_match':True,'source_png_sha256':baseline['png_sha256'],'historical_limits':'Technical operational fixtures; actual source retains zero qualified edges/doors and no inferred staffing or positions','ok':True}

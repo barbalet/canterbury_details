@@ -739,7 +739,9 @@
             "content/source-manifest.json",
             "docs/evidence/cycle01-1.log",
             "docs/evidence/cycle01-2.log",
-            "docs/evidence/cycle01-3.log"
+            "docs/evidence/cycle01-3.log",
+            "tools/building_placements.py",
+            "content/building-placement-corrections.json"
           ],
           "additionalProperties": false,
           "properties": {
@@ -780,6 +782,14 @@
               "pattern": "^[0-9a-f]{64}$"
             },
             "docs/evidence/cycle01-3.log": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "tools/building_placements.py": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "content/building-placement-corrections.json": {
               "type": "string",
               "pattern": "^[0-9a-f]{64}$"
             }

@@ -18,7 +18,7 @@ FILES={
  'osm':'simulation-map/modern/osm-canterbury.json','osm_roads':'simulation-map/modern/osm-roads.json',
  'assembler':'simulation-map/assemble.py','enricher':'simulation-map/enrich_buildings.py',
  'road_builder':'simulation-map/osm_roads.py','tracer':'simulation-map/complete_roads.py','institution_builder':'simulation-map/religion_1940.py'}
-LOCAL=['tools/compile_content.py','tools/audit_sources.py','content/content-policy.json','content/review-annotations.json','content/content.schema.json','content/cycle-01-validation.json','content/source-manifest.json',*[f'docs/evidence/cycle01-{i}.log' for i in range(1,4)]]
+LOCAL=['tools/building_placements.py','content/building-placement-corrections.json','tools/compile_content.py','tools/audit_sources.py','content/content-policy.json','content/review-annotations.json','content/content.schema.json','content/cycle-01-validation.json','content/source-manifest.json',*[f'docs/evidence/cycle01-{i}.log' for i in range(1,4)]]
 OUTPUT=Path('build/content/canterbury.json')
 class ContentError(ValueError):pass
 def require(condition,message):
@@ -246,9 +246,13 @@ def compile_bytes(expected_owned=None,expected_sources=None):
     buildings=[]
     for b in d['buildings']['objects']:
         buildings.append({**b,'modern_annotation':{k:v for k,v in modern[b['id']].items() if k not in b},'institution_annotation':{k:v for k,v in period[b['id']].items() if k not in b}})
+    from building_placements import corrected_objects
+    buildings=corrected_objects(buildings,parse(owned['content/building-placement-corrections.json']))
     data={k:d[k] for k in ('vectors','annotations','road_ink','modern_roads','historical_roads','waterways','rail_ink','rail_corridors','institutions','institution_policy','review_candidates')}
     data['buildings']={'metadata':{k:v for k,v in d['buildings'].items() if k!='objects'},'objects':buildings,'annotation_metadata':{k:{a:v for a,v in d[k].items() if a!='objects'} for k in ('buildings_modern','buildings_1940')}}
     data['context']={k:d[k] for k in ('assembly_report','enrichment_report','connectivity_report','road_traces','modern_sources','controls')}
+    placements=parse(owned['content/building-placement-corrections.json'])
+    data['context']['building_placement_corrections']={'format':placements['format'],'version':placements['version'],'basis':placements['basis'],'source_file':'content/building-placement-corrections.json','sha256':digest(owned['content/building-placement-corrections.json']),'corrected_count':len(placements['corrections'])}
     result={'format':'canterbury-details-content','version':1,'setting':{'year':1940,'initial_people':27000,'population_basis':'user-required simulation total; not a verified census'},'canvas':policy['canvas'],'units':'pixels','admission':{'candidate_only':True,'routing_enabled':False,'historical_identity_inferred':False},'provenance':{'source_manifest_sha256':digest(owned['content/source-manifest.json']),'revisions':{m['path']:m['revision'] for m in manifest['submodules']},'inputs':inputs,'owned_inputs':{p:digest(raw) for p,raw in owned.items()}},'data':data,'review_annotations':review,'statistics':{'buildings':len(buildings),'institutions':len(sites),'unlocated_institutions':sum(s.get('position_pixels') is None for s in sites.values()),'networks':{k:{'nodes':len(n),'edges':len(e)} for k,(n,e) in graphs.items()}}}
     result['generation_id']=digest(canonical(result))
     schema_check(result,parse(owned['content/content.schema.json']))

@@ -21,8 +21,17 @@
   CdMapView *map =
       [[CdMapView alloc] initWithFrame:NSMakeRect(0, 0, 1600, 1600)];
   map.basemap = [[NSImage alloc]
-      initWithContentsOfURL:[NSBundle.mainBundle URLForResource:@"CanterburyMap"
-                                                  withExtension:@"png"]];
+      initWithContentsOfURL:[NSBundle.mainBundle
+                                URLForResource:@"CanterburyMapBackground"
+                                 withExtension:@"png"]];
+  NSDictionary *content = [NSJSONSerialization
+      JSONObjectWithData:
+          [NSData dataWithContentsOfURL:[NSBundle.mainBundle
+                                            URLForResource:@"buildings-enriched"
+                                             withExtension:@"json"]]
+                 options:0
+                   error:nil];
+  map.buildings = content[@"objects"];
   map.showAgents = YES;
   scroll.documentView = map;
   [self.window.contentView addSubview:scroll];

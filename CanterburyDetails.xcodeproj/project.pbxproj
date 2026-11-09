@@ -758,16 +758,22 @@
 			"path" = "build/map/CanterburyMap.png";
 			"sourceTree" = "SOURCE_ROOT";
 		};
+		"DABAF3AC7B1CA7D4EF5B4B70" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "image.png";
+			"path" = "build/map/CanterburyMapBackground.png";
+			"sourceTree" = "SOURCE_ROOT";
+		};
 		"73549845F534177589DE8143" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text.json";
 			"path" = "canterbury/simulation-map/derived/religious-sites-1940.json";
 			"sourceTree" = "SOURCE_ROOT";
 		};
-		"8440EAF57C7872BDC21763C6" = {
+		"510212DE35B1C62893D62746" = {
 			"isa" = "PBXFileReference";
 			"lastKnownFileType" = "text.json";
-			"path" = "canterbury/simulation-map/derived/buildings-enriched.json";
+			"path" = "build/map/buildings-enriched.json";
 			"sourceTree" = "SOURCE_ROOT";
 		};
 		"41C134B5CBE345BF6C63A697" = {
@@ -777,8 +783,9 @@
 				"9683C0E3FF4DBEDB6D447424",
 				"E17D70BD4BCE4A91F506934C",
 				"70F5E478861EBD685C75253F",
+				"DABAF3AC7B1CA7D4EF5B4B70",
 				"73549845F534177589DE8143",
-				"8440EAF57C7872BDC21763C6",
+				"510212DE35B1C62893D62746",
 			);
 			"sourceTree" = "<group>";
 		};
@@ -1284,7 +1291,9 @@
 			);
 			"outputPaths" = (
 				"$(SRCROOT)/build/map/CanterburyMap.png",
+				"$(SRCROOT)/build/map/CanterburyMapBackground.png",
 				"$(SRCROOT)/build/map/render.json",
+				"$(SRCROOT)/build/map/buildings-enriched.json",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 			"shellPath" = "/bin/sh";
@@ -1303,13 +1312,17 @@
 			"isa" = "PBXBuildFile";
 			"fileRef" = "70F5E478861EBD685C75253F";
 		};
+		"64866035BF00D84690543626" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "DABAF3AC7B1CA7D4EF5B4B70";
+		};
 		"6FA8BF2BA25D3579AEADB7ED" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "73549845F534177589DE8143";
 		};
-		"661BE6D9D954D4E5A4C27E1C" = {
+		"108587871281B14FA830AD23" = {
 			"isa" = "PBXBuildFile";
-			"fileRef" = "8440EAF57C7872BDC21763C6";
+			"fileRef" = "510212DE35B1C62893D62746";
 		};
 		"C84B5C31679C986BFD935BC6" = {
 			"isa" = "PBXResourcesBuildPhase";
@@ -1318,8 +1331,9 @@
 				"DB70542E293CD6095A4F3484",
 				"D34D0BAFE2D9619A843EEC5B",
 				"DEDBB46BFAF9D84BC86706BA",
+				"64866035BF00D84690543626",
 				"6FA8BF2BA25D3579AEADB7ED",
-				"661BE6D9D954D4E5A4C27E1C",
+				"108587871281B14FA830AD23",
 			);
 			"runOnlyForDeploymentPostprocessing" = 0;
 		};

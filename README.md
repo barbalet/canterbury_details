@@ -14,7 +14,9 @@ an independent frontend through the packaged CanterburyCore library.
 
 The final assembled map with cropped OpenStreetMap connections is rendered by
 `json2png2.c` using the upstream core. Zoom/pan and inspection stay independent of
-native stepping on the serial worker. Names, households and technical rates are
+native stepping on the serial worker. A shared, source-locked correction layer
+clears buildings from streets in both rendering and runtime geometry; see the
+[map audit](content/building-placement-validation.json). Names, households and technical rates are
 explicit fixtures. Unreviewed source routes/doors, capacities, housing and initial
 map positions remain unknown. Completion of the model does not establish a
 historical census or supply missing historical evidence.

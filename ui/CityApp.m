@@ -122,7 +122,7 @@ static NSDictionary *resource(NSString *name) {
   self.occupations = roles;
   self.sites = resource(@"religious-sites-1940")[@"sites"];
   self.buildings = resource(@"buildings-enriched")[@"objects"];
-  NSURL *mapURL = [NSBundle.mainBundle URLForResource:@"CanterburyMap"
+  NSURL *mapURL = [NSBundle.mainBundle URLForResource:@"CanterburyMapBackground"
                                         withExtension:@"png"];
   NSImage *image =
       mapURL ? [[NSImage alloc] initWithContentsOfURL:mapURL] : nil;
@@ -290,25 +290,6 @@ static NSDictionary *resource(NSString *name) {
   self.map.buildings = self.buildings;
   self.map.showSites = YES;
   self.map.showAgents = YES;
-  NSMutableArray *paths = [NSMutableArray new];
-  for (NSDictionary *building in self.buildings) {
-    NSBezierPath *path = [NSBezierPath bezierPath];
-    path.windingRule = NSWindingRuleEvenOdd;
-    for (NSArray *ring in building[@"geometry"][@"rings"]) {
-      BOOL first = YES;
-      for (NSArray *xy in ring) {
-        NSPoint p = NSMakePoint([xy[0] doubleValue], [xy[1] doubleValue]);
-        if (first) {
-          [path moveToPoint:p];
-          first = NO;
-        } else
-          [path lineToPoint:p];
-      }
-      [path closePath];
-    }
-    [paths addObject:path];
-  }
-  self.map.footprints = paths;
   self.mapScroll.documentView = self.map;
   __weak CdApplication *weakSelf = self;
   self.map.selection = ^(NSDictionary *item, NSString *kind) {
@@ -1142,6 +1123,13 @@ static NSDictionary *resource(NSString *name) {
                     permissions.count
                         ? [permissions componentsJoinedByString:@", "]
                         : @"none"];
+            if (item[@"structure_refinement"][@"osm_ref"])
+              self.inspector.string = [self.inspector.string
+                  stringByAppendingFormat:
+                      @"\nReviewed surviving structure: %@. OSM outline only; "
+                      @"surrounding modern buildings excluded. Historical "
+                      @"coordinates remain schematic.",
+                      item[@"structure_refinement"][@"osm_ref"]];
             NSString *base = [self.inspector.string copy];
             [self.citySession context:resident.ref
                            completion:^(NSString *context) {
@@ -1163,6 +1151,18 @@ static NSDictionary *resource(NSString *name) {
             @"and access have not yet been established.",
             item[@"id"], item[@"use"] ?: @"unknown", item[@"area_pixels"],
             item[@"status"]];
+    if (item[@"placement_correction"])
+      self.inspector.string = [self.inspector.string
+          stringByAppendingString:
+              @"\nMap footprint corrected for street clearance. "
+              @"Schematic placement; historical location remains unverified."];
+    if (item[@"structure_refinement"][@"osm_ref"])
+      self.inspector.string = [self.inspector.string
+          stringByAppendingFormat:
+              @"\nReviewed surviving structure: %@. OSM outline only; "
+              @"surrounding modern buildings excluded. Historical coordinates "
+              @"remain schematic.",
+              item[@"structure_refinement"][@"osm_ref"]];
     NSString *base = [self.inspector.string copy];
     [self.citySession
           building:item[@"id"]

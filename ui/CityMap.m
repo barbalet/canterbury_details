@@ -22,6 +22,29 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
   [scroll reflectScrolledClipView:clip];
 }
 @implementation CdMapView
+- (void)setBuildings:(NSArray *)buildings {
+  _buildings = [buildings copy];
+  NSMutableArray *paths = [NSMutableArray new];
+  for (NSDictionary *building in buildings) {
+    NSBezierPath *path = [NSBezierPath bezierPath];
+    path.windingRule = NSWindingRuleEvenOdd;
+    for (NSArray *ring in building[@"geometry"][@"rings"]) {
+      BOOL first = YES;
+      for (NSArray *xy in ring) {
+        NSPoint p = NSMakePoint([xy[0] doubleValue], [xy[1] doubleValue]);
+        if (first) {
+          [path moveToPoint:p];
+          first = NO;
+        } else
+          [path lineToPoint:p];
+      }
+      [path closePath];
+    }
+    [paths addObject:path];
+  }
+  self.footprints = paths;
+  self.needsDisplay = YES;
+}
 - (BOOL)isFlipped {
   return YES;
 }
@@ -58,14 +81,19 @@ static void centerViewport(NSScrollView *scroll, NSPoint point) {
   [[NSColor colorWithCalibratedRed:.94 green:.90 blue:.80 alpha:1] setFill];
   NSRectFill(self.bounds);
   [NSGraphicsContext currentContext].imageInterpolation =
-      self.enclosingScrollView.magnification > 1.5 ? NSImageInterpolationNone
-                                                   : NSImageInterpolationHigh;
+      NSImageInterpolationHigh;
+  [NSGraphicsContext currentContext].shouldAntialias = YES;
   [self.basemap drawInRect:self.bounds
                   fromRect:NSZeroRect
                  operation:NSCompositingOperationSourceOver
                   fraction:1
             respectFlipped:YES
                      hints:nil];
+  // Paths are cached when content changes, never reconstructed during zoom.
+  [[NSColor colorWithCalibratedWhite:68.0 / 255 alpha:1] setFill];
+  for (NSBezierPath *path in self.footprints)
+    if (NSIntersectsRect(path.bounds, self.visibleRect))
+      [path fill];
   CGFloat z = MAX(.1, self.enclosingScrollView.magnification);
   if (self.showFootprints) {
     [[NSColor colorWithCalibratedRed:.08 green:.52 blue:.52

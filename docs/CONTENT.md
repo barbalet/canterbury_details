@@ -73,8 +73,11 @@ The bundle contains:
   evidence hashes. No host path or current timestamp is added.
 - `data.vectors` and `data.annotations`: all original map classes, rings, palette,
   labels and reference annotations, preserving source paint/order information.
-- `data.buildings`: unchanged candidate records, with modern extra fields under
+- `data.buildings`: source-ID-preserving candidate records, with modern extra fields under
   `modern_annotation` and institution extras under `institution_annotation`.
+  Source-locked street-clearance corrections update rings and selectable bounds,
+  with per-record placement provenance; merged blocks retain their source area.
+  Original vectors and upstream documents remain unchanged.
   Metadata for both annotation layers is preserved separately. Names/use transferred
   from OSM remain modern suggestions, never verified 1940 identity.
 - Separate road-ink, modern-road, historical-trace, water-ink, rail-ink and

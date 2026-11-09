@@ -1,0 +1,56 @@
+{
+  "format": "canterbury-building-placement-validation",
+  "version": 1,
+  "inputs": {
+    "tools/verify_building_placements.py": "acdd74c586f9f0e71a1a273f914b99fb54ace7db886529a9b9339bb8bfc78d80",
+    "tools/building_placements.py": "e9bd9e659a3cff431e70aec5f7bc03ff01a7450a5aa7d0c04a48831a6c4a0396",
+    "tools/review_building_placements.py": "f6189defece61b97bf05dee991c5eb1bfc82162d3b19159c053f91f435fd92d8",
+    "tools/review_building_structures.py": "646368258bf701797f1dd6ecb98c2d208fa913180ca6125d63efe38969e9979e",
+    "ui/CityMap.m": "6482597ebf18c313976d7625014f383ead44227380affa6611fb94e1a0cffb31",
+    "tests/presentation.m": "2cb65947a73056625bc5fd7cc4102693de52f831764676f883e30a14e26b5108",
+    "tools/assembled_map.py": "99ba87d2c7894a30ad05844d2e14a754f50589a46de1c26690d28e3372f1c798",
+    "tools/compile_content.py": "75abc637a9e114c545085cbfaaed23b8f0a3aa9b670bb9228e623e543d4fa31b",
+    "tools/compile_runtime.py": "dd7a45e83bf3981f8b2e09e872541f6986a60596451d902d548cff4fab53a9e2",
+    "tools/build_basemap.py": "a97a54676a1a58da62fafdc614240901addb5aff2cc8c8f2d844cc52b02c2a19",
+    "tests/test_assembled_map.py": "f60eced636d32181d4f2edaf529bb7e720a33bf6ee3a0d37d110082437d20681",
+    "content/content.schema.json": "2860cfae80dcb90fabdc693175fe89e90a7056e21640da73fce1f46d5f23a569",
+    "content/building-placement-corrections.json": "e94fac927b0e65fdce397d723d9dcd3492d5f97345770dc6bbdf719ee4c49c69",
+    "content/spatial-review.json": "d15ba239c75fbf8b0d29d21426320a5085ad012bc70264d476cc2ef5ae93b5c8",
+    "docs/MAP.md": "cedc7286534cf05f3713d74406041c653e1a6642092db1b7d144ced5e1395913",
+    "docs/CONTENT.md": "6faf7074f77d51669f15b05782d843b3e0c976796c119279754c0276ac790c4a",
+    "build/map/CanterburyMap.png": "c6c3b07bd101ce01eb6952413cacc50215daf2fbc387eb6fb2226e1340c53e81",
+    "build/map/CanterburyMapBackground.png": "0b069f9a1fc2e1c769427286bcdecaafc72c383590e80d39f886cee9bd9e5322",
+    "build/map/AssembledMap.json": "53e4644f355246efbd2a694c1502177bbb88e2247dcdeb7c8a2b4e9f0b13bb67",
+    "build/map/buildings-enriched.json": "002e2ac1c490e9f6429d3be65f4f81386cdb09713231508e05d53a8b098ff33e",
+    "build/content/canterbury.json": "cef3c0ba5c9e4819d9b9f2c4de1f25ea7b4f018325a85091f77f4b704539409b",
+    "build/content/CanterburyCity.bin": "34e2ee03c527f041124c3349482331d548c930e2425008d327986aa8bed88c2a"
+  },
+  "source_buildings": 3341,
+  "corrected_buildings": 1483,
+  "methods": {
+    "translate": 1401,
+    "separate-merged-footprint": 82
+  },
+  "structure_refinements": {
+    "historical-contour-cleanup": 2934,
+    "osm-surviving-structure": 1
+  },
+  "buildings_with_road_pixels_before": 1117,
+  "buildings_with_road_pixels_after": 0,
+  "building_overlap_pixels_after": 0,
+  "new_rail_obstruction_pixels": 0,
+  "renderer_bundle_runtime_geometry_identical": true,
+  "native_selection_bounds_and_outlines_identical": true,
+  "independent_python_png_reference_matches": true,
+  "source_ids_preserved": true,
+  "historical_verification_inferred": false,
+  "all_cases": "build/map/building-conflicts.html",
+  "geometry": {
+    "centerline_building_intersections_after": 0,
+    "building_overlap_pairs_after": 0,
+    "increased_water_overlaps": 0,
+    "increased_rail_intersections": 0,
+    "all_corrected_shapes_valid": true
+  },
+  "ok": true
+}

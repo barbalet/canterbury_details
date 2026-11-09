@@ -43,6 +43,7 @@ def prepare():
  review_path=work/'content/spatial-review.json';review=json.loads(review_path.read_text());assert not any(review[k] for k in ('edges','doors','dwellings'));review['generation_id']=json.loads((work/'build/content/canterbury.json').read_text())['generation_id'];review_path.write_text(json.dumps(review,indent=2)+'\n');call(['python3','tools/compile_runtime.py','--write'],work,logs/'runtime.log')
  for name in ['verify_cycle03','verify_cycle04','verify_cycle05','verify_cycle06','verify_cycle07','verify_city_cycles','verify_human_cycles','verify_work_cycles','verify_civic_cycles','verify_observer_cycles','verify_final_cycles','verify_xcode']:
   call(['python3','tools/'+name+'.py','--run'],work,logs/(name+'.log'));print('PASS clean clone '+name,flush=True)
+ call(['python3','tools/verify_building_placements.py'],work,logs/'building-placement.log');print('PASS clean clone exhaustive street/building clearance',flush=True)
  for name in ('presentation-metrics.json','presentation-build.json'):
   source=ROOT/'build'/name
   if not source.exists():raise ValueError('Normally launch PresentationBenchmark.app and finish measurements before release prepare')
@@ -53,7 +54,7 @@ def prepare():
 def finalize():
  candidate=json.loads((ROOT/'build/release-candidate.json').read_text());work=Path(candidate['checkout']);assert candidate['ok'] and code_inputs(ROOT)==candidate['code_inputs']==code_inputs(work)
  native=json.loads((ROOT/'content/cycle-35-40-native-ui.json').read_text());assert native['ok'] and native.get('release_clone_verified') and native['code_inputs']==candidate['code_inputs']
- for name in ['verify_cycle01','verify_cycle02','verify_cycle03','verify_cycle04','verify_cycle05','verify_cycle06','verify_cycle07','verify_cycle08','verify_city_cycles','verify_human_cycles','verify_work_cycles','verify_civic_cycles','verify_observer_cycles','verify_final_cycles','verify_sdk_profile','verify_xcode']:call(['python3','tools/'+name+'.py','--check'],work)
+ for name in ['verify_cycle01','verify_cycle02','verify_cycle03','verify_cycle04','verify_cycle05','verify_cycle06','verify_cycle07','verify_cycle08','verify_city_cycles','verify_human_cycles','verify_work_cycles','verify_civic_cycles','verify_observer_cycles','verify_final_cycles','verify_sdk_profile','verify_xcode','verify_building_placements']:call(['python3','tools/'+name+'.py','--check'],work)
  # Copy executed qualification evidence and its exact content generation back;
  # never manufacture reports by changing hashes without rerunning their checks.
  for p in (work/'content').iterdir():

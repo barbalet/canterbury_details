@@ -1,0 +1,42 @@
+{
+  "format": "canterbury-building-clearance-native-ui",
+  "version": 2,
+  "inputs": {
+    "ui/CityMap.m": "6482597ebf18c313976d7625014f383ead44227380affa6611fb94e1a0cffb31",
+    "ui/CityApp.m": "2f6efcdfd71356f374d0356b6d7e33ccde0f51eb03685d813edbc99c50edc275",
+    "tools/building_placements.py": "e9bd9e659a3cff431e70aec5f7bc03ff01a7450a5aa7d0c04a48831a6c4a0396",
+    "content/building-placement-corrections.json": "e94fac927b0e65fdce397d723d9dcd3492d5f97345770dc6bbdf719ee4c49c69",
+    "build/map/CanterburyMap.png": "c6c3b07bd101ce01eb6952413cacc50215daf2fbc387eb6fb2226e1340c53e81",
+    "build/map/CanterburyMapBackground.png": "0b069f9a1fc2e1c769427286bcdecaafc72c383590e80d39f886cee9bd9e5322",
+    "build/map/buildings-enriched.json": "002e2ac1c490e9f6429d3be65f4f81386cdb09713231508e05d53a8b098ff33e",
+    "build/content/CanterburyCity.bin": "34e2ee03c527f041124c3349482331d548c930e2425008d327986aa8bed88c2a"
+  },
+  "normal_app_launch": true,
+  "application": "/Users/barbalet/canterbury_details/build/CanterburyDetails-StructureReview-dd01888237.app",
+  "executable_sha256": "897db2b94dcfb7289285490dc3fe38ccc77e32205f434c1f92262e189a512625",
+  "root_app_source_fingerprint": "dd01888237f881a106c53bc4fc7c953fdc647842b2e4ac54cf626782f4c63214",
+  "packaged_geometry_and_background_match": true,
+  "clock_before": 1,
+  "clock_after": 1,
+  "population": 27000,
+  "capacity": 30000,
+  "observed": [
+    "Selected Hothe Court by stable source ID buildings-905b3d026b5c5a4cb40c; camera recentered and inspector identified reviewed OSM way/123811376 with modern surroundings excluded.",
+    "Filled geometry, optional footprint outline and selected shape coincide at 273 percent zoom.",
+    "Panned and zoomed back to 219 percent responsively; simulation remained paused at minute 1."
+  ],
+  "presentation_benchmark": {
+    "format": "canterbury-presentation-benchmark",
+    "frames": 30,
+    "glyphs": 30000,
+    "p95_ms": 21.229250000033062,
+    "max_ms": 21.23679166652437,
+    "source_sha256": "542b82a3a939a264254e6678873e7d25a275ef25c29611f46cabe0a2b3285486",
+    "scope": "Offscreen AppKit full-map raster capture; copied technical glyphs, no engine or physical-device FPS claim",
+    "ok": true,
+    "reduce_motion_requested": false,
+    "mean_ms": 20.46643888897961
+  },
+  "scope": "Map and structure review only; no claim that the full 40-cycle release qualification was rerun.",
+  "ok": true
+}

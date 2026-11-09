@@ -17,9 +17,12 @@ bundle, and Command-U is not a replacement for that suite.
 
 The map is produced by `tools/json2png2.c`, using the unmodified upstream
 `json2png.c` core and the final assembled building/water/rail/connected-OSM-road
-JSON layers. It matches the agreed `simulation-map/derived/overview.png` pixel
-for pixel. The older full-color source-vector map is not the display input.
-See [MAP.md](MAP.md) for standalone renderer usage and the exact input contract.
+JSON layers plus the shared source-locked building-clearance overlay. It matches
+an independent rendering of those corrected layers pixel for pixel. The older full-color source-vector map is not the display input.
+The resource phase copies the generated `build/map/buildings-enriched.json` for
+selection bounds/outlines as well as the corrected PNG. The map preflight declares
+both generated resources as outputs, so clean Xcode builds cannot copy stale raw
+geometry. See [MAP.md](MAP.md) for standalone renderer usage and the exact input contract.
 
 Build-time requirements are Xcode, Python 3, pkg-config, libpng and FreeType.
 On macOS with Homebrew these libraries are normally installed with:
