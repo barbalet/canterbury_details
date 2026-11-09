@@ -907,3 +907,7 @@ Current results and exact pins are indexed in `content/evidence-index.json` and
    SDK submodule with matching parent pins, and preserve ordinary SDK regressions.
 9. Release claims describe this application's measured, supported scope; copied
    code, data labels or old qualification reports alone never count as completion.
+
+## Native activity event follow-up
+
+The cross-mode episodic event integration is tracked in [EVENTS_PLAN.md](EVENTS_PLAN.md).

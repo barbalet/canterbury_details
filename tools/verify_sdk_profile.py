@@ -30,10 +30,16 @@ def main():
                     text=run(['cc','-E','-P','-Wno-builtin-macro-redefined','-D__DATE__="stable"','-D__TIME__="stable"','-D__TIMESTAMP__="stable"','-DHIDE_THUNDER=1','-DCOMMAND_LINE_EXPLICIT',*flags,source_path],sdk)
                     # Added guarded source lines shift diagnostic __LINE__ metadata only.
                     text=re.sub(r'((?:draw_error|apescript_error)\([^\n]*, "[^"\n]+", )\d+(\))',r'\1<LINE>\2',text.replace(str(sdk),'<SDK>'))
+                    # Bronze intentionally appends food vocabulary for native activity
+                    # memories; declaration-only additions are not a layout or
+                    # a change to these clock/body/registry implementations.
+                    if name=='bronze':
+                        text=re.sub(r'\bFOOD_(?:GRAIN|FISH|PREPARED|OTHER)\s*,','',text)
+                        text=re.sub(r'\b(?:int|n_uint)\s+episodic_simulation_(?:food|chat|summary)\s*\([^;]*\)\s*;','',text)
                     text='\n'.join(line.strip() for line in text.splitlines() if line.strip())
                     outputs.append(hashlib.sha256(text.encode()).hexdigest())
                 assert outputs[0]==outputs[1],(name,source_path)
-                probes.append({'profile':name,'source':source_path,'preprocessed_simulation_equal':True,'sha256':outputs[0]})
+                probes.append({'profile':name,'source':source_path,'preprocessed_simulation_equal':True,'appended_activity_declarations_normalized':name=='bronze','sha256':outputs[0]})
         code='#include "universe/universe.h"\n#include <stdio.h>\nint main(void){printf("%u %zu %zu\\n",(unsigned)LARGE_SIM,sizeof(simulated_being),sizeof(simulated_group));return 0;}\n'
         source=work/'layout.c';source.write_text(code)
         for name,flags in [('native',[]),('bronze',['-DBRONZE_SIM=1']),('city',['-DBRONZE_SIM=1','-DCANTERBURY_SIM=1'])]:
@@ -47,6 +53,6 @@ def main():
         for name,command in [('native',['bash','test.sh']),('contract',['python3','bronze/contract/check.py']),('actors',['bash','bronze/actors/test.sh']),('hybrid',['bash','bronze/hybrid/test.sh'])]:
             output=run(command,current);log=ROOT/'build'/('cycle03-sdk-'+name+'.log');log.parent.mkdir(exist_ok=True);log.write_text(output);results.append({'suite':name,'passed':True,'log':str(log.relative_to(ROOT)),'log_sha256':sha(log)});print('PASS isolated SDK '+name,flush=True)
     assert inventory()==baseline
-    j={'format':'canterbury-details-sdk-population-qualification','version':1,'source_manifest_sha256':sha(ROOT/MANIFEST),'tool_sha256':sha(Path(__file__)),'population':27000,'capacity':30000,'storage_scope':'Cycle 07 guarded host-owned storage','change_scope':'CANTERBURY_SIM-only capacity/storage and native/Bronze checkpoint staging/validation; unflagged profiles unchanged','probes':probes,'suites':results,'original_checkout_untouched_by_tests':True,'sdk_changes_uncommitted':bool(review['files']),'comparison_revision':anchor,'baseline_file_sha256':sha(ROOT/'content/sdk-profile-baseline.json'),'ok':True}
+    j={'format':'canterbury-details-sdk-population-qualification','version':1,'source_manifest_sha256':sha(ROOT/MANIFEST),'tool_sha256':sha(Path(__file__)),'population':27000,'capacity':30000,'storage_scope':'Cycle 07 guarded host-owned storage','change_scope':'BRONZE_SIM/CANTERBURY_SIM native activity memories plus guarded city capacity/storage and checkpoint staging; unflagged native profiles unchanged','probes':probes,'suites':results,'original_checkout_untouched_by_tests':True,'sdk_changes_uncommitted':bool(review['files']),'comparison_revision':anchor,'baseline_file_sha256':sha(ROOT/'content/sdk-profile-baseline.json'),'ok':True}
     (ROOT/REPORT).write_text(json.dumps(j,indent=2)+'\n');print('PASS guarded 30000-capacity SDK change, 27000 default; ordinary profiles/layouts unchanged')
 if __name__=='__main__':main()

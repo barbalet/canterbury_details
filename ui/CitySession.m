@@ -273,6 +273,32 @@
                         @"\nExplicit institutional membership: %s (%llu)",
                         site.name, (unsigned long long)site.id];
           }
+      char memories[4096];
+      if (cd_world_activity_memories(
+              self->_world, current,
+              (CdRecordQuery){current, CD_RECORD_PERSONAL}, memories,
+              sizeof memories, NULL) == CD_OK)
+        [text appendFormat:@"\n\nNative activity memories (bounded)\n%@",
+                           [NSString stringWithUTF8String:memories] ?: @""];
+      CdRecordSummary history = {0};
+      if (cd_world_record_summary(self->_world, &history, NULL) == CD_OK) {
+        [text appendString:@"\n\nRecent named conversations (newest first)\n"];
+        unsigned shown = 0;
+        for (uint64_t id = history.next; id > history.first && shown < 12;) {
+          CdRecord event;
+          if (cd_world_record(self->_world, --id,
+                              (CdRecordQuery){current, CD_RECORD_PERSONAL},
+                              &event, NULL) != CD_OK ||
+              event.actor.person_id != current.person_id ||
+              event.kind != CD_EVENT_CHAT)
+            continue;
+          [text appendFormat:@"\nMinute %llu · %s",
+                             (unsigned long long)event.minute, event.message];
+          shown++;
+        }
+        if (!shown)
+          [text appendString:@"No named conversation records retained yet."];
+      }
       CdSocialView social;
       if (cd_world_social(self->_world, current, &social, NULL) == CD_OK &&
           social.bereavement_event)

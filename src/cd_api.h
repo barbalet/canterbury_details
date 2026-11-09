@@ -66,7 +66,8 @@ typedef enum {
   CD_ACTIVITY_REST,
   CD_ACTIVITY_CARE,
   CD_ACTIVITY_WAIT,
-  CD_ACTIVITY_RETIRED
+  CD_ACTIVITY_RETIRED,
+  CD_ACTIVITY_CHAT
 } CdHumanActivity;
 /* View strings are borrowed from a snapshot, never pointers into a native body.
  */

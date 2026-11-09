@@ -62,9 +62,15 @@ static int eat(CdWorld *w, CdCitizen *p) {
   p->meals--;
   p->eaten++;
   w->food.consumed++;
+  int before = cd_native_energy(w->native, p->civil.ref);
   cd_native_energy_set(w->native, p->civil.ref,
-                       cd_native_energy(w->native, p->civil.ref) +
-                           (int)cd_native_hungry() / 2);
+                       before + (int)cd_native_hungry() / 2);
+  cd_native_awake(w->native, p->civil.ref, 1);
+  cd_native_remember_food(w->native, p->civil.ref,
+                          cd_native_energy(w->native, p->civil.ref) - before);
+  cd_record_emit(w, CD_EVENT_EAT, p->civil.ref, (CdPersonRef){0}, 0, 0,
+                 CD_RECORD_PERSONAL, "native EVENT_EAT; consumed finite meal",
+                 "Ate a prepared meal");
   p->activity = CD_ACTIVITY_MEAL;
   cd_native_block(w->native, p->civil.ref, 0);
   return 1;

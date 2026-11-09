@@ -1,0 +1,48 @@
+{
+  "format": "native-activity-inspector-observations",
+  "version": 1,
+  "bronze": {
+    "build": "Release Mac Catalyst",
+    "application": "/Users/barbalet/canterbury_details/build/BronzeSim-ActivityReleaseReview-ecb743ccc1.app",
+    "executable_sha256": "ecb743ccc16a5eb1b4b95f42bf5a2e0320fa6dc109ba5b3453ed0917fc7bb8b1",
+    "observed": [
+      "Activity memories section in the current workspace inspector",
+      "Was eating vegetation; Was eating seaweed",
+      "Chatted with Unwin Frost-Sutton and Ansel Bond-Butler",
+      "Groomed by, swimming and tickling memories from the existing native social loop",
+      "Pause/Resume control and scrollable memory section"
+    ]
+  },
+  "canterbury": {
+    "application": "/Users/barbalet/canterbury_details/build/CanterburyDetails-ActivityReview-781151eb2f.app",
+    "executable_sha256": "781151eb2fc95d1b72945d3a48d07e15c721358f8cbbc4feeeb9420b7d0a3177",
+    "fixture": "Eight synthetic residents; checkpoint from the dedicated native activity acceptance test; not historical placements",
+    "clock_before": 120,
+    "clock_after": 120,
+    "observed": [
+      "Selected Ansel Morris-Berry by stable resident identity",
+      "Native memory: Was eating a prepared meal 58 minutes ago",
+      "Native memory: Had a conversation",
+      "Personal city record: Chatted with Amery Morris-Berry",
+      "Chatting activity label and two remaining carried meals"
+    ],
+    "utf8_display_correction": "The first observed UI revealed a separator encoding issue, corrected in the final compiled CitySession.m. Later isolated-fixture automation encountered launch/input timeouts; no claim that those attempts reverified the final text visually."
+  },
+  "build_logs": {
+    "build/activity-canterbury-xcode.log": "deb4753aa1332026c51dcf7ef692fcf0770a635b082fa4ff2ac00748c011a04c",
+    "build/activity-bronze-xcode.log": "f62056f39718aa9bbcb965f185017220ad1f4cfd507f5a9bb4f698b48e8fbe45",
+    "build/activity-bronze-release.log": "3930facf846f5aaa25edf39de6dd2815097335c528ee378a4c3c3d2f0b457c10"
+  },
+  "default_day": {
+    "people": 27000,
+    "added_native_minutes": 1440,
+    "wall_seconds": 24.86,
+    "max_rss_bytes": 2405662720,
+    "logs": {
+      "build/activity-default-day.jsonl": "2b45e75d95f16a03acfe067f25919e2c3f512b6a44ba9c0833e8f4650f5ee8f4",
+      "build/activity-default-day-time.log": "f6356b20028bebf4430430c254397ddb3438522c065cdba26b7dbc713d3922fb"
+    },
+    "scope": "Single CLI measurement on this host; no device-FPS claim"
+  },
+  "ok": true
+}

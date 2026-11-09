@@ -358,6 +358,9 @@ void cd_jobs_tick(CdWorld *w) {
           if (w->offices[oi].view.job == j->view.id)
             w->offices[oi].view.outputs += t->spec.units;
       }
+      cd_native_remember_work(w->native, p->civil.ref);
+      if (mentor)
+        cd_native_remember_training(w->native, mentor->civil.ref, p->civil.ref);
       w->economy.work_completed++;
       cd_work_release(w, p, 0);
     }

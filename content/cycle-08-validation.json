@@ -12,25 +12,25 @@
     "docs/CONTENT.md": "6faf7074f77d51669f15b05782d843b3e0c976796c119279754c0276ac790c4a"
   },
   "compiler_owned_inputs": {
-    "tools/building_placements.py": "e9bd9e659a3cff431e70aec5f7bc03ff01a7450a5aa7d0c04a48831a6c4a0396",
+    "tools/building_placements.py": "9f3fba61e3447f32dad06af0e73cc25d29b591f7e96c4e4a48f114beabbe4124",
     "content/building-placement-corrections.json": "e94fac927b0e65fdce397d723d9dcd3492d5f97345770dc6bbdf719ee4c49c69",
     "tools/compile_content.py": "75abc637a9e114c545085cbfaaed23b8f0a3aa9b670bb9228e623e543d4fa31b",
     "tools/audit_sources.py": "1936cffd8bbef37b21d3ad2ff2b2306de81e74ddc8d16a108cdef2c4d4a8c38c",
     "content/content-policy.json": "cc3b9922cd471cee8944dec30508c86b38ce9b6782df041b2f6906bf75d3cef6",
     "content/review-annotations.json": "81e94a8ef7ec76267cd22106be2347a362114cf77876561c75044986987b5c88",
     "content/content.schema.json": "2860cfae80dcb90fabdc693175fe89e90a7056e21640da73fce1f46d5f23a569",
-    "content/cycle-01-validation.json": "81cbb89f1f7688852a20d0cde7cde1b41ad12396649658c7155474152ff1c42c",
-    "content/source-manifest.json": "dc7cbb075d67a6951a2c75dd3d4bc1d027e0257363e31c16f5e9a3669d4b2073",
+    "content/cycle-01-validation.json": "66075bd36dbfe603d1b8de18a9116cbb0550b0c3a00107089962a37657e93cde",
+    "content/source-manifest.json": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
     "docs/evidence/cycle01-1.log": "69449a1cba8d7935766017b430b798d9c3a9a38b4d4d79fc7229611f52e8d6b8",
     "docs/evidence/cycle01-2.log": "1cf2945274655f0e22b0a152e71508dc24d2a9c09ec8430f0133ed465fc09421",
-    "docs/evidence/cycle01-3.log": "5b71b006513c435913f5555d8eede51d323e671feab2931276aa9b23244db0dd"
+    "docs/evidence/cycle01-3.log": "b3ea910cd0d804d4cbcac6bd98481f118b75b4b9812373d31ae872b8e76993a3"
   },
-  "source_manifest_sha256": "dc7cbb075d67a6951a2c75dd3d4bc1d027e0257363e31c16f5e9a3669d4b2073",
+  "source_manifest_sha256": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
   "contract_tests": 30,
   "artifact_path": "build/content/canterbury.json",
   "artifact_bytes": 63744161,
-  "artifact_sha256": "cef3c0ba5c9e4819d9b9f2c4de1f25ea7b4f018325a85091f77f4b704539409b",
-  "generation_id": "91e664e10521c96b58dbb8c6abc060215a25db241300c78a6d6298b77b689cb8",
+  "artifact_sha256": "416cbef84707ebd39b6693f0075d58e1edd75aac8228deda91fe3b7861ef6ab7",
+  "generation_id": "d45751c411ab25b7ef421b922eb090c962eff24c7b8194c9adb50fa280256bd2",
   "repeat_byte_identical": true,
   "cli_freshness_check_passed": true,
   "statistics": {

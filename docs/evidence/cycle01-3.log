@@ -7,6 +7,12 @@ test_rejects_bad_geometry_and_mismatched_canvas (test_assemble.AssemblyTests.tes
 test_review_gaps_and_crossings_do_not_change_graphs (test_assemble.AssemblyTests.test_review_gaps_and_crossings_do_not_change_graphs) ... ok
 test_thinning_stays_inside_and_retains_separate_regions (test_assemble.AssemblyTests.test_thinning_stays_inside_and_retains_separate_regions) ... ok
 test_union_roundtrip_with_hole_and_edge_contact (test_assemble.AssemblyTests.test_union_roundtrip_with_hole_and_edge_contact) ... ok
+test_builder_rejects_overwriting_source_layers (test_building_placements.PlacementTests.test_builder_rejects_overwriting_source_layers) ... ok
+test_ids_and_originals_are_preserved (test_building_placements.PlacementTests.test_ids_and_originals_are_preserved) ... ok
+test_only_reviewed_surviving_structure_is_admitted (test_building_placements.PlacementTests.test_only_reviewed_surviving_structure_is_admitted) ... ok
+test_render_and_picking_share_geometry (test_building_placements.PlacementTests.test_render_and_picking_share_geometry) ... ok
+test_stale_sources_and_unreviewed_modern_replacements_rejected (test_building_placements.PlacementTests.test_stale_sources_and_unreviewed_modern_replacements_rejected) ... ok
+test_vector_export_preserves_holes_and_needs_no_external_assets (test_building_placements.PlacementTests.test_vector_export_preserves_holes_and_needs_no_external_assets) ... ok
 test_path_follows_curved_source_instead_of_straight_chord (test_complete_roads.CompletedRoadTests.test_path_follows_curved_source_instead_of_straight_chord) ... ok
 test_shared_junction_is_connected_and_untraced_parallel_road_excluded (test_complete_roads.CompletedRoadTests.test_shared_junction_is_connected_and_untraced_parallel_road_excluded) ... ok
 test_short_color_interruption_does_not_disconnect_trace (test_complete_roads.CompletedRoadTests.test_short_color_interruption_does_not_disconnect_trace) ... ok
@@ -32,6 +38,6 @@ test_source_geometry_is_preserved_and_links_are_only_candidates (test_religion_1
 test_synagogue_override_and_no_modern_faith_import (test_religion_1940.Religion1940Tests.test_synagogue_override_and_no_modern_faith_import) ... ok
 
 ----------------------------------------------------------------------
-Ran 32 tests in 1.024s
+Ran 38 tests in 4.213s
 
 OK

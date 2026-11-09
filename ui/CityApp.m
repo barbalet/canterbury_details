@@ -1094,7 +1094,7 @@ static NSDictionary *resource(NSString *name) {
                     resident.position_known ? @"Native map position assigned"
                                             : @"Map position unplaced; no "
                                               @"historical location inferred"];
-            self.inspector.string=[self.inspector.string stringByAppendingFormat:@"\nNative energy %d · fatigue %u · %@ · meals carried %u · health severity %u",resident.energy,resident.fatigue,resident.sleeping?@"sleeping":@[@"idle",@"travelling",@"working",@"eating",@"resting",@"care",@"waiting",@"retired"][(unsigned)resident.activity],resident.carried_meals,resident.health_severity];
+            self.inspector.string=[self.inspector.string stringByAppendingFormat:@"\nNative energy %d · fatigue %u · %@ · meals carried %u · health severity %u",resident.energy,resident.fatigue,resident.sleeping?@"sleeping":@[@"idle",@"travelling",@"working",@"eating",@"resting",@"care",@"waiting",@"retired",@"chatting"][(unsigned)resident.activity],resident.carried_meals,resident.health_severity];
             self.inspector.string = [self.inspector.string
                 stringByAppendingFormat:
                     @"\nPrimary job %llu · secondary job %llu · workplace "

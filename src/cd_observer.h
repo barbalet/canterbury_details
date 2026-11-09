@@ -29,6 +29,8 @@ typedef enum {
   CD_EVENT_BEREAVEMENT,
   CD_EVENT_OPERATION,
   CD_EVENT_INVENTORY,
+  CD_EVENT_EAT,
+  CD_EVENT_CHAT,
   CD_EVENT_KINDS
 } CdEventKind;
 typedef struct {
@@ -52,6 +54,8 @@ typedef struct {
   uint64_t bereavement_event, support_until;
   int support_context_active;
 } CdSocialView;
+CdStatus cd_world_activity_memories(const CdWorld *, CdPersonRef, CdRecordQuery,
+                                    char *, size_t, CdDiagnostic *);
 CdStatus cd_world_record_summary(const CdWorld *, CdRecordSummary *,
                                  CdDiagnostic *);
 CdStatus cd_world_record(const CdWorld *, uint64_t, CdRecordQuery, CdRecord *,

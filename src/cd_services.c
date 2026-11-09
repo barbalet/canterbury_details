@@ -330,10 +330,13 @@ void cd_services_tick(CdWorld *w) {
     w->premises[base].escrow_money -= t->rate;
     p->wallet += t->rate;
     w->economy.wages += t->rate;
-    if (v->progress == v->minutes)
+    if (v->progress == v->minutes) {
+      if (s)
+        cd_native_remember_service(w->native, p->civil.ref, s->civil.ref);
       finish(w, t, CD_TASK_DONE,
              "ordinary service completed through native work; no inferred "
              "authority beyond roster");
+    }
   }
 }
 void cd_civic_retire(CdWorld *w, CdCitizen *p, CdRetirement reason) {

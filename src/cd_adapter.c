@@ -6,6 +6,7 @@
 #include "bronze/work/bronze_work.h"
 #include "bronze/actors/bronze_actors.h"
 #include "entity/entity.h"
+#include "entity/profession.h"
 #include "sim/sim.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -601,6 +602,120 @@ CdStatus cd_native_city_body(CdSmokeSession *s, CdPersonRef ref) {
   b->delta.awake = FULLY_AWAKE;
   being_set_speed(b, 0);
   return CD_OK;
+}
+CdStatus cd_native_activity_memories(const CdSmokeSession *s, CdPersonRef ref,
+                                     char *out, size_t size) {
+  simulated_being *b = native_body(s, ref);
+  if (!b || !out || !size)
+    return CD_UNKNOWN_REFERENCE;
+  out[0] = 0;
+  size_t used = 0;
+  unsigned slots[EPISODIC_SIZE], count = 0;
+  const simulated_iepisodic *memories = being_episodic(b);
+  if (!memories)
+    return CD_UNSUPPORTED;
+  for (unsigned i = 0; i < EPISODIC_SIZE; i++) {
+    if (!memories[i].event || memories[i].event >= EVENTS)
+      continue;
+    unsigned j = count;
+    while (j && (memories[slots[j - 1]].space_time.date <
+                     memories[i].space_time.date ||
+                 (memories[slots[j - 1]].space_time.date ==
+                      memories[i].space_time.date &&
+                  memories[slots[j - 1]].space_time.time <
+                      memories[i].space_time.time))) {
+      slots[j] = slots[j - 1];
+      j--;
+    }
+    slots[j] = i;
+    count++;
+  }
+  for (unsigned n = 0; n < count && used + 1 < size; n++) {
+    unsigned i = slots[n];
+    n_string_block message = {0};
+    /* City civil names are not native alias identities. Do not guess a
+       counterpart by matching repeatable native names after death/compaction.
+     */
+    const char *text = NULL;
+    switch (memories[i].event) {
+    case EVENT_CHAT:
+      text = "Had a conversation";
+      break;
+    case EVENT_BIRTH:
+      text = "Gave birth";
+      break;
+    case EVENT_PROFESSION_SERVICE:
+      text = "Provided a service";
+      break;
+    case EVENT_PROFESSION_SERVICE_BY:
+      text = "Received a service";
+      break;
+    case EVENT_PROFESSION_TRAIN:
+      text = "Provided guidance";
+      break;
+    case EVENT_PROFESSION_TRAINED:
+      text = "Received guidance";
+      break;
+    case EVENT_EAT:
+    case EVENT_PROFESSION_WORK:
+      episode_description(b, (n_int)i, message);
+      text = message;
+      break;
+    default:
+      continue;
+    }
+    uint64_t now = (uint64_t)land_date() * TIME_DAY_MINUTES + land_time();
+    uint64_t when = (uint64_t)memories[i].space_time.date * TIME_DAY_MINUTES +
+                    memories[i].space_time.time;
+    uint64_t age = now >= when ? now - when : 0, minute = cd_native_minutes(s);
+    minute = age <= minute ? minute - age : 0;
+    int written = snprintf(out + used, size - used, "%sMinute %llu · %s",
+                           used ? "\n" : "", (unsigned long long)minute, text);
+    if (written < 0 || (size_t)written >= size - used)
+      break;
+    used += (size_t)written;
+  }
+  if (!used)
+    snprintf(out, size, "No native activity memories retained yet.");
+  return CD_OK;
+}
+void cd_native_remember_food(CdSmokeSession *s, CdPersonRef ref, int gained) {
+  simulated_being *b = native_body(s, ref);
+  if (b)
+    episodic_simulation_food(b, gained, "meal");
+}
+int cd_native_chat(CdSmokeSession *s, CdPersonRef ar, CdPersonRef br) {
+  simulated_being *a = native_body(s, ar), *b = native_body(s, br);
+  if (!a || !b || a == b || !cd_native_can_work(s, ar) ||
+      !cd_native_can_work(s, br))
+    return 0;
+  if (!cd_native_claim(s, ar) || !cd_native_claim(s, br))
+    return 0;
+  return episodic_simulation_chat(a, b);
+}
+void cd_native_remember_birth(CdSmokeSession *s, CdPersonRef parent,
+                              CdPersonRef child) {
+  simulated_being *a = native_body(s, parent), *b = native_body(s, child);
+  if (a && b)
+    episodic_close(a, b, EVENT_BIRTH, AFFECT_BIRTH, 0);
+}
+void cd_native_remember_training(CdSmokeSession *s, CdPersonRef mentor,
+                                 CdPersonRef student) {
+  simulated_being *a = native_body(s, mentor), *b = native_body(s, student);
+  if (a && b && a != b)
+    profession_training(a, b, 0);
+}
+void cd_native_remember_work(CdSmokeSession *s, CdPersonRef ref) {
+  simulated_being *b = native_body(s, ref);
+  if (b)
+    episodic_self(b, EVENT_PROFESSION_WORK, 0, 0);
+}
+void cd_native_remember_service(CdSmokeSession *s, CdPersonRef ar,
+                                CdPersonRef br) {
+  simulated_being *a = native_body(s, ar), *b = native_body(s, br);
+  if (a && b && a != b) {
+    profession_interaction(a, b, 0);
+  }
 }
 unsigned cd_native_walk_units(void) { return FATIGUE_SPEED_THRESHOLD; }
 

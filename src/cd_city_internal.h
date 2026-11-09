@@ -129,7 +129,8 @@ typedef struct {
   CdEntityId ordination_institution, memberships[4], vehicle, driving, refuge;
   uint64_t mission, gathering, ration_day, last_care_grant;
   CdPersonId last_care_subject;
-  uint64_t bereavement_event,support_until;CdRecordCursor record_cursor;
+  uint64_t bereavement_event, support_until;
+  CdRecordCursor record_cursor;
   char credential_basis[96], ordination_basis[96];
 } CdCitizen;
 typedef struct {
@@ -189,9 +190,12 @@ struct CdWorld {
   unsigned rain, alert, blackout, ration_limit;
   uint64_t water_imported, water_used, water_exported, fire_minutes, damage,
       service_outputs, attendance_minutes;
-  CdRecord *records;CdRecordCursor *record_cursors;CdOperation *operations;
-  uint64_t record_next,record_dropped,last_cause,current_cause;
-  size_t record_count,operation_count;int record_saturated;
+  CdRecord *records;
+  CdRecordCursor *record_cursors;
+  CdOperation *operations;
+  uint64_t record_next, record_dropped, last_cause, current_cause;
+  size_t record_count, operation_count;
+  int record_saturated;
 };
 struct CdSnapshot {
   CdContent *content;
@@ -200,7 +204,8 @@ struct CdSnapshot {
   CdTravelState *travel;
   CdInstitutionRuntime *institutions;
   CdCivicSummary civic;
-  CdRecord *records;CdRecordSummary record_summary;
+  CdRecord *records;
+  CdRecordSummary record_summary;
 };
 void cd_content_retain(CdContent *);
 CdStatus cd_diag(CdDiagnostic *, CdStatus, const char *);
@@ -282,15 +287,19 @@ void cd_civic_retire(CdWorld *, CdCitizen *, CdRetirement);
 uint64_t cd_civic_digest(const CdWorld *, uint64_t);
 CdStatus cd_care_begin(CdWorld *, CdPersonRef, CdPersonRef, CdEntityId,
                        unsigned, CdDiagnostic *);
-CdStatus cd_world_allocate(const CdContent *,const CdScenario *,CdWorld **,CdDiagnostic *);
+CdStatus cd_world_allocate(const CdContent *, const CdScenario *, CdWorld **,
+                           CdDiagnostic *);
 void cd_world_destroy_staged(CdWorld *);
 int cd_world_is_owner(const CdWorld *);
-void cd_world_publish_checkpoint(CdWorld **,CdWorld *,CdSmokeStage **);
-uint64_t cd_world_state_digest(const CdWorld *,uint64_t);
-uint64_t cd_record_emit(CdWorld *,CdEventKind,CdPersonRef,CdPersonRef,CdEntityId,uint64_t,CdRecordPrivacy,const char *,const char *);
+void cd_world_publish_checkpoint(CdWorld **, CdWorld *, CdSmokeStage **);
+uint64_t cd_world_state_digest(const CdWorld *, uint64_t);
+uint64_t cd_record_emit(CdWorld *, CdEventKind, CdPersonRef, CdPersonRef,
+                        CdEntityId, uint64_t, CdRecordPrivacy, const char *,
+                        const char *);
+void cd_social_tick(CdWorld *);
 void cd_records_tick(CdWorld *);
-uint64_t cd_observer_digest(const CdWorld *,uint64_t);
+uint64_t cd_observer_digest(const CdWorld *, uint64_t);
 void cd_operations_tick(CdWorld *);
 size_t cd_record_cursor_count(const CdContent *);
-int cd_record_visible(const CdRecord *,CdRecordQuery,CdEntityId);
+int cd_record_visible(const CdRecord *, CdRecordQuery, CdEntityId);
 #endif

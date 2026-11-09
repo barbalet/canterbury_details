@@ -11,6 +11,14 @@ int cd_native_claim(CdSmokeSession *, CdPersonRef);
 CdStatus cd_native_name(const CdSmokeSession *, CdPersonRef, char *, size_t);
 CdStatus cd_native_city_body(CdSmokeSession *, CdPersonRef);
 void cd_native_fixture_name(uint64_t, uint64_t, char *, size_t);
+CdStatus cd_native_activity_memories(const CdSmokeSession *, CdPersonRef,
+                                     char *, size_t);
+void cd_native_remember_food(CdSmokeSession *, CdPersonRef, int);
+int cd_native_chat(CdSmokeSession *, CdPersonRef, CdPersonRef);
+void cd_native_remember_birth(CdSmokeSession *, CdPersonRef, CdPersonRef);
+void cd_native_remember_training(CdSmokeSession *, CdPersonRef, CdPersonRef);
+void cd_native_remember_work(CdSmokeSession *, CdPersonRef);
+void cd_native_remember_service(CdSmokeSession *, CdPersonRef, CdPersonRef);
 unsigned cd_native_walk_units(void);
 uint64_t cd_native_minutes(const CdSmokeSession *);
 int cd_native_closed(const CdSmokeSession *);

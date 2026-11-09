@@ -40,6 +40,28 @@ uint64_t cd_record_emit(CdWorld *w, CdEventKind kind, CdPersonRef actor,
   w->last_cause = id;
   return id;
 }
+CdStatus cd_world_activity_memories(const CdWorld *w, CdPersonRef who,
+                                    CdRecordQuery query, char *out, size_t size,
+                                    CdDiagnostic *d) {
+  if (!w || !out || !size)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Memory output required");
+  if (!cd_citizen((CdWorld *)w, who))
+    return cd_diag(d, CD_UNKNOWN_REFERENCE, "Live resident reference required");
+  if ((unsigned)query.access > CD_RECORD_DIAGNOSTIC)
+    return cd_diag(d, CD_INVALID_ARGUMENT,
+                   "Valid memory access scope required");
+  if (query.access != CD_RECORD_DIAGNOSTIC &&
+      (query.access != CD_RECORD_PERSONAL ||
+       query.viewer.person_id != who.person_id ||
+       query.viewer.world_token != who.world_token))
+    return cd_diag(d, CD_UNSUPPORTED,
+                   "Personal memories require the same live observer or "
+                   "explicit diagnostic access");
+  CdStatus status = cd_native_activity_memories(w->native, who, out, size);
+  return cd_diag(d, status,
+                 "Copied bounded native memories; civil counterpart names "
+                 "require retained city records");
+}
 CdStatus cd_world_record_summary(const CdWorld *w, CdRecordSummary *out,
                                  CdDiagnostic *d) {
   if (!w || !out)
@@ -332,4 +354,39 @@ uint64_t cd_observer_digest(const CdWorld *w, uint64_t h) {
     h = string_hash(h, v->reason);
   }
   return h;
+}
+
+/* Bounded local social opportunity, once per native hour. Only nearby array
+ * neighbours are considered; never an all-pairs scan of 30,000 people. No
+ * unplaced, sleeping, travelling, ill or working resident is made to chat. */
+void cd_social_tick(CdWorld *w) {
+  if (cd_native_minutes(w->native) % 60)
+    return;
+  for (size_t i = 0; i < w->count; i++) {
+    CdCitizen *a = &w->people[i];
+    if (a->activity != CD_ACTIVITY_IDLE || a->sleeping || a->civil.age < 6 ||
+        a->health.mortality_pending || a->health.severity >= 600 ||
+        !a->civil.position_known)
+      continue;
+    for (size_t j = i + 1; j < w->count && j <= i + 8; j++) {
+      CdCitizen *b = &w->people[j];
+      if (b->activity != CD_ACTIVITY_IDLE || b->sleeping || b->civil.age < 6 ||
+          b->health.mortality_pending || b->health.severity >= 600 ||
+          !cd_colocated(w, a, b))
+        continue;
+      if (!cd_native_chat(w->native, a->civil.ref, b->civil.ref))
+        continue;
+      a->activity = b->activity = CD_ACTIVITY_CHAT;
+      char text[160];
+      snprintf(text, sizeof text, "Chatted with %.127s", b->civil.name);
+      uint64_t cause = cd_record_emit(
+          w, CD_EVENT_CHAT, a->civil.ref, b->civil.ref, a->civil.household, 0,
+          CD_RECORD_PERSONAL, "native EVENT_CHAT; observed co-location", text);
+      snprintf(text, sizeof text, "Chatted with %.127s", a->civil.name);
+      cd_record_emit(w, CD_EVENT_CHAT, b->civil.ref, a->civil.ref,
+                     b->civil.household, cause, CD_RECORD_PERSONAL,
+                     "native EVENT_CHAT; observed co-location", text);
+      break;
+    }
+  }
 }

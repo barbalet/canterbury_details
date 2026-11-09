@@ -3,7 +3,7 @@
   "version": 1,
   "date": "2026-11-08",
   "scope": "architecture admission and declaration syntax only; no runtime, linkage or SDK behavior qualification",
-  "source_manifest_sha256": "dc7cbb075d67a6951a2c75dd3d4bc1d027e0257363e31c16f5e9a3669d4b2073",
+  "source_manifest_sha256": "01f8ef9b0c0b3081aea16bb91bc6cc03de81b56224d0dce9f13a1188dc8dbb77",
   "design_sha256": {
     "content/architecture.json": "aa95fb5a1ecdbb4989d108343a409de5e463660f4815455e32b50f3315bed914",
     "content/reuse-ledger.json": "1135d24acce3e55629432acc54733615a2bb74386ddb10d4a30c27cf49875271",

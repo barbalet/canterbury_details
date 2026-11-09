@@ -11,9 +11,9 @@
   "submodules": [
     {
       "path": "canterbury",
-      "revision": "c8dfee17622fcc903b247afcf4d6df4a70489e2a",
+      "revision": "56cfe688be2ebb62d2c0497a296e16fe7f508b32",
       "origin": "git@github.com:barbalet/ds-canterbury1940.git",
-      "tracked_files": 76,
+      "tracked_files": 86,
       "reviewed_worktree_files": []
     },
     {
@@ -21,12 +21,22 @@
       "revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
       "origin": "git@github.com:barbalet/apesdk.git",
       "tracked_files": 471,
-      "reviewed_worktree_files": []
+      "reviewed_worktree_files": [
+        "bronze/README.md",
+        "bronze/hybrid/test_hybrid.c",
+        "bronze/tasks/bronze_tasks.c",
+        "bronze/ui/BronzeScenarioUI.swift",
+        "entity/entity.h",
+        "entity/episodic.c",
+        "gui/shared.c",
+        "universe/loop.c",
+        "universe/sim.c"
+      ]
     }
   ],
   "sdk_worktree_review": {
     "path": "content/sdk-working-tree.json",
-    "sha256": "d3294190c4d9e117329bc0924c9eda3cd55a6661ecbaf47995ada94225a3a917"
+    "sha256": "b3f498b6ffa4bea56ad5f63e1c9e3f3309d28eda3f4f56655f613b9e22924561"
   },
   "root_license": {
     "path": "LICENSE",
@@ -487,7 +497,7 @@
       "path": "apesdk/universe/sim.c",
       "role": "native_city_clock",
       "selector": "guarded configure/init/cycle/close branches",
-      "sha256": "2ab2a8592dcc2aaf7c7241aba6655ad9e8477901933eba569190f2b9057ace97"
+      "sha256": "c73ad91a86f9e78f6915baadd6a5e608e497879820577518d5dcfef2b4039bef"
     },
     {
       "path": "apesdk/entity/being.c",
@@ -590,6 +600,11 @@
     }
   ],
   "tracked_files": [
+    {
+      "path": "canterbury/.gitignore",
+      "bytes": 108,
+      "sha256": "fd62f1811c1d2cf0a38cc3652ff109a02185e3fe8e925dc0cbff113637a11b9d"
+    },
     {
       "path": "canterbury/Canterbury.txt",
       "bytes": 874,
@@ -696,6 +711,11 @@
       "sha256": "5fcfa17f81c1c5a4804284269b23296cc81397cab0ca93d88d1939d348283999"
     },
     {
+      "path": "canterbury/newcanterbury/json2png2.c",
+      "bytes": 3585,
+      "sha256": "68e6cd4d4f7fe616040a3b35fa3ea4a83e1146dca66ef08e5821e5b8ce07d769"
+    },
+    {
       "path": "canterbury/newcanterbury/map.h",
       "bytes": 6783,
       "sha256": "34e719084c09d67c53f59401caabd2d705d2224ea497b9621bef7a445086c951"
@@ -747,13 +767,28 @@
     },
     {
       "path": "canterbury/simulation-map/README.md",
-      "bytes": 20074,
-      "sha256": "d79864de03631f0370229e9ee6f77dd61cf03f6364d1870198c210daf7731316"
+      "bytes": 23524,
+      "sha256": "cf98eacf585cf39a884f163ee1831934c4112ad114ba2f567be3f198579a556b"
     },
     {
       "path": "canterbury/simulation-map/assemble.py",
       "bytes": 27433,
       "sha256": "a7de36b6fa579cc08580322c9912279412af08ead686f4ad644fe13a1817f0b0"
+    },
+    {
+      "path": "canterbury/simulation-map/assembled_map.py",
+      "bytes": 3818,
+      "sha256": "0a250dff7e1be1f7d0b786c6958fafc4c4a7108974b6b18c724e6896c7e972ff"
+    },
+    {
+      "path": "canterbury/simulation-map/building-placement-corrections.json",
+      "bytes": 6624109,
+      "sha256": "95eca9b97b6cab60bd723309e2aaae852f5aec99fa052dfd10e5187d36413028"
+    },
+    {
+      "path": "canterbury/simulation-map/building_placements.py",
+      "bytes": 6426,
+      "sha256": "c2c0a6cd4f66a7b4bf8e8111c8c45365177e0106139a5f3fe85cd7bef0e04142"
     },
     {
       "path": "canterbury/simulation-map/complete_roads.py",
@@ -931,6 +966,21 @@
       "sha256": "8f5b3a1e7172483a2b885a779f18c3a3bb9bda02876b730171b4bd60dd62c51e"
     },
     {
+      "path": "canterbury/simulation-map/render_map.py",
+      "bytes": 4338,
+      "sha256": "6e134be79cb1ac52b76eb1eebc988afaf697609b02130bf296ef46e2b56a6b86"
+    },
+    {
+      "path": "canterbury/simulation-map/review_building_placements.py",
+      "bytes": 6705,
+      "sha256": "1323986b16ea34d9337ac05e361054d1c14d0dc4fcefccb9723ebc7b4612779c"
+    },
+    {
+      "path": "canterbury/simulation-map/review_building_structures.py",
+      "bytes": 6209,
+      "sha256": "2f5c67958ecd3e3625de903258c909ba654383789ee67234d69b077a38076528"
+    },
+    {
       "path": "canterbury/simulation-map/road-traces.json",
       "bytes": 26439,
       "sha256": "4b8d88ac9f779b26947779dca5d3ce8e23bd9d1c8389c6727ba8563f6da7d7a0"
@@ -939,6 +989,11 @@
       "path": "canterbury/simulation-map/test_assemble.py",
       "bytes": 6362,
       "sha256": "d0d9898a30bc9cccb0d58766d5943aea7ce8601983c7d41f21527f47738bd69a"
+    },
+    {
+      "path": "canterbury/simulation-map/test_building_placements.py",
+      "bytes": 3450,
+      "sha256": "a2d0cd07f6fe76589f3874c8bc6724332dac6fa31dff26ba73c7bbce5f6f55a7"
     },
     {
       "path": "canterbury/simulation-map/test_complete_roads.py",
@@ -969,6 +1024,11 @@
       "path": "canterbury/simulation-map/validate_buildings.py",
       "bytes": 3813,
       "sha256": "4a5b4c218e14114d38d76385a94a1a401b43c6e679375e1f61cce8a6998ca020"
+    },
+    {
+      "path": "canterbury/simulation-map/verify_placements.py",
+      "bytes": 5534,
+      "sha256": "1ca6d19beacd6ca09688449f5ee20b5113b4fb60b8c505841f38b1fee6b7d9cd"
     },
     {
       "path": "apesdk/.github/FUNDING.yml",
@@ -1162,8 +1222,8 @@
     },
     {
       "path": "apesdk/bronze/README.md",
-      "bytes": 7145,
-      "sha256": "deddb6f5fad54c33e8ea09d19ba54a542893bfdda92ed9c9943d341e3493417b"
+      "bytes": 8520,
+      "sha256": "72432e8b26953e437a86a0df3cf84a255f0e6a145c3e46626f5b0dec1cd4a580"
     },
     {
       "path": "apesdk/bronze/SAVE-FORMAT.md",
@@ -1512,8 +1572,8 @@
     },
     {
       "path": "apesdk/bronze/hybrid/test_hybrid.c",
-      "bytes": 48807,
-      "sha256": "d34762e5b9cffa19a33b9edf41b150ae1721060d543f902b4e9e3895930af29d"
+      "bytes": 51106,
+      "sha256": "b3d49e88f4a42bb695833b5a62fb0ec0cc7af85c581166b6f1a3d9ec2168993b"
     },
     {
       "path": "apesdk/bronze/hybrid/test_paths.inc",
@@ -1692,8 +1752,8 @@
     },
     {
       "path": "apesdk/bronze/tasks/bronze_tasks.c",
-      "bytes": 32576,
-      "sha256": "6b6e5b1df3ebfb0a109bf7d970f8a63a6692bd219fd7ff714cd63b1f79a27c6b"
+      "bytes": 32858,
+      "sha256": "88c1ca50d5e246dcc3dc7e369d837b05087b9e586197aead10d44233e79da890"
     },
     {
       "path": "apesdk/bronze/tasks/bronze_tasks.h",
@@ -1752,8 +1812,8 @@
     },
     {
       "path": "apesdk/bronze/ui/BronzeScenarioUI.swift",
-      "bytes": 35424,
-      "sha256": "7e13cf33b6061c7aafbfb5767274503818542c543e85a71a13cc0a87e31a0f0a"
+      "bytes": 36065,
+      "sha256": "03590ccdc46be3942cf7cea00311496897204b403e95171012f8cd1e89dc55af"
     },
     {
       "path": "apesdk/bronze/ui/bronze_settlement_inspector.h",
@@ -1892,8 +1952,8 @@
     },
     {
       "path": "apesdk/entity/entity.h",
-      "bytes": 23840,
-      "sha256": "7093a1ee5caf1b0afa5efaf764fbf11a51b56a86a29415f9279651948e7439cf"
+      "bytes": 24511,
+      "sha256": "8f2b46cda269d3ba51680f0be7d80ef0a14a26534a304000553472117b5ba0e4"
     },
     {
       "path": "apesdk/entity/entity_internal.h",
@@ -1902,8 +1962,8 @@
     },
     {
       "path": "apesdk/entity/episodic.c",
-      "bytes": 25155,
-      "sha256": "ff761e4f0ca110c8e7577fbe4cd56fcef59333c0cfefb1e61b1af22959f8e51f"
+      "bytes": 27654,
+      "sha256": "1fd00eb1090fbfe4712e8712d1a11e4012db0fa6d8989f04c815f4841d4bbd38"
     },
     {
       "path": "apesdk/entity/food.c",
@@ -2012,8 +2072,8 @@
     },
     {
       "path": "apesdk/gui/shared.c",
-      "bytes": 70426,
-      "sha256": "f61085ce4f581097ebfea8de502401b254b08ceb46fa3b83c8a42749accc4bd5"
+      "bytes": 70716,
+      "sha256": "12388447f9019abd0d61f726c03c0be019532c5efac22552af37b8a481591df0"
     },
     {
       "path": "apesdk/gui/tutorial.c",
@@ -3249,13 +3309,13 @@
     },
     {
       "path": "apesdk/universe/loop.c",
-      "bytes": 69562,
-      "sha256": "9be60c304e7e3fedd96e1bf737079c24cb5ce1028e364f78d16134ba19228a4e"
+      "bytes": 69917,
+      "sha256": "83add395a0121c0cdf3333836d0a18e89ebdada819418ace2ce0d4bfe8a5245c"
     },
     {
       "path": "apesdk/universe/sim.c",
-      "bytes": 66344,
-      "sha256": "2ab2a8592dcc2aaf7c7241aba6655ad9e8477901933eba569190f2b9057ace97"
+      "bytes": 66452,
+      "sha256": "c73ad91a86f9e78f6915baadd6a5e608e497879820577518d5dcfef2b4039bef"
     },
     {
       "path": "apesdk/universe/transfer.c",

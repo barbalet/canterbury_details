@@ -33,3 +33,33 @@ institutions/offices, dispatch, gatherings, transport and scripted pressures.
 They record observed phase changes, not every native minute or every internal
 substep. No historical event/staffing/faith is synthesized from missing source data.
 See `tests/observer.c` Cycle 29 and `content/cycle-29-validation.json`.
+
+## Native eating and conversation events
+
+Native activity integration is tracked in [EVENTS_PLAN.md](../EVENTS_PLAN.md).
+A finite Canterbury meal now creates native `EVENT_EAT` with the prepared-food
+code and a personal `CD_EVENT_EAT` record. A successful conversation creates
+paired native `EVENT_CHAT` memories and two personal `CD_EVENT_CHAT` records,
+using the residents' civil names in city history. Completed production and
+physically delivered services also use existing native profession memory codes.
+
+The local-chat opportunity is an explicitly schematic policy: once per native
+hour, consider at most eight following residents in stable-ID order. Each may
+chat at most once, only when both are awake, at least six, healthy, idle, known to
+be physically co-located and have unused native action budgets. This is bounded
+O(8N), consumes each participant's real native minute grant, and infers neither
+positions nor conversations for unplaced people. It establishes no automatic
+friendship, congregation or historical interaction frequency.
+
+The resident inspector reads retained native activity memories even if the global
+city history has evicted that resident's earlier entries. This requires the same
+live personal observer or explicit diagnostic access. It separately shows named
+conversations from retained personal city records. Native aliases may repeat in
+Canterbury, so a lost city record is never reconstructed by guessing identities
+from native name bytes: the subjective memory says a conversation happened,
+while named counterparts are shown only where the city record retains them.
+The Bronze actor inspector shows copied native episodic descriptions. Native
+subjective memories use the existing 12 slots and forgetting; city causal records
+use their independent 8,192-entry bounded observer history. Both persist through
+existing native/body and city checkpoint paths. Incompatible old checkpoints are
+rejected by the existing ABI/content gate rather than silently reinterpreted.

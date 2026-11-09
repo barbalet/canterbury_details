@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 static CdWorld *active_world;
-int cd_world_is_owner(const CdWorld *w){return w==active_world;}
+int cd_world_is_owner(const CdWorld *w) { return w == active_world; }
 static void destroy(CdWorld *w) {
   if (!w)
     return;
@@ -509,5 +509,6 @@ void cd_human_tick(CdWorld *w) {
   cd_economy_tick(w);
   cd_jobs_tick(w);
   cd_development_tick(w);
+  cd_social_tick(w);
   cd_records_tick(w);
 }

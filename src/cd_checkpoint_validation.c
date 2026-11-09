@@ -109,7 +109,7 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
         cd_civil_valid(p->civil.birth) && p->civil.birth.minute_of_day == 0 &&
         p->skills <= 15 && p->credentials <= 63 && p->meals <= 12 &&
         p->raw <= 12 && p->water <= 12 && p->fatigue <= 1440 &&
-        (unsigned)p->activity <= CD_ACTIVITY_RETIRED &&
+        (unsigned)p->activity <= CD_ACTIVITY_CHAT &&
         (unsigned)p->travel <= CD_ROUTE_CANCELLED &&
         (unsigned)p->reason <= CD_ROUTE_ACCESS &&
         (unsigned)p->health.condition <= CD_CRITICAL &&
