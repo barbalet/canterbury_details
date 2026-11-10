@@ -911,3 +911,53 @@ Current results and exact pins are indexed in `content/evidence-index.json` and
 ## Native activity event follow-up
 
 The cross-mode episodic event integration is tracked in [EVENTS_PLAN.md](EVENTS_PLAN.md).
+
+## Post-release follow-up — populated home/work geography
+
+On 9 November 2026 the user requested occupation-linked guesses for all 1,790
+unknown-use buildings. `tools/estimate_building_uses.py` now provides a separately
+labelled, source-hashed advisory overlay and ordinary workplace-role suggestions.
+Seven dedicated tests pass; see `docs/BUILDING-USE-ESTIMATES.md`. This does not
+change source facts, qualify routes/doors or assign homes/jobs. The default
+27,000-person world still lacks initial placed households and assigned employment.
+That populated home-to-work scenario remains implementation work beyond the
+forty-cycle technical fixtures. The previous release conclusion must not be read
+as evidence that this operational population setup exists. The new estimator
+is outside the release snapshot currently being revalidated.
+
+### Current release rerun status
+
+The 9 November rerun passed the five full-day CPU/resource workloads, isolated
+model/regression suites, independent-core checks and fresh-checkout Xcode builds.
+The release gate then rejected stale presentation benchmark inputs
+(`cd_api.h`, `cd_city_internal.h`, `cd_native.h`, `cd_observer.h`). No new
+Cycle 40 completion or fresh live UI acceptance is claimed. Rebuild and normally
+launch the presentation benchmark, then requalify the latest source including the
+new building estimator before publishing another release.
+
+The subsequent user request applies all 1,790 proposed uses to runtime building
+metadata with provisional policy labels and a new content identity. Source uses
+and geometry remain untouched. Nine estimator/integration tests pass. A separate
+27,000-person age and 12,000-job sector allocation is specified in
+`content/population-allocation-proposal.json`, but is not yet applied to the
+live age/household generator, job catalogue or physical placement.
+
+## Initial career catalogue draft
+
+At the user's request, `content/occupation-careers-draft.json` and its readable
+`.txt` companion draft 300 named career roles across 60 families and 12 sectors.
+Each family has five candidate stages, with explicit training, skill, funded
+vacancy, qualification/appointment and ownership gates. These are design
+candidates requiring local/period review, not activated roles or historical
+staffing claims. The implemented catalogue still enables eight occupations.
+
+## Canterbury DSL 0.1 draft
+
+The user requested a separate Canterbury authoring language containing the 300
+career roles and more refined resources. The initial `.canterbury` draft contains
+60 families, 300 roles, 240 advancement links, 72 resource kinds, 21 delivered
+services and five illustrative mass-balanced recipes. Grammar/semantics are in
+`docs/CANTERBURY-DSL-DRAFT.txt`. The draft checker and seven tests pass. It is not
+a runtime compiler: no new occupations, supply, qualifications, employers or
+behaviour are enabled. Native task binding, curriculum/qualification definitions,
+workplace allocation and implementation remain required before activation.

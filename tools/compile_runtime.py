@@ -50,7 +50,7 @@ def encode(model):
         w.f(s.get('confidence',0))
     payload=bytes(w.data);return b'CDCT0002'+struct.pack('<QI',len(payload),zlib.crc32(payload))+payload
 
-def compile_model(bundle,review):
+def compile_model(bundle,review,estimates=None):
     cc.require(set(review)=={'format','version','generation_id','edges','dwellings','doors'},'Unknown spatial-review fields')
     cc.require(review['format']=='canterbury-details-spatial-review' and review['version']==1 and review['generation_id']==bundle['generation_id'],'Stale spatial review generation')
     data=bundle['data'];used=set()
@@ -66,12 +66,16 @@ def compile_model(bundle,review):
         return records
     er=reviews(review['edges'],['network','source_id','input_sha256','basis','note','bridge','rail_crossing','capacity','grade','junction'])
     dr=reviews(review['dwellings'],['source_id','input_sha256','basis','note','capacity','opening_known','opens','closes','locked'])
+    proposed={} if estimates is None else {r['building_id']:r for r in estimates['estimates']}
     polys=[];buildings={};seen_d=set()
     features={f['id']:f for f in data['vectors']['features']}
     for key,kind in [('buildings',1),('waterways',2),('rail_ink',3)]:
         for p in data[key]['objects']:
             ident=stable(key,p['id']);policy=dr.get((None,p['id'])) if kind==1 else None
             record={'id':ident,'kind':kind,'source':p['id'],'name':p.get('modern_annotation',{}).get('name','unknown'),'use':p.get('modern_annotation',{}).get('use','unknown'),'rings':p['geometry']['rings'],'policy_basis':'unreviewed','confidence':min(features[x].get('confidence',0) for x in p['source_feature_ids'])}
+            if kind==1 and record['use']=='unknown' and p['id'] in proposed:
+                guess=proposed[p['id']]
+                record.update(use=guess['estimated_use'],policy_basis='provisional simulation use ('+guess['confidence']+'); source use unknown; not historical evidence')
             if kind==1:buildings[p['id']]=ident
             if policy:
                 cc.require(policy['input_sha256']==bundle['provenance']['inputs']['buildings']['sha256'],'Stale dwelling review')
@@ -103,7 +107,8 @@ def compile_model(bundle,review):
         doors.append({'id':stable('door',d['source_id']),'building':buildings[d['building_id']],'node':node_ids[(d['network'],d['node_id'])],'reviewed':d['reviewed'],'basis':d['basis']+': '+d['note'],'points':d['points']})
     sites=[{'id':stable('site',s['id']),'source':s['id'],'point':s.get('position_pixels'),'name':s['name'],'religion':s['religion'],'denomination':s['denomination'],'status':s['worship_status_1940'],'notes':s.get('notes',''),'site_type':s.get('site_type','unknown'),'setting_year':s.get('setting_year',0),'identity_verified':s.get('historical_identity_verified',False),'review_required':s.get('spatial_review_required',True),'confidence_known':'spatial_confidence' in s,'confidence':s.get('spatial_confidence',0),'location_basis':s.get('location_basis','unknown'),'source_record':json.dumps(s,ensure_ascii=False,sort_keys=True,separators=(',',':'))} for s in data['institutions']['sites']]
 
-    return {'width':bundle['canvas']['width'],'height':bundle['canvas']['height'],'generation':bundle['generation_id'],'basis':'audited source candidates; per-feature review required','polygons':polys,'nodes':nodes,'edges':edges,'doors':doors,'sites':sites}
+    generation=bundle['generation_id'] if estimates is None else cc.digest(cc.canonical({'source_generation':bundle['generation_id'],'building_use_estimates':estimates}))
+    return {'width':bundle['canvas']['width'],'height':bundle['canvas']['height'],'generation':generation,'basis':'audited source candidates; provisional simulation uses; access/capacity review remains separate' if estimates is not None else 'audited source candidates; per-feature review required','polygons':polys,'nodes':nodes,'edges':edges,'doors':doors,'sites':sites}
 
 def build(check=False):
     cc.require(OUTPUT.resolve()==ROOT.resolve()/'build/content/CanterburyCity.bin','Runtime output escapes checkout');cc.source_inventory();bundle_path=ROOT/cc.OUTPUT
@@ -113,14 +118,17 @@ def build(check=False):
     cc.require(bundle['provenance']['source_manifest_sha256']==cc.digest((ROOT/'content/source-manifest.json').read_bytes()),'Stale runtime source manifest')
     cc.require(all(cc.digest(cc.local_file(ROOT,p).read_bytes())==sha for p,sha in bundle['provenance']['owned_inputs'].items()),'Stale runtime compiler inputs')
     policy_raw=cc.local_file(ROOT,'content/spatial-review.json').read_bytes();review=cc.parse(policy_raw);tool=(ROOT/'tools/compile_runtime.py').read_bytes()
-    model=compile_model(bundle,review);packed=encode(model)
+    from estimate_building_uses import build as estimate_build, OUTPUT as ESTIMATES
+    estimate_build(check)
+    estimate_raw=(ROOT/ESTIMATES).read_bytes()
+    model=compile_model(bundle,review,cc.parse(estimate_raw));packed=encode(model)
     cc.require(len(packed)<=256*1024*1024,'Runtime pack exceeds byte limit')
     if check:cc.require(OUTPUT.is_file() and OUTPUT.read_bytes()==packed,'Runtime content missing/stale: run make runtime-content')
     else:
         def fresh():
-            cc.require(bundle_path.read_bytes()==raw and REVIEW.read_bytes()==policy_raw and (ROOT/'tools/compile_runtime.py').read_bytes()==tool,'Runtime inputs changed before publication');cc.source_inventory()
+            cc.require(bundle_path.read_bytes()==raw and REVIEW.read_bytes()==policy_raw and (ROOT/'tools/compile_runtime.py').read_bytes()==tool and (ROOT/ESTIMATES).read_bytes()==estimate_raw,'Runtime inputs changed before publication');estimate_build(True);cc.source_inventory()
         cc.atomic_write(OUTPUT,packed,fresh)
-    return {'bytes':len(packed),'sha256':cc.digest(packed),'generation_id':bundle['generation_id'],'buildings':sum(p['kind']==1 for p in model['polygons']),'nodes':len(model['nodes']),'edges':len(model['edges']),'qualified_edges':sum(e['qualified'] for e in model['edges']),'reviewed_doors':sum(d['reviewed'] for d in model['doors'])}
+    return {'bytes':len(packed),'sha256':cc.digest(packed),'generation_id':model['generation'],'source_generation_id':bundle['generation_id'],'provisional_building_uses':len(cc.parse(estimate_raw)['estimates']),'buildings':sum(p['kind']==1 for p in model['polygons']),'nodes':len(model['nodes']),'edges':len(model['edges']),'qualified_edges':sum(e['qualified'] for e in model['edges']),'reviewed_doors':sum(d['reviewed'] for d in model['doors'])}
 def main():
     p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--write',action='store_true');g.add_argument('--check',action='store_true');a=p.parse_args()
     try:print(json.dumps(build(a.check),sort_keys=True))

@@ -2,9 +2,9 @@
   "format": "canterbury-native-activity-events-validation",
   "version": 1,
   "inputs": {
-    "EVENTS_PLAN.md": "dbec8a479f0a284ef4a2fdb758c5ca3175e578f271f0692c8effa81cdc3b96b6",
-    "content/sdk-working-tree.json": "b3f498b6ffa4bea56ad5f63e1c9e3f3309d28eda3f4f56655f613b9e22924561",
-    "content/source-manifest.json": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
+    "EVENTS_PLAN.md": "4e05d17d158a594c007cbf64b10453aebdedbacaa3c1d8dafca86ed85df04336",
+    "content/sdk-working-tree.json": "ae5fda6b9e4b592f6694140921fb4d694712e15c5a481ac0469ff33e0fcd825a",
+    "content/source-manifest.json": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
     "docs/RECORDS.md": "9d3e0b43f0fa9db15862f4b98c9ea70c32732ed95fc9307727b9a9be2ef3d600",
     "src/cd_adapter.c": "5a31d1f060eaa60f370156544220a306e6ecf129c56e48ae7633c47ce0c4fbef",
     "src/cd_api.h": "f04877f5cad81bcfd5c37e7893927a50d189cd3cad557d7edcebd95a49320257",
@@ -67,8 +67,8 @@
     "ui/CitySession.h": "74928a6a1522988867ce86b7ca1803bba441c8b62a3dfba61b7f9e5a0a38ebec",
     "ui/CitySession.m": "9aba31369881f5d598a9964c3f97b6eb7d770b9497c33cef8383c678333c05ba"
   },
-  "sdk_revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
-  "sdk_worktree_review": "b3f498b6ffa4bea56ad5f63e1c9e3f3309d28eda3f4f56655f613b9e22924561",
+  "sdk_revision": "dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98",
+  "sdk_worktree_review": "ae5fda6b9e4b592f6694140921fb4d694712e15c5a481ac0469ff33e0fcd825a",
   "scope": "Native episodic activity, actual meals, co-located chats, privacy, birth and save/replay; not a scheduled world-event system",
   "native_eat_and_chat_verified": true,
   "food_conservation": true,

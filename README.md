@@ -103,3 +103,20 @@ All source, data and documentation required for this ordinary release live here
 and in the two declared submodules. No sibling application or deleted web upload
 is required. New historical data or game integration is a separate phase with its
 own review and qualification; no additional implementation cycle is outstanding.
+
+## Provisional building allocation
+
+User-authorized [building-use and occupation hypotheses](docs/BUILDING-USE-ESTIMATES.md)
+now cover all 1,790 source buildings of unknown use. These are advisory guesses,
+not verified historical facts or live job/home assignments. The default population
+still has no assigned jobs or placed homes; automatic home-to-work population
+setup remains additional implementation work. This new estimator is outside the
+earlier forty-cycle release snapshot and requires its own qualification.
+
+## Canterbury DSL design draft
+
+The [initial Canterbury scenario DSL](content/scenarios/canterbury1940-draft.canterbury)
+contains all 300 draft career roles, finite refined resources and explicit
+advancement gates. See [the grammar and design notes](docs/CANTERBURY-DSL-DRAFT.txt).
+`python3 tools/check_canterbury_dsl_draft.py` checks the draft; it is not a runtime
+compiler and does not enable its roles in the application.

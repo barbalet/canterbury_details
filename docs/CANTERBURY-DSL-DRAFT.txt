@@ -1,0 +1,157 @@
+CANTERBURY_SIM DSL 0.1 — DESIGN DRAFT
+
+Status and scope
+----------------
+content/scenarios/canterbury1940-draft.canterbury is a complete initial authoring
+example with 60 career families, 300 named roles, 240 candidate advancement links,
+72 finite resource kinds, 21 non-stockpiled services and five illustrative material
+recipes. It also carries the proposed 27,000-person age/workforce allocation.
+
+The existing application does NOT execute this language. The supplied checker
+parses and validates the draft only; it does not grant skills, create employers,
+change ages, load stock or enable jobs. All 300 draft roles are disabled, have zero
+vacancies and have unconfigured wages, shifts and task programs. The current
+implemented occupation catalogue still enables eight roles. Do not pass this
+file to the Bronze parser or the existing pipe-delimited operation runner.
+
+Counts and setting choices are model proposals, not verified 1940 local staffing,
+resource supply, qualifications, rank structures or legal rules. Source map
+certainty, religious institution closures and unqualified transport remain intact.
+
+Surface grammar
+---------------
+file        = { declaration } EOF ;
+declaration = kind identifier "{" { field } "}" ;
+field       = identifier value ";" ;
+value       = JSON-string | JSON-number | "true" | "false" | "unset"
+            | "null" | "[" [ value { "," value } ] "]" ;
+identifier  = letter-or-underscore { letter | digit | "_" | "-" | "." } ;
+comment     = "#" { character-except-newline } ;
+
+Strings use JSON escaping. Whitespace is insignificant outside strings. unset
+(and null) means unconfigured, not zero. Finite numbers only. Each (kind, ID) is
+unique; repeated field names are errors. IDs are stable strings, not native array
+indices. References are resolved in a second pass, so declaration order does not
+confer meaning. No includes, file access, loops, expressions, shell evaluation or
+remote loading are part of this draft. Lists preserve order; references to other
+declarations are quoted IDs. Nesting is bounded at 64 levels.
+
+Declaration kinds
+-----------------
+scenario: profile, language version, seed, sole native clock, source-map/content
+          identity, population and capacity. runtime_activation must remain false
+          for this draft.
+limits: proposed authoring budgets, not compiled C constants.
+policy: named modelling/execution contracts, including resource conservation.
+cohort: explicit age band, population and default activity proposal.
+workforce: sector employment target and candidate premises types; not actual jobs.
+activity: non-employment statuses, including dependent care, school and retirement.
+resource: finite physical stock with unit, group, quality policy and supply basis.
+service: delivered worker time/capacity; cannot be banked as inventory.
+recipe: explicitly reserved inputs and accounted outputs/byproducts with units.
+competence: family-specific assessed skills earned from actual completed actions.
+qualification: independent external assessment, license or appointment gates.
+career: family, source-compatible candidate premises and ordered candidate roles.
+occupation: named role, career stage, training status, vacancies, wages and program.
+advance: explicit candidate move between roles, with funding/training/consent gates.
+
+Example
+-------
+occupation carpenter.1 {
+  title "Carpentry apprentice";
+  career "carpenter";
+  stage 1;
+  enabled false;
+  training_post true;
+  mentor_required true;
+  mentor_minimum_stage 3;
+  competence "carpenter";
+  qualification "carpenter";
+  funded_vacancies 0;
+  wage_pence_per_shift unset;
+  shift_start_minute unset;
+  shift_duration_minutes unset;
+  workplace "explicit_employer_premises_and_safe_route_required";
+  task_program unset;
+}
+
+The actual file includes additional duties and advancement requirements. Stage
+numbers organise candidates; they are not a universal experience ladder. A funded
+manager vacancy, business ownership, driving qualification or religious office
+cannot be awarded merely by incrementing stage. A future compiler must bind each
+task program to implemented native/city handlers before enabling its role.
+
+Refining resources at city scale
+-------------------------------
+Use shared material supply chains, rather than one resource per occupation:
+  wheat grain -> flour + bran
+  timber -> usable timber + offcuts
+  cloth -> usable cloth + textile offcuts
+  steel stock -> metalwork + scrap
+  paper -> cut paper + paper offcuts
+
+The sample recipes conserve material mass including byproducts. Their quantities
+are illustrative yields, not measured period rates. Equipment, heat/energy and
+labour requirements are explicitly unconfigured, so these recipes must not become
+active production merely because their mass balances pass the draft checker.
+
+Mass uses integer grams, liquids integer millilitres, finished equipment/items
+integer counts, and money integer pence. Do not add quantities with incompatible
+units. Counted products need explicit bills of materials; cooking must account
+for water, moisture/evaporation and food energy. Food nutrition and spoilage rates
+are unset rather than invented. Medical doses require defined contents and
+appropriate authorization, not a generic craft operation.
+
+Quality, condition, ownership, provenance and expiry belong to batch/item records,
+not hundreds of near-identical resource IDs. Explicit imports replenish finite
+stocks through supplier and financial ledgers; there is no automatic regeneration.
+Services such as care, instruction, worship and administration consume actual
+worker presence, shared native minutes and any declared supplies. Religion is
+not an inventory commodity. Equipment custody and maintenance remain explicit.
+
+Careers, apprentices and allocation
+----------------------------------
+The 300 names match occupation-careers-draft.json exactly. Each family has five
+candidate roles and four proposed moves. Later review can branch, merge or remove
+stages. Family competence may be shared by several posts; cross-family transfer
+needs an explicit reviewed link. Only successful work/training creates experience.
+Mentoring consumes accounted capacity and shared time; mentor loss suspends
+training rather than deleting prior evidence or granting a qualification.
+
+The age/workforce allocation remains proposed: 7,830 under 18, 16,470 aged 18–64,
+2,700 aged 65+, and 12,000 proposed employed working-age adults. No child or elderly
+resident is forced into a job. Capacity, guardianship, safety, consent, qualifications
+and safe routes precede assignment. Candidate premises types are not employers,
+confirmed historical uses, safe entrances or proof of a local institution.
+
+Host and persistence requirements
+---------------------------------
+A future CANTERBURY_SIM compiler needs separate schemas for employers, funded
+posts, shifts, household/school placement, curricula and role task bindings.
+Their absence must block activation; the draft does not fill those gaps with
+free labour, automatic hiring or fabricated historical organizations.
+
+Use sparse family competences per agent, stable role IDs, and separate career
+posts from resource kinds. Keep original BRONZE_SIM constants/behaviour unchanged.
+Proposed city authoring budgets are 8 MiB/file, 128 families, 512 roles, 128
+resource kinds, 128 service kinds and 512 recipes. Retain 256 tasks/rules per role,
+4,096 expanded statements/task and 64 nesting levels unless measurements justify
+change. These values are proposals, not implemented runtime limits.
+
+Checkpoints must bind language version, exact compiled scenario identity,
+resource/role identities, content generation and native profile. Preserve native
+position/energy/clock ownership, preview/pause purity, reservations, RNG domains,
+finite resource ledgers and existing activity-event semantics. Unknown references,
+unimplemented handlers and incompatible saves must produce diagnostics rather
+than partial installation.
+
+Checking this draft
+-------------------
+python3 tools/check_canterbury_dsl_draft.py
+python3 -m unittest discover -s tests -p test_canterbury_dsl_draft.py -v
+
+The checker validates grammar, identifiers/references, all 300 names, all 240
+advancement links, inactive-role safety, population/workforce totals and sample
+recipe units/mass. This is authoring validation, not gameplay or historical
+qualification. The existing executable scenario action format is documented in
+OPERATIONS.md and remains separate.

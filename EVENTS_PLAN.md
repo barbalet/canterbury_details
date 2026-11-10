@@ -76,3 +76,12 @@ A 27,000-resident source-world day (1,440 added native minutes) completed in
 CLI measurement, not a physical-device frame-rate claim. Detailed evidence is in
 `content/activity-events-validation.json`, `content/activity-events-native-ui.json`
 and the `build/activity-*` logs.
+
+## Committed-source revalidation
+
+The first four sections were rerun against committed ApeSDK revision
+`dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98` on 9 November 2026.
+The obsolete working-tree exceptions were removed and source qualification,
+native compatibility, activity acceptance and Canterbury regression evidence
+were refreshed. Existing recorded UI observations remain separate from backend
+acceptance; this rerun does not claim a new interactive UI observation.

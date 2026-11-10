@@ -3,7 +3,7 @@
   "version": 1,
   "inputs": {
     "content/operation-controls.json": "5816913ba6d2e0cfcdc507c84bee1e675389f943c24ee76c0e49e481e6fe7c9f",
-    "content/spatial-review.json": "dd137e44d259b50b52c79ae7e1f5dc7fc796993d45466ed160b40bf3f70e787d",
+    "content/spatial-review.json": "c961b80933565529e012ec7024131183d27d77e02a9d67ac4629d63adeabc787",
     "docs/INSPECTION.md": "f9111e9e380c24f8a569d8b19fb3bff936cdd3668c329bd8dee18902b3202371",
     "docs/MAP.md": "d53831c733c66224dcbef89a8c3eb1ef0fa6e13b16d15ba295b79bfa63fd7446",
     "docs/OPERATIONS.md": "b652ff16b32fdac5dc30316c255de614796e82a52dfc2cfa14e4dfa371b2563c",
@@ -82,7 +82,7 @@
     "ui/CitySession.h": "74928a6a1522988867ce86b7ca1803bba441c8b62a3dfba61b7f9e5a0a38ebec",
     "ui/CitySession.m": "9aba31369881f5d598a9964c3f97b6eb7d770b9497c33cef8383c678333c05ba"
   },
-  "source_manifest_sha256": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
+  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
   "scope": "Complete active travel/work/development/care/gathering/transport checkpoint; staged failure/publication preservation",
   "fixture": {
     "cycle": 31,

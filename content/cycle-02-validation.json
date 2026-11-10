@@ -3,11 +3,11 @@
   "version": 1,
   "date": "2026-11-08",
   "scope": "architecture admission and declaration syntax only; no runtime, linkage or SDK behavior qualification",
-  "source_manifest_sha256": "01f8ef9b0c0b3081aea16bb91bc6cc03de81b56224d0dce9f13a1188dc8dbb77",
+  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
   "design_sha256": {
     "content/architecture.json": "aa95fb5a1ecdbb4989d108343a409de5e463660f4815455e32b50f3315bed914",
     "content/reuse-ledger.json": "1135d24acce3e55629432acc54733615a2bb74386ddb10d4a30c27cf49875271",
-    "src/cd_api.h": "4a674327a0f323e820c07e85182a5cbc9c4cacf47b207cb97056c47d53fe5266",
+    "src/cd_api.h": "f04877f5cad81bcfd5c37e7893927a50d189cd3cad557d7edcebd95a49320257",
     "docs/ARCHITECTURE.md": "1b147e19ddcbed680e25a2de1bcd0f549b15430e5537fbbb964d9157a427801f",
     "docs/REUSE.md": "4e206bbe6bce3fd10d15467812f8d050de937429a000d0a18c6ff13623f4d4b5",
     "tools/verify_cycle02.py": "f30cdfcdd5637244ae61b0517eab4690ee2393c286ea1f45d32e08dfd0ee2f91"

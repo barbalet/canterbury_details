@@ -1,0 +1,38 @@
+{
+  "format": "canterbury-details-provisional-neighbourhood-policy",
+  "version": 1,
+  "basis": "User-authorized simulation guesses; weights are modelling choices, not historical proportions or employment evidence.",
+  "radius_pixels": 120,
+  "maximum_anchors": 8,
+  "distance_scale_pixels": 30,
+  "fallback_use": "residential",
+  "affinities": {
+    "residential": {"residential": 1, "commercial": 0.25, "community_service": 0.08},
+    "commercial": {"commercial": 1, "residential": 0.35, "workshop": 0.3},
+    "education": {"education_support": 1, "residential": 0.3, "commercial": 0.2},
+    "civic": {"civic_support": 1, "commercial": 0.3},
+    "agricultural": {"agricultural_support": 1, "residential": 0.3, "workshop": 0.2},
+    "healthcare": {"care_support": 1, "residential": 0.3, "commercial": 0.2},
+    "leisure": {"hospitality_support": 1, "commercial": 0.4, "residential": 0.2},
+    "industrial": {"workshop": 1, "storage": 0.6, "commercial": 0.2},
+    "mixed_use": {"mixed_use": 1, "commercial": 0.3, "residential": 0.3},
+    "religious": {"community_service": 1, "residential": 0.4, "commercial": 0.2},
+    "utility": {"utility_support": 1, "workshop": 0.3},
+    "transport": {"storage": 1, "commercial": 0.5, "workshop": 0.3}
+  },
+  "roles": {
+    "residential": [],
+    "commercial": ["shopkeeper", "shop assistant", "delivery worker"],
+    "community_service": ["community administrator", "caretaker", "charitable worker"],
+    "workshop": ["carpenter", "repair worker", "craft apprentice"],
+    "education_support": ["teacher", "school caretaker", "school meals worker"],
+    "civic_support": ["clerk", "administrator", "maintenance worker"],
+    "agricultural_support": ["crop farmer", "farm labourer", "produce carrier"],
+    "care_support": ["care worker", "laundry worker", "kitchen worker"],
+    "hospitality_support": ["cook", "server", "cleaner"],
+    "storage": ["storekeeper", "porter", "delivery worker"],
+    "mixed_use": ["shopkeeper", "shop assistant"],
+    "utility_support": ["maintenance worker", "utility attendant"]
+  },
+  "role_status": "Suggestions only. Most names are not yet enabled occupation catalogue entries. No staffing counts, professional licenses or affiliation are inferred; clergy are not assigned from mere proximity to a religious site. Residential occupants may work elsewhere."
+}

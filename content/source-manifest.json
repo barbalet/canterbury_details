@@ -18,25 +18,15 @@
     },
     {
       "path": "apesdk",
-      "revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
+      "revision": "dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98",
       "origin": "git@github.com:barbalet/apesdk.git",
       "tracked_files": 471,
-      "reviewed_worktree_files": [
-        "bronze/README.md",
-        "bronze/hybrid/test_hybrid.c",
-        "bronze/tasks/bronze_tasks.c",
-        "bronze/ui/BronzeScenarioUI.swift",
-        "entity/entity.h",
-        "entity/episodic.c",
-        "gui/shared.c",
-        "universe/loop.c",
-        "universe/sim.c"
-      ]
+      "reviewed_worktree_files": []
     }
   ],
   "sdk_worktree_review": {
     "path": "content/sdk-working-tree.json",
-    "sha256": "b3f498b6ffa4bea56ad5f63e1c9e3f3309d28eda3f4f56655f613b9e22924561"
+    "sha256": "ae5fda6b9e4b592f6694140921fb4d694712e15c5a481ac0469ff33e0fcd825a"
   },
   "root_license": {
     "path": "LICENSE",

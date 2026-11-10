@@ -3,7 +3,7 @@
   "version": 1,
   "inputs": {
     "content/architecture.json": "aa95fb5a1ecdbb4989d108343a409de5e463660f4815455e32b50f3315bed914",
-    "content/institution-source-matrix.json": "b484c80462fa4477f5cc56918c1e2f3cffe0db9158c0ae3cfdf33eb2ed9a7910",
+    "content/institution-source-matrix.json": "af0821d80e377ec3b9817e0bd8a6cef79e07725e33854f85da1bcbeea985aff7",
     "content/operation-controls.json": "5816913ba6d2e0cfcdc507c84bee1e675389f943c24ee76c0e49e481e6fe7c9f",
     "docs/DEVELOPMENT.md": "2dabb26639c05f57187ed2ac63bc6cb13613340c1d2d29aab65b41dccf57982f",
     "docs/ECONOMY.md": "4d986432e53549b35d85faf4f28bbc1edfd2790d193f50966a8449737cf4233d",
@@ -78,7 +78,7 @@
     "ui/CitySession.h": "74928a6a1522988867ce86b7ca1803bba441c8b62a3dfba61b7f9e5a0a38ebec",
     "ui/CitySession.m": "9aba31369881f5d598a9964c3f97b6eb7d770b9497c33cef8383c678333c05ba"
   },
-  "source_manifest_sha256": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
+  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
   "scope": "single native-minute arbitration, real commute, interruption/resume, batch equivalence, exactly-once wages/materials/output and cancellation",
   "native_fixture": {
     "cycle": 20,
@@ -87,8 +87,8 @@
   },
   "runtime_pack": {
     "bytes": 6297414,
-    "sha256": "e26c461dbf92d7c19fe88b80e4861e0b8e943c2bd6dc233b1da09a8fbb768103",
-    "generation_id": "d45751c411ab25b7ef421b922eb090c962eff24c7b8194c9adb50fa280256bd2",
+    "sha256": "85e02dded0ffd1a1897037b1cfd5c159e8728752cc61c37730956eba2db460b8",
+    "generation_id": "2b299d611dbfd5079352af44f3224e05f6a88abec1324f3a06e8d54538086400",
     "buildings": 3341,
     "nodes": 13728,
     "edges": 16279,

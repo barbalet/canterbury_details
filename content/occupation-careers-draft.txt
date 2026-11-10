@@ -1,0 +1,484 @@
+CANTERBURY DETAILS — INITIAL 300 CAREER ROLES
+60 families, five candidate stages each. DRAFT: not implemented or historically verified.
+Arrows indicate candidate moves, not automatic promotion. Qualifications, vacancies, ownership and appointments remain separate gates.
+
+01. Retail — grocer
+    001. Grocery apprentice
+    002. Grocery assistant
+    003. Senior grocery assistant
+    004. Grocery manager
+    005. Grocery proprietor
+    Path: Grocery apprentice -> Grocery assistant -> Senior grocery assistant -> Grocery manager -> Grocery proprietor
+
+02. Retail — draper
+    006. Drapery apprentice
+    007. Drapery assistant
+    008. Senior drapery assistant
+    009. Drapery manager
+    010. Drapery proprietor
+    Path: Drapery apprentice -> Drapery assistant -> Senior drapery assistant -> Drapery manager -> Drapery proprietor
+
+03. Retail — ironmonger
+    011. Ironmongery apprentice
+    012. Ironmongery assistant
+    013. Senior ironmongery assistant
+    014. Ironmongery manager
+    015. Ironmongery proprietor
+    Path: Ironmongery apprentice -> Ironmongery assistant -> Senior ironmongery assistant -> Ironmongery manager -> Ironmongery proprietor
+
+04. Retail — bookseller
+    016. Bookselling apprentice
+    017. Bookseller
+    018. Senior bookseller
+    019. Bookshop manager
+    020. Bookshop proprietor
+    Path: Bookselling apprentice -> Bookseller -> Senior bookseller -> Bookshop manager -> Bookshop proprietor
+
+05. Retail — coal merchant
+    021. Coal-yard junior
+    022. Coal-yard worker
+    023. Coal-yard chargehand
+    024. Coal-yard manager
+    025. Coal merchant
+    Path: Coal-yard junior -> Coal-yard worker -> Coal-yard chargehand -> Coal-yard manager -> Coal merchant
+
+06. Food production — baker
+    026. Bakery apprentice
+    027. Baker
+    028. Senior baker
+    029. Head baker
+    030. Bakery proprietor
+    Path: Bakery apprentice -> Baker -> Senior baker -> Head baker -> Bakery proprietor
+
+07. Food production — butcher
+    031. Butchery apprentice
+    032. Butcher
+    033. Senior butcher
+    034. Butcher-shop manager
+    035. Butcher-shop proprietor
+    Path: Butchery apprentice -> Butcher -> Senior butcher -> Butcher-shop manager -> Butcher-shop proprietor
+
+08. Food production — fishmonger
+    036. Fishmongery apprentice
+    037. Fishmonger
+    038. Senior fishmonger
+    039. Fish-shop manager
+    040. Fish-shop proprietor
+    Path: Fishmongery apprentice -> Fishmonger -> Senior fishmonger -> Fish-shop manager -> Fish-shop proprietor
+
+09. Food production — brewer
+    041. Brewery apprentice
+    042. Brewery worker
+    043. Skilled brewer
+    044. Head brewer
+    045. Brewery production manager
+    Path: Brewery apprentice -> Brewery worker -> Skilled brewer -> Head brewer -> Brewery production manager
+
+10. Food production — miller
+    046. Mill apprentice
+    047. Mill worker
+    048. Skilled miller
+    049. Head miller
+    050. Mill manager
+    Path: Mill apprentice -> Mill worker -> Skilled miller -> Head miller -> Mill manager
+
+11. Skilled trades — carpenter
+    051. Carpentry apprentice
+    052. Carpenter
+    053. Senior carpenter
+    054. Carpentry foreman
+    055. Carpentry contractor
+    Path: Carpentry apprentice -> Carpenter -> Senior carpenter -> Carpentry foreman -> Carpentry contractor
+
+12. Skilled trades — joiner
+    056. Joinery apprentice
+    057. Joiner
+    058. Senior joiner
+    059. Joinery foreman
+    060. Joinery proprietor
+    Path: Joinery apprentice -> Joiner -> Senior joiner -> Joinery foreman -> Joinery proprietor
+
+13. Skilled trades — plumber
+    061. Plumbing apprentice
+    062. Plumber
+    063. Senior plumber
+    064. Plumbing foreman
+    065. Plumbing contractor
+    Path: Plumbing apprentice -> Plumber -> Senior plumber -> Plumbing foreman -> Plumbing contractor
+
+14. Skilled trades — electrician
+    066. Electrical apprentice
+    067. Electrician
+    068. Senior electrician
+    069. Electrical foreman
+    070. Electrical contractor
+    Path: Electrical apprentice -> Electrician -> Senior electrician -> Electrical foreman -> Electrical contractor
+
+15. Skilled trades — motor mechanic
+    071. Motor-mechanic apprentice
+    072. Motor mechanic
+    073. Senior motor mechanic
+    074. Garage foreman
+    075. Garage proprietor
+    Path: Motor-mechanic apprentice -> Motor mechanic -> Senior motor mechanic -> Garage foreman -> Garage proprietor
+
+16. Manufacturing — weaver
+    076. Weaving apprentice
+    077. Weaver
+    078. Senior weaver
+    079. Weaving-room foreman
+    080. Textile works manager
+    Path: Weaving apprentice -> Weaver -> Senior weaver -> Weaving-room foreman -> Textile works manager
+
+17. Manufacturing — dressmaker
+    081. Dressmaking apprentice
+    082. Dressmaker
+    083. Senior dressmaker
+    084. Dressmaking workroom supervisor
+    085. Dressmaking proprietor
+    Path: Dressmaking apprentice -> Dressmaker -> Senior dressmaker -> Dressmaking workroom supervisor -> Dressmaking proprietor
+
+18. Manufacturing — shoemaker
+    086. Shoemaking apprentice
+    087. Shoemaker
+    088. Senior shoemaker
+    089. Shoe-workshop foreman
+    090. Shoe-workshop proprietor
+    Path: Shoemaking apprentice -> Shoemaker -> Senior shoemaker -> Shoe-workshop foreman -> Shoe-workshop proprietor
+
+19. Manufacturing — printer
+    091. Printing apprentice
+    092. Printer
+    093. Senior printer
+    094. Printing foreman
+    095. Printworks proprietor
+    Path: Printing apprentice -> Printer -> Senior printer -> Printing foreman -> Printworks proprietor
+
+20. Manufacturing — metalworker
+    096. Metalworking apprentice
+    097. Metalworker
+    098. Senior metalworker
+    099. Metalworking foreman
+    100. Metalworking proprietor
+    Path: Metalworking apprentice -> Metalworker -> Senior metalworker -> Metalworking foreman -> Metalworking proprietor
+
+21. Manufacturing — potter
+    101. Pottery apprentice
+    102. Potter
+    103. Senior potter
+    104. Pottery foreman
+    105. Pottery proprietor
+    Path: Pottery apprentice -> Potter -> Senior potter -> Pottery foreman -> Pottery proprietor
+
+22. Construction — bricklayer
+    106. Bricklaying apprentice
+    107. Bricklayer
+    108. Senior bricklayer
+    109. Bricklaying foreman
+    110. Brickwork contractor
+    Path: Bricklaying apprentice -> Bricklayer -> Senior bricklayer -> Bricklaying foreman -> Brickwork contractor
+
+23. Construction — stonemason
+    111. Stonemasonry apprentice
+    112. Stonemason
+    113. Senior stonemason
+    114. Masonry foreman
+    115. Masonry contractor
+    Path: Stonemasonry apprentice -> Stonemason -> Senior stonemason -> Masonry foreman -> Masonry contractor
+
+24. Construction — roofer
+    116. Roofing apprentice
+    117. Roofer
+    118. Senior roofer
+    119. Roofing foreman
+    120. Roofing contractor
+    Path: Roofing apprentice -> Roofer -> Senior roofer -> Roofing foreman -> Roofing contractor
+
+25. Construction — plasterer
+    121. Plastering apprentice
+    122. Plasterer
+    123. Senior plasterer
+    124. Plastering foreman
+    125. Plastering contractor
+    Path: Plastering apprentice -> Plasterer -> Senior plasterer -> Plastering foreman -> Plastering contractor
+
+26. Construction — painter decorator
+    126. Painting apprentice
+    127. Painter and decorator
+    128. Senior painter and decorator
+    129. Decorating foreman
+    130. Decorating contractor
+    Path: Painting apprentice -> Painter and decorator -> Senior painter and decorator -> Decorating foreman -> Decorating contractor
+
+27. Transport and distribution — railway operations
+    131. Railway operating trainee
+    132. Railway operating assistant
+    133. Signalman
+    134. Station supervisor
+    135. Stationmaster
+    Path: Railway operating trainee -> Railway operating assistant -> Signalman -> Station supervisor -> Stationmaster
+
+28. Transport and distribution — goods carrier
+    136. Goods-yard junior
+    137. Goods porter
+    138. Senior goods porter
+    139. Goods-yard foreman
+    140. Goods depot manager
+    Path: Goods-yard junior -> Goods porter -> Senior goods porter -> Goods-yard foreman -> Goods depot manager
+
+29. Transport and distribution — road haulage
+    141. Haulage assistant
+    142. Qualified lorry driver
+    143. Senior lorry driver
+    144. Haulage dispatcher
+    145. Haulage manager
+    Path: Haulage assistant -> Qualified lorry driver -> Senior lorry driver -> Haulage dispatcher -> Haulage manager
+
+30. Transport and distribution — bus operations
+    146. Bus-service trainee
+    147. Bus conductor
+    148. Qualified bus driver
+    149. Bus inspector
+    150. Bus depot manager
+    Path: Bus-service trainee -> Bus conductor -> Qualified bus driver -> Bus inspector -> Bus depot manager
+
+31. Transport and distribution — postal service
+    151. Postal sorting junior
+    152. Postal sorter
+    153. Postman
+    154. Postal sorting supervisor
+    155. Post office manager
+    Path: Postal sorting junior -> Postal sorter -> Postman -> Postal sorting supervisor -> Post office manager
+
+32. Agriculture — crop farming
+    156. Farm learner
+    157. Arable farm worker
+    158. Skilled arable worker
+    159. Farm foreman
+    160. Arable farm manager
+    Path: Farm learner -> Arable farm worker -> Skilled arable worker -> Farm foreman -> Arable farm manager
+
+33. Agriculture — livestock farming
+    161. Livestock learner
+    162. Livestock worker
+    163. Senior stockkeeper
+    164. Livestock foreman
+    165. Livestock farm manager
+    Path: Livestock learner -> Livestock worker -> Senior stockkeeper -> Livestock foreman -> Livestock farm manager
+
+34. Agriculture — dairy
+    166. Dairy learner
+    167. Dairy worker
+    168. Skilled dairy worker
+    169. Dairy supervisor
+    170. Dairy manager
+    Path: Dairy learner -> Dairy worker -> Skilled dairy worker -> Dairy supervisor -> Dairy manager
+
+35. Agriculture — horticulture
+    171. Gardening apprentice
+    172. Gardener
+    173. Senior gardener
+    174. Head gardener
+    175. Nursery manager
+    Path: Gardening apprentice -> Gardener -> Senior gardener -> Head gardener -> Nursery manager
+
+36. Agriculture — woodland
+    176. Woodland learner
+    177. Woodland worker
+    178. Skilled woodsman
+    179. Woodland foreman
+    180. Woodland manager
+    Path: Woodland learner -> Woodland worker -> Skilled woodsman -> Woodland foreman -> Woodland manager
+
+37. Health and care — medicine
+    181. Medical student
+    182. Junior doctor
+    183. Medical practitioner
+    184. Senior medical practitioner
+    185. Medical service lead
+    Path: Medical student -> Junior doctor -> Medical practitioner -> Senior medical practitioner -> Medical service lead
+
+38. Health and care — nursing
+    186. Nursing student
+    187. Qualified nurse
+    188. Senior nurse
+    189. Ward sister
+    190. Nursing superintendent
+    Path: Nursing student -> Qualified nurse -> Senior nurse -> Ward sister -> Nursing superintendent
+
+39. Health and care — midwifery
+    191. Midwifery student
+    192. Qualified midwife
+    193. Experienced midwife
+    194. Senior midwife
+    195. Midwifery service supervisor
+    Path: Midwifery student -> Qualified midwife -> Experienced midwife -> Senior midwife -> Midwifery service supervisor
+
+40. Health and care — pharmacy
+    196. Pharmacy apprentice
+    197. Qualified pharmacist
+    198. Senior pharmacist
+    199. Pharmacy manager
+    200. Pharmacy proprietor
+    Path: Pharmacy apprentice -> Qualified pharmacist -> Senior pharmacist -> Pharmacy manager -> Pharmacy proprietor
+
+41. Health and care — social care
+    201. Care assistant trainee
+    202. Care assistant
+    203. Experienced care assistant
+    204. Care supervisor
+    205. Care-home manager
+    Path: Care assistant trainee -> Care assistant -> Experienced care assistant -> Care supervisor -> Care-home manager
+
+42. Education and knowledge — school teaching
+    206. Teacher-training student
+    207. Qualified teacher
+    208. Experienced teacher
+    209. Deputy headteacher
+    210. Headteacher
+    Path: Teacher-training student -> Qualified teacher -> Experienced teacher -> Deputy headteacher -> Headteacher
+
+43. Education and knowledge — library service
+    211. Library junior
+    212. Library assistant
+    213. Qualified librarian
+    214. Senior librarian
+    215. Chief librarian
+    Path: Library junior -> Library assistant -> Qualified librarian -> Senior librarian -> Chief librarian
+
+44. Education and knowledge — technical instruction
+    216. Workshop teaching assistant
+    217. Technical instructor
+    218. Senior technical instructor
+    219. Department head
+    220. Technical school principal
+    Path: Workshop teaching assistant -> Technical instructor -> Senior technical instructor -> Department head -> Technical school principal
+
+45. Education and knowledge — nursery education
+    221. Nursery assistant trainee
+    222. Nursery assistant
+    223. Qualified nursery teacher
+    224. Senior nursery teacher
+    225. Nursery headteacher
+    Path: Nursery assistant trainee -> Nursery assistant -> Qualified nursery teacher -> Senior nursery teacher -> Nursery headteacher
+
+46. Civic administration and safety — office administration
+    226. Junior clerk
+    227. Clerk
+    228. Senior clerk
+    229. Office supervisor
+    230. Office manager
+    Path: Junior clerk -> Clerk -> Senior clerk -> Office supervisor -> Office manager
+
+47. Civic administration and safety — municipal administration
+    231. Junior municipal clerk
+    232. Municipal clerk
+    233. Senior municipal clerk
+    234. Municipal section head
+    235. Municipal departmental manager
+    Path: Junior municipal clerk -> Municipal clerk -> Senior municipal clerk -> Municipal section head -> Municipal departmental manager
+
+48. Civic administration and safety — fire service
+    236. Fire-service recruit
+    237. Fireman
+    238. Leading fireman
+    239. Sub-officer
+    240. Station officer
+    Path: Fire-service recruit -> Fireman -> Leading fireman -> Sub-officer -> Station officer
+
+49. Civic administration and safety — police service
+    241. Police recruit
+    242. Police constable
+    243. Police sergeant
+    244. Police inspector
+    245. Police superintendent
+    Path: Police recruit -> Police constable -> Police sergeant -> Police inspector -> Police superintendent
+
+50. Civic administration and safety — waterworks
+    246. Waterworks trainee
+    247. Waterworks operator
+    248. Senior waterworks operator
+    249. Waterworks foreman
+    250. Waterworks manager
+    Path: Waterworks trainee -> Waterworks operator -> Senior waterworks operator -> Waterworks foreman -> Waterworks manager
+
+51. Hospitality and domestic services — hotel service
+    251. Hotel service junior
+    252. Hotel attendant
+    253. Senior hotel attendant
+    254. Hotel duty manager
+    255. Hotel manager
+    Path: Hotel service junior -> Hotel attendant -> Senior hotel attendant -> Hotel duty manager -> Hotel manager
+
+52. Hospitality and domestic services — licensed hospitality
+    256. Public-house service junior
+    257. Bar attendant
+    258. Senior bar attendant
+    259. Public-house manager
+    260. Public-house licensee
+    Path: Public-house service junior -> Bar attendant -> Senior bar attendant -> Public-house manager -> Public-house licensee
+
+53. Hospitality and domestic services — kitchen
+    261. Kitchen learner
+    262. Cook
+    263. Senior cook
+    264. Head cook
+    265. Catering manager
+    Path: Kitchen learner -> Cook -> Senior cook -> Head cook -> Catering manager
+
+54. Hospitality and domestic services — laundry
+    266. Laundry junior
+    267. Laundry worker
+    268. Skilled laundry worker
+    269. Laundry supervisor
+    270. Laundry manager
+    Path: Laundry junior -> Laundry worker -> Skilled laundry worker -> Laundry supervisor -> Laundry manager
+
+55. Hospitality and domestic services — domestic service
+    271. Junior domestic servant
+    272. Domestic servant
+    273. Experienced domestic servant
+    274. Housekeeper
+    275. Household service manager
+    Path: Junior domestic servant -> Domestic servant -> Experienced domestic servant -> Housekeeper -> Household service manager
+
+56. Religion and community — anglican ministry
+    276. Anglican theological student
+    277. Ordained Anglican deacon
+    278. Ordained Anglican priest
+    279. Incumbent parish minister
+    280. Rural dean
+    Path: Anglican theological student -> Ordained Anglican deacon -> Ordained Anglican priest -> Incumbent parish minister -> Rural dean
+
+57. Religion and community — roman catholic ministry
+    281. Catholic seminarian
+    282. Ordained Catholic deacon
+    283. Ordained Catholic priest
+    284. Catholic parish priest
+    285. Catholic dean
+    Path: Catholic seminarian -> Ordained Catholic deacon -> Ordained Catholic priest -> Catholic parish priest -> Catholic dean
+
+58. Religion and community — jewish ministry
+    286. Rabbinical student
+    287. Qualified rabbinical educator
+    288. Appointed rabbi
+    289. Senior rabbi
+    290. Rabbinical education head
+    Path: Rabbinical student -> Qualified rabbinical educator -> Appointed rabbi -> Senior rabbi -> Rabbinical education head
+
+59. Religion and community — religious lay service
+    291. Religious-site maintenance trainee
+    292. Religious-site caretaker
+    293. Senior religious-site caretaker
+    294. Religious-site facilities supervisor
+    295. Religious-site facilities manager
+    Path: Religious-site maintenance trainee -> Religious-site caretaker -> Senior religious-site caretaker -> Religious-site facilities supervisor -> Religious-site facilities manager
+
+60. Religion and community — charitable service
+    296. Charity office junior
+    297. Charitable services worker
+    298. Senior charitable services worker
+    299. Charitable services coordinator
+    300. Charitable institution manager
+    Path: Charity office junior -> Charitable services worker -> Senior charitable services worker -> Charitable services coordinator -> Charitable institution manager
+

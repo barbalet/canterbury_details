@@ -38,6 +38,6 @@ test_source_geometry_is_preserved_and_links_are_only_candidates (test_religion_1
 test_synagogue_override_and_no_modern_faith_import (test_religion_1940.Religion1940Tests.test_synagogue_override_and_no_modern_faith_import) ... ok
 
 ----------------------------------------------------------------------
-Ran 38 tests in 4.213s
+Ran 38 tests in 3.777s
 
 OK

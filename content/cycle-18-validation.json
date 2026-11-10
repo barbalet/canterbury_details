@@ -87,7 +87,7 @@
     "ui/CitySession.h": "74928a6a1522988867ce86b7ca1803bba441c8b62a3dfba61b7f9e5a0a38ebec",
     "ui/CitySession.m": "9aba31369881f5d598a9964c3f97b6eb7d770b9497c33cef8383c678333c05ba"
   },
-  "source_manifest_sha256": "5bafe16378f3cfcd5452ce1c87ce6e9faaa8b6f3ce5230aa5740426641d8ae46",
+  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
   "scope": "all 63 upstream vocations audited; 8 explicit ordinary roles, 58 disabled specializations and no inferred affiliation",
   "native_fixture": {
     "cycle": 18,

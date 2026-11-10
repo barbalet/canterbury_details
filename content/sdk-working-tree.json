@@ -1,17 +1,7 @@
 {
   "format": "canterbury-details-reviewed-sdk-worktree",
   "version": 1,
-  "base_revision": "3892ece3e7b8bb45cc95e4c9e02a3c600fc1f00e",
-  "reason": "Reviewed guarded native activity memories: actual Bronze/Canterbury eating, paired conversations, bounded pure inspector summaries, and native event regression fixtures; no ordinary-profile behavior or native layout change.",
-  "files": {
-    "bronze/README.md": "72432e8b26953e437a86a0df3cf84a255f0e6a145c3e46626f5b0dec1cd4a580",
-    "bronze/hybrid/test_hybrid.c": "b3d49e88f4a42bb695833b5a62fb0ec0cc7af85c581166b6f1a3d9ec2168993b",
-    "bronze/tasks/bronze_tasks.c": "88c1ca50d5e246dcc3dc7e369d837b05087b9e586197aead10d44233e79da890",
-    "bronze/ui/BronzeScenarioUI.swift": "03590ccdc46be3942cf7cea00311496897204b403e95171012f8cd1e89dc55af",
-    "entity/entity.h": "8f2b46cda269d3ba51680f0be7d80ef0a14a26534a304000553472117b5ba0e4",
-    "entity/episodic.c": "1fd00eb1090fbfe4712e8712d1a11e4012db0fa6d8989f04c815f4841d4bbd38",
-    "gui/shared.c": "12388447f9019abd0d61f726c03c0be019532c5efac22552af37b8a481591df0",
-    "universe/loop.c": "83add395a0121c0cdf3333836d0a18e89ebdada819418ace2ce0d4bfe8a5245c",
-    "universe/sim.c": "c73ad91a86f9e78f6915baadd6a5e608e497879820577518d5dcfef2b4039bef"
-  }
+  "base_revision": "dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98",
+  "reason": "Native activity integration is committed in the pinned ApeSDK revision; no working-tree exceptions are required.",
+  "files": {}
 }

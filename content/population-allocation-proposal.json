@@ -1,0 +1,28 @@
+{
+  "format": "canterbury-details-population-allocation-proposal",
+  "version": 1,
+  "status": "proposed simulation allocation, not applied to live residents",
+  "basis": "User-requested 27000-person city; explicit modelling choices, not historical census or employment statistics",
+  "population": 27000,
+  "age_cohorts": [
+    {"ages": "0-4", "people": 2160, "activity": "dependent care"},
+    {"ages": "5-14", "people": 4050, "activity": "school"},
+    {"ages": "15-17", "people": 1620, "activity": "education; optional configured apprenticeships from age 16"},
+    {"ages": "18-64", "people": 16470, "activity": "12000 proposed employed; 4470 household care, study, unavailable or seeking work"},
+    {"ages": "65+", "people": 2700, "activity": "retirement and community life; no automatic incapacity assumption"}
+  ],
+  "working_age_employment": [
+    {"sector": "retail, food shops and distribution", "people": 2800, "premises": ["commercial", "mixed_use", "storage"]},
+    {"sector": "manufacturing and crafts", "people": 1800, "premises": ["industrial", "workshop"]},
+    {"sector": "construction, repair and utilities", "people": 1400, "premises": ["workshop", "utility", "utility_support"]},
+    {"sector": "agriculture and food production", "people": 1500, "premises": ["agricultural", "agricultural_support"]},
+    {"sector": "education", "people": 900, "premises": ["education", "education_support"]},
+    {"sector": "health and social care", "people": 1000, "premises": ["healthcare", "care_support"]},
+    {"sector": "hospitality and domestic services", "people": 1500, "premises": ["commercial", "leisure", "hospitality_support", "residential"]},
+    {"sector": "administration and civic services", "people": 700, "premises": ["civic", "civic_support", "commercial"]},
+    {"sector": "religious and community services", "people": 400, "premises": ["religious", "community_service"]}
+  ],
+  "housing_policy": "Keep related household members together. Permit multiple households per residential building, with explicit estimated floor area/storeys and reviewed capacity. Do not split households or silently exceed capacity to hit 27000. Mixed-use premises require separate home and workplace capacities.",
+  "job_policy": "Allocate qualified adults to capacity-limited employers by reachable route and shift. Place shops/care/education near homes, repairs/delivery near employers and agricultural work near agricultural premises. Do not infer clergy authority or personal affiliation. Roles and skills must be implemented before assignments become active.",
+  "unresolved": ["initial household ages and guardianship generation", "residential capacities and home allocation", "expanded occupation catalogue and workplace staffing capacities", "school, retirement and household-care routines", "qualified street links and safe building entrances", "actual resident placement and daily home-to-work return journeys"]
+}
