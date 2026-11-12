@@ -119,6 +119,11 @@ formats require migration.
 
 ## Actual Canterbury access trial
 
+The access check exports `build/access-trial-placement.json` with proposed
+household addresses, worker destinations and school seats. The validation
+report records native route availability and dry street travel estimates.
+
+
 Run `make access-check` to build the technical access pack and verify
 27,000-resident home entry, a paid work commute and a pupil's school trip
 on the actual map. The output report is `build/access-trial-validation.json`.

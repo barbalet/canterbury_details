@@ -124,12 +124,20 @@ nine sector totals when commercial premises can host light bench work and
 construction offices. These are simulation permissions. With households in
 their current assigned homes, component-level matching lowers the upper
 bound to 11,634 jobs and 2,618 of 4,050 pupils across two school sessions.
-The extra modeled floor closes the previous 444-job deficit in the
-relaxed component-constrained sector match. That match now reaches all
-12,000 targets when every housing place is available to a worker. It
-does not allocate whole households or share housing capacity with pupils.
-Citywide completion requires a joint allocation, funded shifts,
-recurring pupil schedules, and native arrival and return checks at scale.
+The joint planning check now assigns addresses to 6,750 intact households,
+12,000 worker destinations across all nine sectors, and 4,050 school places
+across two sessions. It prefers nearby premises within each connected
+component and exports the proposed assignments to
+`build/access-trial-placement.json`. The plan is a technical allocation
+fixture. It has yet to be activated as funded jobs and school schedules.
+
+Native pathfinding finds routes both ways for 11,881 workers and all 4,050
+pupils. At the current dry walking pace, street travel alone plus an
+eight-hour shift and eight hours of rest exceeds one day for 11,518 of
+the routable workers. With a three-hour session and eight hours of rest,
+3,920 pupils exceed a day. The estimates exclude entrance movement,
+crowding and weather. Cycle 08 remains open for travel-aware placement,
+feasible scheduling, and the full native arrival and return run.
 
 ## Cycle 09 — Career catalogue and competence
 

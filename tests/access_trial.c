@@ -149,10 +149,67 @@ static void school_journey(CdContent *content) {
   cd_world_close(world);
 }
 
+static void household_profiles(CdContent *content) {
+  CdWorld *world = NULL;
+  CdScenarioStartup startup = {
+      {27000, 1940, {1940, 1, 1, 480}, "synthetic-ordinary-v1"},
+      {2160, 4050, 1620, 16470, 2700}, {0}};
+  OK(cd_world_open_startup(content, &startup, &world, &diagnostic));
+  for (uint32_t d = 0; d < content->nd; ++d) {
+    const CdDoor *door = &content->doors[d];
+    if (door->reviewed) {
+      CdPoint point = content->nodes[door->node].p;
+      printf("door %" PRIu64 " %.9g %.9g\n",
+             (uint64_t)content->polygons[door->building].id, point.x, point.y);
+    }
+  }
+  for (size_t h = 0; h < world->home_count; ++h) {
+    assert(world->homes[h].members == 4);
+    printf("%zu", h + 1);
+    for (size_t i = h * 4; i < h * 4 + 4; ++i) {
+      const CdCitizen *p = &world->people[i];
+      assert(p->civil.household == h + 1);
+      printf(" %" PRIu64 " %u", (uint64_t)p->civil.ref.person_id, p->civil.age);
+    }
+    puts("");
+  }
+  cd_world_close(world);
+}
+
+static void check_routes(CdContent *content) {
+  CdWorld *world = NULL;
+  CdScenario scenario = {1, 1940, {1940, 1, 1, 480}, "synthetic-ordinary-v1"};
+  OK(cd_world_open(content, &scenario, &world, &diagnostic));
+  uint64_t from, to;
+  int read;
+  while ((read = scanf("%" SCNu64 " %" SCNu64, &from, &to)) == 2) {
+    uint32_t start = cd_reviewed_door(world, from), goal = cd_reviewed_door(world, to);
+    assert(start != CD_NONE && goal != CD_NONE);
+    CdRoute route;
+    CdStatus status = cd_route_indices(world, content->doors[start].node,
+                                      content->doors[goal].node, &route);
+    printf("%d %u %.9g\n", status == CD_OK, (unsigned)route.reason, route.cost * cd_city_scale(world));
+  }
+  assert(read == EOF);
+  cd_world_close(world);
+}
+
 int main(int argc, char **argv) {
   CdContent *content = NULL;
   CdWorld *world = NULL;
   OK(cd_content_open("build/content/CanterburyAccessTrial.bin", &content, &diagnostic));
+  if (argc == 2 && !strcmp(argv[1], "--routes")) {
+    check_routes(content);
+    cd_content_close(content);
+    assert(!cd_memory_stats().total);
+    return 0;
+  }
+  if (argc == 2 && !strcmp(argv[1], "--households")) {
+    household_profiles(content);
+    cd_content_close(content);
+    assert(!cd_memory_stats().total);
+    return 0;
+  }
   if (argc == 2 && !strcmp(argv[1], "--population")) {
     population_placement(content);
     cd_content_close(content);

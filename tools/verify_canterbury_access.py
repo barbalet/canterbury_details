@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Run actual-map household, workplace, and school access checks."""
-from collections import Counter
+from collections import Counter, defaultdict, deque
 import hashlib
 import json
+import math
 from pathlib import Path
 import subprocess
 
@@ -31,6 +32,115 @@ def joint_placement_bound(premises, sectors, shared_uses, sessions):
     }
 
 
+def allocate_households(binary, premises, sessions, sectors, shared):
+    """Place intact startup households against local school and employment capacity."""
+    homes, school = defaultdict(deque), defaultdict(Counter)
+    employment = Counter()
+    jobs_at = defaultdict(Counter)
+    for site in sorted(premises, key=lambda site: site['building']):
+        group = site['component']
+        if site['use'] == 'residential':
+            homes[group].extend([site['building']] * (site['capacity'] // 4))
+        for session in range(sessions):
+            if site['school_capacity']:
+                school[group][site['building'], session] = site['school_capacity']
+        employment[group] += site['work_capacity']
+        if site['work_capacity']:
+            jobs_at[group, site['use']][site['building']] = site['work_capacity']
+
+    adults, placements, enrollment = defaultdict(deque), [], []
+    households, points = [], {}
+    output = subprocess.check_output([binary, '--households'], cwd=ROOT, text=True)
+    for line in output.splitlines():
+        fields = line.split()
+        if fields[0] == 'door':
+            points[int(fields[1])] = tuple(map(float, fields[2:]))
+            continue
+        household, *members = map(int, fields)
+        workers = [person for person, age in zip(members[::2], members[1::2]) if 18 <= age < 65]
+        pupils = [person for person, age in zip(members[::2], members[1::2]) if 5 <= age < 15]
+        households.append((household, workers, pupils))
+
+    def nearest(remaining, dwelling, building_id):
+        site = min(remaining, key=lambda key: (math.dist(points[dwelling], points[building_id(key)]), key))
+        remaining[site] -= 1
+        if not remaining[site]:
+            del remaining[site]
+        return site
+
+    seats = Counter({group: sum(counts.values()) for group, counts in school.items()})
+    for household, workers, pupils in sorted(households,
+                                             key=lambda h: (-len(h[2]), -len(h[1]), h[0])):
+        choices = [group for group, slots in homes.items()
+                   if slots and seats[group] >= len(pupils)]
+        if not choices:
+            raise ValueError(f'No local home and school capacity for household {household}')
+        if pupils:
+            group = max(choices, key=lambda g: (seats[g], employment[g] - len(adults[g]), -g))
+        elif workers:
+            group = max(choices, key=lambda g: (min(len(workers), employment[g] - len(adults[g])),
+                                                employment[g] - len(adults[g]), len(homes[g]), -g))
+        else:
+            group = max(choices, key=lambda g: (len(homes[g]), -g))
+        dwelling = homes[group].popleft()
+        placements.append({'household': household, 'home': dwelling})
+        adults[group].extend((person, dwelling) for person in workers)
+        for pupil in pupils:
+            building, session = nearest(school[group], dwelling, lambda site: site[0])
+            seats[group] -= 1
+            enrollment.append({'person': pupil, 'home': dwelling,
+                               'school': building, 'session': session})
+
+    allocations = []
+    jobs = workforce_bound(premises, sectors, shared,
+                           {group: len(people) for group, people in adults.items()}, allocations)
+    workers = []
+    for group, use, sector, count in allocations:
+        for _ in range(count):
+            person, dwelling = adults[group].popleft()
+            workers.append({'person': person, 'home': dwelling,
+                            'workplace': nearest(jobs_at[group, use], dwelling, int), 'sector': sector})
+    return {'homes': placements, 'school_enrollment': enrollment,
+            'workers': workers, 'jobs_by_sector': jobs}
+
+
+
+def check_routes(binary, placement, walk_units):
+    journeys = [(row['home'], row['workplace']) for row in placement['workers']]
+    journeys.extend((row['home'], row['school']) for row in placement['school_enrollment'])
+    pairs = sorted(set(journeys) | {(end, start) for start, end in journeys})
+    routes = subprocess.run(
+        [binary, '--routes'], cwd=ROOT, text=True, capture_output=True, check=True,
+        input=''.join(f'{start} {end}\n' for start, end in pairs),
+    ).stdout.splitlines()
+    if len(routes) != len(pairs):
+        raise ValueError('Native router did not return every requested route')
+    travel = {}
+    for pair, route in zip(pairs, routes):
+        found, _, distance = route.split()
+        if int(found):
+            travel[pair] = math.ceil(float(distance) / walk_units)
+
+    def assess(rows, destination, duty_minutes):
+        round_trips = [(row['home'], row[destination]) for row in rows]
+        complete = [travel[pair] + travel[pair[::-1]] for pair in round_trips
+                    if pair in travel and pair[::-1] in travel]
+        return {
+            'assigned': len(rows),
+            'with_routes_both_ways': len(complete),
+            'longest_dry_street_round_trip_minutes': max(complete, default=0),
+            'duty_minutes': duty_minutes,
+            'over_day_with_duty_and_8_hours_rest': sum(
+                duration + duty_minutes + 480 > 1440 for duration in complete),
+        }
+
+    return {
+        'unique_routes_checked': len(pairs),
+        'workers': assess(placement['workers'], 'workplace', 480),
+        'pupils': assess(placement['school_enrollment'], 'school', 180),
+    }
+
+
 def main():
     qualification = json.loads(REPORT.read_text())
     fingerprint = hashlib.sha256(PACK.read_bytes()).hexdigest()
@@ -54,6 +164,17 @@ def main():
     bound = joint_placement_bound(premises, sectors, shared, sessions)
     evidence = {'pack_sha256': fingerprint, 'workforce_capacity_bound': capacity,
                 'joint_placement_upper_bounds': bound}
+    placement = allocate_households(binary, premises, sessions, sectors, shared)
+    placement['pack_sha256'] = fingerprint
+    atomic_write(ROOT / 'build/access-trial-placement.json', canonical(placement))
+    evidence['joint_household_plan'] = {
+        'households': len(placement['homes']),
+        'pupils': len(placement['school_enrollment']),
+        'jobs_capacity_matched': len(placement['workers']),
+    }
+    print(json.dumps(evidence['joint_household_plan'], sort_keys=True), flush=True)
+    evidence['joint_household_routes'] = check_routes(binary, placement, qualification['dry_native_walk_units'])
+    print(json.dumps(evidence['joint_household_routes'], sort_keys=True), flush=True)
     for name, flags in [('population', ['--population']), ('district', []), ('school', ['--school'])]:
         output = subprocess.check_output([binary, *flags], cwd=ROOT, text=True)
         evidence[name] = json.loads(output.splitlines()[-1])

@@ -43,7 +43,7 @@ def workforce_records(raw):
             if kind == 'workforce'}
 
 
-def workforce_bound(premises, sectors, shared_uses=None, adults=None):
+def workforce_bound(premises, sectors, shared_uses=None, adults=None, allocations=None):
     """Maximum jobs under use constraints, optionally bounded by local adults."""
     by_use = defaultdict(int)
     by_component_use = defaultdict(int)
@@ -65,15 +65,19 @@ def workforce_bound(premises, sectors, shared_uses=None, adults=None):
         for component, count in sorted(adults.items()):
             connect(source, ('component', component), count)
         for (component, use), capacity in sorted(by_component_use.items()):
-            connect(('component', component), ('use', use), capacity)
+            connect(('component', component), ('component_use', component, use), capacity)
     for name, record in sectors.items():
         target = record['target_people']
         connect(('sector', name), sink, target)
         uses = set(record['premises_types'])
         uses.update((shared_uses or {}).get(name, ()))
         for use in sorted(uses):
-            if by_use[use]:
+            if adults is None and by_use[use]:
                 connect(('use', use), ('sector', name), target)
+            elif adults is not None:
+                for component, candidate in sorted(by_component_use):
+                    if candidate == use and adults.get(component, 0):
+                        connect(('component_use', component, use), ('sector', name), target)
     while True:
         parents = {source: None}
         queue = deque([source])
@@ -95,6 +99,12 @@ def workforce_bound(premises, sectors, shared_uses=None, adults=None):
         for a, b in path:
             residual[a][b] -= amount
             residual[b][a] += amount
+    if allocations is not None:
+        for name in sectors:
+            for node, count in residual['sector', name].items():
+                if node[0] == 'component_use' and count:
+                    _, component, use = node
+                    allocations.append((component, use, name, count))
     return {
         name: {
             'sector': record['sector'],
