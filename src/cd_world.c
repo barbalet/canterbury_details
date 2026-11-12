@@ -148,7 +148,10 @@ CdStatus cd_world_open_startup(const CdContent *content, const CdScenarioStartup
   size_t child_slots = 2 * (count / 4) + (count % 4 == 3);
   if (total != count || minors > child_slots)
     return cd_diag(d, CD_INVALID_DATA, "Scenario cohorts cannot form guarded households");
-  return open_world(content, &startup->scenario, startup->cohorts, out, d);
+  CdStatus status = open_world(content, &startup->scenario, startup->cohorts, out, d);
+  if (status == CD_OK)
+    memcpy((*out)->scenario_identity, startup->identity, sizeof startup->identity);
+  return status;
 }
 
 static CdStatus open_world(const CdContent *content, const CdScenario *s,

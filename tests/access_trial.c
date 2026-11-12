@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <inttypes.h>
 #include <stdlib.h>
+#include <zlib.h>
 
 static CdDiagnostic diagnostic;
 #define OK(call) do {                                                        \
@@ -475,6 +476,8 @@ static void scheduled_day(CdContent *content) {
   OK(cd_world_clock(world, &inspected_clock, &diagnostic));
   OK(cd_world_digest(world, &after, &diagnostic));
   assert(before == after && start_clock.native_minutes == inspected_clock.native_minutes);
+  uint64_t checkpoint_minute = 0;
+  uint64_t checkpoint_digest = 0;
   for (unsigned step = 0; step < 1440; ++step) {
     CdClockView clock;
     OK(cd_world_clock(world, &clock, &diagnostic));
@@ -497,6 +500,29 @@ static void scheduled_day(CdContent *content) {
         j->attendance += present;
       if (minute >= j->end && at_home)
         j->returned = j->departed;
+    }
+    if (!checkpoint_minute && minute >= 420) {
+      int reserved_work = 0, travelling = 0, pending_service = 0;
+      for (size_t i = 0; i < production_count; ++i) {
+        CdWorkView work;
+        OK(cd_world_work(world, production[i].job->view.worker, &work, &diagnostic));
+        reserved_work |= cd_pending(work.state) && work.reserved_money;
+      }
+      for (size_t i = 0; i < initial_count && !travelling; ++i)
+        travelling = journeys[i].end && world->people[i].travel == CD_ROUTE_TRAVELLING;
+      for (size_t i = 0; i < service_count; ++i) {
+        CdServiceView service;
+        OK(cd_world_service(world, services[i], &service, &diagnostic));
+        pending_service |= cd_pending(service.state);
+      }
+      if (reserved_work && travelling && pending_service) {
+        assert(step > 0);
+        checkpoint_minute = clock.native_minutes;
+        OK(cd_world_digest(world, &checkpoint_digest, &diagnostic));
+        OK(cd_world_save(world, "build/funded-day.city", &diagnostic));
+        OK(cd_world_digest(world, &after, &diagnostic));
+        assert(after == checkpoint_digest);
+      }
     }
     OK(cd_world_step(world, 1, &diagnostic));
   }
@@ -569,16 +595,22 @@ static void scheduled_day(CdContent *content) {
   assert(cd_dsl_stock_valid(world));
   int complete_day = passed[0] == assigned[0] && passed[1] == assigned[1] &&
                      fully_paid == assigned[0];
+  uint64_t uninterrupted_digest;
+  assert(checkpoint_minute);
+  OK(cd_world_digest(world, &uninterrupted_digest, &diagnostic));
   if (complete_day) {
     funded_advancement(world);
     funded_resource_matrix(world);
   }
   size_t career_storage = cd_smoke_capacity() * sizeof world->people[0].certificates;
-  printf("{\"minutes\":1440,\"scheduled_services\":%zu,\"wages\":%" PRIu64
+  printf("{\"minutes\":1440,\"end_native_minute\":%" PRIu64 ",\"checkpoint_minute\":%" PRIu64
+         ",\"checkpoint_digest\":\"%016" PRIx64
+         "\",\"uninterrupted_digest\":\"%016" PRIx64 "\",\"scheduled_services\":%zu,\"wages\":%" PRIu64
          ",\"money_created\":%" PRIu64 ",\"money_stock\":%" PRIu64
          ",\"ledgers_balanced\":true,\"inspection_pure\":true,\"city_production_orders\":%zu,\"resource_kinds_verified\":%zu,\"funded_advancement\":%s,\"roles_inspected\":%zu,\"competence_storage_bytes\":%zu,"
          "\"owned_peak_bytes\":%zu,\"fully_paid_workers\":%u,\"workers\":{\"on_time\":%u,\"completed\":%u,\"home\":%u,\"passed\":%u},"
          "\"pupils\":{\"on_time\":%u,\"completed\":%u,\"home\":%u,\"passed\":%u},\"ok\":%s}\n",
+         end_clock.native_minutes, checkpoint_minute, checkpoint_digest, uninterrupted_digest,
          service_count, ledger.wages, ledger.money_created, ledger.money_stock,
          production_count, complete_day ? cd_dsl_resource_count() : 0,
          complete_day ? "true" : "false", cd_dsl_role_count(), career_storage, cd_memory_stats().peak_total,
@@ -589,8 +621,54 @@ static void scheduled_day(CdContent *content) {
   cd_world_close(world);
 }
 
-static void supervised_milling(CdWorld *world, CdPersonRef mentor, CdEntityId original,
+static void reject_funded_checkpoints(CdWorld **active, const CdContent *content,
+                                     const char *checkpoint, uint64_t digest) {
+  unsigned char prefix[512];
+  gzFile reader = gzopen(checkpoint, "rb");
+  assert(reader && gzread(reader, prefix, sizeof prefix) == sizeof prefix);
+  assert(gzclose(reader) == Z_OK);
+  size_t identity = 0;
+  while (identity + 65 <= sizeof prefix &&
+         memcmp(prefix + identity, cd_dsl_catalogue_identity(), 65))
+    identity++;
+  assert(identity + 65 <= sizeof prefix);
+  const char *path = "build/rejected-funded-checkpoint.city";
+  CdWorld *owner = *active;
+  for (unsigned trial = 0; trial < 3; ++trial) {
+    unsigned char image[sizeof prefix];
+    memcpy(image, prefix, sizeof image);
+    if (trial == 0)
+      image[identity] ^= 1;
+    if (trial == 1) {
+      const uint64_t old_version = 1;
+      memcpy(image + sizeof old_version, &old_version, sizeof old_version);
+    }
+    gzFile writer = gzopen(path, "wb");
+    assert(writer && gzwrite(writer, image, sizeof image) == sizeof image);
+    assert(gzclose(writer) == Z_OK);
+    assert(cd_world_load(active, content, path, &diagnostic) == CD_INVALID_DATA);
+    if (trial == 0)
+      assert(strstr(diagnostic.message, "DSL catalogue"));
+    if (trial == 1)
+      assert(strstr(diagnostic.message, "checkpoint version"));
+    uint64_t after;
+    OK(cd_world_digest(*active, &after, &diagnostic));
+    assert(*active == owner && after == digest);
+  }
+  assert(remove(path) == 0);
+  CdScenarioStartup wrong = {0};
+  memset(wrong.identity, 'a', 64);
+  assert(cd_world_load_startup(active, content, checkpoint, &wrong, &diagnostic) == CD_INVALID_DATA);
+  assert(strstr(diagnostic.message, "startup scenario"));
+  uint64_t after;
+  OK(cd_world_digest(*active, &after, &diagnostic));
+  assert(*active == owner && after == digest);
+}
+
+static void supervised_milling(CdWorld **active, CdPersonRef mentor, CdEntityId original,
                                CdEntityId premises, CdEntityId entrance) {
+  CdWorld *world = *active;
+  const CdContent *content = world->content;
   CdPersonRef learner = world->people[1].civil.ref;
   OK(cd_world_job_close(world, original, &diagnostic));
   OK(cd_world_employer(world, premises, "Technical milling school", 3,
@@ -620,13 +698,43 @@ static void supervised_milling(CdWorld *world, CdPersonRef mentor, CdEntityId or
   OK(cd_world_job_assign(world, apprentice, learner, mentor, 0, &diagnostic));
   assert(cd_world_dsl_advance_job(world, learner, "miller_1_to_2",
                                  apprentice, graduate, 1, &diagnostic) != CD_OK);
-  OK(cd_world_dsl_import(world, premises, "wheat_grain", 1000,
-                        "Competing production input", &diagnostic));
+  CdDslBatch input = {.quality = 820, .condition = CD_DSL_GRADE_UNKNOWN,
+                      .provenance = "Competing production input"};
+  uint64_t batch;
+  OK(cd_world_dsl_import_batch(world, premises, "wheat_grain", "g", 1000,
+                               &input, &batch, &diagnostic));
   OK(cd_world_dsl_import(world, premises, "hand_tool", 1,
                         "Competing production equipment", &diagnostic));
   uint64_t competing_order;
   OK(cd_world_refined_work_submit(world, mentor, 2, supervisor, "mill_wheat", 1,
                                     "Production competes with instruction", &competing_order, &diagnostic));
+  OK(cd_world_step(world, 5, &diagnostic));
+  CdWorkView checkpoint_work;
+  OK(cd_world_work(world, mentor, &checkpoint_work, &diagnostic));
+  assert(checkpoint_work.progress > 0 && checkpoint_work.reserved_money &&
+         cd_job(world, apprentice)->training_remaining == 45);
+  uint64_t checkpoint, expected, actual;
+  OK(cd_world_digest(world, &checkpoint, &diagnostic));
+  CdDslBatchView stock;
+  OK(cd_world_dsl_batch(world, premises, "wheat_grain", batch, &stock, &diagnostic));
+  assert(stock.reserved == 1000 && stock.batch.quality == 820);
+  OK(cd_world_save(world, "build/funded-training.city", &diagnostic));
+  reject_funded_checkpoints(active, content, "build/funded-training.city", checkpoint);
+  OK(cd_world_step(world, 5, &diagnostic));
+  OK(cd_world_digest(world, &expected, &diagnostic));
+  OK(cd_world_load(active, content, "build/funded-training.city", &diagnostic));
+  world = *active;
+  OK(cd_world_digest(world, &actual, &diagnostic));
+  assert(actual == checkpoint && !cd_citizen(world, mentor));
+  OK(cd_world_dsl_batch(world, premises, "wheat_grain", batch, &stock, &diagnostic));
+  assert(stock.reserved == 1000 && stock.batch.quality == 820);
+  mentor = world->people[0].civil.ref;
+  learner = world->people[1].civil.ref;
+  person = cd_citizen(world, learner);
+  for (unsigned i = 0; i < 5; ++i)
+    OK(cd_world_step(world, 1, &diagnostic));
+  OK(cd_world_digest(world, &actual, &diagnostic));
+  assert(actual == expected && cd_dsl_role_minutes(person, role) == before);
   for (unsigned i = 0; i < 60; ++i) {
     CdWorkView work;
     OK(cd_world_work(world, mentor, &work, &diagnostic));
@@ -646,8 +754,17 @@ static void supervised_milling(CdWorld *world, CdPersonRef mentor, CdEntityId or
   OK(cd_world_dsl_credential(world, learner, "medicine.2", "Trial independent medical credential", &diagnostic));
   assert(cd_world_dsl_credential(world, learner, "anglican_ministry.2", "Missing appointment", &diagnostic) != CD_OK);
   OK(cd_world_dsl_certify(world, learner, "miller.2", "Milling completion assessment", &diagnostic));
+  OK(cd_world_save(world, "build/funded-promotion.city", &diagnostic));
   OK(cd_world_dsl_advance_job(world, learner, "miller_1_to_2", apprentice, graduate, 1, &diagnostic));
   assert(person->jobs[0] == graduate && !cd_job(world, apprentice)->view.open);
+  OK(cd_world_digest(world, &expected, &diagnostic));
+  OK(cd_world_load(active, content, "build/funded-promotion.city", &diagnostic));
+  world = *active;
+  learner = world->people[1].civil.ref;
+  OK(cd_world_dsl_advance_job(world, learner, "miller_1_to_2", apprentice, graduate, 1, &diagnostic));
+  OK(cd_world_digest(world, &actual, &diagnostic));
+  assert(actual == expected);
+
 }
 
 static void batch_mill_delivery(CdWorld **active, CdPersonRef *worker, CdEntityId home,
@@ -1981,12 +2098,12 @@ int main(int argc, char **argv) {
   CdEconomyLedger ledger;
   OK(cd_world_economy_ledger(world, &ledger, &diagnostic));
   assert(ledger.money_created == ledger.money_stock && cd_dsl_stock_valid(world));
-  supervised_milling(world, worker, job, premises, content->doors[entrance].id);
+  supervised_milling(&world, worker, job, premises, content->doors[entrance].id);
   funded_bread_chain(world, entrance);
   funded_book_chain(world, entrance);
   printf("{\"households\":1,\"residents\":4,\"jobs\":1,\"home\":\"%s\","
          "\"workplace\":\"%s\",\"arrival_minute\":%llu,\"return_minute\":%llu,"
-         "\"bakery_fuel_g\":120,\"bakery_ash_g\":12,\"bakery_water_ml\":300,\"bakery_wastewater_ml\":50,\"school_books_delivered\":1,\"bread_delivered_g\":1000,\"bread_eaten_g\":100,\"retail_tokens\":12,\"batch_delivery_g\":1000,\"expired_g\":100,\"flour_g\":750,\"bran_g\":250,\"wages\":60,\"supervised_minutes\":60,\"work_training_contention\":true,\"ok\":true}\n",
+         "\"bakery_fuel_g\":120,\"bakery_ash_g\":12,\"bakery_water_ml\":300,\"bakery_wastewater_ml\":50,\"school_books_delivered\":1,\"bread_delivered_g\":1000,\"bread_eaten_g\":100,\"retail_tokens\":12,\"batch_delivery_g\":1000,\"expired_g\":100,\"flour_g\":750,\"bran_g\":250,\"wages\":60,\"supervised_minutes\":60,\"work_training_contention\":true,\"training_checkpoint\":true,\"promotion_checkpoint\":true,\"transactional_checkpoint_rejection\":true,\"ok\":true}\n",
          content->polygons[home].source, content->polygons[mill].source,
          (unsigned long long)arrival, (unsigned long long)returned);
   cd_world_close(world);

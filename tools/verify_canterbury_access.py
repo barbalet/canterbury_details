@@ -341,6 +341,30 @@ def main():
     }
     if day['scheduled_services'] != 3 or not all(evidence['cycle_16'].values()):
         raise ValueError('Cycle 16 native integration did not meet the funded-day requirements')
+    replay_command = [str(ROOT / 'build/CanterburyDetails'),
+                      '--city', str(PACK), '--scenario', 'build/content/access-27000.cdstart',
+                      '--load', 'build/funded-day.city']
+    def replay(minutes):
+        output = subprocess.check_output([*replay_command, '--minutes', str(minutes)],
+                                         cwd=ROOT, text=True)
+        return json.loads(output.splitlines()[-1])
+    loaded = replay(0)
+    resumed = replay(day['end_native_minute'] - day['checkpoint_minute'])
+    if (loaded['native_minutes'] != day['checkpoint_minute'] or
+            loaded['digest'] != day['checkpoint_digest'] or
+            resumed['native_minutes'] != day['end_native_minute'] or
+            resumed['digest'] != day['uninterrupted_digest']):
+        raise ValueError(f'Funded city replay mismatch: saved={day}, loaded={loaded}, resumed={resumed}')
+    evidence['cycle_17'] = {
+        'checkpoint_minute': day['checkpoint_minute'],
+        'checkpoint_digest': loaded['digest'],
+        'uninterrupted_digest': day['uninterrupted_digest'],
+        'resumed_digest': resumed['digest'],
+        'separate_process': True,
+        'training_checkpoint': evidence['district']['training_checkpoint'],
+        'promotion_checkpoint': evidence['district']['promotion_checkpoint'],
+        'transactional_rejection': evidence['district']['transactional_checkpoint_rejection'],
+    }
     atomic_write(ROOT / 'build/access-trial-validation.json', canonical(evidence))
     if not evidence['scheduled_native_day']['ok']:
         raise SystemExit('Cycle 8 native day did not meet every attendance and return requirement')

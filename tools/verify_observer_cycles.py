@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Qualify causal history, scenario operations, whole-city checkpoints and inspection (29–34)."""
-import argparse,gzip,json,subprocess,shutil
+import argparse,gzip,json,subprocess,shutil,struct
 from pathlib import Path
 from audit_sources import ROOT,MANIFEST,inventory,sha
 from native_sources import CORE,UI
@@ -24,7 +24,7 @@ def reject_files():
   if i==1:raw=source.read_bytes();target.write_bytes(raw[:len(raw)//2]);continue
   if i==7:
    raw=bytearray(source.read_bytes());raw[-5]^=64;target.write_bytes(raw);continue
-  offset={2:8,3:48,4:113,5:184,6:None}[i]
+  offset={2:8,3:48,4:113,5:struct.calcsize('@6Q260s4I0Q'),6:None}[i]
   with gzip.open(source,'rb') as src,gzip.open(target,'wb',compresslevel=1) as dst:
    pos=0; previous=b''
    while block:=src.read(1024*1024):

@@ -196,6 +196,7 @@ struct CdWorld {
   uint32_t *previous, *heap, *heap_pos;
   size_t heap_count;
   uint64_t next_request, seed;
+  char scenario_identity[65];
   unsigned origin_offset;
   CdPremises *premises;
   unsigned *home_meals, *home_raw;

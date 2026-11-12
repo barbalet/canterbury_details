@@ -440,6 +440,23 @@ Version scenario and checkpoint identities. Persist roles, skills, credentials, 
 
 **Exit.** Saves during travel, production, training and promotion resume equivalently. Incompatible or corrupt saves preserve the live world. Batch, single-minute and CLI/app schedules agree.
 
+**Cycle 17 complete.** The [version 2 checkpoint format](../PERSISTENCE.md) binds saves to
+the compiled DSL catalogue, map, native ABI and startup scenario
+identity. Funded duty assignments, role credentials, school enrollment,
+inventory batches, training, work and service reservations, and
+advancement prerequisites are preserved. Promotion commits atomically.
+A pre-promotion checkpoint retains the learner, qualification and
+funded vacancy needed to repeat it.
+
+The funded verifier saves the 27,000-resident scenario with active
+commutes, production inputs and wages reserved, and services queued.
+It compares the saved instant and the resumed end-of-day digest against
+the uninterrupted run in separate CLI processes. The funded district
+replays an active production order with a tagged batch and queued
+training, compares batch and single-minute continuation, and repeats
+a prepared promotion after reload. Truncated checkpoints and incompatible
+version, catalogue and startup identities are rejected transactionally.
+
 ## Cycle 18 — Native authoring and inspection workflow
 
 Expose scenario selection, compiler diagnostics and provenance in the app and CLI. Show homes, employers, shifts, role history, training, qualifications, inventories and service delivery. Provide a documented path from editing the DSL to loading the compiled scenario and observing its results.

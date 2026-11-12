@@ -278,12 +278,12 @@ int main(int argc, char **argv) {
     fputs("Bootstrap parameter outside supported bounds\n", stderr);
     return 2;
   }
-  if (scenario_path && (load_path || explicit_population || explicit_seed)) {
-    fputs("--scenario supplies population and seed and starts a new world.\n", stderr);
+  if (scenario_path && (explicit_population || explicit_seed)) {
+    fputs("--scenario supplies population and seed.\n", stderr);
     return 2;
   }
-  if (duty_path && (!scenario_path || allocate_homes || place_homes)) {
-    fputs("--duty-startup requires --scenario and supplies household placement.\n", stderr);
+  if (duty_path && (!scenario_path || load_path || allocate_homes || place_homes)) {
+    fputs("--duty-startup requires a fresh --scenario and supplies household placement.\n", stderr);
     return 2;
   }
   if ((place_homes || allocate_homes || scenario_path || load_path || save_path || program_path || record_path || manage >= 0) &&
@@ -303,7 +303,8 @@ int main(int argc, char **argv) {
     int ok =
         cd_content_open(city_path, &content, &d) == CD_OK &&
         (!scenario_path || cd_scenario_startup_read(content, scenario_path, &startup, &d) == CD_OK) &&
-        (load_path ? cd_world_load(&world, content, load_path, &d)
+        (load_path ? cd_world_load_startup(&world, content, load_path,
+                                            scenario_path ? &startup : NULL, &d)
          : duty_path ? cd_world_open_duty_startup(content, &startup, duty_path, &world, &d)
          : scenario_path ? cd_world_open_startup(content, &startup, &world, &d)
                          : cd_world_open(content, &scenario, &world, &d)) == CD_OK &&

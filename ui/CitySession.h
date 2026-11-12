@@ -16,6 +16,7 @@
 @end
 @interface CdCitySession : NSObject
 - (void)open:(NSString *)path
+  checkpoint:(NSString *)checkpoint
     completion:(void (^)(CdCityState *, NSString *))completion;
 - (void)openScenario:(NSString *)path
          completion:(void (^)(CdCityState *, NSString *))completion;

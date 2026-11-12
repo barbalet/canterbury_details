@@ -1,5 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "cd_city_internal.h"
+#include "cd_dsl_catalogue.h"
+#include "cd_scenario_startup.h"
 #include "cd_native.h"
 #include <unistd.h>
 #include <fcntl.h>
@@ -11,7 +13,7 @@
 
 typedef struct {
   uint64_t magic, version, native_abi, world_bytes, digest, content_hash;
-  char abi[65], generation[65];
+  char abi[65], generation[65], catalogue[65], scenario[65];
   uint32_t endian, np, ne, ns;
 } Header;
 typedef struct {
@@ -392,7 +394,7 @@ CdStatus cd_world_save(const CdWorld *world, const char *path,
   Stream stream = {file, UINT64_C(1469598103934665603), 0};
   Header h = {0};
   h.magic = UINT64_C(0x315643445043);
-  h.version = 1;
+  h.version = 2;
   h.native_abi = cd_native_checkpoint_abi();
   h.world_bytes = sizeof(CdWorld);
   h.endian = 0x01020304;
@@ -402,7 +404,9 @@ CdStatus cd_world_save(const CdWorld *world, const char *path,
   h.content_hash = bytes_hash(UINT64_C(1469598103934665603), w->content->file,
                               w->content->file_bytes);
   snprintf(h.abi, 65, "%s", cd_checkpoint_abi);
-  memcpy(h.generation, w->content->generation, 65);
+  memcpy(h.generation, w->content->generation, sizeof h.generation);
+  memcpy(h.catalogue, cd_dsl_catalogue_identity(), sizeof h.catalogue);
+  memcpy(h.scenario, w->scenario_identity, sizeof h.scenario);
   cd_world_digest(w, &h.digest, NULL);
   CdWorld image = *w;
 #define ZERO_POINTER(field) image.field = NULL;
@@ -451,8 +455,19 @@ CdStatus cd_world_save(const CdWorld *world, const char *path,
       d, status == CD_CAPACITY ? status : CD_IO_ERROR,
       "Checkpoint staging/publication failed; preceding checkpoint retained");
 }
+static int scenario_identity_valid(const char identity[65]) {
+  if (identity[64])
+    return 0;
+  for (size_t i = 0; i < 64; ++i) {
+    char c = identity[i];
+    if (identity[0] ? !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) : c != 0)
+      return 0;
+  }
+  return 1;
+}
 static int scalar_valid(const CdWorld *w) {
-  return w->count <= cd_smoke_capacity() &&
+  return scenario_identity_valid(w->scenario_identity) &&
+         w->count <= cd_smoke_capacity() &&
          w->home_count <= cd_smoke_capacity() &&
          w->initial_count <= cd_smoke_capacity() &&
          w->life_capacity == cd_smoke_capacity() * 2 &&
@@ -472,8 +487,9 @@ static int scalar_valid(const CdWorld *w) {
 }
 CdStatus cd_checkpoint_validate(CdWorld *, const CdSmokeStage *,
                                 CdDiagnostic *);
-CdStatus cd_world_load(CdWorld **out, const CdContent *content,
-                       const char *path, CdDiagnostic *d) {
+CdStatus cd_world_load_startup(CdWorld **out, const CdContent *content,
+                               const char *path, const CdScenarioStartup *startup,
+                               CdDiagnostic *d) {
   if (!out || !cd_world_is_owner(*out) ||
       !cd_native_checkpoint_owner(*out ? (*out)->native : NULL) || !content ||
       !path || !*path || (*out && !cd_model_ready(*out)))
@@ -488,16 +504,30 @@ CdStatus cd_world_load(CdWorld **out, const CdContent *content,
   CdWorld *w = NULL;
   CdSmokeStage *stage = NULL;
   CdStatus status = CD_INVALID_DATA;
-  if (!read_bytes(&stream, &h, sizeof h) ||
-      h.magic != UINT64_C(0x315643445043) || h.version != 1 ||
-      h.native_abi != cd_native_checkpoint_abi() ||
+  const char *failure = "Checkpoint rejected; live world and prior file preserved";
+  if (!read_bytes(&stream, &h, sizeof h) || h.magic != UINT64_C(0x315643445043))
+    goto done;
+  if (h.version != 2) {
+    failure = "Unsupported city checkpoint version; use its originating build";
+    goto done;
+  }
+  if (memcmp(h.catalogue, cd_dsl_catalogue_identity(), sizeof h.catalogue)) {
+    failure = "Checkpoint belongs to a different Canterbury DSL catalogue";
+    goto done;
+  }
+  if (startup && memcmp(h.scenario, startup->identity, sizeof h.scenario)) {
+    failure = "Checkpoint belongs to a different Canterbury startup scenario";
+    goto done;
+  }
+  if (h.native_abi != cd_native_checkpoint_abi() ||
       h.world_bytes != sizeof(CdWorld) || h.endian != 0x01020304 ||
-      memcmp(h.abi, cd_checkpoint_abi, 65) ||
+      memcmp(h.abi, cd_checkpoint_abi, sizeof h.abi) ||
       memcmp(h.generation, content->generation, 65) || h.np != content->np ||
       h.ne != content->ne || h.ns != content->ns ||
       h.content_hash != bytes_hash(UINT64_C(1469598103934665603), content->file,
                                    content->file_bytes) ||
-      !read_bytes(&stream, &image, sizeof image) || !scalar_valid(&image))
+      !read_bytes(&stream, &image, sizeof image) || !scalar_valid(&image) ||
+      memcmp(h.scenario, image.scenario_identity, sizeof h.scenario))
     goto done;
 #define CHECK_POINTER(field)                                                   \
   if (image.field)                                                             \
@@ -575,5 +605,10 @@ done:
       status == CD_OK
           ? "Complete city restored at the same closed minute; runtime "
             "references refreshed"
-          : "Checkpoint rejected; live world and prior file preserved");
+          : failure);
+}
+
+CdStatus cd_world_load(CdWorld **out, const CdContent *content, const char *path,
+                       CdDiagnostic *d) {
+  return cd_world_load_startup(out, content, path, NULL, d);
 }

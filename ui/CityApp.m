@@ -362,14 +362,18 @@ static NSDictionary *resource(NSString *name) {
   [content layoutSubtreeIfNeeded];
   [self.map fitMap];
   [self.window makeFirstResponder:self.map];
-  NSURL *pack = [NSBundle.mainBundle URLForResource:@"CanterburyCity"
-                                      withExtension:@"bin"];
+  NSUserDefaults *launch = NSUserDefaults.standardUserDefaults;
+  NSString *packPath = [launch stringForKey:@"CityPack"];
+  NSString *checkpoint = [launch stringForKey:@"CityCheckpoint"];
+  NSURL *pack = packPath.length ? [NSURL fileURLWithPath:packPath] :
+      [NSBundle.mainBundle URLForResource:@"CanterburyCity" withExtension:@"bin"];
   if (!pack) {
     [self failure:@"Runtime city map is missing."];
     [NSApp terminate:nil];
     return;
   }
   [self.citySession open:pack.path
+              checkpoint:checkpoint
               completion:^(CdCityState *state, NSString *error) {
                 self.busy = NO;
                 if (!state) {

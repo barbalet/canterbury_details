@@ -75,6 +75,7 @@
   });
 }
 - (void)open:(NSString *)path
+  checkpoint:(NSString *)checkpoint
     completion:(void (^)(CdCityState *, NSString *))completion {
   dispatch_async(_queue, ^{
     @autoreleasepool {
@@ -84,8 +85,10 @@
       CdCityState *state = nil;
       if (cd_content_open(path.fileSystemRepresentation, &self->_content,
                           &error) == CD_OK &&
-          cd_world_open(self->_content, &scenario, &self->_world, &error) ==
-              CD_OK)
+          (checkpoint.length
+               ? cd_world_load(&self->_world, self->_content,
+                               checkpoint.fileSystemRepresentation, &error)
+               : cd_world_open(self->_content, &scenario, &self->_world, &error)) == CD_OK)
         state = [self state:&error rebuild:YES];
       [self publish:state error:error completion:completion];
     }
