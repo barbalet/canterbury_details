@@ -13,6 +13,8 @@ def build(target):
     if target=='app' and platform.system()!='Darwin':raise ValueError('The native application target requires macOS and the Apple SDK; use cli on other platforms')
     subprocess.run([sys.executable,str(ROOT/'tools/compile_occupations.py'),'--write'],cwd=ROOT,check=True)
     subprocess.run([sys.executable,str(ROOT/'tools/compile_controls.py')],cwd=ROOT,check=True)
+    from compile_dsl_catalogue import build as compile_dsl_catalogue
+    catalogue = compile_dsl_catalogue()
     from checkpoint_abi import build as checkpoint_abi
     checkpoint_abi()
     compiler=shlex.split(os.environ.get('CC','cc'))
@@ -20,6 +22,7 @@ def build(target):
     if target=='app':
         subprocess.run([sys.executable,str(ROOT/'tools/build_basemap.py'),'--write'],cwd=ROOT,check=True)
         subprocess.run([sys.executable,str(ROOT/'tools/compile_runtime.py'),'--write'],cwd=ROOT,check=True)
+        subprocess.run([sys.executable,str(ROOT/'tools/compile_canterbury_dsl.py')],cwd=ROOT,check=True)
     sources=[ROOT/p for p in native_sources.sources(target)]
     command=[*compiler,*PROFILE,*extra,'-Iapesdk','-Isrc','-include','src/cd_api.h','-std=c11',*shlex.split(os.environ.get('CFLAGS','-O2 -g'))]
     if target=='app':command+=['-fobjc-arc']
@@ -28,6 +31,7 @@ def build(target):
     command+=['-lz','-lm','-lpthread']
     output=ROOT/({'cli':'build/CanterburyDetails','smoke':'build/smoke-test','app':'build/CanterburyDetails.app/Contents/MacOS/CanterburyDetails'}[target])
     inputs=set(sources)|set((ROOT/'src').glob('*.h'))|set((ROOT/'apesdk').rglob('*.h'))|set((ROOT/'apesdk').rglob('*.inc'))|{ROOT/'tools/build.py',ROOT/'tools/native_sources.py',ROOT/'tools/native_profile.py',ROOT/'content/source-manifest.json',ROOT/'tools/compile_occupations.py',ROOT/'content/occupation-policy.json',ROOT/'build/content/OccupationCatalogue.inc',ROOT/'build/content/CheckpointABI.inc',ROOT/'tools/checkpoint_abi.py'}
+    inputs.add(catalogue)
     if target=='app':inputs.update([ROOT/'ui/Info.plist',ROOT/'ui/CityMap.h',ROOT/'ui/CitySession.h',ROOT/'ui/CityManagement.h',*(ROOT/p for p in native_sources.RESOURCES)])
     identity={'command':command,'compiler':subprocess.check_output([*compiler,'--version'],text=True).splitlines()[0],'sources':{str(p.relative_to(ROOT)):sha(p) for p in sorted(inputs)}}
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest();stamp=ROOT/f'build/{target}-build.json'

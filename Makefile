@@ -65,3 +65,16 @@ performance:
 	$(PYTHON) tools/verify_final_cycles.py --performance
 release:
 	$(PYTHON) tools/verify_release.py --prepare
+
+.PHONY: scenario-pack scenario-check
+scenario-pack: runtime-content
+	$(PYTHON) tools/compile_canterbury_dsl.py
+scenario-check:
+	$(PYTHON) tools/compile_canterbury_dsl.py --check
+	$(PYTHON) -m unittest discover -s tests -p 'test_canterbury_dsl*.py'
+
+.PHONY: access-trial access-check
+access-trial: runtime-content
+	$(PYTHON) tools/qualify_canterbury_access.py
+access-check: access-trial cli
+	$(PYTHON) tools/verify_canterbury_access.py

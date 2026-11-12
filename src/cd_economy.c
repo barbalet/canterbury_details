@@ -255,6 +255,7 @@ void cd_economy_tick(CdWorld *w) {
                  "availability");
       }
     }
+    cd_dsl_cargo_tick(w, p);
     if (!p->cargo.remaining || p->activity != CD_ACTIVITY_IDLE)
       continue;
     uint32_t b = cd_polygon_index(w->content, p->cargo.building);

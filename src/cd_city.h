@@ -134,6 +134,10 @@ CdStatus cd_world_lock(CdWorld *, CdEntityId building, int locked,
                        CdDiagnostic *);
 CdStatus cd_world_category(CdWorld *, CdPersonRef, CdResidentCategory,
                            const char *explicit_basis, CdDiagnostic *);
+/* Assign fresh households to reachable reviewed dwellings as one transaction. */
+CdStatus cd_world_households_allocate(CdWorld *, CdDiagnostic *);
+/* Preflight every resident, then publish initial street positions and entry. */
+CdStatus cd_world_place_households(CdWorld *, CdDiagnostic *);
 CdStatus cd_world_household(const CdWorld *, size_t, CdHouseholdView *,
                             CdDiagnostic *);
 CdStatus cd_world_household_move(CdWorld *, CdEntityId household,

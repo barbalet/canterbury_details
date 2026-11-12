@@ -1,0 +1,226 @@
+{
+  "version": "1.0",
+  "migration_from": "0.1",
+  "declarations": {
+    "scenario": {
+      "language_version": "string",
+      "profile": "string",
+      "status": "string",
+      "runtime_activation": "boolean",
+      "civil_origin": "string",
+      "population": "integer",
+      "population_capacity": "integer",
+      "seed": "integer",
+      "clock": "string",
+      "source_map": "string",
+      "unknown_building_uses": "string",
+      "map_identity": "string",
+      "historical_workforce_claim": "boolean",
+      "ownership": "string",
+      "source_career_catalogue_sha256": "string"
+    },
+    "limits": {
+      "file_bytes": "integer",
+      "families": "integer",
+      "roles": "integer",
+      "resource_kinds": "integer",
+      "services": "integer",
+      "recipes": "integer",
+      "tasks_per_role": "integer",
+      "rules_per_role": "integer",
+      "expanded_task_statements": "integer",
+      "nesting_depth": "integer",
+      "policy": "string"
+    },
+    "cohort": {
+      "age_band": "string",
+      "people": "integer",
+      "default_activity": "string",
+      "status": "string"
+    },
+    "workforce": {
+      "sector": "string",
+      "target_people": "integer",
+      "premises_types": "string[]",
+      "status": "string"
+    },
+    "activity": {
+      "statuses": "string[]",
+      "working_age_not_employed": "integer",
+      "compulsory_employment": "boolean"
+    },
+    "resource": {
+      "group": "string",
+      "unit": "string",
+      "storage": "string",
+      "initial_stock": "integer",
+      "automatic_renewal": "boolean",
+      "quality": "string",
+      "food_energy_per_unit": "number?",
+      "spoilage_rate": "number?",
+      "hazard_controls": "string",
+      "historical_supply_claim": "boolean"
+    },
+    "service": {
+      "unit": "string",
+      "stockpilable": "boolean",
+      "requires_actual_presence": "boolean",
+      "requires_native_action_grant": "boolean",
+      "materials": "string",
+      "eligibility": "string",
+      "duration_and_output_rate": "number?"
+    },
+    "recipe": {
+      "input_resources": "string[]",
+      "input_quantities": "integer[]",
+      "output_resources": "string[]",
+      "output_quantities": "integer[]",
+      "unit": "string",
+      "accounting": "string",
+      "worker_minutes": "integer?",
+      "required_equipment": "string[]",
+      "activation": "string",
+      "basis": "string"
+    },
+    "competence": {
+      "assessment": "string",
+      "experience": "string",
+      "training_time": "string",
+      "automatic_skill_grant": "boolean"
+    },
+    "qualification": {
+      "review_required": "boolean",
+      "issuing_authority": "string?",
+      "requirements": "string[]?",
+      "status": "string",
+      "activation": "string",
+      "tradition_or_license_transfer": "string"
+    },
+    "career": {
+      "sector": "string",
+      "candidate_premises_types": "string[]",
+      "role_ids": "string[]",
+      "competence": "string",
+      "qualification": "string",
+      "local_employer_exists": "boolean",
+      "starting_staff": "integer"
+    },
+    "occupation": {
+      "title": "string",
+      "career": "string",
+      "stage": "integer",
+      "enabled": "boolean",
+      "training_post": "boolean",
+      "mentor_required": "boolean",
+      "mentor_minimum_stage": "integer?",
+      "competence": "string",
+      "qualification": "string",
+      "funded_vacancies": "integer",
+      "wage_pence_per_shift": "integer?",
+      "shift_start_minute": "integer?",
+      "shift_duration_minutes": "integer?",
+      "workplace": "string",
+      "task_program": "string?",
+      "duties_and_outputs": "string",
+      "advancement_requirements": "string[]"
+    },
+    "advance": {
+      "from": "string",
+      "to": "string",
+      "automatic": "boolean",
+      "requires": "string[]",
+      "minimum_supervised_minutes": "integer?",
+      "mentor_capacity": "string",
+      "ownership": "string",
+      "on_mentor_loss": "string",
+      "on_failure": "string"
+    },
+    "policy": {}
+  },
+  "executable_declarations": {
+    "household": {
+      "members": "string[]",
+      "dwelling": "string",
+      "guardian": "string?"
+    },
+    "employer": {
+      "premises": "string",
+      "name": "string",
+      "work_capacity": "integer",
+      "funding_pence": "integer"
+    },
+    "post": {
+      "employer": "string",
+      "occupation": "string",
+      "shift": "string",
+      "vacancies": "integer",
+      "wage_pence": "integer"
+    },
+    "shift": {
+      "start_minute": "integer",
+      "duration_minutes": "integer"
+    },
+    "curriculum": {
+      "career": "string",
+      "mentor_stage": "integer",
+      "supervised_minutes": "integer",
+      "qualification": "string"
+    },
+    "credential": {
+      "qualification": "string",
+      "authority": "string",
+      "assessment": "string"
+    },
+    "stock": {
+      "premises": "string",
+      "resource": "string",
+      "quantity": "integer"
+    },
+    "task": {
+      "handler": "string",
+      "recipe": "string",
+      "units": "integer"
+    },
+    "program": {
+      "tasks": "string[]"
+    }
+  },
+  "policies": {
+    "population": {
+      "cohort_allocation": "string",
+      "default_employment": "boolean",
+      "preserve_households_and_guardians": "boolean",
+      "minimum_training_age": "integer",
+      "minor_hazard_policy": "string",
+      "elderly_policy": "string",
+      "home_and_work_capacity": "string",
+      "housing_shortage": "string",
+      "unreachable_workplace": "string",
+      "faith_and_title": "string",
+      "currency_unit": "string",
+      "fractional_stock_unit": "string",
+      "ownership_transfer": "string"
+    },
+    "production": {
+      "refinement": "string",
+      "fuel_and_water": "string",
+      "counted_products": "string",
+      "food": "string",
+      "medicine": "string",
+      "imports": "string",
+      "scale": "string"
+    },
+    "execution": {
+      "priority": "string[]",
+      "parallel_work_and_travel": "boolean",
+      "read_or_preview_advances_time": "boolean",
+      "event_codes": "string[]",
+      "checkpoint": "string",
+      "randomness": "string",
+      "unknown_reference": "string",
+      "unimplemented_handler": "string",
+      "unqualified_route": "string",
+      "validation": "string"
+    }
+  }
+}

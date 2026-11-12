@@ -8,6 +8,7 @@
 @interface CdCityState : NSObject
 @property(nonatomic) uint64_t revision;
 @property(nonatomic) CdClockView clock;
+@property(nonatomic, copy) NSString *scenarioIdentity;
 @property(nonatomic) CdCitySummary summary;
 @property(nonatomic) CdCivicSummary civic;
 @property(nonatomic, copy) NSArray<NSDictionary *> *people;
@@ -16,6 +17,8 @@
 @interface CdCitySession : NSObject
 - (void)open:(NSString *)path
     completion:(void (^)(CdCityState *, NSString *))completion;
+- (void)openScenario:(NSString *)path
+         completion:(void (^)(CdCityState *, NSString *))completion;
 - (void)step:(unsigned)minutes
     completion:(void (^)(CdCityState *, NSString *))completion;
 - (void)restart:(void (^)(CdCityState *, NSString *))completion;

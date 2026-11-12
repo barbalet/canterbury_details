@@ -18,7 +18,8 @@ typedef enum {
   CD_RECIPE_TEXTILE,
   CD_RECIPE_TOOL,
   CD_RECIPE_SERVICE,
-  CD_RECIPE_DEVELOPMENT
+  CD_RECIPE_DEVELOPMENT,
+  CD_RECIPE_REFINED
 } CdRecipe;
 typedef struct {
   CdEntityId workplace, entrance, occupation, institution;
@@ -115,16 +116,34 @@ CdStatus cd_world_employer(CdWorld *, CdEntityId, const char *name,
                            unsigned capacity, const char *basis,
                            CdDiagnostic *);
 CdStatus cd_world_employer_open(CdWorld *, CdEntityId, int, CdDiagnostic *);
+CdStatus cd_world_dsl_certify(CdWorld *, CdPersonRef, const char *role,
+                              const char *basis, CdDiagnostic *);
+CdStatus cd_world_dsl_job_create(CdWorld *, const CdJobSpec *, const char *role,
+                                  CdEntityId *, CdDiagnostic *);
+CdStatus cd_world_dsl_supervise(CdWorld *, CdPersonRef supervisor,
+                                 CdPersonRef worker, uint64_t key, CdEntityId job,
+                                 const char *recipe, unsigned batches,
+                                 const char *basis, uint64_t *, CdDiagnostic *);
+CdStatus cd_world_dsl_fund(CdWorld *, CdPersonRef owner, CdEntityId premises,
+                            uint64_t amount, CdDiagnostic *);
 CdStatus cd_world_job_create(CdWorld *, const CdJobSpec *, CdEntityId *,
                              CdDiagnostic *);
 size_t cd_world_job_count(const CdWorld *);
 CdStatus cd_world_job(const CdWorld *, CdEntityId, CdJobView *, CdDiagnostic *);
 CdStatus cd_world_job_assign(CdWorld *, CdEntityId, CdPersonRef,
                              CdPersonRef mentor, int secondary, CdDiagnostic *);
+/* Fill a batch of regular funded vacancies from an ordered applicant list. */
+CdStatus cd_world_staff_jobs(CdWorld *, const CdEntityId *, size_t job_count,
+                              const CdPersonRef *, size_t applicant_count,
+                              CdDiagnostic *);
 CdStatus cd_world_job_unassign(CdWorld *, CdEntityId, CdDiagnostic *);
 CdStatus cd_world_job_close(CdWorld *, CdEntityId, CdDiagnostic *);
 CdStatus cd_world_work_submit(CdWorld *, CdPersonRef, uint64_t key,
                               const CdWorkSpec *, uint64_t *, CdDiagnostic *);
+CdStatus cd_world_refined_work_submit(CdWorld *, CdPersonRef, uint64_t key,
+                                       CdEntityId job, const char *recipe,
+                                       unsigned batches, const char *basis,
+                                       uint64_t *, CdDiagnostic *);
 CdStatus cd_world_work(const CdWorld *, CdPersonRef, CdWorkView *,
                        CdDiagnostic *);
 CdStatus cd_world_work_cancel(CdWorld *, CdPersonRef, uint64_t, CdDiagnostic *);

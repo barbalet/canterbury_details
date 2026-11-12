@@ -1,3 +1,4 @@
+#include "cd_dsl_catalogue.h"
 #include "cd_city_internal.h"
 #include "cd_management.h"
 static const char *names[] = {"Jobs",
@@ -97,14 +98,16 @@ CdStatus cd_world_management(const CdWorld *w, CdManagementKind kind,
     switch (kind) {
     case CD_MANAGE_JOBS: {
       const CdJobView *v = &w->jobs[i].view;
-      CdOccupationView role;
-      cd_occupation(v->occupation - 1, &role, NULL);
+      CdOccupationView role = {0};
+      const CdDslRole *named = cd_dsl_job_role(v->occupation);
+      if (!named)
+        cd_occupation(v->occupation - 1, &role, NULL);
       r->id = v->id;
       r->actor = v->worker.person_id;
       r->related = v->workplace;
       r->state = v->open;
       r->quantity = v->wage;
-      snprintf(r->name, sizeof r->name, "%s", role.name);
+      snprintf(r->name, sizeof r->name, "%s", named ? named->title : role.name);
       snprintf(
           r->detail, sizeof r->detail,
           "Worker %llu; premises %llu; shift %u-%u; wage %u model tokens; %s",
@@ -120,6 +123,14 @@ CdStatus cd_world_management(const CdWorld *w, CdManagementKind kind,
       r->state = v->state;
       r->quantity = v->progress;
       r->balance = v->reserved_money;
+      if (v->recipe == CD_RECIPE_REFINED) {
+        CdEntityId index = w->people[i].work.spec.project;
+        const CdDslRecipe *recipe = index && index <= cd_dsl_recipe_count()
+                                        ? cd_dsl_recipe_at((size_t)index - 1)
+                                        : NULL;
+        if (recipe)
+          snprintf(r->name, sizeof r->name, "%s", recipe->id);
+      }
       snprintf(
           r->detail, sizeof r->detail,
           "Person %llu; job %llu; progress %u/%u; paid %llu; reserved %llu; %s",

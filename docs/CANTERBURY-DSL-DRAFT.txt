@@ -91,9 +91,9 @@ Use shared material supply chains, rather than one resource per occupation:
   paper -> cut paper + paper offcuts
 
 The sample recipes conserve material mass including byproducts. Their quantities
-are illustrative yields, not measured period rates. Equipment, heat/energy and
-labour requirements are explicitly unconfigured, so these recipes must not become
-active production merely because their mass balances pass the draft checker.
+are illustrative yields, not measured period rates. The five manual trials specify illustrative equipment and labour requirements.
+Activation still requires native production binding, an eligible worker and
+qualified premises. The draft checker verifies quantities and equipment kinds.
 
 Mass uses integer grams, liquids integer millilitres, finished equipment/items
 integer counts, and money integer pence. Do not add quantities with incompatible

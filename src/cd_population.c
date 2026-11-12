@@ -33,7 +33,27 @@ void cd_population_name(const CdWorld *w, CdPersonId id, CdEntityId household,
                random_at(w->seed ^ UINT64_C(0x46414d494c595f31), household);
   cd_native_fixture_name(given, family, out, 128);
 }
-CdStatus cd_population_init(CdWorld *w, const CdScenario *scenario) {
+static unsigned cohort_age(const unsigned *cohorts, size_t index, uint64_t random) {
+  const unsigned minimum[] = {0, 5, 15, 18, 65};
+  const unsigned maximum[] = {4, 14, 17, 64, 90};
+  unsigned minors = cohorts[0] + cohorts[1] + cohorts[2];
+  size_t role = index % 4;
+  size_t child_index = index / 4 * 2 + (role > 2 ? 1 : 0);
+  unsigned band = 0;
+  size_t ordinal = child_index;
+  if (role < 2 || child_index >= minors) {
+    ordinal = index - (child_index < minors ? child_index : minors);
+    band = 3;
+  }
+  while (band < 4 && ordinal >= cohorts[band]) {
+    ordinal -= cohorts[band];
+    ++band;
+  }
+  return minimum[band] + (unsigned)(random % (maximum[band] - minimum[band] + 1));
+}
+
+CdStatus cd_population_init(CdWorld *w, const CdScenario *scenario,
+                            const unsigned *cohorts) {
   for (size_t i = 0; i < w->count; i++) {
     CdCitizen *p = &w->people[i];
     if (cd_smoke_person(w->native, i, &p->civil.ref, NULL) != CD_OK)
@@ -45,6 +65,8 @@ CdStatus cd_population_init(CdWorld *w, const CdScenario *scenario) {
                    : role == 1 ? 33 + (unsigned)(r % 28)
                    : role == 2 ? 6 + (unsigned)(r % 10)
                                : (unsigned)(r % 6);
+    if (cohorts)
+      age = cohort_age(cohorts, i, r);
     p->civil.birth = (CdCivilTime){scenario->civil_origin.year - (int)age,
                                    1 + (unsigned)((r >> 8) % 12), 1, 0};
     p->civil.birth.day =
@@ -61,7 +83,7 @@ CdStatus cd_population_init(CdWorld *w, const CdScenario *scenario) {
     }
     /* Incomplete final groups contain adults only; every generated minor has a
      * guardian. */
-    if (i / 4 == w->count / 4 && w->count % 4 && role >= 2) {
+    if (!cohorts && i / 4 == w->count / 4 && w->count % 4 && role >= 2) {
       p->civil.birth.year = scenario->civil_origin.year - 35;
       p->civil.birth.month = 1;
       p->civil.birth.day = 1;

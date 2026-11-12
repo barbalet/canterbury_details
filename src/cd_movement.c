@@ -55,8 +55,8 @@ CdStatus cd_world_place(CdWorld *w, CdPersonRef ref, CdEntityId node,
                  "Initial spatial admission on qualified source node; no "
                  "travel tick consumed");
 }
-CdStatus cd_world_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
-                         CdDiagnostic *d) {
+static CdStatus request_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
+                               CdDiagnostic *d, int automatic) {
   CdCitizen *p = cd_citizen(w, ref);
   if (!p)
     return cd_diag(d, CD_UNKNOWN_REFERENCE, "Unknown/foreign travel actor");
@@ -81,8 +81,11 @@ CdStatus cd_world_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
   }
   CdRoute route;
   CdStatus status = cd_route_indices(w, p->anchor, goal, &route);
-  if (status != CD_OK)
+  if (status != CD_OK) {
+    if (automatic)
+      p->reason = route.reason;
     return cd_diag(d, status, cd_route_reason(route.reason));
+  }
   release_edge(w, p);
   p->route = route;
   p->route_index = 0;
@@ -93,6 +96,13 @@ CdStatus cd_world_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
   p->reason = CD_ROUTE_OK;
   return cd_diag(d, CD_OK,
                  "Bounded source-polyline travel intention published");
+}
+CdStatus cd_world_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
+                         CdDiagnostic *d) {
+  return request_travel(w, ref, destination, d, 0);
+}
+void cd_automatic_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination) {
+  request_travel(w, ref, destination, NULL, 1);
 }
 CdStatus cd_world_stop(CdWorld *w, CdPersonRef ref, CdDiagnostic *d) {
   CdCitizen *p = cd_citizen(w, ref);
@@ -134,6 +144,84 @@ static CdStatus access_now(CdWorld *w, CdCitizen *p, CdDoor *door) {
   return cd_access_polygon(&w->content->polygons[door->building],
                            w->locks[door->building], &a);
 }
+static void begin_connector(CdWorld *w, CdCitizen *person, uint32_t index,
+                            int entering, int key, int emergency) {
+  const CdDoor *door = &w->content->doors[index];
+  release_edge(w, person);
+  person->door = index;
+  person->entering = entering;
+  person->door_key = key;
+  person->door_emergency = emergency;
+  person->door_vertex = entering ? 1 : door->count - 2;
+  person->travel = CD_ROUTE_TRAVELLING;
+  person->reason = CD_ROUTE_OK;
+  person->destination = door->id;
+}
+
+CdStatus cd_world_place_households(CdWorld *w, CdDiagnostic *d) {
+  if (!cd_model_ready(w) || !w->count)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Initial placement requires a live population");
+  CdClockView clock;
+  if (cd_world_clock(w, &clock, d) != CD_OK)
+    return cd_diag(d, CD_INVALID_STATE, "Initial placement needs the native clock");
+  uint32_t *doors = cd_memory_calloc(w->content->np, sizeof *doors, CD_MEM_TEMP);
+  if (!doors)
+    return cd_diag(d, CD_CAPACITY, "Cannot stage initial placements");
+  const char *failure = NULL;
+  double scale = cd_city_scale(w);
+  for (size_t i = 0; i < w->count; ++i) {
+    const CdCitizen *person = &w->people[i];
+    uint32_t b = cd_polygon_index(w->content, person->civil.dwelling);
+    if (person->civil.position_known || person->vehicle || b == CD_NONE) {
+      failure = "Initial placement requires unplaced residents with allocated homes";
+      break;
+    }
+    if (doors[b])
+      continue;
+    uint32_t index = cd_reviewed_door(w, person->civil.dwelling);
+    if (index == CD_NONE || !cd_usable(w, b) ||
+        cd_housing_load(w, b) > cd_capacity(w, b)) {
+      failure = "Home lacks a usable reviewed entrance or residential capacity";
+      break;
+    }
+    CdAccess access = {1, 0, 1, 0, clock.civil.minute_of_day};
+    if (cd_access_polygon(&w->content->polygons[b], w->locks[b], &access) != CD_OK) {
+      failure = "Home entry access denied";
+      break;
+    }
+    uint32_t node = w->content->doors[index].node;
+    int linked = 0;
+    for (uint32_t j = w->content->adj_offset[node]; j < w->content->adj_offset[node + 1]; ++j) {
+      uint32_t edge = w->content->adj_edges[j];
+      linked |= w->content->edges[edge].qualified && !w->closed[edge];
+    }
+    CdPoint point = w->content->nodes[node].p;
+    CdPoint quantized = {round(point.x * scale) / scale, round(point.y * scale) / scale};
+    if (!linked || cd_segment_blocked(w->content, quantized, quantized, 0, 0, CD_NONE)) {
+      failure = "Home entrance is disconnected or obstructed at native precision";
+      break;
+    }
+    doors[b] = index + 1;
+  }
+  if (!failure) {
+    for (size_t i = 0; i < w->count; ++i) {
+      CdCitizen *person = &w->people[i];
+      uint32_t b = cd_polygon_index(w->content, person->civil.dwelling);
+      uint32_t door = doors[b] - 1;
+      uint32_t node = w->content->doors[door].node;
+      CdPoint point = w->content->nodes[node].p;
+      cd_native_write(w->native, person->civil.ref, (uint16_t)lround(point.x * scale),
+                      (uint16_t)lround(point.y * scale));
+      person->civil.position_known = 1;
+      person->anchor = node;
+      begin_connector(w, person, door, 1, 1, 0);
+    }
+  }
+  cd_memory_free(doors);
+  return failure ? cd_diag(d, CD_INVALID_STATE, failure)
+                 : cd_diag(d, CD_OK, "Households placed on source streets and queued for home entry");
+}
+
 static CdStatus door_intent(CdWorld *w, CdPersonRef ref, CdEntityId id, int key,
                             int emergency, int entering, CdDiagnostic *d) {
   CdCitizen *p = cd_citizen(w, ref);
@@ -192,16 +280,7 @@ static CdStatus door_intent(CdWorld *w, CdPersonRef ref, CdEntityId id, int key,
     return cd_diag(d, CD_OK,
                    "Interrupted connector resumed from native position");
   }
-  release_edge(w, p);
-  p->door = i;
-  p->entering = entering;
-  p->door_key = key;
-  p->door_emergency = emergency;
-  p->door_vertex = entering ? 1 : door->count - 2;
-  p->travel = CD_ROUTE_TRAVELLING;
-  p->reason = CD_ROUTE_OK;
-  p->destination = id;
-  return cd_diag(d, CD_OK,
+  begin_connector(w, p, i, entering, key, emergency);  return cd_diag(d, CD_OK,
                  "Reviewed entrance movement queued; position unchanged until "
                  "native minute");
 }

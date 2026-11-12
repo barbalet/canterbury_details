@@ -435,6 +435,7 @@ static NSDictionary *resource(NSString *name) {
   for (NSArray *entry in @[
          @[ @"Save checkpoint…", @"saveCheckpoint:", @"s" ],
          @[ @"Load checkpoint…", @"loadCheckpoint:", @"o" ],
+         @[ @"Open scenario startup…", @"openScenarioStartup:", @"" ],
          @[ @"City management…", @"showManagement:", @"m" ],
          @[ @"Scenario operation…", @"scenarioOperation:", @"i" ],
          @[ @"Export causal records…", @"exportRecords:", @"e" ]
@@ -662,6 +663,8 @@ static NSDictionary *resource(NSString *name) {
     [self advance:(unsigned[]){1, 5, 20}[self.speed.indexOfSelectedItem]];
 }
 - (void)refresh {
+  NSString *identity = self.cityState.scenarioIdentity;
+  self.window.subtitle = identity.length ? [@"Scenario " stringByAppendingString:identity] : @"";
   self.runButton.title = self.running ? @"Pause" : @"Run";
   if (!self.cityState) {
     self.status.stringValue = @"Loading city on simulation worker…";
@@ -736,6 +739,31 @@ static NSDictionary *resource(NSString *name) {
                        self.running ? @"Running" : @"Paused",
                        (unsigned long long)r.native_minutes, r.households,
                        r.capacity, r.located, r.people - r.located];
+}
+- (void)openScenarioStartup:(id)sender {
+  (void)sender;
+  if (self.busy || !self.cityState)
+    return;
+  NSOpenPanel *panel = [NSOpenPanel openPanel];
+  panel.title = @"Open compiled Canterbury startup (.cdstart)";
+  if ([panel runModal] != NSModalResponseOK)
+    return;
+  self.running = NO;
+  self.busy = YES;
+  [self.citySession openScenario:panel.URL.path
+                      completion:^(CdCityState *state, NSString *error) {
+    self.busy = NO;
+    if (!state) {
+      [self failure:error];
+    } else {
+      self.cityState = state;
+      self.people = state.people;
+      self.map.selected = nil;
+      [self listChanged:nil];
+      [self inspect:nil kind:nil];
+    }
+    [self refresh];
+  }];
 }
 - (void)restart:(id)sender {
   (void)sender;

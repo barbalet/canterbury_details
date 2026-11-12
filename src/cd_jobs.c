@@ -19,9 +19,36 @@ static int overlap(unsigned a, unsigned b, unsigned c, unsigned d) {
       return 1;
   return 0;
 }
+static uint64_t shift_cost(unsigned start, unsigned end, unsigned wage) {
+  unsigned duration = (end + 1440 - start) % 1440;
+  return (uint64_t)wage * (duration ? duration : 1440);
+}
 int cd_job_qualified(const CdWorld *world, const CdJob *j, const CdCitizen *p) {
   if (!p || !j || !j->view.open || p->health.mortality_pending)
     return 0;
+  const CdDslRole *named = cd_dsl_job_role(j->view.occupation);
+  if (named) {
+    if (!cd_dsl_role_recipe(named) || j->view.apprenticeship != (int)named->training_post)
+      return 0;
+    if (!named->training_post) {
+      uint32_t premises = cd_polygon_index(world->content, j->view.workplace);
+      return p->civil.age >= 18 && cd_dsl_certified(p, named) &&
+             (!named->owner || (premises != CD_NONE &&
+               world->owners[premises].person_id == p->civil.ref.person_id &&
+               world->owners[premises].world_token == p->civil.ref.world_token));
+    }
+    CdCitizen *mentor = cd_citizen((CdWorld *)world, j->view.mentor);
+    if (p->civil.age < 16 || !mentor || mentor == p || mentor->civil.age < 18 ||
+        mentor->health.mortality_pending)
+      return 0;
+    for (size_t slot = 0; slot < 2; ++slot) {
+      CdJob *teacher = cd_job((CdWorld *)world, mentor->jobs[slot]);
+      if (cd_job_mentor_matches(j, teacher) &&
+          cd_dsl_certified(mentor, cd_dsl_job_role(teacher->view.occupation)))
+        return 1;
+    }
+    return 0;
+  }
   CdOccupationView role;
   if (cd_occupation(j->view.occupation - 1, &role, NULL) != CD_OK ||
       !role.enabled)
@@ -123,14 +150,31 @@ CdStatus cd_world_job_create(CdWorld *w, const CdJobSpec *s, CdEntityId *out,
     return cd_diag(d, CD_INVALID_ARGUMENT, "Invalid explicit job definition");
   uint32_t b = cd_polygon_index(w->content, s->workplace),
            door = cd_door_index(w->content, s->entrance);
-  CdOccupationView role;
   if (b == CD_NONE || !w->premises[b].employer || door == CD_NONE ||
       w->content->doors[door].building != b ||
       !w->content->doors[door].reviewed ||
-      cd_occupation(s->occupation - 1, &role, NULL) != CD_OK || !role.enabled)
+      !cd_job_role_enabled(s->occupation))
     return cd_diag(d, CD_UNSUPPORTED,
                    "Job requires enabled role, configured employer and "
                    "reviewed source entrance");
+  const CdDslRole *named = cd_dsl_job_role(s->occupation);
+  if (named) {
+    const CdDslCareer *career = cd_dsl_career(named->career);
+    const char *use = w->premises[b].scenario_use[0] ?
+        w->premises[b].scenario_use : w->content->polygons[b].use;
+    int suitable = 0;
+    for (size_t i = 0; career && i < career->premises_count; ++i)
+      suitable |= !strcmp(career->premises[i], use);
+    uint64_t payroll = shift_cost(s->shift_start, s->shift_end, s->wage);
+    for (size_t i = 0; i < w->job_count; ++i) {
+      const CdJobView *job = &w->jobs[i].view;
+      if (job->open && job->workplace == s->workplace)
+        payroll += shift_cost(job->shift_start, job->shift_end, job->wage);
+    }
+    if (!suitable || s->apprenticeship != (int)named->training_post ||
+        !s->wage || w->premises[b].treasury < payroll)
+      return cd_diag(d, CD_UNSUPPORTED, "Technical role requires suitable premises and funded shift");
+  }
   if (s->institution) {
     uint32_t si = cd_site_index(w->content, s->institution);
     int linked = 0;
@@ -193,9 +237,19 @@ uint32_t cd_source_node(CdWorld *w, CdCitizen *p) {
   }
   return CD_NONE;
 }
-CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
-                             CdPersonRef mentor, int secondary,
-                             CdDiagnostic *d) {
+static void publish_assignment(CdWorld *w, CdJob *job, CdCitizen *person,
+                               CdPersonRef mentor, int secondary) {
+  cd_record_emit(w, CD_EVENT_JOB, person->civil.ref, mentor, job->view.id, 0,
+                 CD_RECORD_DIAGNOSTIC, job->view.basis,
+                 "Qualified workplace assignment committed");
+  job->view.worker = person->civil.ref;
+  job->view.mentor = mentor;
+  person->jobs[secondary] = job->view.id;
+}
+
+static CdStatus job_assignment(CdWorld *w, CdEntityId id, CdPersonRef ref,
+                               CdPersonRef mentor, int secondary,
+                               int publish, CdDiagnostic *d) {
   CdJob *j = cd_job(w, id);
   CdCitizen *p = cd_citizen(w, ref);
   if (!cd_model_ready(w) || !j || !p || !j->view.open ||
@@ -233,14 +287,80 @@ CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
                    "Workplace is not reachable on currently qualified links");
   if (!cd_usable(w, b) || w->premises[b].closed)
     return cd_diag(d, CD_INVALID_STATE, "Employer premises unavailable");
-  cd_record_emit(w,CD_EVENT_JOB,ref,mentor,id,0,CD_RECORD_DIAGNOSTIC,j->view.basis,"Qualified workplace assignment committed");
-  j->view.worker = ref;
-  j->view.mentor = mentor;
-  p->jobs[secondary] = id;
+  if (publish)
+    publish_assignment(w, j, p, mentor, secondary);
   return cd_diag(
       d, CD_OK,
       "Reachable qualified assignment committed; no position changed");
 }
+CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
+                             CdPersonRef mentor, int secondary, CdDiagnostic *d) {
+  return job_assignment(w, id, ref, mentor, secondary, 1, d);
+}
+
+CdStatus cd_world_staff_jobs(CdWorld *w, const CdEntityId *jobs, size_t job_count,
+                              const CdPersonRef *applicants, size_t applicant_count,
+                              CdDiagnostic *d) {
+  if (!cd_model_ready(w) || !jobs || !applicants || !job_count ||
+      job_count > w->job_count || applicant_count < job_count ||
+      applicant_count > w->count)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Staffing requires bounded jobs and applicants");
+  CdCitizen **selected = cd_memory_calloc(job_count, sizeof *selected, CD_MEM_TEMP);
+  unsigned char *used = cd_memory_calloc(w->count, sizeof *used, CD_MEM_TEMP);
+  unsigned char *seen = cd_memory_calloc(w->job_count, sizeof *seen, CD_MEM_TEMP);
+  uint64_t *payroll = cd_memory_calloc(w->content->np, sizeof *payroll, CD_MEM_TEMP);
+  CdStatus status = CD_CAPACITY;
+  const char *message = "Cannot stage staffing allocation";
+  if (!selected || !used || !seen || !payroll)
+    goto done;
+
+  for (size_t i = 0; i < job_count; ++i) {
+    CdJob *job = cd_job(w, jobs[i]);
+    if (!job || seen[jobs[i] - 1] || !job->view.open ||
+        job->view.worker.person_id || job->view.apprenticeship || !job->view.wage) {
+      status = CD_INVALID_ARGUMENT;
+      message = "Staffing requires distinct open regular paid vacancies";
+      goto done;
+    }
+    seen[jobs[i] - 1] = 1;
+    uint32_t building = cd_polygon_index(w->content, job->view.workplace);
+    if (building == CD_NONE || !w->premises[building].employer) {
+      status = CD_UNKNOWN_REFERENCE;
+      message = "Vacancy lacks a configured employer premises";
+      goto done;
+    }
+    payroll[building] += shift_cost(job->view.shift_start, job->view.shift_end,
+                                    job->view.wage);
+    if (payroll[building] > w->premises[building].treasury) {
+      message = "Employer cannot cover proposed shift payroll";
+      goto done;
+    }
+    for (size_t a = 0; a < applicant_count; ++a) {
+      CdCitizen *person = cd_citizen(w, applicants[a]);
+      if (!person || used[person - w->people] ||
+          job_assignment(w, jobs[i], applicants[a], (CdPersonRef){0}, 0, 0, NULL) != CD_OK)
+        continue;
+      selected[i] = person;
+      used[person - w->people] = 1;
+      break;
+    }
+    if (!selected[i]) {
+      message = "A funded vacancy has no unassigned qualified applicant with a reachable route";
+      goto done;
+    }
+  }
+  for (size_t i = 0; i < job_count; ++i)
+    publish_assignment(w, cd_job(w, jobs[i]), selected[i], (CdPersonRef){0}, 0);
+  status = CD_OK;
+  message = "Funded reachable staff assignments committed";
+done:
+  cd_memory_free(selected);
+  cd_memory_free(used);
+  cd_memory_free(seen);
+  cd_memory_free(payroll);
+  return cd_diag(d, status, message);
+}
+
 static void unassign_one(CdWorld *w, CdJob *j) {
   if(j->view.worker.person_id)cd_record_emit(w,CD_EVENT_JOB,j->view.worker,j->view.mentor,j->view.id,0,CD_RECORD_DIAGNOSTIC,j->view.basis,"Workplace assignment released; dependent work revalidated");
   CdCitizen *p = cd_citizen(w, j->view.worker);
@@ -289,6 +409,10 @@ CdStatus cd_world_job(const CdWorld *w, CdEntityId id, CdJobView *out,
 void cd_commute_to(CdWorld *w, CdCitizen *p, uint32_t target, int key,
                    int repair) {
   CdContent *c = w->content;
+  if (target >= c->nd || !c->doors[target].reviewed) {
+    p->reason = CD_ROUTE_ACCESS;
+    return;
+  }
   CdDoor *destination = &c->doors[target];
   if (p->inside == destination->building)
     return;
@@ -320,7 +444,7 @@ void cd_commute_to(CdWorld *w, CdCitizen *p, uint32_t target, int key,
   if (cd_source_node(w, p) == destination->node)
     cd_world_enter(w, p->civil.ref, destination->id, key, repair, NULL);
   else
-    cd_world_travel(w, p->civil.ref, c->nodes[destination->node].id, NULL);
+    cd_automatic_travel(w, p->civil.ref, c->nodes[destination->node].id);
 }
 void cd_jobs_plan(CdWorld *w) {
   unsigned m = minute(w);
@@ -328,7 +452,7 @@ void cd_jobs_plan(CdWorld *w) {
     CdCitizen *p = &w->people[i];
     if (cd_civic_busy(p) || p->activity != CD_ACTIVITY_IDLE ||
         p->food_remaining || p->feed_target.person_id ||
-        p->care_target.person_id || p->cargo.remaining ||
+        p->care_target.person_id || p->cargo.remaining || p->dsl_cargo.quantity ||
         p->trade.view.state == CD_TASK_PENDING ||
         p->trade.view.state == CD_TASK_WAITING)
       continue;
@@ -343,7 +467,8 @@ void cd_jobs_plan(CdWorld *w) {
     }
     if (chosen) {
       uint32_t b = cd_polygon_index(w->content, chosen->view.workplace);
-      int repair = p->work.view.project &&
+      int repair = p->work.spec.recipe == CD_RECIPE_DEVELOPMENT &&
+                   p->work.view.project &&
                    p->work.view.project == w->projects[b].view.id &&
                    w->projects[b].view.kind == CD_DEV_REPAIR &&
                    !w->premises[b].fire;

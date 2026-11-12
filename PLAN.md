@@ -961,3 +961,10 @@ services and five illustrative mass-balanced recipes. Grammar/semantics are in
 a runtime compiler: no new occupations, supply, qualifications, employers or
 behaviour are enabled. Native task binding, curriculum/qualification definitions,
 workplace allocation and implementation remain required before activation.
+
+## Canterbury DSL implementation
+
+The [Canterbury DSL implementation plan](docs/canterbury-dsl/PLAN.md) defines
+20 cycles from executable schema through standalone release. Cycles 01–04
+provide the versioned schema, parser and scenario pack compiler. Runtime loading
+and execution begin in Cycle 05.

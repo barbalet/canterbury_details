@@ -1,10 +1,12 @@
 #import "CitySession.h"
 #include "cd_work.h"
+#include "cd_scenario_startup.h"
 @implementation CdCityState
 @end
 @interface CdCitySession () {
   CdContent *_content;
   CdWorld *_world;
+  CdScenarioStartup _startup;
   dispatch_queue_t _queue;
   NSArray<NSDictionary *> *_people;
   uint64_t _admissions, _retirements, _revision;
@@ -26,6 +28,7 @@
     return nil;
   state.revision = ++_revision;
   state.clock = clock;
+  state.scenarioIdentity = [NSString stringWithUTF8String:_startup.identity];
   state.summary = summary;
   CdCivicSummary civic;
   if (cd_world_civic_summary(_world, &civic, error) != CD_OK)
@@ -88,6 +91,23 @@
     }
   });
 }
+- (void)openScenario:(NSString *)path
+         completion:(void (^)(CdCityState *, NSString *))completion {
+  dispatch_async(_queue, ^{
+    @autoreleasepool {
+      CdDiagnostic error = {0};
+      CdScenarioStartup candidate;
+      CdCityState *state = nil;
+      if (cd_scenario_startup_read(self->_content, path.fileSystemRepresentation,
+                                   &candidate, &error) == CD_OK &&
+          cd_world_open_startup(self->_content, &candidate, &self->_world, &error) == CD_OK) {
+        self->_startup = candidate;
+        state = [self state:&error rebuild:YES];
+      }
+      [self publish:state error:error completion:completion];
+    }
+  });
+}
 - (void)step:(unsigned)minutes
     completion:(void (^)(CdCityState *, NSString *))completion {
   dispatch_async(_queue, ^{
@@ -106,8 +126,10 @@
       CdDiagnostic error = {0};
       CdScenario scenario = {
           27000, 1940, {1940, 1, 1, 0}, "synthetic-ordinary-v1"};
-      CdCityState *state = cd_world_open(self->_content, &scenario,
-                                         &self->_world, &error) == CD_OK
+      CdStatus status = self->_startup.identity[0]
+          ? cd_world_open_startup(self->_content, &self->_startup, &self->_world, &error)
+          : cd_world_open(self->_content, &scenario, &self->_world, &error);
+      CdCityState *state = status == CD_OK
                                ? [self state:&error rebuild:YES]
                                : nil;
       [self publish:state error:error completion:completion];
@@ -166,6 +188,8 @@
           load ? cd_world_load(&self->_world, self->_content,
                                path.fileSystemRepresentation, &d)
                : cd_world_save(self->_world, path.fileSystemRepresentation, &d);
+      if (status == CD_OK && load)
+        self->_startup = (CdScenarioStartup){0};
       CdCityState *state = status == CD_OK ? [self state:&d rebuild:load] : nil;
       [self publish:state error:d completion:completion];
     }

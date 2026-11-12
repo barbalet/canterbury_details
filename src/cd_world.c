@@ -1,3 +1,4 @@
+#include "cd_scenario_startup.h"
 #include "cd_city_internal.h"
 #include "cd_native.h"
 #include <stdint.h>
@@ -125,8 +126,33 @@ void cd_world_publish_checkpoint(CdWorld **out, CdWorld *w,
   active_world = w;
   *out = w;
 }
-CdStatus cd_world_open(const CdContent *content, const CdScenario *s,
+static CdStatus open_world(const CdContent *, const CdScenario *,
+                           const unsigned *, CdWorld **, CdDiagnostic *);
+
+CdStatus cd_world_open(const CdContent *content, const CdScenario *scenario,
                        CdWorld **out, CdDiagnostic *d) {
+  return open_world(content, scenario, NULL, out, d);
+}
+
+CdStatus cd_world_open_startup(const CdContent *content, const CdScenarioStartup *startup,
+                               CdWorld **out, CdDiagnostic *d) {
+  if (!startup)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Missing scenario startup");
+  size_t count = startup->scenario.initial_people;
+  uint64_t total = 0, minors = 0;
+  for (unsigned i = 0; i < 5; ++i) {
+    total += startup->cohorts[i];
+    if (i < 3)
+      minors += startup->cohorts[i];
+  }
+  size_t child_slots = 2 * (count / 4) + (count % 4 == 3);
+  if (total != count || minors > child_slots)
+    return cd_diag(d, CD_INVALID_DATA, "Scenario cohorts cannot form guarded households");
+  return open_world(content, &startup->scenario, startup->cohorts, out, d);
+}
+
+static CdStatus open_world(const CdContent *content, const CdScenario *s,
+                           const unsigned *cohorts, CdWorld **out, CdDiagnostic *d) {
   if (!content || !s || !out || (*out && *out != active_world) ||
       (active_world && *out != active_world) || !s->initial_people ||
       s->initial_people > cd_smoke_capacity() || s->civil_origin.year != 1940 ||
@@ -160,7 +186,7 @@ CdStatus cd_world_open(const CdContent *content, const CdScenario *s,
   w->native = native;
   /* All model arrays and policy validation were staged before native
    * publication. */
-  if (cd_population_init(w, s) != CD_OK || cd_housing_init(w) != CD_OK ||
+  if (cd_population_init(w, s, cohorts) != CD_OK || cd_housing_init(w) != CD_OK ||
       cd_native_client(native, cd_city_minute, w) != CD_OK) {
     fputs("Internal city publication invariant failed\n", stderr);
     abort();

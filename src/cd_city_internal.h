@@ -2,6 +2,7 @@
 #define CD_CITY_INTERNAL_H
 #include "cd_bootstrap.h"
 #include "cd_city.h"
+#include "cd_dsl_catalogue.h"
 #include "cd_human.h"
 #include "cd_work.h"
 #include "cd_civic_internal.h"
@@ -97,6 +98,15 @@ typedef struct {
   int has_key;
 } CdJob;
 typedef struct {
+  CdEntityId premises;
+  uint64_t carried, quantity;
+  unsigned resource, requested, delivery;
+} CdDslCargo;
+enum { CD_DSL_CERTIFICATES = 8 };
+typedef struct {
+  unsigned role;
+} CdDslCertificate;
+typedef struct {
   CdResidentView civil;
   uint32_t anchor;
   CdRoute route;
@@ -121,9 +131,11 @@ typedef struct {
   unsigned food_remaining;
   char training_basis[96];
   CdEntityId jobs[2];
+  CdDslCertificate certificates[CD_DSL_CERTIFICATES];
   CdWorkTask work;
   CdTradeTask trade;
   CdCargo cargo;
+  CdDslCargo dsl_cargo;
   uint64_t wallet, goods[CD_GOODS];
   unsigned credentials, ordination_kind, water, ration_used;
   CdEntityId ordination_institution, memberships[4], vehicle, driving, refuge;
@@ -139,10 +151,16 @@ typedef struct {
   size_t members;
   int housing_known;
 } CdHousehold;
+enum { CD_DSL_PREMISES_STOCKS = 16, CD_DSL_RESOURCE_LIMIT = 128 };
+typedef struct {
+  uint64_t available, reserved, key, work;
+  unsigned resource, settled;
+} CdDslStock;
 typedef struct {
   unsigned meals, raw, enabled, producer, beds, occupied, medicine;
   char food_basis[96], clinic_basis[96];
   uint64_t goods[CD_GOODS], reserved[CD_GOODS], treasury, escrow_money;
+  CdDslStock dsl_stock[CD_DSL_PREMISES_STOCKS];
   unsigned reserved_raw, reserved_meals, prices[CD_GOODS], meal_price;
   unsigned water, shelter_capacity, fire;
   char water_basis[96], shelter_basis[96], fire_basis[96];
@@ -179,6 +197,8 @@ struct CdWorld {
   uint64_t *home_wallet, *home_goods;
   uint64_t next_work, next_trade, next_project;
   CdEconomyLedger economy;
+  uint64_t dsl_imported[CD_DSL_RESOURCE_LIMIT], dsl_consumed[CD_DSL_RESOURCE_LIMIT],
+           dsl_produced[CD_DSL_RESOURCE_LIMIT], dsl_lost[CD_DSL_RESOURCE_LIMIT];
   CdOffice *offices;
   CdRoster *rosters;
   CdService *services;
@@ -223,7 +243,7 @@ uint32_t cd_door_index(const CdContent *, CdEntityId);
 CdStatus cd_route_indices(CdWorld *, uint32_t, uint32_t, CdRoute *);
 CdCitizen *cd_citizen(CdWorld *, CdPersonRef);
 void cd_population_name(const CdWorld *, CdPersonId, CdEntityId, char *);
-CdStatus cd_population_init(CdWorld *, const CdScenario *);
+CdStatus cd_population_init(CdWorld *, const CdScenario *, const unsigned *);
 void cd_population_view(const CdWorld *, const CdCitizen *, CdResidentView *);
 void cd_city_minute(CdSmokeSession *, void *);
 void cd_movement_tick(CdWorld *);
@@ -262,11 +282,25 @@ void cd_work_release(CdWorld *, CdCitizen *, int);
 void cd_trade_release(CdWorld *, CdCitizen *);
 void cd_employment_retire(CdWorld *, CdCitizen *, CdRetirement);
 uint64_t cd_work_digest(const CdWorld *, uint64_t);
+const CdDslRole *cd_dsl_job_role(CdEntityId);
+int cd_dsl_certified(const CdCitizen *, const CdDslRole *);
+int cd_dsl_certificate_valid(const CdCitizen *);
+int cd_job_mentor_matches(const CdJob *, const CdJob *);
+int cd_job_role_enabled(CdEntityId);
+
+int cd_dsl_stock_valid(const CdWorld *);
+void cd_dsl_cargo_tick(CdWorld *, CdCitizen *);
+void cd_dsl_cargo_retire(CdWorld *, CdCitizen *);
+typedef enum { CD_DSL_HOLD, CD_DSL_CHECK_OUTPUT, CD_DSL_COMPLETE, CD_DSL_RETURN } CdDslWorkAction;
+int cd_dsl_work_stock(CdWorld *, uint32_t, const CdWorkTask *, CdDslWorkAction);
+int cd_dsl_work_holds(const CdWorld *, uint32_t, const CdWorkTask *, CdPremises *);
+
 uint32_t cd_site_index(const CdContent *, CdEntityId);
 int cd_pending(CdTaskState);
 uint64_t cd_now(const CdWorld *);
 uint32_t cd_reviewed_door(const CdWorld *, CdEntityId);
 uint32_t cd_source_node(CdWorld *, CdCitizen *);
+void cd_automatic_travel(CdWorld *, CdPersonRef, CdEntityId);
 void cd_commute_to(CdWorld *, CdCitizen *, uint32_t, int, int);
 int cd_civic_busy(const CdCitizen *);
 int cd_office_job_valid(CdWorld *, CdEntityId);

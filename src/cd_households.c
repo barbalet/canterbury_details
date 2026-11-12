@@ -39,6 +39,85 @@ CdStatus cd_housing_init(CdWorld *w) {
   }
   return CD_OK;
 }
+CdStatus cd_world_households_allocate(CdWorld *w, CdDiagnostic *d) {
+  if (!cd_model_ready(w) || !w->home_count)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Housing allocation requires a live population");
+  for (size_t h = 0; h < w->home_count; ++h)
+    if (w->homes[h].housing_known || w->homes[h].dwelling != CD_NONE)
+      return cd_diag(d, CD_INVALID_STATE, "Housing allocation requires fresh households");
+  for (size_t i = 0; i < w->count; ++i)
+    if (w->people[i].civil.position_known || w->people[i].presence)
+      return cd_diag(d, CD_INVALID_STATE, "Housing allocation precedes initial physical placement");
+
+  uint32_t *selected = cd_memory_calloc(w->home_count, sizeof *selected, CD_MEM_TEMP);
+  uint32_t *capacity = cd_memory_calloc(w->content->np, sizeof *capacity, CD_MEM_TEMP);
+  CdStatus status = CD_CAPACITY;
+  const char *message = "Cannot stage housing allocation";
+  if (!selected || !capacity)
+    goto done;
+
+  for (uint32_t b = 0; b < w->content->np; ++b) {
+    const CdPolygon *building = &w->content->polygons[b];
+    const char *use = w->premises[b].scenario_use[0] ?
+        w->premises[b].scenario_use : building->use;
+    /* Mixed-use premises require a separately declared residential capacity. */
+    if (building->kind != CD_BUILDING || !building->capacity_known ||
+        strcmp(use, "residential") || !cd_usable(w, b))
+      continue;
+    uint32_t door = cd_reviewed_door(w, building->id);
+    if (door == CD_NONE)
+      continue;
+    uint32_t node = w->content->doors[door].node;
+    for (uint32_t i = w->content->adj_offset[node];
+         i < w->content->adj_offset[node + 1]; ++i) {
+      uint32_t edge = w->content->adj_edges[i];
+      if (w->content->edges[edge].qualified && !w->closed[edge]) {
+        capacity[b] = cd_capacity(w, b);
+        break;
+      }
+    }
+  }
+  for (size_t h = 0; h < w->home_count; ++h) {
+    uint32_t b = 0;
+    unsigned members = w->homes[h].members;
+    if (!members) {
+      selected[h] = CD_NONE;
+      continue;
+    }
+    while (b < w->content->np && capacity[b] < members)
+      ++b;
+    if (b == w->content->np) {
+      message = "Insufficient reviewed residential capacity connected to the walking network";
+      goto done;
+    }
+    selected[h] = b;
+    capacity[b] -= members;
+  }
+
+  for (size_t h = 0; h < w->home_count; ++h) {
+    CdHousehold *household = &w->homes[h];
+    if (selected[h] == CD_NONE)
+      continue;
+    household->dwelling = selected[h];
+    household->housing_known = 1;
+    w->housing[selected[h]] += household->members;
+  }
+  for (size_t i = 0; i < w->count; ++i) {
+    CdCitizen *person = &w->people[i];
+    person->civil.dwelling =
+        w->content->polygons[selected[person->civil.household - 1]].id;
+  }
+  cd_record_emit(w, CD_EVENT_HOUSEHOLD, (CdPersonRef){0}, (CdPersonRef){0},
+                 w->home_count, 0, CD_RECORD_PUBLIC, "reviewed residential capacity",
+                 "Initial household allocation committed");
+  status = CD_OK;
+  message = "Households assigned to reviewed residential premises";
+done:
+  cd_memory_free(selected);
+  cd_memory_free(capacity);
+  return cd_diag(d, status, message);
+}
+
 CdStatus cd_world_household(const CdWorld *w, size_t i, CdHouseholdView *out,
                             CdDiagnostic *d) {
   if (!w || !out || i >= w->home_count)

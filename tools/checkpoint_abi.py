@@ -4,7 +4,9 @@ import hashlib,re,json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def build():
- paths=sorted([*ROOT.glob('src/*.h'),*ROOT.glob('apesdk/**/*.h'),ROOT/'content/source-manifest.json',Path(__file__)])
+ from compile_dsl_catalogue import build as compile_dsl_catalogue
+ definitions=compile_dsl_catalogue()
+ paths=sorted([*ROOT.glob('src/*.h'),*ROOT.glob('apesdk/**/*.h'),ROOT/'content/source-manifest.json',definitions,Path(__file__)])
  digest=hashlib.sha256(b''.join(str(p.relative_to(ROOT)).encode()+b'\0'+p.read_bytes() for p in paths)).hexdigest()
  text=(ROOT/'src/cd_city_internal.h').read_text().split('struct CdWorld {',1)[1].split('\n};',1)[0]
  pointers=re.findall(r'\*\s*(\w+)',text)

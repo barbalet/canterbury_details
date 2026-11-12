@@ -30,6 +30,16 @@ h['doors'].append(dict(id=303,building=2,node=110,reviewed=True,basis='technical
 w=copy.deepcopy(h)
 w['sites']=[dict(id=401,source='closed-fixture',name='Closed Christian fixture',religion='Christian',denomination='source denomination',status='closed',point=[51,31],review_required=True,setting_year=1940,source_record='{"closure_year":1928,"fixture":true}'),dict(id=402,source='unlocated-fixture',name='Unlocated Jewish fixture',religion='Jewish',denomination='unknown',status='unknown',point=None,review_required=True,setting_year=1940,source_record='{"fixture":true,"date":"unknown"}'),dict(id=403,source='active-fixture',name='Active fixture',religion='Christian',denomination='unknown',status='active',point=[31,31],setting_year=1940,source_record='{"fixture":true}')]
 (out/'work.bin').write_bytes(encode(w))
+staffed_day=copy.deepcopy(w)
+staffed_day['polygons'][0]['use']='residential'
+staffed_day['polygons'][1]['use']='workshop'
+(out/'staffed-day.bin').write_bytes(encode(staffed_day))
+
+for use in ('workshop', 'industrial', 'commercial'):
+ trial=copy.deepcopy(w)
+ trial['polygons'][1]['use']=use
+ (out/f'dsl-{use}.bin').write_bytes(encode(trial))
+
 c=copy.deepcopy(w)
 c['sites'][0]['denomination']='anglican'
 c['sites'].append(dict(id=404,source='synagogue-fixture',name='Jewish scenario fixture',religion='judaism',denomination='unknown',status='scenario_active',point=[51,31],review_required=True,setting_year=1940,source_record='{"fixture":true,"setting_assignment":"explicit"}'))

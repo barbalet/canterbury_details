@@ -84,7 +84,7 @@ Kinds/masks are the public enums in `cd_city.h`, `cd_human.h`, `cd_work.h` and
 | create-job | target workplace, secondary door, units occupation ID, value wage, starts/duration shift start/end (minute of day), auxiliary institution; flags bit0 apprenticeship, bit1 key |
 | assign-job | actor worker, target job, secondary mentor logical ID (0 none), flags secondary-job slot |
 | unassign-job / close-job | target job; release worker / close vacancy |
-| work | actor, target job, secondary project ID, value recipe enum, units production quantity |
+| work | actor, target job, secondary project ID or refined recipe index, value recipe enum (6 for refined work), units production quantity |
 | cancel-work | actor, target own work ID |
 | import-goods | target building, value good enum, units finite imported quantity |
 | import-food | target building, units meals, value raw food, flags producer bool; configures store and imports finite stocks |

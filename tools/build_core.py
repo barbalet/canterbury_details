@@ -5,12 +5,13 @@ from pathlib import Path
 from native_sources import ROOT,CORE,RESOURCES,sdk_sources
 from native_profile import PROFILE,preflight
 from checkpoint_abi import build as abi
+from compile_dsl_catalogue import build as compile_dsl_catalogue
 PUBLIC=['cd_api.h','cd_city.h','cd_human.h','cd_work.h','cd_civic.h','cd_observer.h','cd_management.h','cd_core.h']
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def build():
- extra=preflight();subprocess.run(['python3','tools/compile_occupations.py','--write'],cwd=ROOT,check=True);abi()
+ extra=preflight();compile_dsl_catalogue();subprocess.run(['python3','tools/compile_occupations.py','--write'],cwd=ROOT,check=True);abi()
  compiler=shlex.split(os.environ.get('CC','cc'));flags=[*PROFILE,*extra,'-O2','-std=c11','-Iapesdk','-Isrc','-include','src/cd_api.h'];out=ROOT/'build/core';out.mkdir(parents=True,exist_ok=True)
- sources=CORE+sdk_sources();inputs=sorted(set(sources+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+[str(p.relative_to(ROOT)) for p in (ROOT/'apesdk').rglob('*.h')]+['content/source-manifest.json','build/content/CheckpointABI.inc','build/content/OccupationCatalogue.inc','tools/build_core.py','tools/native_sources.py']))
+ sources=CORE+sdk_sources();inputs=sorted(set(sources+[str(p.relative_to(ROOT)) for p in (ROOT/'src').glob('*.h')]+[str(p.relative_to(ROOT)) for p in (ROOT/'apesdk').rglob('*.h')]+['content/source-manifest.json','build/content/CheckpointABI.inc','build/content/OccupationCatalogue.inc','build/content/CanterburyDefinitions.inc','tools/build_core.py','tools/native_sources.py']))
  identity={'sources':{p:sha(ROOT/p) for p in inputs},'compiler':subprocess.check_output([*compiler,'--version'],text=True).splitlines()[0],'flags':flags};key=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest();stamp=out/'manifest.json';archive=out/'libCanterburyCore.a'
  old=json.loads(stamp.read_text()) if stamp.exists() else {}
  if not archive.exists() or old.get('fingerprint')!=key or old.get('archive_sha256')!=sha(archive):

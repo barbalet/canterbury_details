@@ -62,7 +62,7 @@
     },
     {
       "name": "work",
-      "help": "actor, target job, secondary project ID, value recipe enum, units production quantity"
+      "help": "actor, target job, secondary project ID or refined recipe index, value recipe enum (6 for refined work), units production quantity"
     },
     {
       "name": "cancel-work",

@@ -42,5 +42,15 @@ def main():
   output=run([ROOT/'build/work-test',n]);(ROOT/f'build/work-{n}.log').write_text(output);result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
   report={'format':f'canterbury-details-cycle{n:02}-validation','version':1,**expected,'scope':scope,'native_fixture':result,'runtime_pack':packed,'source_institutions':len(actual['sites']),'parameters':'Explicit technical scenario fixtures; no historical staffing, prices, yields or congregations inferred','ok':True}
   (ROOT/f'content/cycle-{n:02}-validation.json').write_text(json.dumps(report,indent=2)+'\n');print('PASS work cycle '+str(n),flush=True)
+ output=run([ROOT/'build/work-test',24])
+ (ROOT/'build/work-refined.log').write_text(output)
+ result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
+ print('PASS refined production, physical cargo, cancellation and checkpoint',flush=True)
+ output=run([ROOT/'build/work-test',25]);(ROOT/'build/work-dsl-trades.log').write_text(output)
+ result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
+ print('PASS 50 named trade roles, authority, finite production and checkpoint',flush=True)
+ output=run([ROOT/'build/work-test',26]);(ROOT/'build/work-staffed-day.log').write_text(output)
+ result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
+ print('PASS staffed full day, commutes, production, service, conservation and replay',flush=True)
  assert inventory()==json.loads((ROOT/MANIFEST).read_text())
 if __name__=='__main__':main()

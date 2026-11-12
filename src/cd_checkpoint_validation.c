@@ -43,6 +43,7 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
   } while (0)
 #define TEXT(x) REQUIRE(memchr((x), 0, sizeof(x)))
 #define REF(x) REQUIRE(ref_known((x), ids, w->count + w->life_count))
+  REQUIRE(cd_dsl_stock_valid(w));
   uint64_t native_minute = cd_native_stage_minutes(stage);
   CdCivilTime civil;
   REQUIRE(w->origin_offset < 366 * 1440 &&
@@ -168,19 +169,22 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     if (p->ordination_institution)
       REQUIRE(cd_site_index(w->content, p->ordination_institution) != CD_NONE &&
               p->ordination_kind <= CD_OFFICE_RABBI);
+    REQUIRE(cd_dsl_certificate_valid(p));
     for (unsigned g = 0; g < CD_GOODS; g++)
       REQUIRE(p->goods[g] <= 16);
     if (p->work.view.id) {
       REQUIRE(p->work.view.id < w->next_work && p->work.view.job &&
               p->work.view.job <= w->job_count &&
               p->work.view.progress <= p->work.view.duration &&
-              (unsigned)p->work.spec.recipe <= CD_RECIPE_DEVELOPMENT &&
+              (unsigned)p->work.spec.recipe <= CD_RECIPE_REFINED &&
               p->work.spec.units && p->work.spec.units <= 1000 &&
               p->work.view.duration && p->work.view.duration <= 10080);
       uint32_t b = cd_polygon_index(
           w->content, w->jobs[p->work.view.job - 1].view.workplace);
       REQUIRE(b != CD_NONE);
       if (cd_pending(p->work.view.state)) {
+        if (p->work.spec.recipe == CD_RECIPE_REFINED)
+          REQUIRE(cd_dsl_work_holds(w, b, &p->work, &held[b]));
         for (unsigned g = 0; g < CD_GOODS; g++) {
           REQUIRE(p->work.inputs[g] <= 2000);
           held[b].reserved[g] += p->work.inputs[g];
@@ -236,7 +240,7 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     REF(j->view.mentor);
     TEXT(j->view.basis);
     REQUIRE(j->view.id == i + 1 && j->view.occupation &&
-            j->view.occupation <= cd_occupation_count() &&
+            cd_job_role_enabled(j->view.occupation) &&
             j->view.shift_start < 1440 && j->view.shift_end < 1440 &&
             j->view.wage <= 1000 &&
             cd_polygon_index(w->content, j->view.workplace) != CD_NONE &&
@@ -371,6 +375,8 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     TEXT(p->employer_basis);
     TEXT(p->scenario_use);
     REF(w->owners[b]);
+    for (size_t i = 0; i < CD_DSL_PREMISES_STOCKS; ++i)
+      REQUIRE(p->dsl_stock[i].work == held[b].dsl_stock[i].work);
     REQUIRE(
         w->housing[b] == counts[b] &&
         w->visitors[b] == counts[w->content->np + b] &&

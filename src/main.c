@@ -2,6 +2,8 @@
 #include "cd_city.h"
 #include "cd_observer.h"
 #include "cd_management.h"
+#include "cd_scenario_startup.h"
+#include "cd_dsl_catalogue.h"
 #include <errno.h>
 #include <inttypes.h>
 #include <stdio.h>
@@ -55,14 +57,129 @@ static CdStatus management_output(const CdWorld *w, int kind, size_t offset,
   puts("]}");
   return CD_OK;
 }
+static void definition_quantities(const CdDslQuantity *amounts, size_t count) {
+  putchar('[');
+  for (size_t i = 0; i < count; ++i) {
+    if (i)
+      putchar(',');
+    fputs("{\"resource\":", stdout);
+    json_text(amounts[i].resource);
+    printf(",\"quantity\":%" PRIu64 "}", amounts[i].quantity);
+  }
+  putchar(']');
+}
+
+static int definition_output(const char *query) {
+  if (!strcmp(query, "summary")) {
+    printf("{\"definition_identity\":\"%s\",\"families\":%zu,\"roles\":%zu,\"advancements\":%zu,"
+           "\"resources\":%zu,\"recipes\":%zu}\n",
+           cd_dsl_catalogue_identity(), cd_dsl_career_count(), cd_dsl_role_count(), cd_dsl_advance_count(),
+           cd_dsl_resource_count(), cd_dsl_recipe_count());
+    return 0;
+  }
+  const CdDslCareer *career = cd_dsl_career(query);
+  if (career) {
+    fputs("{\"career\":", stdout);
+    json_text(career->id);
+    fputs(",\"sector\":", stdout);
+    json_text(career->sector);
+    fputs(",\"candidate_premises_types\":[", stdout);
+    for (size_t i = 0; i < career->premises_count; ++i) {
+      if (i)
+        putchar(',');
+      json_text(career->premises[i]);
+    }
+    puts("]}");
+    return 0;
+  }
+  const CdDslRole *role = cd_dsl_role(query);
+  if (role) {
+    fputs("{\"role\":", stdout);
+    json_text(role->id);
+    fputs(",\"title\":", stdout);
+    json_text(role->title);
+    fputs(",\"career\":", stdout);
+    json_text(role->career);
+    fputs(",\"qualification\":", stdout);
+    json_text(role->qualification);
+    printf(",\"stage\":%u,\"training_post\":%s,\"enabled\":%s,\"technical_recipe\":",
+           role->stage, role->training_post ? "true" : "false",
+           role->enabled ? "true" : "false");
+    const char *recipe = cd_dsl_role_recipe(role);
+    if (recipe)
+      json_text(recipe);
+    else
+      fputs("null", stdout);
+    puts("}");
+    return 0;
+  }
+  const CdDslAdvance *advance = cd_dsl_advance(query);
+  if (advance) {
+    fputs("{\"advance\":", stdout);
+    json_text(advance->id);
+    fputs(",\"from\":", stdout);
+    json_text(advance->from);
+    fputs(",\"to\":", stdout);
+    json_text(advance->to);
+    puts("}");
+    return 0;
+  }
+  const CdDslRecipe *recipe = cd_dsl_recipe(query);
+  if (recipe) {
+    fputs("{\"recipe\":", stdout);
+    json_text(recipe->id);
+    fputs(",\"unit\":", stdout);
+    json_text(recipe->unit);
+    fputs(",\"power\":", stdout);
+    json_text(recipe->power);
+    printf(",\"work_recipe_index\":%zu,\"worker_minutes\":%u,\"inputs\":",
+           (size_t)(recipe - cd_dsl_recipe_at(0)) + 1, recipe->worker_minutes);
+    definition_quantities(recipe->inputs, recipe->input_count);
+    fputs(",\"outputs\":", stdout);
+    definition_quantities(recipe->outputs, recipe->output_count);
+    fputs(",\"equipment\":[", stdout);
+    for (size_t i = 0; i < recipe->equipment_count; ++i) {
+      if (i)
+        putchar(',');
+      json_text(recipe->equipment[i]);
+    }
+    puts("]}");
+    return 0;
+  }
+  const CdDslResource *resource = cd_dsl_resource(query);
+  if (resource) {
+    fputs("{\"resource\":", stdout);
+    json_text(resource->id);
+    fputs(",\"group\":", stdout);
+    json_text(resource->group);
+    fputs(",\"unit\":", stdout);
+    json_text(resource->unit);
+    puts("}");
+    return 0;
+  }
+  fputs("Unknown Canterbury DSL definition\n", stderr);
+  return 2;
+}
+
 int main(int argc, char **argv) {
+  if (argc == 3 && !strcmp(argv[1], "--dsl-definition"))
+    return definition_output(argv[2]);
   int manage = -1;
   size_t page = 0;
   uint64_t people = cd_smoke_default_people(), minutes = 5, seed = 1940;
   const char *city_path = NULL, *load_path = NULL, *save_path = NULL,
-             *program_path = NULL, *record_path = NULL;
+             *program_path = NULL, *record_path = NULL, *scenario_path = NULL;
   int intervene = 0, diagnostic = 0, explicit_minutes = 0;
+  int explicit_population = 0, explicit_seed = 0, allocate_homes = 0, place_homes = 0;
   for (int i = 1; i < argc; i++) {
+    if (!strcmp(argv[i], "--place-homes")) {
+      place_homes = 1;
+      continue;
+    }
+    if (!strcmp(argv[i], "--allocate-homes")) {
+      allocate_homes = 1;
+      continue;
+    }
     if (!strcmp(argv[i], "--intervene")) {
       intervene = 1;
       continue;
@@ -77,9 +194,12 @@ int main(int argc, char **argv) {
            "native-backed city with explicit synthetic demographics. Default "
            "mode retains the native bootstrap diagnostic. City options: --load "
            "FILE --save FILE --program FILE --intervene --records FILE "
-           "--diagnostic --manage 0..10 --page 0..30000. Programs use the "
+           "--scenario FILE.cdstart --diagnostic --manage 0..10 --page 0..30000. Programs use the "
            "documented ordinary operation "
-           "protocol; load/program defaults to zero extra minutes.");
+           "protocol; load/program defaults to zero extra minutes.\n"
+           "--dsl-definition summary|ID inspects compiled Canterbury definitions.\n"
+           "--allocate-homes assigns fresh households to reviewed residential capacity.\n"
+           "--place-homes admits residents at their reviewed home entrances.");
       return 0;
     }
     if (i + 1 >= argc) {
@@ -103,6 +223,10 @@ int main(int argc, char **argv) {
       record_path = argv[++i];
       continue;
     }
+    if (!strcmp(option, "--scenario")) {
+      scenario_path = argv[++i];
+      continue;
+    }
     if (!strcmp(option, "--city")) {
       city_path = argv[++i];
       continue;
@@ -112,8 +236,10 @@ int main(int argc, char **argv) {
       fputs("Invalid numeric option\n", stderr);
       return 2;
     }
-    if (!strcmp(option, "--people"))
+    if (!strcmp(option, "--people")) {
       people = value;
+      explicit_population = 1;
+    }
     else if (!strcmp(option, "--minutes")) {
       minutes = value;
       explicit_minutes = 1;
@@ -121,8 +247,10 @@ int main(int argc, char **argv) {
       manage = (int)value;
     else if (!strcmp(option, "--page") && value <= 30000)
       page = (size_t)value;
-    else if (!strcmp(option, "--seed"))
+    else if (!strcmp(option, "--seed")) {
       seed = value;
+      explicit_seed = 1;
+    }
     else {
       fputs("Unknown option\n", stderr);
       return 2;
@@ -133,7 +261,11 @@ int main(int argc, char **argv) {
     fputs("Bootstrap parameter outside supported bounds\n", stderr);
     return 2;
   }
-  if ((load_path || save_path || program_path || record_path || manage >= 0) &&
+  if (scenario_path && (load_path || explicit_population || explicit_seed)) {
+    fputs("--scenario supplies population and seed and starts a new world.\n", stderr);
+    return 2;
+  }
+  if ((place_homes || allocate_homes || scenario_path || load_path || save_path || program_path || record_path || manage >= 0) &&
       !city_path)
     city_path = "build/content/CanterburyCity.bin";
   if ((program_path || load_path || manage >= 0) && !explicit_minutes)
@@ -144,12 +276,17 @@ int main(int argc, char **argv) {
     CdWorld *world = NULL;
     CdScenario scenario = {
         (size_t)people, seed, {1940, 1, 1, 0}, "synthetic-ordinary-v1"};
+    CdScenarioStartup startup = {0};
     CdCitySummary summary;
     uint64_t digest;
     int ok =
         cd_content_open(city_path, &content, &d) == CD_OK &&
+        (!scenario_path || cd_scenario_startup_read(content, scenario_path, &startup, &d) == CD_OK) &&
         (load_path ? cd_world_load(&world, content, load_path, &d)
-                   : cd_world_open(content, &scenario, &world, &d)) == CD_OK &&
+         : scenario_path ? cd_world_open_startup(content, &startup, &world, &d)
+                         : cd_world_open(content, &scenario, &world, &d)) == CD_OK &&
+        (!allocate_homes || cd_world_households_allocate(world, &d) == CD_OK) &&
+        (!place_homes || cd_world_place_households(world, &d) == CD_OK) &&
         (!program_path ||
          cd_world_run_program(world, program_path,
                               intervene ? CD_PERMISSION_INTERVENTION
@@ -167,6 +304,18 @@ int main(int argc, char **argv) {
              record_path, &d) == CD_OK);
     if (ok && manage >= 0)
       ok = management_output(world, manage, page, &d) == CD_OK;
+    if (ok && scenario_path) {
+      unsigned bands[5] = {0};
+      for (size_t i = 0; i < summary.people; ++i) {
+        CdResidentView resident;
+        if (cd_world_resident(world, i, &resident, NULL) == CD_OK) {
+          unsigned age = resident.age;
+          ++bands[age < 5 ? 0 : age < 15 ? 1 : age < 18 ? 2 : age < 65 ? 3 : 4];
+        }
+      }
+      printf("{\"scenario_identity\":\"%s\",\"age_cohorts\":[%u,%u,%u,%u,%u]}\n",
+             startup.identity, bands[0], bands[1], bands[2], bands[3], bands[4]);
+    }
     if (ok)
       printf("{\"scope\":\"ordinary-city\",\"policy\":\"synthetic-ordinary-"
              "v1\",\"people\":%zu,\"households\":%zu,\"housing_unknown\":%zu,"

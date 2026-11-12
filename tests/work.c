@@ -1,5 +1,6 @@
 #include "cd_city_internal.h"
 #include "cd_native.h"
+#include "cd_dsl_catalogue.h"
 #include <assert.h>
 #include <stdlib.h>
 static CdDiagnostic d;
@@ -368,6 +369,365 @@ static void cycle23(void) {
   ledgers(w);
   cd_world_close(w);
 }
+static void refined_work(void) {
+  CdWorld *w = world();
+  CdPersonRef worker = person(w, 0);
+  OK(cd_world_place(w, worker, 110, &d));
+  CdEntityId job = carpenter(w, worker);
+  uint64_t id;
+  uint64_t before = hash(w);
+  assert(cd_world_refined_work_submit(w, worker, 1, job, "cut_timber", 1,
+                                      "manual trial", &id, &d) == CD_CAPACITY);
+  assert(hash(w) == before);
+  OK(cd_world_dsl_import(w, 2, "timber", 1000, "manual trial", &d));
+  OK(cd_world_dsl_import(w, 2, "carpentry_tool_set", 1, "manual trial", &d));
+  OK(cd_world_refined_work_submit(w, worker, 1, job, "cut_timber", 1,
+                                  "manual trial", &id, &d));
+  step(w, 2);
+  CdWorkView task_view;
+  OK(cd_world_work(w, worker, &task_view, &d));
+  assert(!task_view.progress);
+  OK(cd_world_work_cancel(w, worker, id, &d));
+  CdDslStockView stock;
+  OK(cd_world_dsl_stock(w, 2, "timber", &stock, &d));
+  assert(stock.available == 1000 && stock.reserved == 0);
+  OK(cd_world_enter(w, worker, 303, 0, 0, &d));
+  arrive(w, worker);
+  OK(cd_world_refined_work_submit(w, worker, 2, job, "cut_timber", 1,
+                                  "manual trial", &id, &d));
+  step(w, 4);
+  OK(cd_world_work(w, worker, &task_view, &d));
+  assert(task_view.progress == 4);
+  uint64_t saved = hash(w);
+  OK(cd_world_save(w, "build/refined-work.city", &d));
+  OK(cd_world_load(&w, content, "build/refined-work.city", &d));
+  assert(hash(w) == saved);
+  worker = person(w, 0);
+  step(w, 16);
+  OK(cd_world_work(w, worker, &task_view, &d));
+  assert(task_view.state == CD_TASK_DONE && task_view.paid == 40);
+  OK(cd_world_dsl_stock(w, 2, "timber", &stock, &d));
+  assert(stock.available == 850 && stock.reserved == 0);
+  OK(cd_world_dsl_stock(w, 2, "wood_offcuts", &stock, &d));
+  assert(stock.available == 150);
+  OK(cd_world_dsl_stock(w, 2, "carpentry_tool_set", &stock, &d));
+  assert(stock.available == 1 && stock.reserved == 0);
+  assert(cd_dsl_stock_valid(w));
+  ledgers(w);
+  cd_world_close(w);
+}
+
+static void refined_cloth(void) {
+  CdWorld *w = world();
+  CdPersonRef worker = person(w, 0);
+  inside(w, worker, 2);
+  OK(cd_world_training(w, worker, CD_SKILL_CRAFT, "manual trial", &d));
+  OK(cd_world_employer(w, 2, "Technical cloth workshop", 8, "manual trial", &d));
+  OK(cd_world_money_import(w, company(2), 1000, "manual trial", &d));
+  CdEntityId job = vacancy(w, 2, 4, 480, 1020, 0);
+  OK(cd_world_job_assign(w, job, worker, (CdPersonRef){0}, 0, &d));
+  OK(cd_world_dsl_import(w, 2, "woven_cloth", 1000, "manual trial", &d));
+  OK(cd_world_dsl_import(w, 2, "hand_tool", 1, "manual trial", &d));
+  uint64_t work;
+  assert(cd_world_refined_work_submit(w, worker, 1, job, "cut_timber", 1,
+                                      "manual trial", &work, &d) == CD_UNSUPPORTED);
+  OK(cd_world_refined_work_submit(w, worker, 1, job, "cut_cloth", 1,
+                                  "manual trial", &work, &d));
+  step(w, 8);
+  CdWorkView view;
+  OK(cd_world_work(w, worker, &view, &d));
+  assert(view.state == CD_TASK_DONE && view.paid == 16);
+  CdDslStockView stock;
+  OK(cd_world_dsl_stock(w, 2, "woven_cloth", &stock, &d));
+  assert(stock.available == 900 && stock.reserved == 0);
+  OK(cd_world_dsl_stock(w, 2, "textile_offcuts", &stock, &d));
+  assert(stock.available == 100);
+  assert(cd_dsl_stock_valid(w));
+  cd_world_close(w);
+}
+
+static void refined_delivery(void) {
+  CdWorld *w = world();
+  CdPersonRef carrier = person(w, 0);
+  inside(w, carrier, 1);
+  OK(cd_world_dsl_import(w, 1, "timber", 1200, "delivery trial", &d));
+  assert(cd_world_dsl_cargo_order(w, carrier, 2, "timber", 1000, 1, &d) ==
+         CD_INVALID_ARGUMENT);
+  OK(cd_world_dsl_cargo_order(w, carrier, 1, "timber", 1000, 0, &d));
+  OK(cd_world_dsl_cargo_cancel(w, carrier, &d));
+  step(w, 1);
+  CdDslCargoView cargo;
+  OK(cd_world_dsl_cargo(w, carrier, &cargo, &d));
+  assert(!cargo.carried);
+  OK(cd_world_dsl_cargo_order(w, carrier, 1, "timber", 1000, 0, &d));
+  step(w, 1);
+  OK(cd_world_dsl_cargo(w, carrier, &cargo, &d));
+  assert(cargo.carried == 1000 && !cargo.pending_quantity);
+  uint64_t saved = hash(w);
+  OK(cd_world_save(w, "build/refined-delivery.city", &d));
+  OK(cd_world_load(&w, content, "build/refined-delivery.city", &d));
+  assert(hash(w) == saved);
+  carrier = person(w, 0);
+  OK(cd_world_exit(w, carrier, 301, 0, 0, &d));
+  arrive(w, carrier);
+  OK(cd_world_travel(w, carrier, 110, &d));
+  arrive(w, carrier);
+  OK(cd_world_enter(w, carrier, 303, 0, 0, &d));
+  arrive(w, carrier);
+  OK(cd_world_dsl_cargo_order(w, carrier, 2, "timber", 1000, 1, &d));
+  step(w, 1);
+  OK(cd_world_dsl_cargo(w, carrier, &cargo, &d));
+  assert(!cargo.carried && !cargo.pending_quantity);
+  CdDslStockView stock;
+  OK(cd_world_dsl_stock(w, 1, "timber", &stock, &d));
+  assert(stock.available == 200);
+  OK(cd_world_dsl_stock(w, 2, "timber", &stock, &d));
+  assert(stock.available == 1000);
+  CdEntityId job = carpenter(w, carrier);
+  OK(cd_world_dsl_import(w, 2, "carpentry_tool_set", 1, "delivery trial", &d));
+  uint64_t work;
+  OK(cd_world_refined_work_submit(w, carrier, 1, job, "cut_timber", 1,
+                                  "delivered timber", &work, &d));
+  OK(cd_world_save(w, "build/refined-chain.city", &d));
+  step(w, 20);
+  uint64_t completed = hash(w);
+  CdWorkView completed_work;
+  OK(cd_world_work(w, carrier, &completed_work, &d));
+  assert(completed_work.id == work && completed_work.state == CD_TASK_DONE &&
+         completed_work.paid == 40);
+  OK(cd_world_load(&w, content, "build/refined-chain.city", &d));
+  for (unsigned minute = 0; minute < 20; ++minute)
+    step(w, 1);
+  assert(hash(w) == completed);
+  OK(cd_world_dsl_stock(w, 2, "timber", &stock, &d));
+  assert(stock.available == 850 && stock.reserved == 0);
+  OK(cd_world_dsl_stock(w, 2, "wood_offcuts", &stock, &d));
+  assert(stock.available == 150);
+  assert(cd_dsl_stock_valid(w));
+  ledgers(w);
+  cd_world_close(w);
+}
+
+static void finish_trade(CdWorld *w, CdPersonRef worker, uint64_t id) {
+  for (unsigned minute = 0; minute < 120; ++minute) {
+    CdWorkView work;
+    OK(cd_world_work(w, worker, &work, &d));
+    assert(work.id == id && work.state != CD_TASK_CANCELLED);
+    if (work.state == CD_TASK_DONE) {
+      assert(work.paid && work.progress == work.duration);
+      return;
+    }
+    step(w, 1);
+  }
+  abort();
+}
+
+static void named_trade_roles(void) {
+  static const struct { const char *family, *recipe, *use; } trials[] = {
+      {"miller", "mill_wheat", "industrial"},
+      {"carpenter", "cut_timber", "workshop"},
+      {"weaver", "cut_cloth", "workshop"},
+      {"printer", "cut_paper", "workshop"},
+      {"metalworker", "form_metalwork", "workshop"},
+      {"joiner", "cut_timber", "workshop"},
+      {"dressmaker", "cut_cloth", "workshop"},
+      {"shoemaker", "trial_trim_leather", "workshop"},
+      {"butcher", "trial_portion_meat", "commercial"},
+      {"fishmonger", "trial_portion_fish", "commercial"},
+  };
+  cd_content_close(content);
+  scenario.initial_people = 12;
+  for (size_t trial = 0; trial < sizeof trials / sizeof trials[0]; ++trial) {
+    char path[96];
+    snprintf(path, sizeof path, "build/fixtures/dsl-%s.bin", trials[trial].use);
+    content = NULL;
+    OK(cd_content_open(path, &content, &d));
+    CdWorld *w = world();
+    CdPersonRef workers[5] = {person(w, 0), person(w, 1), person(w, 4),
+                              person(w, 5), person(w, 8)};
+    CdEntityId jobs[5] = {0};
+    CdJobSpec spec = {2, 303, 0, 0, 480, 1020, 2, 0, 0, "named trade trial"};
+    char names[5][48];
+    for (unsigned stage = 0; stage < 5; ++stage)
+      snprintf(names[stage], sizeof names[stage], "%s.%u", trials[trial].family, stage + 1);
+    OK(cd_world_employer(w, 2, "Technical workshop", 8, "named trade trial", &d));
+    assert(cd_world_dsl_job_create(w, &spec, names[1], &jobs[1], &d) == CD_UNSUPPORTED);
+    OK(cd_world_money_import(w, company(2), 10000, "named trade trial", &d));
+    for (size_t stage = 0; stage < 5; ++stage) {
+      inside(w, workers[stage], 2);
+      OK(cd_world_dsl_job_create(w, &spec, names[stage], &jobs[stage], &d));
+    }
+    assert(cd_world_job_assign(w, jobs[0], workers[0], workers[1], 0, &d) != CD_OK);
+    for (size_t stage = 1; stage < 5; ++stage) {
+      assert(cd_world_job_assign(w, jobs[stage], workers[stage], (CdPersonRef){0}, 0, &d) != CD_OK);
+      OK(cd_world_dsl_certify(w, workers[stage], names[stage], "technical assessment", &d));
+      if (cd_dsl_role(names[stage])->owner) {
+        assert(cd_world_job_assign(w, jobs[stage], workers[stage], (CdPersonRef){0}, 0, &d) != CD_OK);
+        OK(cd_world_owner(w, 2, workers[stage], &d));
+      }
+      OK(cd_world_job_assign(w, jobs[stage], workers[stage], (CdPersonRef){0}, 0, &d));
+    }
+    assert(cd_world_job_assign(w, jobs[0], workers[0], workers[1], 0, &d) != CD_OK);
+    OK(cd_world_job_assign(w, jobs[0], workers[0], workers[2], 0, &d));
+    const CdDslRecipe *recipe = cd_dsl_recipe(trials[trial].recipe);
+    uint64_t id, before = hash(w);
+    assert(cd_world_refined_work_submit(w, workers[1], 1, jobs[1], recipe->id, 1,
+                                        "missing materials", &id, &d) == CD_CAPACITY);
+    assert(hash(w) == before);
+    for (size_t i = 0; i < recipe->input_count; ++i)
+      OK(cd_world_dsl_import(w, 2, recipe->inputs[i].resource,
+                              recipe->inputs[i].quantity * 6, "trade stock", &d));
+    before = hash(w);
+    assert(cd_world_refined_work_submit(w, workers[1], 1, jobs[1], recipe->id, 1,
+                                        "missing equipment", &id, &d) == CD_CAPACITY);
+    assert(hash(w) == before);
+    for (size_t i = 0; i < recipe->equipment_count; ++i)
+      OK(cd_world_dsl_import(w, 2, recipe->equipment[i], 1, "trade equipment", &d));
+    uint64_t funds;
+    OK(cd_world_balance(w, company(2), &funds, &d));
+    OK(cd_world_money_transfer(w, company(2), account(workers[4]), funds, &d));
+    before = hash(w);
+    assert(cd_world_refined_work_submit(w, workers[1], 1, jobs[1], recipe->id, 1,
+                                        "unfunded work", &id, &d) == CD_CAPACITY);
+    assert(hash(w) == before);
+    OK(cd_world_money_transfer(w, account(workers[4]), company(2), funds, &d));
+    if (trial == 0) {
+      before = hash(w);
+      OK(cd_world_save(w, "build/named-trade.city", &d));
+      OK(cd_world_load(&w, content, "build/named-trade.city", &d));
+      assert(hash(w) == before);
+      unsigned indices[] = {0, 1, 4, 5, 8};
+      for (size_t stage = 0; stage < 5; ++stage)
+        workers[stage] = person(w, indices[stage]);
+    }
+    for (size_t stage = 0; stage < 3; ++stage) {
+      OK(cd_world_refined_work_submit(w, workers[stage], 1, jobs[stage], recipe->id, 1,
+                                      "named trade trial", &id, &d));
+      finish_trade(w, workers[stage], id);
+    }
+    assert(cd_world_dsl_supervise(w, workers[1], workers[2], 2, jobs[2], recipe->id,
+                                  1, "unauthorized dispatch", &id, &d) == CD_UNSUPPORTED);
+    OK(cd_world_dsl_supervise(w, workers[3], workers[2], 2, jobs[2], recipe->id,
+                                1, "supervised dispatch", &id, &d));
+    finish_trade(w, workers[2], id);
+    if (cd_dsl_role(names[4])->owner) {
+      OK(cd_world_money_import(w, account(workers[4]), 100, "technical capital", &d));
+      uint64_t treasury;
+      OK(cd_world_balance(w, company(2), &treasury, &d));
+      assert(cd_world_dsl_fund(w, workers[3], 2, 20, &d) == CD_UNSUPPORTED);
+      OK(cd_world_dsl_fund(w, workers[4], 2, 40, &d));
+      uint64_t after;
+      OK(cd_world_balance(w, company(2), &after, &d));
+      assert(after == treasury + 40);
+    } else {
+      OK(cd_world_dsl_supervise(w, workers[4], workers[1], 2, jobs[1], recipe->id,
+                                  1, "manager dispatch", &id, &d));
+      finish_trade(w, workers[1], id);
+    }
+    assert(cd_dsl_stock_valid(w));
+    ledgers(w);
+    cd_world_close(w);
+    cd_content_close(content);
+    content = NULL;
+  }
+  scenario.initial_people = 8;
+}
+
+static void staffed_day(void) {
+  cd_content_close(content);
+  content = NULL;
+  OK(cd_content_open("build/fixtures/staffed-day.bin", &content, &d));
+  CdWorld *w = world();
+  uint64_t shortage = hash(w);
+  assert(cd_world_households_allocate(w, &d) == CD_CAPACITY);
+  assert(hash(w) == shortage);
+  cd_world_close(w);
+  scenario.initial_people = 4;
+  w = world();
+  CdPersonRef worker = person(w, 0), administrator = person(w, 1);
+  OK(cd_world_households_allocate(w, &d));
+  for (unsigned i = 0; i < 4; ++i)
+    inside(w, person(w, i), 1);
+  OK(cd_world_food_import(w, (CdFoodEndpoint){CD_FOOD_HOME, 1}, 16, 0,
+                           "staffed day meals", &d));
+  OK(cd_world_training(w, worker, CD_SKILL_CRAFT, "staffed day fixture", &d));
+  OK(cd_world_employer(w, 2, "Day workshop", 8, "staffed day fixture", &d));
+  OK(cd_world_money_import(w, company(2), 10000, "staffed day payroll", &d));
+  CdEntityId trade = vacancy(w, 2, 3, 480, 600, 0);
+  OK(cd_world_job_assign(w, trade, worker, (CdPersonRef){0}, 0, &d));
+  OK(cd_world_training(w, administrator, CD_SKILL_CRAFT, "staffed day fixture", &d));
+  OK(cd_world_authorize(w, administrator, 63, "staffed day permissions", &d));
+  CdEntityId office = vacancy(w, 2, 8, 480, 600, 0);
+  OK(cd_world_job_assign(w, office, administrator, (CdPersonRef){0}, 0, &d));
+  CdRosterSpec roster = {office, 1u << CD_SERVICE_ADMIN, "Day office", "staffed day fixture"};
+  CdEntityId provider;
+  OK(cd_world_roster(w, &roster, &provider, &d));
+  CdServiceSpec request = {provider, 0, CD_SERVICE_ADMIN, 2, {0},
+                           cd_now(w) + 90, 3, "staffed day request"};
+  uint64_t service;
+  OK(cd_world_dispatch(w, 1, &request, &service, &d));
+  OK(cd_world_dsl_import(w, 2, "timber", 1000, "staffed day stock", &d));
+  OK(cd_world_dsl_import(w, 2, "carpentry_tool_set", 1, "staffed day tools", &d));
+  uint64_t work;
+  OK(cd_world_refined_work_submit(w, worker, 1, trade, "cut_timber", 1,
+                                  "staffed day demand", &work, &d));
+  OK(cd_world_dsl_import(w, 1, "wood_offcuts", 100, "staffed day pickup", &d));
+  OK(cd_world_dsl_cargo_order(w, worker, 1, "wood_offcuts", 100, 0, &d));
+  step(w, 1);
+  CdDslCargoView cargo;
+  OK(cd_world_dsl_cargo(w, worker, &cargo, &d));
+  assert(cargo.carried == 100 && !cargo.pending_quantity);
+  assert(cd_citizen(w, worker)->inside == cd_polygon_index(content, 1));
+  CdServiceView waiting;
+  OK(cd_world_service(w, service, &waiting, &d));
+  assert(waiting.state == CD_TASK_WAITING && !waiting.progress &&
+         strstr(waiting.reason, "qualification"));
+  OK(cd_world_training(w, administrator, CD_SKILL_CRAFT | CD_SKILL_COMMUNITY,
+                        "staffed day administrative qualification", &d));
+
+  CdClockView clock;
+  OK(cd_world_clock(w, &clock, &d));
+  uint64_t before = hash(w);
+  CdSnapshot *snapshot = NULL;
+  OK(cd_snapshot_capture(w, &snapshot, &d));
+  cd_snapshot_close(snapshot);
+  assert(hash(w) == before);
+  OK(cd_world_save(w, "build/staffed-day.city", &d));
+
+  /* Inspect return journeys before the following day's shift begins. */
+  step(w, 360);
+  CdWorkView production;
+  OK(cd_world_work(w, worker, &production, &d));
+  assert(production.id == work && production.state == CD_TASK_DONE && production.paid == 40);
+  CdServiceView delivered;
+  OK(cd_world_service(w, service, &delivered, &d));
+  if (delivered.state != CD_TASK_DONE || delivered.progress != 3 || delivered.paid != 6)
+    fprintf(stderr, "Staffed day service state %u, progress %u, pay %llu, reason %s\n",
+            (unsigned)delivered.state, delivered.progress,
+            (unsigned long long)delivered.paid, delivered.reason);
+  assert(delivered.state == CD_TASK_DONE && delivered.progress == 3 && delivered.paid == 6);
+  assert(cd_citizen(w, worker)->inside == cd_polygon_index(content, 1));
+  assert(cd_citizen(w, administrator)->inside == cd_polygon_index(content, 1));
+  CdDslStockView stock;
+  OK(cd_world_dsl_stock(w, 2, "wood_offcuts", &stock, &d));
+  assert(stock.available == 150 && !stock.reserved);
+  assert(cd_dsl_stock_valid(w));
+  ledgers(w);
+  step(w, 1080);
+  uint64_t expected = hash(w);
+  CdClockView end;
+  OK(cd_world_clock(w, &end, &d));
+  assert(end.native_minutes == clock.native_minutes + 1440);
+  ledgers(w);
+
+  OK(cd_world_load(&w, content, "build/staffed-day.city", &d));
+  for (unsigned i = 0; i < 1440; ++i)
+    step(w, 1);
+  assert(hash(w) == expected);
+  cd_world_close(w);
+  scenario.initial_people = 8;
+}
+
 static void source_records(void) {
   CdWorld *w = world();
   printf("{\"sites\":[");
@@ -405,6 +765,17 @@ int main(int argc, char **argv) {
     break;
   case 23:
     cycle23();
+    break;
+  case 24:
+    refined_work();
+    refined_cloth();
+    refined_delivery();
+    break;
+  case 25:
+    named_trade_roles();
+    break;
+  case 26:
+    staffed_day();
     break;
   default:
     abort();

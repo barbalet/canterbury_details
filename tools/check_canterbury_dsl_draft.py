@@ -5,45 +5,16 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 DEFAULT=ROOT/'content/scenarios/canterbury1940-draft.canterbury'
 KINDS=set('scenario limits policy cohort workforce activity resource service recipe competence qualification career occupation advance'.split())
-class DraftError(ValueError):pass
+from canterbury_dsl_parser import DraftError, parse as parse_records
+
 def require(ok,message):
  if not ok:raise DraftError(message)
+
 def parse(text):
- pos=0;records={};decoder=json.JSONDecoder(parse_constant=lambda x:(_ for _ in ()).throw(DraftError('Non-finite value')))
- def skip():
-  nonlocal pos
-  while pos<len(text):
-   if text[pos].isspace():pos+=1
-   elif text[pos]=='#':
-    end=text.find('\n',pos);pos=len(text) if end<0 else end+1
-   else:break
- def identifier():
-  nonlocal pos
-  skip();m=re.match(r'[A-Za-z_][A-Za-z0-9_.-]*',text[pos:]);require(m is not None,f'Identifier expected near line {text[:pos].count(chr(10))+1}');pos+=len(m[0]);return m[0]
- def symbol(char):
-  nonlocal pos
-  skip();require(text[pos:pos+1]==char,f'Expected {char!r} near line {text[:pos].count(chr(10))+1}');pos+=1
- def finite(v,depth=0):
-  require(depth<=64,'Value nesting exceeds 64')
-  if type(v) in (float,int):require(math.isfinite(v),'Non-finite value')
-  elif isinstance(v,list):
-   for x in v:finite(x,depth+1)
-  else:require(v is None or type(v) in (str,bool),'Only scalars and lists are allowed')
- while True:
-  skip()
-  if pos==len(text):return records
-  kind=identifier();key=identifier();require(kind in KINDS,'Unknown declaration '+kind);require((kind,key) not in records,'Duplicate declaration '+kind+' '+key);symbol('{');fields={}
-  while True:
-   skip()
-   if text[pos:pos+1]=='}':pos+=1;break
-   field=identifier();require(field not in fields,'Duplicate field '+field);skip()
-   if text.startswith('unset',pos):value=None;pos+=5
-   else:
-    try:value,end=decoder.raw_decode(text,pos)
-    except (ValueError,RecursionError) as e:raise DraftError('Invalid field value for '+field) from e
-    pos=end
-   finite(value);symbol(';');fields[field]=value
-  records[kind,key]=fields
+ records=parse_records(text)
+ for key in records:
+  require(key[0] in KINDS,'Unknown declaration '+key[0])
+ return records
 
 def validate(records,catalogue=None):
  def group(kind):return {key:v for (k,key),v in records.items() if k==kind}

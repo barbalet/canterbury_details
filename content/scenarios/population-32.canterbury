@@ -1,0 +1,53 @@
+# Synthetic age and household startup fixture.
+scenario canterbury_1940 {
+  language_version "1.0";
+  profile "CANTERBURY_SIM";
+  status "population_fixture";
+  runtime_activation true;
+  civil_origin "1940-01-01T00:00";
+  population 32;
+  population_capacity 30000;
+  seed 1940;
+  clock "native_minute";
+  source_map "CanterburyCity.bin";
+  unknown_building_uses "provisional_simulation_overlay";
+  map_identity "must_match_compiled_content";
+  historical_workforce_claim false;
+  ownership "single_native_population_positions_energy_and_clock";
+  source_career_catalogue_sha256 "d88c883bc066cbad33b546d5e0f60f8c44f1edecbf2443363c3ee4f03e919aa9";
+}
+cohort age_group_1 {
+  age_band "0-4";
+  people 2;
+  default_activity "dependent care";
+  status "configured_population_fixture";
+}
+
+cohort age_group_2 {
+  age_band "5-14";
+  people 4;
+  default_activity "school";
+  status "configured_population_fixture";
+}
+
+cohort age_group_3 {
+  age_band "15-17";
+  people 2;
+  default_activity "education; optional configured apprenticeships from age 16";
+  status "configured_population_fixture";
+}
+
+cohort age_group_4 {
+  age_band "18-64";
+  people 20;
+  default_activity "12000 proposed employed; 4470 household care, study, unavailable or seeking work";
+  status "configured_population_fixture";
+}
+
+cohort age_group_5 {
+  age_band "65+";
+  people 4;
+  default_activity "retirement and community life; no automatic incapacity assumption";
+  status "configured_population_fixture";
+}
+

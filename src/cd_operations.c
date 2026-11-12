@@ -1,3 +1,4 @@
+#include "cd_dsl_catalogue.h"
 #define _POSIX_C_SOURCE 200809L
 #include "cd_city_internal.h"
 #include "cd_native.h"
@@ -160,8 +161,10 @@ CdStatus cd_world_operation_preview(const CdWorld *world, const CdCommand *c,
            "Live assignment actor/mentor and vacancy required");
     break;
   case CD_CMD_WORK:
-    if (!p || !cd_job(w, c->target) || c->value > CD_RECIPE_DEVELOPMENT ||
-        !c->units || c->units > 1000)
+    if (!p || !cd_job(w, c->target) || c->value > CD_RECIPE_REFINED ||
+        !c->units || c->units > 1000 ||
+        (c->value == CD_RECIPE_REFINED &&
+         (!c->secondary || c->secondary > cd_dsl_recipe_count())))
       FAIL(CD_INVALID_ARGUMENT, "Supported recipe, actor and job required");
     break;
   case CD_CMD_WORK_CANCEL:

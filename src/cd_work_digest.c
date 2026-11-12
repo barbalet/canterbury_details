@@ -14,6 +14,12 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
   H(w->next_trade);
   H(w->next_project);
   H(w->job_count);
+  for (size_t i = 0; i < CD_DSL_RESOURCE_LIMIT; ++i) {
+    H(w->dsl_imported[i]);
+    H(w->dsl_consumed[i]);
+    H(w->dsl_produced[i]);
+    H(w->dsl_lost[i]);
+  }
   for (size_t i = 0; i < w->job_count; i++) {
     const CdJob *j = &w->jobs[i];
     H(j->view.id);
@@ -35,12 +41,20 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
     const CdCitizen *p = &w->people[i];
     H(p->jobs[0]);
     H(p->jobs[1]);
+    for (size_t i = 0; i < CD_DSL_CERTIFICATES; ++i)
+      H(p->certificates[i].role);
     H(p->wallet);
     H(p->cargo.building);
     H(p->cargo.household);
     H(p->cargo.good);
     H(p->cargo.remaining);
     H(p->cargo.delivery);
+    H(p->dsl_cargo.premises);
+    H(p->dsl_cargo.carried);
+    H(p->dsl_cargo.quantity);
+    H(p->dsl_cargo.resource);
+    H(p->dsl_cargo.requested);
+    H(p->dsl_cargo.delivery);
     H(p->trade.cost);
     H(p->trade.payer);
     H(p->work.view.id);
@@ -86,6 +100,15 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
     const CdPremises *p = &w->premises[i];
     const CdProject *project = &w->projects[i];
     H(p->treasury);
+    for (size_t i = 0; i < CD_DSL_PREMISES_STOCKS; ++i) {
+      const CdDslStock *stock = &p->dsl_stock[i];
+      H(stock->resource);
+      H(stock->available);
+      H(stock->reserved);
+      H(stock->key);
+      H(stock->work);
+      H(stock->settled);
+    }
     H(p->escrow_money);
     H(p->reserved_raw);
     H(p->reserved_meals);

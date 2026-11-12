@@ -1,5 +1,6 @@
 #include "cd_city_internal.h"
 #include "cd_native.h"
+#include "cd_dsl_catalogue.h"
 #include <stdlib.h>
 static int pending(CdTaskState s) {
   return s == CD_TASK_PENDING || s == CD_TASK_WAITING;
@@ -48,6 +49,8 @@ static int definition(const CdJob *j, CdRecipe recipe, unsigned *duration,
       return 0;
     *duration = 1;
     return 1;
+  case CD_RECIPE_REFINED:
+    return 0;
   }
   return 0;
 }
@@ -60,6 +63,9 @@ void cd_work_release(CdWorld *w, CdCitizen *p, int cancelled) {
     return;
   uint32_t b = cd_polygon_index(w->content, j->view.workplace);
   CdPremises *site = &w->premises[b];
+  if (cancelled && t->spec.recipe == CD_RECIPE_REFINED &&
+      !cd_dsl_work_stock(w, b, t, CD_DSL_RETURN))
+    abort();
   for (unsigned g = 0; g < CD_GOODS; g++) {
     site->reserved[g] -= t->inputs[g];
     site->goods[g] += t->inputs[g];
@@ -105,9 +111,22 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
                    "Work requires this actor's qualified job");
   uint32_t b = cd_polygon_index(w->content, j->view.workplace);
   CdPremises *site = &w->premises[b];
-  unsigned duration;
-  uint64_t inputs[CD_GOODS], raw;
-  if (!definition(j, s->recipe, &duration, inputs, &raw))
+  unsigned duration = 0;
+  uint64_t inputs[CD_GOODS] = {0}, raw = 0;
+  if (s->recipe == CD_RECIPE_REFINED) {
+    const CdDslRecipe *recipe = s->project && s->project <= cd_dsl_recipe_count()
+                                   ? cd_dsl_recipe_at((size_t)s->project - 1)
+                                   : NULL;
+    const CdDslRole *role = cd_dsl_job_role(j->view.occupation);
+    const char *bound = cd_dsl_role_recipe(role);
+    if (!recipe || !recipe->worker_minutes ||
+        strcmp(recipe->power, "manual_power_technical_trial") ||
+        !(role ? (role->stage <= 3 && bound && !strcmp(bound, recipe->id)) :
+                 ((j->view.occupation == 3 && !strcmp(recipe->id, "cut_timber")) ||
+                  (j->view.occupation == 4 && !strcmp(recipe->id, "cut_cloth")))))
+      return cd_diag(d, CD_UNSUPPORTED, "Refined recipe needs a compatible enabled occupation");
+    duration = recipe->worker_minutes;
+  } else if (!definition(j, s->recipe, &duration, inputs, &raw))
     return cd_diag(d, CD_UNSUPPORTED,
                    "Recipe is not supported by this occupation");
   CdProject *project = &w->projects[b];
@@ -116,7 +135,7 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
         !pending(project->view.state))
       return cd_diag(d, CD_UNKNOWN_REFERENCE,
                      "Unknown active worksite project");
-  } else if (s->project)
+  } else if (s->project && s->recipe != CD_RECIPE_REFINED)
     return cd_diag(d, CD_INVALID_ARGUMENT,
                    "Non-development work cannot name a project");
   duration *= s->units;
@@ -127,9 +146,7 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
     CdCitizen *m = cd_citizen(w, j->view.mentor);
     for (unsigned slot = 0; slot < 2; slot++) {
       CdJob *mj = cd_job(w, m->jobs[slot]);
-      if (mj && mj->view.open && mj->view.workplace == j->view.workplace &&
-          mj->view.occupation == j->view.occupation &&
-          !mj->view.apprenticeship) {
+      if (cd_job_mentor_matches(j, mj)) {
         mentor_rate = mj->view.wage;
         break;
       }
@@ -152,7 +169,7 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
   task.spec = *s;
   task.spec.basis = NULL;
   snprintf(task.basis, 96, "%s", s->basis);
-  task.view = (CdWorkView){.id = w->next_work++,
+  task.view = (CdWorkView){.id = w->next_work,
                            .key = key,
                            .state = CD_TASK_PENDING,
                            .job = s->job,
@@ -165,6 +182,9 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
   task.mentor = j->view.mentor;
   task.raw = raw;
   memcpy(task.inputs, inputs, sizeof inputs);
+  if (s->recipe == CD_RECIPE_REFINED && !cd_dsl_work_stock(w, b, &task, CD_DSL_HOLD))
+    return cd_diag(d, CD_CAPACITY, "Refined inputs, equipment or output capacity unavailable");
+  w->next_work++;
   for (unsigned g = 0; g < CD_GOODS; g++) {
     site->goods[g] -= inputs[g];
     site->reserved[g] += inputs[g];
@@ -179,6 +199,18 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
                  "Inputs and wages reserved once; work begins only at its "
                  "actual workplace");
 }
+CdStatus cd_world_refined_work_submit(CdWorld *w, CdPersonRef worker, uint64_t key,
+                                       CdEntityId job, const char *name,
+                                       unsigned batches, const char *basis,
+                                       uint64_t *out, CdDiagnostic *d) {
+  const CdDslRecipe *recipe = cd_dsl_recipe(name);
+  if (!recipe)
+    return cd_diag(d, CD_UNKNOWN_REFERENCE, "Unknown refined recipe");
+  CdEntityId index = (CdEntityId)(recipe - cd_dsl_recipe_at(0)) + 1;
+  CdWorkSpec spec = {job, index, CD_RECIPE_REFINED, batches, basis};
+  return cd_world_work_submit(w, worker, key, &spec, out, d);
+}
+
 CdStatus cd_world_work(const CdWorld *w, CdPersonRef ref, CdWorkView *out,
                        CdDiagnostic *d) {
   CdCitizen *p = cd_citizen((CdWorld *)w, ref);
@@ -254,7 +286,8 @@ void cd_jobs_tick(CdWorld *w) {
       continue;
     }
     if (!p->civil.position_known || p->inside != b || p->door != CD_NONE) {
-      reason(t, "physical street/entrance arrival required");
+      reason(t, p->reason != CD_ROUTE_OK ? cd_route_reason(p->reason) :
+                                            "physical street/entrance arrival required");
       continue;
     }
     if (p->activity != CD_ACTIVITY_IDLE || p->health.severity >= 600) {
@@ -269,6 +302,11 @@ void cd_jobs_tick(CdWorld *w) {
     if (t->spec.recipe == CD_RECIPE_TEXTILE)
       output = CD_TEXTILE;
     int completes = t->view.progress + 1 == t->view.duration;
+    if (completes && t->spec.recipe == CD_RECIPE_REFINED &&
+        !cd_dsl_work_stock(w, b, t, CD_DSL_CHECK_OUTPUT)) {
+      reason(t, "refined output inventory full");
+      continue;
+    }
     if (completes && output < CD_GOODS &&
         site->goods[output] + site->reserved[output] + t->spec.units >
             UINT64_C(1000000000)) {
@@ -283,7 +321,8 @@ void cd_jobs_tick(CdWorld *w) {
     CdCitizen *mentor = NULL;
     if (j->view.apprenticeship) {
       mentor = cd_citizen(w, j->view.mentor);
-      if (!mentor || mentor->inside != b || !mentor->civil.position_known ||
+      if (!mentor || mentor->inside != b || mentor->door != CD_NONE ||
+          !mentor->civil.position_known ||
           mentor->activity != CD_ACTIVITY_IDLE ||
           mentor->health.severity >= 600) {
         reason(t, "qualified mentor must be present and available");
@@ -292,9 +331,7 @@ void cd_jobs_tick(CdWorld *w) {
       int on_shift = 0;
       for (unsigned s = 0; s < 2; s++) {
         CdJob *mj = cd_job(w, mentor->jobs[s]);
-        if (mj && !mj->view.apprenticeship &&
-            mj->view.workplace == j->view.workplace &&
-            mj->view.occupation == j->view.occupation &&
+        if (cd_job_mentor_matches(j, mj) &&
             cd_shift(mj->view.shift_start, mj->view.shift_end,
                      clock.minute_of_day))
           on_shift = 1;
@@ -337,6 +374,9 @@ void cd_jobs_tick(CdWorld *w) {
         project->view.progress++;
     }
     if (t->view.progress == t->view.duration) {
+      if (t->spec.recipe == CD_RECIPE_REFINED &&
+          !cd_dsl_work_stock(w, b, t, CD_DSL_COMPLETE))
+        abort();
       for (unsigned g = 0; g < CD_GOODS; g++) {
         site->reserved[g] -= t->inputs[g];
         w->economy.consumed[g] += t->inputs[g];
@@ -370,6 +410,7 @@ void cd_employment_retire(CdWorld *w, CdCitizen *p, CdRetirement why) {
   cd_work_release(w, p, 1);
   cd_trade_release(w, p);
   p->cargo.remaining = 0;
+  cd_dsl_cargo_retire(w, p);
   for (unsigned s = 0; s < 2; s++)
     if (p->jobs[s])
       cd_world_job_unassign(w, p->jobs[s], NULL);

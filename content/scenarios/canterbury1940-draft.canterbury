@@ -1307,10 +1307,10 @@ recipe mill_wheat {
   output_quantities [750, 250];
   unit "g";
   accounting "mass_conserved_including_byproducts";
-  worker_minutes unset;
-  required_equipment [];
-  activation "blocked_until_equipment_energy_and_labour_requirements_defined";
-  basis "illustrative_technical_yield_not_period_measurement";
+  worker_minutes 30;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
 }
 
 recipe cut_timber {
@@ -1320,10 +1320,10 @@ recipe cut_timber {
   output_quantities [850, 150];
   unit "g";
   accounting "mass_conserved_including_byproducts";
-  worker_minutes unset;
-  required_equipment [];
-  activation "blocked_until_equipment_energy_and_labour_requirements_defined";
-  basis "illustrative_technical_yield_not_period_measurement";
+  worker_minutes 20;
+  required_equipment ["carpentry_tool_set"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
 }
 
 recipe cut_cloth {
@@ -1333,10 +1333,10 @@ recipe cut_cloth {
   output_quantities [900, 100];
   unit "g";
   accounting "mass_conserved_including_byproducts";
-  worker_minutes unset;
-  required_equipment [];
-  activation "blocked_until_equipment_energy_and_labour_requirements_defined";
-  basis "illustrative_technical_yield_not_period_measurement";
+  worker_minutes 8;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
 }
 
 recipe cut_paper {
@@ -1346,10 +1346,10 @@ recipe cut_paper {
   output_quantities [950, 50];
   unit "g";
   accounting "mass_conserved_including_byproducts";
-  worker_minutes unset;
-  required_equipment [];
-  activation "blocked_until_equipment_energy_and_labour_requirements_defined";
-  basis "illustrative_technical_yield_not_period_measurement";
+  worker_minutes 5;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
 }
 
 recipe form_metalwork {
@@ -1359,10 +1359,10 @@ recipe form_metalwork {
   output_quantities [920, 80];
   unit "g";
   accounting "mass_conserved_including_byproducts";
-  worker_minutes unset;
-  required_equipment [];
-  activation "blocked_until_equipment_energy_and_labour_requirements_defined";
-  basis "illustrative_technical_yield_not_period_measurement";
+  worker_minutes 25;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
 }
 
 policy production {
@@ -11828,3 +11828,42 @@ policy execution {
   validation "draft_linter_is_not_runtime_compilation";
 }
 
+
+recipe trial_portion_meat {
+  input_resources ["raw_meat"];
+  input_quantities [1000];
+  output_resources ["meat_portion", "food_scraps"];
+  output_quantities [900, 100];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 12;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
+}
+
+recipe trial_portion_fish {
+  input_resources ["raw_fish"];
+  input_quantities [1000];
+  output_resources ["fish_portion", "food_scraps"];
+  output_quantities [850, 150];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 12;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
+}
+
+recipe trial_trim_leather {
+  input_resources ["leather"];
+  input_quantities [1000];
+  output_resources ["leather", "textile_offcuts"];
+  output_quantities [850, 150];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
+}
