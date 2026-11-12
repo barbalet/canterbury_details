@@ -308,3 +308,47 @@ CdStatus cd_world_owner(CdWorld *w, CdEntityId dwelling, CdPersonRef ref,
       d, CD_OK,
       "Property ownership recorded independently of residence and presence");
 }
+
+
+CdStatus cd_world_household_care(const CdWorld *world, CdPersonRef ref,
+                                 CdHouseholdCareView *out, CdDiagnostic *d) {
+  CdCitizen *parent = cd_citizen((CdWorld *)world, ref);
+  if (!parent || !out)
+    return cd_diag(d, CD_UNKNOWN_REFERENCE, "Unknown household-care resident");
+  *out = (CdHouseholdCareView){.designated = parent->household_care};
+  for (size_t i = 0; i < world->count; ++i) {
+    const CdResidentView *child = &world->people[i].civil;
+    if (child->age >= 18 || child->household != parent->civil.household ||
+        (child->guardian.person_id != ref.person_id &&
+         child->parents[0].person_id != ref.person_id &&
+         child->parents[1].person_id != ref.person_id))
+      continue;
+    if (child->age < 1)
+      ++out->infants;
+    else if (child->age < 5)
+      ++out->preschool;
+    else if (child->age < 13)
+      ++out->school_age;
+    else
+      ++out->teenagers;
+  }
+  return cd_diag(d, CD_OK, "Household care stages by dependent age");
+}
+
+CdStatus cd_world_set_household_care(CdWorld *world, CdPersonRef ref, int active,
+                                     CdDiagnostic *d) {
+  CdCitizen *parent = cd_citizen(world, ref);
+  if (!cd_model_ready(world) || !parent || parent->civil.age < 18 ||
+      (active != 0 && active != 1))
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Household care requires a live adult");
+  if (active) {
+    CdHouseholdCareView care;
+    cd_world_household_care(world, ref, &care, NULL);
+    if (!(care.infants || care.preschool || care.school_age || care.teenagers) ||
+        parent->jobs[0] || parent->jobs[1])
+      return cd_diag(d, CD_INVALID_STATE,
+                     "Stay-at-home care requires a dependent and no assigned paid job");
+  }
+  parent->household_care = (unsigned)active;
+  return cd_diag(d, CD_OK, "Household-care designation updated");
+}

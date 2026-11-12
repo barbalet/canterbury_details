@@ -2,7 +2,7 @@
 
 Implement a runnable Canterbury 1940 scenario from the [DSL draft](../../content/scenarios/canterbury1940-draft.canterbury). The release target includes 60 career families, 300 roles, 240 advancement links, 72 resource kinds, 21 services and the five draft recipes. The scenario starts with 27,000 residents and supports growth to 30,000. It runs through the CLI and native app using the existing Canterbury map, native bodies and simulation clock.
 
-The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 has passed the staffed district and school journey fixtures. It remains open for citywide assignments and schedules. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
+The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 is complete for the opt-in citywide startup, funded shifts and recurring school sessions. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
 
 The current compiler qualifies draft parsing, typed binding, deterministic publication and activation preflight. Runtime execution begins in Cycle 05.
 
@@ -68,6 +68,13 @@ Apply the proposed age bands of 2,160 aged 0–4, 4,050 aged 5–14, 1,620 aged 
 
 **Exit.** The seeded 27,000-person population matches every cohort total. Guardianship, names, household membership and lifecycle changes reconcile at both default and maximum capacity.
 
+The native household-care designation is available to co-resident parents
+and guardians without an assigned paid job. It reports overlapping stages
+by dependent age: infant (under one), preschool (1–4), school age (5–12)
+and teenager (13–17). Designated carers with dependents are unavailable
+for paid job assignment until released. The designation is explicit and
+uses the existing parent and guardian relationships.
+
 ## Cycle 07 — Homes, premises and walkable routes
 
 Use the applied provisional building uses to generate candidate homes and workplaces. Define dwelling, school and work capacities with explicit simulation provenance. Qualify street links and door connectors against the actual geometry, including barriers and crossings. Allocate households deterministically, with separate home and work capacity for mixed uses.
@@ -118,7 +125,7 @@ outbound journey took 178 native minutes and the complete trip, including
 time at school, took 433. The fixture supplies the schedule. It uses
 the same native movement and door policies as the work commute.
 
-**Cycle 08 remains open at city scale.** A capacity match using the draft
+**Cycle 08 citywide allocation.** A capacity match using the draft
 premises types covers 9,397 of 12,000 jobs. The opt-in model can cover all
 nine sector totals when commercial premises can host light bench work and
 construction offices. These are simulation permissions. With households in
@@ -128,16 +135,28 @@ The joint planning check now assigns addresses to 6,750 intact households,
 12,000 worker destinations across all nine sectors, and 4,050 school places
 across two sessions. It prefers nearby premises within each connected
 component and exports the proposed assignments to
-`build/access-trial-placement.json`. The plan is a technical allocation
-fixture. It has yet to be activated as funded jobs and school schedules.
+`build/access-trial-placement.json`. The normal CLI loads the plan through the opt-in duty startup.
 
-Native pathfinding finds routes both ways for 11,881 workers and all 4,050
-pupils. At the current dry walking pace, street travel alone plus an
-eight-hour shift and eight hours of rest exceeds one day for 11,518 of
-the routable workers. With a three-hour session and eight hours of rest,
-3,920 pupils exceed a day. The estimates exclude entrance movement,
-crowding and weather. Cycle 08 remains open for travel-aware placement,
-feasible scheduling, and the full native arrival and return run.
+The opt-in pack uses the map registration of 3.9896 metres per pixel and
+an assumed dry walking pace of 75 metres per simulated minute. It converts
+that pace to 769 native coordinate units per minute. Native movement and
+route previews use the same budget, and entrance qualification checks
+rounded movement at that budget. Earlier pilot timings used the SDK
+fallback budget of eight units per minute.
+
+Swapping 119 workplace assignments within their sectors and walking
+components resolves the native route length failures. All 12,000 workers
+and 4,050 pupils have routes in both directions. The longest estimated dry
+street round trips are 224 minutes for a worker and 136 for a pupil.
+The opt-in pack models up to 128 concurrent walkers per qualified link.
+With that capacity and staggered shifts, normal duty startup binds all
+12,000 jobs across the nine sectors and enrolls all 4,050 pupils.
+The 1,440-minute native day verifies on-time arrival, continuous
+attendance and physical return home for every assigned worker and pupil.
+All workers receive 480 model tokens for their first eight-hour shift.
+The ledger conserves all 5,760,000 tokens imported for that day.
+Sector jobs model paid attendance. Named production and service duties
+are covered by the later cycles.
 
 ## Cycle 09 — Career catalogue and competence
 

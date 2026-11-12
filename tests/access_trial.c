@@ -194,10 +194,111 @@ static void check_routes(CdContent *content) {
   cd_world_close(world);
 }
 
+typedef struct {
+  uint32_t home, destination;
+  unsigned leave, start, end, attendance;
+  int on_time, departed, returned;
+  CdRouteReason deadline_reason;
+} DayJourney;
+
+static void scheduled_day(CdContent *content) {
+  CdWorld *world = NULL;
+  CdScenarioStartup startup;
+  OK(cd_scenario_startup_read(content, "build/content/access-27000.cdstart",
+                              &startup, &diagnostic));
+  OK(cd_world_open_duty_startup(content, &startup,
+                                  "build/content/access-duty-startup.txt",
+                                  &world, &diagnostic));
+  DayJourney *journeys = calloc(world->count, sizeof *journeys);
+  assert(journeys);
+  unsigned assigned[2] = {0};
+  size_t initial_count = world->count;
+  for (size_t i = 0; i < initial_count; ++i) {
+    CdCitizen *p = &world->people[i];
+    CdJob *job = cd_job(world, p->jobs[0]);
+    if (!job && !p->school_door)
+      continue;
+    assert(!job || cd_sector_job(job->view.occupation));
+    journeys[i] = (DayJourney){
+        .home = cd_reviewed_door(world, p->civil.dwelling),
+        .destination = cd_door_index(content, job ? job->view.entrance : p->school_door),
+        .leave = job ? job->commute_start : p->school_leave,
+        .start = job ? job->view.shift_start : p->school_start,
+        .end = job ? job->view.shift_end : p->school_end};
+    assert(journeys[i].home != CD_NONE && journeys[i].destination != CD_NONE);
+    assigned[!job]++;
+  }
+  assert(assigned[0] == 12000 && assigned[1] == 4050 && world->job_count == 12000);
+  for (unsigned step = 0; step < 1440; ++step) {
+    CdClockView clock;
+    OK(cd_world_clock(world, &clock, &diagnostic));
+    unsigned minute = clock.civil.minute_of_day;
+    assert(world->count == initial_count);
+    for (size_t i = 0; i < initial_count; ++i) {
+      DayJourney *j = &journeys[i];
+      if (!j->end || minute < j->leave || j->returned)
+        continue;
+      CdCitizen *p = &world->people[i];
+      int present = p->inside == content->doors[j->destination].building && p->door == CD_NONE;
+      int at_home = p->inside == content->doors[j->home].building && p->door == CD_NONE;
+      if (!at_home && p->inside != content->doors[j->home].building)
+        j->departed = 1;
+      if (minute == j->start) {
+        j->on_time = present;
+        j->deadline_reason = p->reason;
+      }
+      if (minute >= j->start && minute < j->end)
+        j->attendance += present;
+      if (minute >= j->end && at_home)
+        j->returned = j->departed;
+    }
+    OK(cd_world_step(world, 1, &diagnostic));
+  }
+  unsigned on_time[2] = {0}, completed[2] = {0}, returned[2] = {0}, passed[2] = {0};
+  unsigned fully_paid = 0;
+  unsigned late[CD_ROUTE_ACCESS + 1] = {0}, absent[CD_ROUTE_ACCESS + 1] = {0};
+  for (size_t i = 0; i < initial_count; ++i) {
+    DayJourney *j = &journeys[i];
+    if (!j->end)
+      continue;
+    unsigned group = world->people[i].civil.age < 18;
+    int attended = j->attendance == j->end - j->start;
+    fully_paid += !group && world->people[i].wallet == j->end - j->start;
+    if (!j->on_time)
+      late[j->deadline_reason]++;
+    if (!j->returned)
+      absent[world->people[i].reason]++;
+    on_time[group] += j->on_time;
+    completed[group] += attended;
+    returned[group] += j->returned;
+    passed[group] += j->on_time && attended && j->returned;
+  }
+  for (unsigned reason = 0; reason <= CD_ROUTE_ACCESS; ++reason)
+    if (late[reason] || absent[reason])
+      fprintf(stderr, "%s: %u late, %u without return\n", cd_route_reason(reason),
+              late[reason], absent[reason]);
+  CdEconomyLedger ledger;
+  OK(cd_world_economy_ledger(world, &ledger, &diagnostic));
+  assert(ledger.money_created == 12000 * 480 && ledger.money_stock == ledger.money_created);
+  printf("{\"minutes\":1440,\"fully_paid_workers\":%u,\"workers\":{\"on_time\":%u,\"completed\":%u,\"home\":%u,\"passed\":%u},"
+         "\"pupils\":{\"on_time\":%u,\"completed\":%u,\"home\":%u,\"passed\":%u},\"ok\":%s}\n",
+         fully_paid, on_time[0], completed[0], returned[0], passed[0],
+         on_time[1], completed[1], returned[1], passed[1],
+         passed[0] == assigned[0] && passed[1] == assigned[1] && fully_paid == assigned[0] ? "true" : "false");
+  free(journeys);
+  cd_world_close(world);
+}
+
 int main(int argc, char **argv) {
   CdContent *content = NULL;
   CdWorld *world = NULL;
   OK(cd_content_open("build/content/CanterburyAccessTrial.bin", &content, &diagnostic));
+  if (argc == 2 && !strcmp(argv[1], "--day")) {
+    scheduled_day(content);
+    cd_content_close(content);
+    assert(!cd_memory_stats().total);
+    return 0;
+  }
   if (argc == 2 && !strcmp(argv[1], "--routes")) {
     check_routes(content);
     cd_content_close(content);
@@ -269,6 +370,13 @@ int main(int argc, char **argv) {
                     2, 0, 0, "technical district shift"};
   CdEntityId job;
   OK(cd_world_dsl_job_create(world, &spec, "miller.2", &job, &diagnostic));
+  CdHouseholdCareView care;
+  OK(cd_world_set_household_care(world, worker, 1, &diagnostic));
+  OK(cd_world_household_care(world, worker, &care, &diagnostic));
+  assert(care.designated && care.infants + care.preschool + care.school_age + care.teenagers);
+  assert(cd_world_job_assign(world, job, worker, (CdPersonRef){0}, 0, &diagnostic)
+         == CD_INVALID_STATE);
+  OK(cd_world_set_household_care(world, worker, 0, &diagnostic));
   CdPersonRef applicants[] = {world->people[1].civil.ref, worker};
   uint64_t before, after;
   OK(cd_world_digest(world, &before, &diagnostic));

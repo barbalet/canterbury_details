@@ -13,4 +13,7 @@ CdStatus cd_scenario_startup_read(const CdContent *, const char *,
 CdStatus cd_world_open_startup(const CdContent *, const CdScenarioStartup *,
                                CdWorld **, CdDiagnostic *);
 
+CdStatus cd_world_open_duty_startup(const CdContent *, const CdScenarioStartup *,
+                                     const char *, CdWorld **, CdDiagnostic *);
+
 #endif

@@ -119,27 +119,22 @@ formats require migration.
 
 ## Actual Canterbury access trial
 
-The access check exports `build/access-trial-placement.json` with proposed
-household addresses, worker destinations and school seats. The validation
-report records native route availability and dry street travel estimates.
+Run `make access-check` to build the opt-in map, allocate homes and
+destinations, and run the 1,440-minute acceptance day. The report is
+`build/access-trial-validation.json` and the assignments are in
+`build/access-trial-placement.json`.
 
-
-Run `make access-check` to build the technical access pack and verify
-27,000-resident home entry, a paid work commute and a pupil's school trip
-on the actual map. The output report is `build/access-trial-validation.json`.
-It reports sector capacity, component-constrained bounds for the current
-household placement, and relaxed bounds for any placement on the same map.
-The relaxed bounds treat every residential place as eligible for a worker
-or pupil and evaluate the two groups independently. To start the
-proposed population against the same pack:
+To run the same scenario from normal CLI startup:
 
 ```sh
-python3 tools/compile_canterbury_dsl.py content/scenarios/population-27000.canterbury   --city build/content/CanterburyAccessTrial.bin --startup build/content/access-27000.cdstart
-./build/CanterburyDetails --city build/content/CanterburyAccessTrial.bin   --scenario build/content/access-27000.cdstart --allocate-homes --place-homes --minutes 0
+./build/CanterburyDetails --city build/content/CanterburyAccessTrial.bin \
+  --scenario build/content/access-27000.cdstart \
+  --duty-startup build/content/access-duty-startup.txt --minutes 1440
 ```
 
-At minute zero the CLI reports the residents placed at their home street
-nodes. Native grants complete the queued home entrances as the clock runs.
-The acceptance fixture starts at 08:00 and checks interior arrival for
-every resident. The staffed fixture uses a qualified industrial premises,
-one funded named milling post and the existing native schedule.
+Startup validates the map generation, housing capacity, unique workers and
+pupils, route reachability, sector totals, workplace capacity, and school
+seats. It publishes homes, employer accounts, paid jobs, and recurring
+school enrollment together. The opt-in jobs pay one model token per
+minute of physical attendance. Startup funds one eight-hour shift per
+worker. The school-only startup file remains available for school runs.

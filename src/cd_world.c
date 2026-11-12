@@ -477,7 +477,7 @@ CdStatus cd_world_preview(const CdWorld *world, const CdRequest *r,
       w, p->anchor, cd_node_index(w->content, r->target.entity_id), &route);
   *out = (CdPreview){s,
                      s == CD_OK
-                         ? (unsigned)ceil(route.cost / (cd_native_walk_units() /
+                         ? (unsigned)ceil(route.cost / (cd_city_walk_units(w) /
                                                         cd_city_scale(w)))
                          : 0,
                      0};

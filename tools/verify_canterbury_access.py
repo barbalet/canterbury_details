@@ -105,9 +105,7 @@ def allocate_households(binary, premises, sessions, sectors, shared):
 
 
 
-def check_routes(binary, placement, walk_units):
-    journeys = [(row['home'], row['workplace']) for row in placement['workers']]
-    journeys.extend((row['home'], row['school']) for row in placement['school_enrollment'])
+def measure_routes(binary, journeys, walk_units):
     pairs = sorted(set(journeys) | {(end, start) for start, end in journeys})
     routes = subprocess.run(
         [binary, '--routes'], cwd=ROOT, text=True, capture_output=True, check=True,
@@ -121,12 +119,76 @@ def check_routes(binary, placement, walk_units):
         if int(found):
             travel[pair] = math.ceil(float(distance) / walk_units)
 
+    return travel, len(pairs)
+
+
+def check_routes(binary, placement, walk_units, premises):
+    workers, pupils = placement['workers'], placement['school_enrollment']
+    component = {site['building']: site['component'] for site in premises}
+    journeys = [(row['home'], row['workplace']) for row in workers]
+    journeys.extend((row['home'], row['school']) for row in pupils)
+    travel, checked = measure_routes(binary, journeys, walk_units)
+
+    def round_trip(start, end):
+        return travel.get((start, end), math.inf) + travel.get((end, start), math.inf)
+
+    groups = defaultdict(list)
+    for worker in workers:
+        groups[component[worker['home']], worker['sector']].append(worker)
+    missing = [w for w in workers if not math.isfinite(round_trip(w['home'], w['workplace']))]
+    candidates = set()
+    for worker in missing:
+        for other in groups[component[worker['home']], worker['sector']]:
+            candidates.add((worker['home'], other['workplace']))
+            candidates.add((other['home'], worker['workplace']))
+    candidates = {pair for pair in candidates if pair not in travel or pair[::-1] not in travel}
+    if candidates:
+        extra, count = measure_routes(binary, candidates, walk_units)
+        travel.update(extra)
+        checked += count
+    repaired = 0
+    for worker in missing:
+        start, end = worker['home'], worker['workplace']
+        if math.isfinite(round_trip(start, end)):
+            continue
+        choices = []
+        for other in groups[component[start], worker['sector']]:
+            if other is worker:
+                continue
+            outward = round_trip(start, other['workplace'])
+            inward = round_trip(other['home'], end)
+            if max(outward, inward) <= 420:
+                choices.append((outward + inward, other['person'], other))
+        if choices:
+            _, _, other = min(choices)
+            worker['workplace'], other['workplace'] = other['workplace'], end
+            repaired += 1
+
     def assess(rows, destination, duty_minutes):
-        round_trips = [(row['home'], row[destination]) for row in rows]
-        complete = [travel[pair] + travel[pair[::-1]] for pair in round_trips
-                    if pair in travel and pair[::-1] in travel]
+        complete = []
+        scheduled = 0
+        for row in rows:
+            pair = row['home'], row[destination]
+            if pair not in travel or pair[::-1] not in travel:
+                continue
+            outbound, inbound = travel[pair], travel[pair[::-1]]
+            complete.append(outbound + inbound)
+            # Split worker shifts into four start waves. Pupils keep their
+            # building's two non-overlapping sessions.
+            start = (570 + 240 * row['session'] if 'session' in row
+                     else 540 + 20 * (row['person'] % 4))
+            end = start + duty_minutes
+            leave = max(360, start - outbound - 105 - row['person'] % 15)
+            expected_home = end + inbound + 60
+            if leave >= 360 and expected_home <= 1320:
+                row['draft_schedule'] = {
+                    'leave_home': leave, 'attendance_start': start,
+                    'attendance_end': end, 'expected_home': expected_home,
+                }
+                scheduled += 1
         return {
             'assigned': len(rows),
+            'with_draft_schedule': scheduled,
             'with_routes_both_ways': len(complete),
             'longest_dry_street_round_trip_minutes': max(complete, default=0),
             'duty_minutes': duty_minutes,
@@ -135,10 +197,27 @@ def check_routes(binary, placement, walk_units):
         }
 
     return {
-        'unique_routes_checked': len(pairs),
+        'route_queries': checked,
+        'worker_route_swaps': repaired,
         'workers': assess(placement['workers'], 'workplace', 480),
         'pupils': assess(placement['school_enrollment'], 'school', 180),
     }
+
+
+def startup_rows(placement, groups):
+    homes = sorted(placement['homes'], key=lambda row: row['household'])
+    lines = [str(row['home']) for row in homes]
+    for group, destination in groups:
+        for row in placement[group]:
+            schedule = row['draft_schedule']
+            lines.append(f"{row['person']} {row[destination]} {schedule['leave_home']} "
+                         f"{schedule['attendance_start']} {schedule['attendance_end']}")
+    return lines
+
+
+def run_day(binary):
+    output = subprocess.check_output([binary, '--day'], cwd=ROOT, text=True)
+    return json.loads(output.splitlines()[-1])
 
 
 def main():
@@ -166,14 +245,27 @@ def main():
                 'joint_placement_upper_bounds': bound}
     placement = allocate_households(binary, premises, sessions, sectors, shared)
     placement['pack_sha256'] = fingerprint
-    atomic_write(ROOT / 'build/access-trial-placement.json', canonical(placement))
     evidence['joint_household_plan'] = {
         'households': len(placement['homes']),
         'pupils': len(placement['school_enrollment']),
         'jobs_capacity_matched': len(placement['workers']),
     }
     print(json.dumps(evidence['joint_household_plan'], sort_keys=True), flush=True)
-    evidence['joint_household_routes'] = check_routes(binary, placement, qualification['dry_native_walk_units'])
+    evidence['joint_household_routes'] = check_routes(binary, placement, qualification['dry_native_walk_units'], premises)
+    school_rows = startup_rows(placement, [('school_enrollment', 'school')])
+    atomic_write(ROOT / 'build/content/access-school-startup.txt',
+                 ('\n'.join(['CDSCHOOL1 ' + qualification['generation'], *school_rows]) + '\n').encode())
+    worker_rows = startup_rows(placement, [('workers', 'workplace')])[len(placement['homes']):]
+    duty_rows = [f"{line} {int(row['sector'].split('_')[-1])}"
+                 for line, row in zip(worker_rows, placement['workers'], strict=True)]
+    atomic_write(ROOT / 'build/content/access-duty-startup.txt',
+                 ('\n'.join(['CDDUTIES1 ' + qualification['generation'], *school_rows, *duty_rows])
+                  + '\n').encode())
+    subprocess.run(['python3', 'tools/compile_canterbury_dsl.py',
+                    'content/scenarios/population-27000.canterbury',
+                    '--city', str(PACK), '--startup', 'build/content/access-27000.cdstart'],
+                   cwd=ROOT, check=True)
+    atomic_write(ROOT / 'build/access-trial-placement.json', canonical(placement))
     print(json.dumps(evidence['joint_household_routes'], sort_keys=True), flush=True)
     for name, flags in [('population', ['--population']), ('district', []), ('school', ['--school'])]:
         output = subprocess.check_output([binary, *flags], cwd=ROOT, text=True)
@@ -203,9 +295,12 @@ def main():
                 ],
             }
         print(json.dumps(evidence[name], sort_keys=True), flush=True)
+    print('Running 1,440 native minutes with all scheduled residents', flush=True)
+    evidence['scheduled_native_day'] = run_day(binary)
+    print(json.dumps(evidence['scheduled_native_day'], sort_keys=True), flush=True)
     atomic_write(ROOT / 'build/access-trial-validation.json', canonical(evidence))
-    print(f"Any household placement can cover at most {bound['jobs']} jobs "
-          f"and {bound['pupils']} pupil places under independent relaxed bounds.", flush=True)
+    if not evidence['scheduled_native_day']['ok']:
+        raise SystemExit('Cycle 8 native day did not meet every attendance and return requirement')
 
 
 if __name__ == '__main__':

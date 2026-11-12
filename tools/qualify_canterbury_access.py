@@ -6,7 +6,6 @@ import hashlib
 import itertools
 import json
 import math
-import re
 
 from canterbury_dsl_parser import parse
 from compile_content import ROOT, atomic_write, canonical
@@ -32,6 +31,8 @@ EXTRA_WORK_FLOOR_USES = {'commercial', 'civic', 'leisure'}
 WORK_AREA_PER_PERSON = 1
 SCHOOL_USES = {'education', 'education_support'}
 SCHOOL_SESSIONS = 2
+# Concurrent walkers on a qualified link in the citywide trial.
+WALK_LINK_CAPACITY = 128
 # Provisional premises sharing for light bench work and building trades offices.
 # These are activity permissions, with no change to the mapped building use.
 TRIAL_SHARED_USES = {'sector_2': {'commercial'}, 'sector_3': {'commercial'}}
@@ -315,8 +316,12 @@ def build():
     model = compile_model(bundle, empty, json.loads(estimate_raw))
     polygons = model['polygons']
     scale = 65535 / max(model['width'], model['height'])
-    sdk_header = (ROOT / 'apesdk/universe/universe.h').read_text()
-    walk_units = int(re.search(r'^#define FATIGUE_SPEED_THRESHOLD (\d+)$', sdk_header, re.M)[1])
+    metres_per_pixel = bundle['data']['modern_roads']['registration']['approximate_metres_per_pixel']
+    # Scenario assumption for dry walking, in metres per simulated minute.
+    walking_metres_per_minute = 75
+    walk_units = int(walking_metres_per_minute * scale / metres_per_pixel)
+    if not 8 <= walk_units <= 4096:
+        raise ValueError('Registered walking budget is outside native bounds')
     geometry = Geometry(polygons)
     node_lookup = {node['id']: node['point'] for node in model['nodes']}
     sources = {edge['id']: edge for edge in bundle['data']['modern_roads']['network']['edges']}
@@ -329,7 +334,7 @@ def build():
             continue
         adjacency[edge['from']].add(edge['to'])
         adjacency[edge['to']].add(edge['from'])
-        edge.update(qualified=True, capacity=24, junction=False,
+        edge.update(qualified=True, capacity=WALK_LINK_CAPACITY, junction=False,
                     basis='technical trial: surface walking on clear mapped street')
     groups = components(adjacency)
     if not groups:
@@ -374,7 +379,7 @@ def build():
                 basis = f'technical trial: {floors} model floors, one person per floor area unit'
             polygon.update(capacity_known=True, capacity=capacity, opening_known=False,
                            policy_basis=basis)
-            if school_capacity:
+            if work_capacity or school_capacity:
                 polygon.update(opening_known=True, opens=360, closes=1320)
             door_id = uid('technical-access', polygon['source'])
             model['doors'].append(dict(id=door_id, building=polygon['id'], node=node,
@@ -384,11 +389,11 @@ def build():
                                  node=node, use=use, capacity=capacity, component=component[node],
                                  work_capacity=work_capacity, school_capacity=school_capacity))
             break
-    model['basis'] = 'Canterbury technical access trial from audited map and provisional uses'
+    model['basis'] = f'Canterbury registered access trial; walking units/minute={walk_units}'
     model['generation'] = hashlib.sha256(canonical({
-        'source': model['generation'], 'edges': [edge['id'] for edge in model['edges'] if edge['qualified']],
+        'source': model['generation'], 'walking_budget': walk_units, 'walking_link_capacity': WALK_LINK_CAPACITY, 'edges': [edge['id'] for edge in model['edges'] if edge['qualified']],
         'doors': model['doors'], 'premises': admitted,
-        'school_opening': [360, 1320],
+        'trial_destination_opening': [360, 1320],
     })).hexdigest()
     packed = encode(model)
     work_components = {b['component'] for b in admitted if b['work_capacity']}
@@ -401,6 +406,9 @@ def build():
         'source_bundle_sha256': hashlib.sha256(bundle_raw).hexdigest(),
         'building_estimates_sha256': hashlib.sha256(estimate_raw).hexdigest(),
         'workforce_draft_sha256': hashlib.sha256(workforce_raw).hexdigest(),
+        'metres_per_pixel': metres_per_pixel,
+        'walking_metres_per_minute': walking_metres_per_minute,
+        'walking_link_capacity': WALK_LINK_CAPACITY,
         'dry_native_walk_units': walk_units,
         'scope': 'Technical model assumptions for access and capacity on the actual Canterbury map',
         'qualified_edges': sum(edge['qualified'] for edge in model['edges']),

@@ -122,6 +122,11 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
         index_ok(p->door, w->content->nd) &&
         index_ok(p->held_edge, w->content->ne) && !p->work.spec.basis &&
         task(p->work.view.state) && task(p->trade.view.state) &&
+        p->household_care <= 1 &&
+        (!p->school_door ||
+         (cd_door_index(w->content, p->school_door) != CD_NONE &&
+          p->school_leave < p->school_start && p->school_start < p->school_end &&
+          p->school_end < 1440)) &&
         p->jobs[0] <= w->job_count && p->jobs[1] <= w->job_count &&
         p->mission <= w->service_count && p->gathering <= w->gathering_count &&
         p->vehicle <= w->vehicle_count && p->driving <= w->vehicle_count &&
@@ -242,6 +247,7 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     REQUIRE(j->view.id == i + 1 && j->view.occupation &&
             cd_job_role_enabled(j->view.occupation) &&
             j->view.shift_start < 1440 && j->view.shift_end < 1440 &&
+            j->commute_start < 1440 &&
             j->view.wage <= 1000 &&
             cd_polygon_index(w->content, j->view.workplace) != CD_NONE &&
             cd_door_index(w->content, j->view.entrance) != CD_NONE);

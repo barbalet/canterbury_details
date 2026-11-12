@@ -29,7 +29,13 @@ const char *cd_dsl_role_recipe(const CdDslRole *role) {
   return NULL;
 }
 
+int cd_sector_job(CdEntityId occupation) {
+  return occupation > CD_SECTOR_JOB_BASE && occupation <= CD_SECTOR_JOB_BASE + 9;
+}
+
 int cd_job_role_enabled(CdEntityId occupation) {
+  if (cd_sector_job(occupation))
+    return 1;
   const CdDslRole *role = cd_dsl_job_role(occupation);
   if (role)
     return cd_dsl_role_recipe(role) != NULL;

@@ -246,6 +246,19 @@ void cd_jobs_tick(CdWorld *w) {
                       NULL);
   for (size_t i = 0; i < w->count; i++) {
     CdCitizen *p = &w->people[i];
+    CdJob *attendance = cd_job(w, p->jobs[0]);
+    if (attendance && cd_sector_job(attendance->view.occupation) &&
+        cd_job_qualified(w, attendance, p) && workplace_open(w, attendance) &&
+        cd_shift(attendance->view.shift_start, attendance->view.shift_end,
+                 clock.minute_of_day) &&
+        p->inside != CD_NONE && p->door == CD_NONE &&
+        w->content->polygons[p->inside].id == attendance->view.workplace) {
+      CdPremises *employer = &w->premises[p->inside];
+      if (employer->treasury >= attendance->view.wage) {
+        employer->treasury -= attendance->view.wage;
+        p->wallet += attendance->view.wage;
+      }
+    }
     CdWorkTask *t = &p->work;
     if (!pending(t->view.state))
       continue;

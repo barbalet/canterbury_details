@@ -26,6 +26,8 @@ static uint64_t shift_cost(unsigned start, unsigned end, unsigned wage) {
 int cd_job_qualified(const CdWorld *world, const CdJob *j, const CdCitizen *p) {
   if (!p || !j || !j->view.open || p->health.mortality_pending)
     return 0;
+  if (cd_sector_job(j->view.occupation))
+    return p->civil.age >= 18 && p->civil.age < 65 && !j->view.apprenticeship;
   const CdDslRole *named = cd_dsl_job_role(j->view.occupation);
   if (named) {
     if (!cd_dsl_role_recipe(named) || j->view.apprenticeship != (int)named->training_post)
@@ -210,6 +212,7 @@ CdStatus cd_world_job_create(CdWorld *w, const CdJobSpec *s, CdEntityId *out,
                         .open = 1,
                         .apprenticeship = s->apprenticeship};
   j->has_key = s->has_key;
+  j->commute_start = s->shift_start;
   snprintf(j->view.basis, 96, "%s", s->basis);
   w->job_count++;
   *out = j->view.id;
@@ -256,6 +259,12 @@ static CdStatus job_assignment(CdWorld *w, CdEntityId id, CdPersonRef ref,
       (secondary != 0 && secondary != 1))
     return cd_diag(d, CD_INVALID_ARGUMENT,
                    "Unknown actor, vacancy or duty slot");
+  if (p->household_care) {
+    CdHouseholdCareView care;
+    cd_world_household_care(w, ref, &care, NULL);
+    if (care.infants || care.preschool || care.school_age || care.teenagers)
+      return cd_diag(d, CD_INVALID_STATE, "Resident is designated for stay-at-home care");
+  }
   if (j->view.worker.person_id) {
     if (j->view.worker.person_id == ref.person_id &&
         j->view.worker.world_token == ref.world_token &&
@@ -446,6 +455,48 @@ void cd_commute_to(CdWorld *w, CdCitizen *p, uint32_t target, int key,
   else
     cd_automatic_travel(w, p->civil.ref, c->nodes[destination->node].id);
 }
+CdStatus cd_world_enroll_school(CdWorld *w, CdPersonRef ref, CdEntityId building,
+                                unsigned leave, unsigned start, unsigned end,
+                                CdDiagnostic *d) {
+  CdCitizen *p = cd_citizen(w, ref);
+  uint32_t door = w ? cd_reviewed_door(w, building) : CD_NONE;
+  if (!cd_model_ready(w) || !p || p->civil.age < 5 || p->civil.age >= 15 ||
+      door == CD_NONE || !p->civil.dwelling || leave >= start ||
+      start >= end || end >= 1440)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "School enrollment requires a pupil, home, and valid session");
+  const CdPolygon *school = &w->content->polygons[w->content->doors[door].building];
+  if (strcmp(school->use, "education") && strcmp(school->use, "education_support"))
+    return cd_diag(d, CD_INVALID_ARGUMENT, "School enrollment requires an education premises");
+  unsigned seats = cd_capacity(w, w->content->doors[door].building) * 3 / 4;
+  int changes[1441] = {0};
+  CdEntityId entrance = w->content->doors[door].id;
+  for (size_t i = 0; i < w->count; ++i) {
+    const CdCitizen *other = &w->people[i];
+    if (other != p && other->school_door == entrance &&
+        other->civil.age >= 5 && other->civil.age < 15) {
+      ++changes[other->school_start];
+      --changes[other->school_end];
+    }
+  }
+  int enrolled = 0;
+  for (unsigned m = 0; m < end; ++m) {
+    enrolled += changes[m];
+    if (m >= start && (unsigned)enrolled >= seats)
+      return cd_diag(d, CD_CAPACITY, "School session has no seat available");
+  }
+  uint32_t home = cd_reviewed_door(w, p->civil.dwelling);
+  CdRoute route;
+  if (home == CD_NONE ||
+      cd_route_indices(w, w->content->doors[home].node,
+                       w->content->doors[door].node, &route) != CD_OK)
+    return cd_diag(d, CD_INVALID_STATE, "School entrance is unreachable from home");
+  p->school_door = w->content->doors[door].id;
+  p->school_leave = leave;
+  p->school_start = start;
+  p->school_end = end;
+  return cd_diag(d, CD_OK, "Daily school enrollment scheduled");
+}
+
 void cd_jobs_plan(CdWorld *w) {
   unsigned m = minute(w);
   for (size_t i = 0; i < w->count; i++) {
@@ -456,11 +507,18 @@ void cd_jobs_plan(CdWorld *w) {
         p->trade.view.state == CD_TASK_PENDING ||
         p->trade.view.state == CD_TASK_WAITING)
       continue;
+    if (p->school_door && p->civil.age >= 5 && p->civil.age < 15) {
+      uint32_t door = m >= p->school_leave && m < p->school_end
+                          ? cd_door_index(w->content, p->school_door)
+                          : cd_reviewed_door(w, p->civil.dwelling);
+      cd_commute_to(w, p, door, 0, 0);
+      continue;
+    }
     CdJob *chosen = NULL;
     for (unsigned s = 0; s < 2; s++) {
       CdJob *j = cd_job(w, p->jobs[s]);
       if (j && institution_open(w, j) && cd_job_qualified(w, j, p) &&
-          cd_shift(j->view.shift_start, j->view.shift_end, m)) {
+          cd_shift(j->commute_start, j->view.shift_end, m)) {
         chosen = j;
         break;
       }

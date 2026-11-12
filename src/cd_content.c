@@ -226,6 +226,13 @@ CdStatus cd_content_open(const char *path, CdContent **out, CdDiagnostic *d) {
   c->height = u32(&r);
   char *generation = text(&r);
   c->basis = text(&r);
+  /* The opt-in map pack carries its registered dry walking budget in its basis. */
+  unsigned walk_units;
+  char trailing;
+  if (c->basis && sscanf(c->basis, "Canterbury registered access trial; walking units/minute=%u%c",
+                         &walk_units, &trailing) == 1 && walk_units >= 8 && walk_units <= 4096)
+    c->walk_units_per_minute = walk_units;
+
   if (!generation || strlen(generation) != 64 || !c->basis || !c->width ||
       !c->height || c->width > 4096 || c->height > 4096)
     goto invalid;

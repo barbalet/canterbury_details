@@ -13,6 +13,7 @@
 #include <string.h>
 #define CD_NONE UINT32_MAX
 #define CD_EPS 1e-8
+#define CD_SECTOR_JOB_BASE UINT64_C(65536)
 typedef struct {
   uint32_t offset, count;
 } CdRing;
@@ -65,6 +66,7 @@ struct CdContent {
   CdSite *sites;
   uint32_t *adj_offset, *adj_edges, *components;
   char *basis;
+  unsigned walk_units_per_minute;
 };
 typedef struct {
   CdWorkView view;
@@ -96,6 +98,7 @@ typedef struct {
 typedef struct {
   CdJobView view;
   int has_key;
+  unsigned commute_start;
 } CdJob;
 typedef struct {
   CdEntityId premises;
@@ -120,6 +123,9 @@ typedef struct {
   CdEntityId presence;
   unsigned fatigue, rest_left, meals, raw, skills;
   int sleeping;
+  unsigned household_care;
+  CdEntityId school_door;
+  unsigned school_leave, school_start, school_end;
   CdHumanActivity activity;
   uint64_t needs_minutes, eaten, unmet_meals;
   CdHealthView health;
@@ -254,6 +260,7 @@ unsigned cd_civil_age(CdCivilTime, CdCivilTime);
 int cd_civil_valid(CdCivilTime);
 CdPoint cd_city_position(const CdWorld *, const CdCitizen *);
 double cd_city_scale(const CdWorld *);
+unsigned cd_city_walk_units(const CdWorld *);
 unsigned cd_days_in_month(int, unsigned);
 int cd_model_ready(const CdWorld *);
 int cd_food_personal(CdWorld *, CdCitizen *);
@@ -287,6 +294,7 @@ int cd_dsl_certified(const CdCitizen *, const CdDslRole *);
 int cd_dsl_certificate_valid(const CdCitizen *);
 int cd_job_mentor_matches(const CdJob *, const CdJob *);
 int cd_job_role_enabled(CdEntityId);
+int cd_sector_job(CdEntityId);
 
 int cd_dsl_stock_valid(const CdWorld *);
 void cd_dsl_cargo_tick(CdWorld *, CdCitizen *);

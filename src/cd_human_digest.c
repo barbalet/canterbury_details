@@ -35,6 +35,11 @@ uint64_t cd_human_digest(const CdWorld *w, uint64_t h) {
     H(p->fatigue);
     H(p->rest_left);
     H(p->sleeping);
+    H(p->household_care);
+    H(p->school_door);
+    H(p->school_leave);
+    H(p->school_start);
+    H(p->school_end);
     H(p->activity);
     H(p->meals);
     H(p->raw);

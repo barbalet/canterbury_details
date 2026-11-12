@@ -168,7 +168,8 @@ int main(int argc, char **argv) {
   size_t page = 0;
   uint64_t people = cd_smoke_default_people(), minutes = 5, seed = 1940;
   const char *city_path = NULL, *load_path = NULL, *save_path = NULL,
-             *program_path = NULL, *record_path = NULL, *scenario_path = NULL;
+             *program_path = NULL, *record_path = NULL, *scenario_path = NULL,
+             *duty_path = NULL;
   int intervene = 0, diagnostic = 0, explicit_minutes = 0;
   int explicit_population = 0, explicit_seed = 0, allocate_homes = 0, place_homes = 0;
   for (int i = 1; i < argc; i++) {
@@ -199,7 +200,8 @@ int main(int argc, char **argv) {
            "protocol; load/program defaults to zero extra minutes.\n"
            "--dsl-definition summary|ID inspects compiled Canterbury definitions.\n"
            "--allocate-homes assigns fresh households to reviewed residential capacity.\n"
-           "--place-homes admits residents at their reviewed home entrances.");
+           "--place-homes admits residents at their reviewed home entrances.\n"
+           "--duty-startup FILE loads homes, jobs, and recurring school sessions.");
       return 0;
     }
     if (i + 1 >= argc) {
@@ -225,6 +227,10 @@ int main(int argc, char **argv) {
     }
     if (!strcmp(option, "--scenario")) {
       scenario_path = argv[++i];
+      continue;
+    }
+    if (!strcmp(option, "--duty-startup") || !strcmp(option, "--school-startup")) {
+      duty_path = argv[++i];
       continue;
     }
     if (!strcmp(option, "--city")) {
@@ -265,6 +271,10 @@ int main(int argc, char **argv) {
     fputs("--scenario supplies population and seed and starts a new world.\n", stderr);
     return 2;
   }
+  if (duty_path && (!scenario_path || allocate_homes || place_homes)) {
+    fputs("--duty-startup requires --scenario and supplies household placement.\n", stderr);
+    return 2;
+  }
   if ((place_homes || allocate_homes || scenario_path || load_path || save_path || program_path || record_path || manage >= 0) &&
       !city_path)
     city_path = "build/content/CanterburyCity.bin";
@@ -283,6 +293,7 @@ int main(int argc, char **argv) {
         cd_content_open(city_path, &content, &d) == CD_OK &&
         (!scenario_path || cd_scenario_startup_read(content, scenario_path, &startup, &d) == CD_OK) &&
         (load_path ? cd_world_load(&world, content, load_path, &d)
+         : duty_path ? cd_world_open_duty_startup(content, &startup, duty_path, &world, &d)
          : scenario_path ? cd_world_open_startup(content, &startup, &world, &d)
                          : cd_world_open(content, &scenario, &world, &d)) == CD_OK &&
         (!allocate_homes || cd_world_households_allocate(world, &d) == CD_OK) &&

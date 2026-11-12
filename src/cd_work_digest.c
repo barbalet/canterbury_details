@@ -36,6 +36,7 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
     H(j->view.apprenticeship);
     T(j->view.basis);
     H(j->has_key);
+    H(j->commute_start);
   }
   for (size_t i = 0; i < w->count; i++) {
     const CdCitizen *p = &w->people[i];

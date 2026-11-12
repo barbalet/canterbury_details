@@ -125,6 +125,16 @@ CdStatus cd_occupation(size_t, CdOccupationView *, CdDiagnostic *);
 CdStatus cd_world_occupation_eligible(const CdWorld *, CdPersonRef, CdEntityId,
                                       int *, CdDiagnostic *);
 const char *cd_occupation_identity(void);
+/* Daily school enrollment, with a civil-minute departure and session. */
+CdStatus cd_world_enroll_school(CdWorld *, CdPersonRef, CdEntityId,
+                                unsigned, unsigned, unsigned, CdDiagnostic *);
+typedef struct {
+  unsigned designated;
+  unsigned infants, preschool, school_age, teenagers;
+} CdHouseholdCareView;
+CdStatus cd_world_household_care(const CdWorld *, CdPersonRef, CdHouseholdCareView *,
+                                 CdDiagnostic *);
+CdStatus cd_world_set_household_care(CdWorld *, CdPersonRef, int, CdDiagnostic *);
 #ifdef __cplusplus
 }
 #endif

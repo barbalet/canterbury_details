@@ -4,6 +4,10 @@
 double cd_city_scale(const CdWorld *w) {
   return 65535.0 / fmax(w->content->width, w->content->height);
 }
+unsigned cd_city_walk_units(const CdWorld *w) {
+  return w->content->walk_units_per_minute ? w->content->walk_units_per_minute
+                                           : cd_native_walk_units();
+}
 CdPoint cd_city_position(const CdWorld *w, const CdCitizen *p) {
   uint16_t x = 0, y = 0;
   cd_native_position(w->native, p->civil.ref, &x, &y);
@@ -384,7 +388,7 @@ void cd_movement_tick(CdWorld *w) {
     p->activity = CD_ACTIVITY_TRAVEL;
     p->travel = CD_ROUTE_TRAVELLING;
     p->reason = CD_ROUTE_OK;
-    double budget = cd_native_walk_units() / (1 + w->rain);
+    double budget = cd_city_walk_units(w) / (1 + w->rain);
     unsigned iterations = 0;
     while (budget >= 1 && iterations++ < 2048) {
       if (p->door != CD_NONE) {
