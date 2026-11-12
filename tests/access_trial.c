@@ -2,6 +2,7 @@
 #include "cd_dsl_catalogue.h"
 #include "cd_scenario_startup.h"
 #include <assert.h>
+#include <inttypes.h>
 #include <stdlib.h>
 
 static CdDiagnostic diagnostic;
@@ -50,14 +51,101 @@ static void population_placement(CdContent *content) {
     fprintf(stderr, "Only %zu residents completed entrance movement\n", inside);
   assert(inside == startup.scenario.initial_people);
   unsigned bands[5] = {0};
+  unsigned (*demands)[2] = calloc(content->np, sizeof *demands);
+  assert(demands);
   for (size_t i = 0; i < world->count; ++i) {
-    unsigned age = world->people[i].civil.age;
+    const CdCitizen *person = &world->people[i];
+    unsigned age = person->civil.age;
+    demands[person->inside][0] += age >= 18 && age < 65;
+    demands[person->inside][1] += age >= 5 && age < 15;
     ++bands[age < 5 ? 0 : age < 15 ? 1 : age < 18 ? 2 : age < 65 ? 3 : 4];
   }
   for (size_t i = 0; i < 5; ++i)
     assert(bands[i] == startup.cohorts[i]);
-  printf("{\"residents_at_home\":%zu,\"households\":%zu,\"entry_minutes\":%u,\"ok\":true}\n",
+  printf("{\"residents_at_home\":%zu,\"households\":%zu,\"entry_minutes\":%u,"
+         "\"ok\":true,\"demands\":[",
          inside, world->home_count, elapsed);
+  const char *separator = "";
+  for (uint32_t i = 0; i < content->np; ++i) {
+    if (!demands[i][0] && !demands[i][1])
+      continue;
+    printf("%s[\"%" PRIu64 "\",%u,%u]", separator, (uint64_t)content->polygons[i].id,
+           demands[i][0], demands[i][1]);
+    separator = ",";
+  }
+  puts("]}");
+  free(demands);
+  cd_world_close(world);
+}
+
+static void school_journey(CdContent *content) {
+  CdWorld *world = NULL;
+  CdScenarioStartup startup = {
+      {4, 1940, {1940, 1, 1, 480}, "synthetic-ordinary-v1"},
+      {1, 1, 0, 2, 0}, {0}};
+  OK(cd_world_open_startup(content, &startup, &world, &diagnostic));
+  uint32_t home_door = CD_NONE, school_door = CD_NONE;
+  double best = INFINITY;
+  for (uint32_t si = 0; si < content->nd; ++si) {
+    const CdDoor *school = &content->doors[si];
+    const CdPolygon *premises = &content->polygons[school->building];
+    if (!school->reviewed || !premises->opening_known ||
+        strcmp(premises->use, "education"))
+      continue;
+    for (uint32_t hi = 0; hi < content->nd; ++hi) {
+      const CdDoor *home = &content->doors[hi];
+      const CdPolygon *dwelling = &content->polygons[home->building];
+      if (!home->reviewed || dwelling->capacity < 4 ||
+          strcmp(dwelling->use, "residential") ||
+          content->components[home->node] != content->components[school->node])
+        continue;
+      if (hypot(content->nodes[home->node].p.x - content->nodes[school->node].p.x,
+                content->nodes[home->node].p.y - content->nodes[school->node].p.y) >= best)
+        continue;
+      CdRoute route;
+      if (cd_route_indices(world, home->node, school->node, &route) == CD_OK &&
+          route.count && route.cost < best) {
+        home_door = hi;
+        school_door = si;
+        best = route.cost;
+      }
+    }
+  }
+  assert(home_door != CD_NONE && school_door != CD_NONE);
+  uint32_t dwelling = content->doors[home_door].building;
+  uint32_t school = content->doors[school_door].building;
+  CdCitizen *pupil = &world->people[3];
+  assert(pupil->civil.age >= 5 && pupil->civil.age <= 14);
+  OK(cd_world_household_move(world, 1, content->polygons[dwelling].id, &diagnostic));
+  OK(cd_world_place_households(world, &diagnostic));
+  OK(cd_world_food_import(world, (CdFoodEndpoint){CD_FOOD_HOME, 1}, 16, 0,
+                          "technical school trial meals", &diagnostic));
+  uint64_t departure = wait_inside(world, pupil->civil.ref, dwelling, 120);
+  uint64_t arrival = 0, returned = 0;
+  const unsigned dismissal = 750;
+  for (unsigned minute = 0; minute < 960; ++minute) {
+    CdClockView clock;
+    OK(cd_world_clock(world, &clock, &diagnostic));
+    if (pupil->inside == school && pupil->door == CD_NONE && !arrival) {
+      assert(clock.civil.minute_of_day < dismissal);
+      arrival = cd_now(world);
+    }
+    if (clock.civil.minute_of_day < dismissal)
+      cd_commute_to(world, pupil, school_door, 0, 0);
+    else if (arrival && pupil->inside == dwelling && pupil->door == CD_NONE) {
+      returned = cd_now(world);
+      break;
+    } else
+      cd_commute_to(world, pupil, home_door, 0, 0);
+    OK(cd_world_step(world, 1, &diagnostic));
+  }
+  if (!arrival || !returned)
+    fprintf(stderr, "School journey timed out: %s\n", cd_route_reason(pupil->reason));
+  assert(arrival > departure && returned > arrival);
+  printf("{\"pupils\":1,\"outbound_minutes\":%llu,\"round_trip_minutes\":%llu,"
+         "\"school\":\"%s\",\"ok\":true}\n",
+         (unsigned long long)(arrival - departure),
+         (unsigned long long)(returned - departure), content->polygons[school].source);
   cd_world_close(world);
 }
 
@@ -67,6 +155,12 @@ int main(int argc, char **argv) {
   OK(cd_content_open("build/content/CanterburyAccessTrial.bin", &content, &diagnostic));
   if (argc == 2 && !strcmp(argv[1], "--population")) {
     population_placement(content);
+    cd_content_close(content);
+    assert(!cd_memory_stats().total);
+    return 0;
+  }
+  if (argc == 2 && !strcmp(argv[1], "--school")) {
+    school_journey(content);
     cd_content_close(content);
     assert(!cd_memory_stats().total);
     return 0;

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Derive a labelled pedestrian trial from the audited Canterbury geometry."""
 import argparse
-from collections import defaultdict
+from collections import defaultdict, deque
 import hashlib
 import itertools
 import json
 import math
 import re
 
+from canterbury_dsl_parser import parse
 from compile_content import ROOT, atomic_write, canonical
 from compile_runtime import build as check_runtime, compile_model, encode, uid
 
@@ -22,10 +23,87 @@ WALKABLE = {
     'residential', 'living_street', 'unclassified', 'tertiary', 'secondary',
     'primary', 'pedestrian', 'footway', 'path', 'steps', 'service', 'track',
 }
-WORK_USES = {'workshop', 'industrial', 'commercial', 'agricultural_support',
-             'agricultural', 'education', 'education_support', 'healthcare',
-             'care_support', 'civic', 'civic_support', 'religious'}
+WORKFORCE = ROOT / 'content/scenarios/canterbury1940-draft.canterbury'
 RESIDENTIAL_FLOORS = 2
+WORK_FLOORS = 2
+# Trial upper-floor offices and hospitality space in these mapped premises.
+EXTRA_WORK_FLOOR_USES = {'commercial', 'civic', 'leisure'}
+# Technical capacity per floor, in map area units per person.
+WORK_AREA_PER_PERSON = 1
+SCHOOL_USES = {'education', 'education_support'}
+SCHOOL_SESSIONS = 2
+# Provisional premises sharing for light bench work and building trades offices.
+# These are activity permissions, with no change to the mapped building use.
+TRIAL_SHARED_USES = {'sector_2': {'commercial'}, 'sector_3': {'commercial'}}
+
+
+def workforce_records(raw):
+    records = parse(raw.decode(), str(WORKFORCE))
+    return {name: record for (kind, name), record in records.items()
+            if kind == 'workforce'}
+
+
+def workforce_bound(premises, sectors, shared_uses=None, adults=None):
+    """Maximum jobs under use constraints, optionally bounded by local adults."""
+    by_use = defaultdict(int)
+    by_component_use = defaultdict(int)
+    for site in premises:
+        if site['work_capacity']:
+            by_use[site['use']] += site['work_capacity']
+            by_component_use[site['component'], site['use']] += site['work_capacity']
+    residual = defaultdict(dict)
+
+    def connect(a, b, capacity):
+        residual[a][b] = capacity
+        residual[b][a] = 0
+
+    source, sink = ('source', ''), ('sink', '')
+    if adults is None:
+        for use, capacity in sorted(by_use.items()):
+            connect(source, ('use', use), capacity)
+    else:
+        for component, count in sorted(adults.items()):
+            connect(source, ('component', component), count)
+        for (component, use), capacity in sorted(by_component_use.items()):
+            connect(('component', component), ('use', use), capacity)
+    for name, record in sectors.items():
+        target = record['target_people']
+        connect(('sector', name), sink, target)
+        uses = set(record['premises_types'])
+        uses.update((shared_uses or {}).get(name, ()))
+        for use in sorted(uses):
+            if by_use[use]:
+                connect(('use', use), ('sector', name), target)
+    while True:
+        parents = {source: None}
+        queue = deque([source])
+        while queue and sink not in parents:
+            node = queue.popleft()
+            for neighbor, capacity in residual[node].items():
+                if capacity and neighbor not in parents:
+                    parents[neighbor] = node
+                    queue.append(neighbor)
+        if sink not in parents:
+            break
+        path = []
+        node = sink
+        while parents[node] is not None:
+            parent = parents[node]
+            path.append((parent, node))
+            node = parent
+        amount = min(residual[a][b] for a, b in path)
+        for a, b in path:
+            residual[a][b] -= amount
+            residual[b][a] += amount
+    return {
+        name: {
+            'sector': record['sector'],
+            'target': record['target_people'],
+            'capacity_matched': residual[sink][('sector', name)],
+        }
+        for name, record in sectors.items()
+    }
+
 
 
 def segments(points):
@@ -216,6 +294,11 @@ def components(adjacency):
 def build():
     bundle_raw = BUNDLE.read_bytes()
     estimate_raw = ESTIMATES.read_bytes()
+    workforce_raw = WORKFORCE.read_bytes()
+    sectors = workforce_records(workforce_raw)
+    work_uses = {use for record in sectors.values() for use in record['premises_types']}
+    # Mixed-use and residential work need separate floor allocations.
+    work_uses -= {'mixed_use', 'residential'}
     bundle = json.loads(bundle_raw)
     empty = dict(format='canterbury-details-spatial-review', version=1,
                  generation_id=bundle['generation_id'], edges=[], doors=[], dwellings=[])
@@ -249,7 +332,7 @@ def build():
     admitted = []
     for i, polygon in enumerate(polygons):
         use = polygon['use']
-        if polygon['kind'] != 1 or (use != 'residential' and use not in WORK_USES):
+        if polygon['kind'] != 1 or (use != 'residential' and use not in work_uses):
             continue
         candidates = []
         for point in entrances(polygon):
@@ -268,34 +351,46 @@ def build():
                 continue
             area = abs(sum(a[0] * b[1] - b[0] * a[1]
                            for ring in polygon['rings'] for a, b in segments(ring))) / 2
+            work_capacity = 0
+            school_capacity = 0
             if use == 'residential':
                 capacity = min(128, 4 * max(1, int(area * RESIDENTIAL_FLOORS / 6)))
                 basis = 'technical trial: two model floors and four places per six area units'
             else:
-                capacity = min(64, max(1, int(area / 4)))
-                basis = 'technical trial: one work place per four footprint area units'
+                floors = WORK_FLOORS + int(use in EXTRA_WORK_FLOOR_USES)
+                capacity = min(128, max(1, int(area * floors / WORK_AREA_PER_PERSON)))
+                school_capacity = capacity * 3 // 4 if use in SCHOOL_USES else 0
+                work_capacity = capacity - school_capacity
+                basis = f'technical trial: {floors} model floors, one person per floor area unit'
             polygon.update(capacity_known=True, capacity=capacity, opening_known=False,
                            policy_basis=basis)
+            if school_capacity:
+                polygon.update(opening_known=True, opens=360, closes=1320)
             door_id = uid('technical-access', polygon['source'])
             model['doors'].append(dict(id=door_id, building=polygon['id'], node=node,
                                        reviewed=True, basis='technical trial clear single-wall connector',
                                        points=[start, point]))
             admitted.append(dict(source=polygon['source'], building=polygon['id'], door=door_id,
-                                 node=node, use=use, capacity=capacity, component=component[node]))
+                                 node=node, use=use, capacity=capacity, component=component[node],
+                                 work_capacity=work_capacity, school_capacity=school_capacity))
             break
     model['basis'] = 'Canterbury technical access trial from audited map and provisional uses'
     model['generation'] = hashlib.sha256(canonical({
         'source': model['generation'], 'edges': [edge['id'] for edge in model['edges'] if edge['qualified']],
         'doors': model['doors'], 'premises': admitted,
+        'school_opening': [360, 1320],
     })).hexdigest()
     packed = encode(model)
-    work_components = {b['component'] for b in admitted if b['use'] in WORK_USES}
+    work_components = {b['component'] for b in admitted if b['work_capacity']}
+    inhabited_components = {b['component'] for b in admitted if b['use'] == 'residential'}
+    local = [b for b in admitted if b['component'] in inhabited_components]
     report = {
         'source_generation': bundle['generation_id'],
         'generation': model['generation'],
         'pack_sha256': hashlib.sha256(packed).hexdigest(),
         'source_bundle_sha256': hashlib.sha256(bundle_raw).hexdigest(),
         'building_estimates_sha256': hashlib.sha256(estimate_raw).hexdigest(),
+        'workforce_draft_sha256': hashlib.sha256(workforce_raw).hexdigest(),
         'dry_native_walk_units': walk_units,
         'scope': 'Technical model assumptions for access and capacity on the actual Canterbury map',
         'qualified_edges': sum(edge['qualified'] for edge in model['edges']),
@@ -303,7 +398,17 @@ def build():
         'components': len(groups),
         'largest_component_nodes': len(groups[0]),
         'residential_model_floors': RESIDENTIAL_FLOORS,
-        'candidate_work_capacity': sum(b['capacity'] for b in admitted if b['use'] in WORK_USES),
+        'work_model_floors': WORK_FLOORS,
+        'extra_work_floor_uses': sorted(EXTRA_WORK_FLOOR_USES),
+        'candidate_work_capacity': sum(b['work_capacity'] for b in admitted),
+        'candidate_school_capacity': sum(b['school_capacity'] for b in admitted),
+        'school_capacity_in_residential_components': sum(b['school_capacity'] for b in local),
+        'school_sessions': SCHOOL_SESSIONS,
+        'school_session_places_in_residential_components': SCHOOL_SESSIONS * sum(
+            b['school_capacity'] for b in local),
+        'workforce_capacity_bound': workforce_bound(local, sectors),
+        'workforce_trial_shared_uses': {k: sorted(v) for k, v in TRIAL_SHARED_USES.items()},
+        'workforce_trial_capacity_bound': workforce_bound(local, sectors, TRIAL_SHARED_USES),
         'residential_capacity_in_work_components': sum(
             b['capacity'] for b in admitted if b['use'] == 'residential'
             and b['component'] in work_components),
@@ -327,7 +432,8 @@ def main():
     else:
         def fresh():
             if (hashlib.sha256(BUNDLE.read_bytes()).hexdigest() != report['source_bundle_sha256'] or
-                    hashlib.sha256(ESTIMATES.read_bytes()).hexdigest() != report['building_estimates_sha256']):
+                    hashlib.sha256(ESTIMATES.read_bytes()).hexdigest() != report['building_estimates_sha256'] or
+                    hashlib.sha256(WORKFORCE.read_bytes()).hexdigest() != report['workforce_draft_sha256']):
                 raise ValueError('Access trial inputs changed before publication')
         atomic_write(PACK, packed, fresh)
         atomic_write(REPORT, raw, fresh)

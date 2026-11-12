@@ -2,7 +2,7 @@
 
 Implement a runnable Canterbury 1940 scenario from the [DSL draft](../../content/scenarios/canterbury1940-draft.canterbury). The release target includes 60 career families, 300 roles, 240 advancement links, 72 resource kinds, 21 services and the five draft recipes. The scenario starts with 27,000 residents and supports growth to 30,000. It runs through the CLI and native app using the existing Canterbury map, native bodies and simulation clock.
 
-The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 has passed the staffed district fixture and remains open for full workforce allocation. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
+The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 has passed the staffed district and school journey fixtures. It remains open for citywide assignments and schedules. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
 
 The current compiler qualifies draft parsing, typed binding, deterministic publication and activation preflight. Runtime execution begins in Cycle 05.
 
@@ -90,12 +90,14 @@ Each connector is screened against native coordinate rounding in both dry
 walking directions. Bridges, tunnels and protected crossings need their own
 qualification.
 
-The residential scenario models two floors and four places per six map
-area units. Workplace and school candidates use one place per four footprint
-area units. These are explicit simulation assumptions. The trial qualifies
-12,675 walking links and 1,579 entrances across 299 components. It provides
-39,632 residential places and 2,793 candidate workplace places. Mixed-use
-buildings require distinct residential and workplace capacity declarations.
+The trial qualifies 12,675 walking links and 1,590 entrances across 299
+components. Residential capacity is 39,632 places under the two-floor
+model. The opt-in workforce model uses two floors, with a third model
+floor at commercial, civic and leisure premises. It assumes one person per
+floor area unit, with a 128-person building cap. It reserves three quarters of
+education premises capacity for pupils. It provides 18,175 candidate
+workplaces and 3,461 school seats per session. Mixed-use premises still
+require distinct residential and workplace capacity declarations.
 
 **Cycle 07 housing and entry acceptance.** The native test assigns all
 6,750 households and verifies that the 27,000 proposed residents, with the
@@ -110,11 +112,24 @@ and verifies the return journey. A two-vacancy batch with one eligible
 applicant fails before any assignment is published. The workforce allocator
 uses ordered applicants, current route reachability and shift payroll checks.
 
-**Cycle 08 remains open at city scale.** The 12,000-job sector allocation,
-school journeys and remaining schedules still require sufficient workplace
-capacity, additional role bindings and configured staff. The actual-map
-test currently qualifies one household and one funded job for the commute.
-The current native walking pace is retained in the trial measurements.
+**Cycle 08 school journey acceptance.** A native fixture sends one child
+from home to a reviewed education building and back at dismissal. The
+outbound journey took 178 native minutes and the complete trip, including
+time at school, took 433. The fixture supplies the schedule. It uses
+the same native movement and door policies as the work commute.
+
+**Cycle 08 remains open at city scale.** A capacity match using the draft
+premises types covers 9,397 of 12,000 jobs. The opt-in model can cover all
+nine sector totals when commercial premises can host light bench work and
+construction offices. These are simulation permissions. With households in
+their current assigned homes, component-level matching lowers the upper
+bound to 11,634 jobs and 2,618 of 4,050 pupils across two school sessions.
+The extra modeled floor closes the previous 444-job deficit in the
+relaxed component-constrained sector match. That match now reaches all
+12,000 targets when every housing place is available to a worker. It
+does not allocate whole households or share housing capacity with pupils.
+Citywide completion requires a joint allocation, funded shifts,
+recurring pupil schedules, and native arrival and return checks at scale.
 
 ## Cycle 09 — Career catalogue and competence
 

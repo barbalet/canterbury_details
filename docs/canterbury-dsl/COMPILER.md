@@ -119,10 +119,14 @@ formats require migration.
 
 ## Actual Canterbury access trial
 
-Run `make access-check` to build the technical access pack and verify both
-the 27,000-resident home entry and a paid actual-map commute. The output
-report is `build/access-trial-validation.json`. To start the proposed
-population against the same pack:
+Run `make access-check` to build the technical access pack and verify
+27,000-resident home entry, a paid work commute and a pupil's school trip
+on the actual map. The output report is `build/access-trial-validation.json`.
+It reports sector capacity, component-constrained bounds for the current
+household placement, and relaxed bounds for any placement on the same map.
+The relaxed bounds treat every residential place as eligible for a worker
+or pupil and evaluate the two groups independently. To start the
+proposed population against the same pack:
 
 ```sh
 python3 tools/compile_canterbury_dsl.py content/scenarios/population-27000.canterbury   --city build/content/CanterburyAccessTrial.bin --startup build/content/access-27000.cdstart
