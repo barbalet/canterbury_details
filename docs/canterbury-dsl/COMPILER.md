@@ -138,3 +138,67 @@ seats. It publishes homes, employer accounts, paid jobs, and recurring
 school enrollment together. The opt-in jobs pay one model token per
 minute of physical attendance. Startup funds one eight-hour shift per
 worker. The school-only startup file remains available for school runs.
+
+
+Each funded job binds a named entry role from the catalogue. The scenario
+supplies a synthetic technical assessment for its worker. Startup selects
+roles compatible with the job sector and premises, with explicit trial
+permissions for construction offices, school support and leisure venues.
+Roles requiring independent licensing or appointment stay outside that
+assessment path. The jobs accrue experience as workers complete paid
+attendance minutes.
+
+Use `--dsl-definition ROLE_ID` to inspect the compiled occupation ID,
+qualification, authored requirements and available task binding. The
+compiled catalogue identity identifies the numeric mapping. Existing
+occupation IDs and previously assigned named role IDs retain their
+interpretation.
+
+
+Cycle 10 exposes explicit native operations for scheduling a supervised
+curriculum, recording an independent role credential, and accepting an
+authored transition into a funded vacancy. Use `--dsl-definition
+TRANSITION_ID` to inspect its compiled experience threshold. The verifier
+runs the complete transition matrix in technical fixtures and measures
+supervised training and advancement in the funded actual-map trials.
+
+
+Cycle 11 admits tagged lots through `cd_world_dsl_import_batch` in each
+kind's declared unit. Quality and equipment condition use a 0–1000
+scale with an explicit unknown value. Expiry is an optional absolute
+simulation minute. Batch reservations, equipment wear and keyed cargo
+requests operate on the stable lot ID. The existing aggregate stock view
+totals all lots of the kind at a premises. Existing untagged stock calls
+continue to operate on their untagged balance.
+
+
+Cycle 12 compiles mass-balanced material recipes, water-accounted food
+recipes, and counted bills of materials. Named roles use the existing
+refined work submission API. `cd_world_dsl_purchase` combines a keyed
+pickup with payment, and `cd_world_dsl_eat_carried` consumes a configured
+food amount and applies its energy rate on a native minute. The acceptance
+suite runs each recipe through closure and resumption, then verifies paid
+food and counted-goods chains on the Canterbury map.
+
+
+Cycle 13 connects production occupations to 28 compiled recipes and
+permits the applicable skilled and construction trades to execute native
+repair projects. `cd_world_dsl_purchase_at_post` binds a keyed sale to a
+specific compatible retail job. The buyer, clerk and any required mentor
+must be available on the native minute. `cd_world_dsl_retail_open` is
+restricted to a qualified manager or proprietor present at the premises.
+
+
+Cycle 14 adds named hospitality rosters, hotel visitor registration,
+and technical freight and single-passenger road vehicles. The road
+qualification is derived from clear two-way mapped links and excludes
+known turn-restriction ways. Passenger and freight state reuse the
+native stop, crew replacement, and physical unloading rules. The
+Canterbury rail overlays remain reference geometry.
+
+
+The transport acceptance suite also loads a separate synthetic rail
+fixture with two reviewed station entrances and an explicit operating
+track link. Walking and road routing exclude that track. Railway
+dispatch on the actual Canterbury pack remains unavailable while its
+track and station connections are reference-only.

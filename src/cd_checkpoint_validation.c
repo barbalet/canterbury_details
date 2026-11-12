@@ -247,7 +247,8 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     REQUIRE(j->view.id == i + 1 && j->view.occupation &&
             cd_job_role_enabled(j->view.occupation) &&
             j->view.shift_start < 1440 && j->view.shift_end < 1440 &&
-            j->commute_start < 1440 &&
+            j->commute_start < 1440 && j->attendance_sector <= 9 && j->training_remaining <= 10080 &&
+            (!!j->training_remaining == !!j->training_learner) &&
             j->view.wage <= 1000 &&
             cd_polygon_index(w->content, j->view.workplace) != CD_NONE &&
             cd_door_index(w->content, j->view.entrance) != CD_NONE);
@@ -344,7 +345,7 @@ CdStatus cd_checkpoint_validate(CdWorld *w, const CdSmokeStage *stage,
     TEXT(v->basis);
     TEXT(v->reason);
     REQUIRE(v->id == i + 1 && v->job && v->job <= w->job_count &&
-            (unsigned)v->kind < CD_RAIL_VEHICLE &&
+            (unsigned)v->kind <= CD_ROAD_PASSENGER &&
             (unsigned)v->phase <= CD_VEHICLE_STOPPED && v->capacity <= 16 &&
             v->loaded <= v->capacity && v->good < CD_GOODS &&
             v->requested <= 16 && v->delivered <= v->requested);

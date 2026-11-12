@@ -98,16 +98,24 @@ typedef struct {
 typedef struct {
   CdJobView view;
   int has_key;
-  unsigned commute_start;
+  unsigned commute_start, attendance_sector, training_remaining;
+  CdPersonId training_learner;
 } CdJob;
 typedef struct {
   CdEntityId premises;
   uint64_t carried, quantity;
   unsigned resource, requested, delivery;
+  CdDslBatch batch;
+  uint64_t requested_batch, order_key, order_batch, order_quantity;
+  CdEntityId order_premises;
+  unsigned order_resource, order_delivery, eating;
+  uint64_t price, order_price;
+  CdEntityId seller_job, order_seller_job;
 } CdDslCargo;
 enum { CD_DSL_CERTIFICATES = 8 };
 typedef struct {
   unsigned role;
+  uint64_t completed_minutes;
 } CdDslCertificate;
 typedef struct {
   CdResidentView civil;
@@ -161,6 +169,7 @@ enum { CD_DSL_PREMISES_STOCKS = 16, CD_DSL_RESOURCE_LIMIT = 128 };
 typedef struct {
   uint64_t available, reserved, key, work;
   unsigned resource, settled;
+  CdDslBatch batch;
 } CdDslStock;
 typedef struct {
   unsigned meals, raw, enabled, producer, beds, occupied, medicine;
@@ -205,6 +214,7 @@ struct CdWorld {
   CdEconomyLedger economy;
   uint64_t dsl_imported[CD_DSL_RESOURCE_LIMIT], dsl_consumed[CD_DSL_RESOURCE_LIMIT],
            dsl_produced[CD_DSL_RESOURCE_LIMIT], dsl_lost[CD_DSL_RESOURCE_LIMIT];
+  uint64_t dsl_batch_next, dsl_expiry_next;
   CdOffice *offices;
   CdRoster *rosters;
   CdService *services;
@@ -295,8 +305,23 @@ int cd_dsl_certificate_valid(const CdCitizen *);
 int cd_job_mentor_matches(const CdJob *, const CdJob *);
 int cd_job_role_enabled(CdEntityId);
 int cd_sector_job(CdEntityId);
+enum { CD_ROUTE_WALK_MODE, CD_ROUTE_ROAD_MODE, CD_ROUTE_RAIL_MODE };
+int cd_vehicle_route_mode(CdVehicleKind);
+int cd_edge_in_mode(const CdEdge *, int);
+CdStatus cd_route_indices_mode(CdWorld *, uint32_t, uint32_t, int, CdRoute *);
+int cd_dsl_role_repairs(const CdDslRole *);
+int cd_dsl_role_can_make(const CdDslRole *, const char *);
+int cd_dsl_appointment(const CdWorld *, const CdCitizen *, const CdDslRole *, CdEntityId);
+uint64_t cd_dsl_role_minutes(const CdCitizen *, const CdDslRole *);
+void cd_dsl_training_tick(CdWorld *, CdCitizen *, CdJob *, unsigned);
+int cd_dsl_role_premises(const CdDslRole *, const char *);
+const CdDslRole *cd_dsl_startup_role(unsigned, const char *, CdPersonId);
+void cd_dsl_record_experience(CdCitizen *, const CdDslRole *, unsigned);
 
+int cd_dsl_work_inputs_current(const CdWorld *, uint32_t, uint64_t);
 int cd_dsl_stock_valid(const CdWorld *);
+int cd_dsl_service_material(CdWorld *, uint32_t, const char *, int);
+void cd_dsl_expiry_tick(CdWorld *);
 void cd_dsl_cargo_tick(CdWorld *, CdCitizen *);
 void cd_dsl_cargo_retire(CdWorld *, CdCitizen *);
 typedef enum { CD_DSL_HOLD, CD_DSL_CHECK_OUTPUT, CD_DSL_COMPLETE, CD_DSL_RETURN } CdDslWorkAction;

@@ -317,7 +317,7 @@ resource bread {
   initial_stock 0;
   automatic_renewal false;
   quality "explicit_batch_attribute_not_extra_resource_id";
-  food_energy_per_unit unset;
+  food_energy_per_unit 2;
   spoilage_rate unset;
   hazard_controls "explicit_before_use";
   historical_supply_claim false;
@@ -330,7 +330,7 @@ resource prepared_meal {
   initial_stock 0;
   automatic_renewal false;
   quality "explicit_batch_attribute_not_extra_resource_id";
-  food_energy_per_unit unset;
+  food_energy_per_unit 2;
   spoilage_rate unset;
   hazard_controls "explicit_before_use";
   historical_supply_claim false;
@@ -11866,4 +11866,277 @@ recipe trial_trim_leather {
   required_equipment ["hand_tool"];
   activation "manual_power_technical_trial";
   basis "illustrative_manual_batch_yield_and_labour_not_period_measurement";
+}
+
+recipe bake_bread {
+  input_resources ["flour", "potable_water", "firewood"];
+  input_quantities [750, 300, 120];
+  output_resources ["bread", "waste_water", "ash"];
+  output_quantities [1000, 50, 12];
+  unit "g";
+  accounting "water_mass_conserved";
+  worker_minutes 25;
+  required_equipment ["cooking_equipment"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_bill_of_materials_labour_and_yield";
+}
+
+recipe cook_meal {
+  input_resources ["meat_portion", "potatoes", "potable_water", "firewood"];
+  input_quantities [400, 400, 250, 100];
+  output_resources ["prepared_meal", "food_scraps", "waste_water", "ash"];
+  output_quantities [900, 100, 50, 10];
+  unit "g";
+  accounting "water_mass_conserved";
+  worker_minutes 20;
+  required_equipment ["cooking_equipment"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_bill_of_materials_labour_and_yield";
+}
+
+recipe bind_school_book {
+  input_resources ["paper", "cardboard"];
+  input_quantities [200, 100];
+  output_resources ["school_book", "paper_offcuts"];
+  output_quantities [1, 20];
+  unit "each";
+  accounting "counted_bill_of_materials";
+  worker_minutes 15;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_bill_of_materials_labour_and_yield";
+}
+
+recipe sew_garment {
+  input_resources ["woven_cloth", "thread"];
+  input_quantities [900, 50];
+  output_resources ["sewn_garment", "textile_offcuts"];
+  output_quantities [1, 100];
+  unit "each";
+  accounting "counted_bill_of_materials";
+  worker_minutes 25;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_bill_of_materials_labour_and_yield";
+}
+
+recipe make_shoes {
+  input_resources ["leather", "thread"];
+  input_quantities [850, 50];
+  output_resources ["pair_of_shoes", "textile_offcuts"];
+  output_quantities [1, 100];
+  unit "each";
+  accounting "counted_bill_of_materials";
+  worker_minutes 30;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_bill_of_materials_labour_and_yield";
+}
+
+recipe brew_small_beer {
+  input_resources ["malted_barley", "potable_water", "firewood"];
+  input_quantities [200, 800, 100];
+  output_resources ["beer", "food_scraps", "waste_water", "ash"];
+  output_quantities [800, 150, 50, 10];
+  unit "g";
+  accounting "water_mass_conserved";
+  worker_minutes 10;
+  required_equipment ["cooking_equipment"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe fit_pipe {
+  input_resources ["copper_stock"];
+  input_quantities [500];
+  output_resources ["finished_metalwork", "metal_scrap"];
+  output_quantities [450, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["plumbing_tool_set"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe form_electrical_fitting {
+  input_resources ["copper_stock"];
+  input_quantities [500];
+  output_resources ["finished_metalwork", "metal_scrap"];
+  output_quantities [450, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["electrical_tool_set"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe recondition_vehicle_part {
+  input_resources ["steel_stock"];
+  input_quantities [500];
+  output_resources ["finished_metalwork", "metal_scrap"];
+  output_quantities [470, 30];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe form_pottery {
+  input_resources ["clay"];
+  input_quantities [500];
+  output_resources ["clay", "brick_material"];
+  output_quantities [450, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe prepare_brickwork {
+  input_resources ["brick_material", "mortar"];
+  input_quantities [800, 200];
+  output_resources ["brick_material", "stone"];
+  output_quantities [950, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe dress_stone {
+  input_resources ["stone"];
+  input_quantities [1000];
+  output_resources ["stone", "sand"];
+  output_quantities [900, 100];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe cut_roofing {
+  input_resources ["roofing_material"];
+  input_quantities [1000];
+  output_resources ["roofing_material", "stone"];
+  output_quantities [950, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe mix_plaster {
+  input_resources ["lime", "sand", "process_water"];
+  input_quantities [250, 500, 250];
+  output_resources ["mortar"];
+  output_quantities [1000];
+  unit "g";
+  accounting "water_mixed_material";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe prepare_paint {
+  input_resources ["paint"];
+  input_quantities [500];
+  output_resources ["paint"];
+  output_quantities [500];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe clean_harvest {
+  input_resources ["wheat_grain"];
+  input_quantities [1000];
+  output_resources ["wheat_grain", "food_scraps"];
+  output_quantities [950, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe sort_eggs {
+  input_resources ["eggs_mass"];
+  input_quantities [500];
+  output_resources ["eggs_mass", "food_scraps"];
+  output_quantities [450, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe churn_butter {
+  input_resources ["raw_milk"];
+  input_quantities [1000];
+  output_resources ["butter", "raw_milk"];
+  output_quantities [50, 950];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["cooking_equipment"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe grade_vegetables {
+  input_resources ["vegetables"];
+  input_quantities [1000];
+  output_resources ["vegetables", "food_scraps"];
+  output_quantities [900, 100];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe split_firewood {
+  input_resources ["timber"];
+  input_quantities [1000];
+  output_resources ["firewood", "wood_offcuts"];
+  output_quantities [950, 50];
+  unit "g";
+  accounting "mass_conserved_including_byproducts";
+  worker_minutes 10;
+  required_equipment ["carpentry_tool_set"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_technical_trade_batch";
+}
+
+recipe wash_linen {
+  input_resources ["woven_cloth", "potable_water"];
+  input_quantities [1000, 500];
+  output_resources ["woven_cloth", "waste_water"];
+  output_quantities [1000, 500];
+  unit "g";
+  accounting "water_mixed_material";
+  worker_minutes 12;
+  required_equipment ["hand_tool"];
+  activation "manual_power_technical_trial";
+  basis "illustrative_finite_laundry_batch";
 }

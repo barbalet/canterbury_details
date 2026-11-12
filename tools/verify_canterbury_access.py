@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 
 from compile_content import ROOT, atomic_write, canonical
+from trace_canterbury_roles import FUNDED_SERVICE_TESTS
 from qualify_canterbury_access import (
     PACK, REPORT, WORKFORCE, workforce_bound, workforce_records,
 )
@@ -267,9 +268,38 @@ def main():
                    cwd=ROOT, check=True)
     atomic_write(ROOT / 'build/access-trial-placement.json', canonical(placement))
     print(json.dumps(evidence['joint_household_routes'], sort_keys=True), flush=True)
-    for name, flags in [('population', ['--population']), ('district', []), ('school', ['--school'])]:
+    subprocess.run(['python3', 'tools/city_fixtures.py'], cwd=ROOT, check=True)
+    checks = {
+        'transitions': ['--transitions'],
+        'recipes': ['--recipes'],
+        'retail': ['--retail'],
+        'transport_hospitality': ['--transport'],
+        'transport_stages': ['--transport-stages'],
+        'public_administration': ['--public-administration'],
+        'police_response': ['--police-response'],
+        'library_access': ['--library-access'],
+        'water_supply': ['--water-supply'],
+        'clinical_care': ['--clinical-care'],
+        'community_services': ['--community-services'],
+        'maternal_and_domestic': ['--maternal-and-domestic'],
+        'repair_and_worship': ['--repair-and-worship'],
+        'senior_public_roles': ['--senior-public-roles'],
+        'institutional_support_roles': ['--institutional-support-roles'],
+        'population': ['--population'],
+        'district': [],
+        'school': ['--school'],
+    }
+    for name, flags in checks.items():
         output = subprocess.check_output([binary, *flags], cwd=ROOT, text=True)
-        evidence[name] = json.loads(output.splitlines()[-1])
+        lines = output.splitlines()
+        evidence[name] = json.loads(lines[-1])
+        if name == 'senior_public_roles':
+            evidence[name]['roles'] = [
+                role for line in lines[:-1] for role, passed in json.loads(line).items()
+                if role != 'ok' and passed == 1
+            ]
+            if len(set(evidence[name]['roles'])) != 38:
+                raise ValueError('Expected evidence for 38 distinct public roles')
         if not evidence[name]['ok']:
             raise ValueError(f'Failed access trial: {name}')
         demands = evidence[name].pop('demands', None)
@@ -298,6 +328,19 @@ def main():
     print('Running 1,440 native minutes with all scheduled residents', flush=True)
     evidence['scheduled_native_day'] = run_day(binary)
     print(json.dumps(evidence['scheduled_native_day'], sort_keys=True), flush=True)
+    evidence['dsl_service_coverage'] = {
+        service: {'check': check, 'passed': evidence[check]['ok']}
+        for service, check in FUNDED_SERVICE_TESTS.items()
+    }
+    day = evidence['scheduled_native_day']
+    evidence['cycle_16'] = {
+        'scheduled_services': day['scheduled_services'],
+        'ledgers_balanced': day['ledgers_balanced'],
+        'inspection_pure': day['inspection_pure'],
+        'work_training_contention': evidence['district']['work_training_contention'],
+    }
+    if day['scheduled_services'] != 3 or not all(evidence['cycle_16'].values()):
+        raise ValueError('Cycle 16 native integration did not meet the funded-day requirements')
     atomic_write(ROOT / 'build/access-trial-validation.json', canonical(evidence))
     if not evidence['scheduled_native_day']['ok']:
         raise SystemExit('Cycle 8 native day did not meet every attendance and return requirement')

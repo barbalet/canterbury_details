@@ -59,6 +59,12 @@ CdStatus cd_world_place(CdWorld *w, CdPersonRef ref, CdEntityId node,
                  "Initial spatial admission on qualified source node; no "
                  "travel tick consumed");
 }
+static int travel_mode(const CdWorld *world, const CdCitizen *person) {
+  if (person->driving && person->driving <= world->vehicle_count)
+    return cd_vehicle_route_mode(world->vehicles[person->driving - 1].view.kind);
+  return CD_ROUTE_WALK_MODE;
+}
+
 static CdStatus request_travel(CdWorld *w, CdPersonRef ref, CdEntityId destination,
                                CdDiagnostic *d, int automatic) {
   CdCitizen *p = cd_citizen(w, ref);
@@ -84,7 +90,7 @@ static CdStatus request_travel(CdWorld *w, CdPersonRef ref, CdEntityId destinati
                    "teleport/rejoin shortcut");
   }
   CdRoute route;
-  CdStatus status = cd_route_indices(w, p->anchor, goal, &route);
+  CdStatus status = cd_route_indices_mode(w, p->anchor, goal, travel_mode(w, p), &route);
   if (status != CD_OK) {
     if (automatic)
       p->reason = route.reason;
@@ -367,8 +373,8 @@ void cd_movement_tick(CdWorld *w) {
       size_t load = w->crowd[ei] + w->traffic[ei] - (p->held_edge == ei);
       if (cd_edge_closed(w, ei) || load >= e->capacity) {
         CdRoute replacement;
-        CdStatus status = cd_route_indices(
-            w, p->anchor, cd_node_index(c, p->destination), &replacement);
+        CdStatus status = cd_route_indices_mode(
+            w, p->anchor, cd_node_index(c, p->destination), travel_mode(w, p), &replacement);
         if (status != CD_OK) {
           p->travel = CD_ROUTE_WAITING;
           p->reason = replacement.reason;
@@ -421,6 +427,11 @@ void cd_movement_tick(CdWorld *w) {
       }
       uint32_t ei = cd_edge_index(c, p->route.edges[p->route_index]);
       CdEdge *e = &c->edges[ei];
+      if (!cd_edge_in_mode(e, travel_mode(w, p))) {
+        p->travel = CD_ROUTE_WAITING;
+        p->reason = CD_ROUTE_UNQUALIFIED;
+        break;
+      }
       if (cd_edge_closed(w, ei)) {
         p->travel = CD_ROUTE_WAITING;
         p->reason = CD_ROUTE_CLOSED;

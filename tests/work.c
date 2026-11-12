@@ -524,6 +524,27 @@ static void finish_trade(CdWorld *w, CdPersonRef worker, uint64_t id) {
 
 static void named_trade_roles(void) {
   static const struct { const char *family, *recipe, *use; } trials[] = {
+      {"brewer", "brew_small_beer", "industrial"},
+      {"plumber", "fit_pipe", "workshop"},
+      {"electrician", "form_electrical_fitting", "workshop"},
+      {"motor_mechanic", "recondition_vehicle_part", "workshop"},
+      {"potter", "form_pottery", "industrial"},
+      {"bricklayer", "prepare_brickwork", "workshop"},
+      {"stonemason", "dress_stone", "workshop"},
+      {"roofer", "cut_roofing", "workshop"},
+      {"plasterer", "mix_plaster", "workshop"},
+      {"painter_decorator", "prepare_paint", "workshop"},
+      {"crop_farming", "clean_harvest", "agricultural"},
+      {"livestock_farming", "sort_eggs", "agricultural"},
+      {"dairy", "churn_butter", "agricultural"},
+      {"horticulture", "grade_vegetables", "agricultural"},
+      {"woodland", "split_firewood", "agricultural"},
+      {"baker", "bake_bread", "commercial"},
+      {"hotel_service", "cook_meal", "commercial"},
+      {"licensed_hospitality", "cook_meal", "commercial"},
+      {"kitchen", "cook_meal", "commercial"},
+      {"laundry", "wash_linen", "industrial"},
+      {"domestic_service", "cook_meal", "residential"},
       {"miller", "mill_wheat", "industrial"},
       {"carpenter", "cut_timber", "workshop"},
       {"weaver", "cut_cloth", "workshop"},
@@ -560,7 +581,10 @@ static void named_trade_roles(void) {
     assert(cd_world_job_assign(w, jobs[0], workers[0], workers[1], 0, &d) != CD_OK);
     for (size_t stage = 1; stage < 5; ++stage) {
       assert(cd_world_job_assign(w, jobs[stage], workers[stage], (CdPersonRef){0}, 0, &d) != CD_OK);
-      OK(cd_world_dsl_certify(w, workers[stage], names[stage], "technical assessment", &d));
+      if (cd_dsl_role(names[stage])->independent)
+        OK(cd_world_dsl_credential(w, workers[stage], names[stage], "independent fixture credential", &d));
+      else
+        OK(cd_world_dsl_certify(w, workers[stage], names[stage], "technical assessment", &d));
       if (cd_dsl_role(names[stage])->owner) {
         assert(cd_world_job_assign(w, jobs[stage], workers[stage], (CdPersonRef){0}, 0, &d) != CD_OK);
         OK(cd_world_owner(w, 2, workers[stage], &d));
@@ -623,6 +647,19 @@ static void named_trade_roles(void) {
       OK(cd_world_dsl_supervise(w, workers[4], workers[1], 2, jobs[1], recipe->id,
                                   1, "manager dispatch", &id, &d));
       finish_trade(w, workers[1], id);
+    }
+    if (cd_dsl_role_repairs(cd_dsl_role(names[1]))) {
+      materials(w);
+      OK(cd_world_wear(w, 2, 200, "Trade repair trial wear", &d));
+      CdDevelopmentSpec repair = {CD_DEV_REPAIR, 0, 4, NULL, "Named trade repair"};
+      uint64_t project;
+      OK(cd_world_project(w, 2, 1, &repair, &project, &d));
+      CdWorkSpec repair_task = {jobs[1], project, CD_RECIPE_DEVELOPMENT, 4, "Named trade repair"};
+      OK(cd_world_work_submit(w, workers[1], 3, &repair_task, &id, &d));
+      finish_trade(w, workers[1], id);
+      CdPremisesView premises;
+      OK(cd_world_premises(w, 2, &premises, &d));
+      assert(premises.condition == 1000);
     }
     assert(cd_dsl_stock_valid(w));
     ledgers(w);

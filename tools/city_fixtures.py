@@ -35,7 +35,7 @@ staffed_day['polygons'][0]['use']='residential'
 staffed_day['polygons'][1]['use']='workshop'
 (out/'staffed-day.bin').write_bytes(encode(staffed_day))
 
-for use in ('workshop', 'industrial', 'commercial'):
+for use in ('workshop', 'industrial', 'commercial', 'agricultural', 'residential'):
  trial=copy.deepcopy(w)
  trial['polygons'][1]['use']=use
  (out/f'dsl-{use}.bin').write_bytes(encode(trial))
@@ -44,3 +44,17 @@ c=copy.deepcopy(w)
 c['sites'][0]['denomination']='anglican'
 c['sites'].append(dict(id=404,source='synagogue-fixture',name='Jewish scenario fixture',religion='judaism',denomination='unknown',status='scenario_active',point=[51,31],review_required=True,setting_year=1940,source_record='{"fixture":true,"setting_assignment":"explicit"}'))
 (out/'civic.bin').write_bytes(encode(c))
+
+rail = copy.deepcopy(h)
+rail['polygons'][0].update(use='transport', capacity=8)
+rail['polygons'][1]['use'] = 'transport'
+track = edge(212, 107, 110, [[29,31],[27,28],[47,28],[49,31]])
+track.update(source='reviewed_rail:synthetic-station-link',
+             basis='technical trial: explicitly reviewed operating rail', capacity=1)
+rail['edges'].append(track)
+(out/'rail-operation.bin').write_bytes(encode(rail))
+
+road = copy.deepcopy(rail)
+road['edges'][-1].update(source='fixture-road:station-link',
+                         basis='technical trial: shared two-way road and walking')
+(out/'transport-operation.bin').write_bytes(encode(road))

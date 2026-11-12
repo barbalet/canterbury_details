@@ -30,7 +30,9 @@ int cd_job_qualified(const CdWorld *world, const CdJob *j, const CdCitizen *p) {
     return p->civil.age >= 18 && p->civil.age < 65 && !j->view.apprenticeship;
   const CdDslRole *named = cd_dsl_job_role(j->view.occupation);
   if (named) {
-    if (!cd_dsl_role_recipe(named) || j->view.apprenticeship != (int)named->training_post)
+    if (j->view.apprenticeship != (int)named->training_post ||
+        (!named->training_post &&
+         !cd_dsl_appointment(world, p, named, j->view.institution)))
       return 0;
     if (!named->training_post) {
       uint32_t premises = cd_polygon_index(world->content, j->view.workplace);
@@ -41,7 +43,8 @@ int cd_job_qualified(const CdWorld *world, const CdJob *j, const CdCitizen *p) {
     }
     CdCitizen *mentor = cd_citizen((CdWorld *)world, j->view.mentor);
     if (p->civil.age < 16 || !mentor || mentor == p || mentor->civil.age < 18 ||
-        mentor->health.mortality_pending)
+        mentor->health.mortality_pending ||
+        !cd_dsl_appointment(world, mentor, named, j->view.institution))
       return 0;
     for (size_t slot = 0; slot < 2; ++slot) {
       CdJob *teacher = cd_job((CdWorld *)world, mentor->jobs[slot]);
@@ -161,12 +164,9 @@ CdStatus cd_world_job_create(CdWorld *w, const CdJobSpec *s, CdEntityId *out,
                    "reviewed source entrance");
   const CdDslRole *named = cd_dsl_job_role(s->occupation);
   if (named) {
-    const CdDslCareer *career = cd_dsl_career(named->career);
     const char *use = w->premises[b].scenario_use[0] ?
         w->premises[b].scenario_use : w->content->polygons[b].use;
-    int suitable = 0;
-    for (size_t i = 0; career && i < career->premises_count; ++i)
-      suitable |= !strcmp(career->premises[i], use);
+    int suitable = cd_dsl_role_premises(named, use);
     uint64_t payroll = shift_cost(s->shift_start, s->shift_end, s->wage);
     for (size_t i = 0; i < w->job_count; ++i) {
       const CdJobView *job = &w->jobs[i].view;
@@ -245,6 +245,10 @@ static void publish_assignment(CdWorld *w, CdJob *job, CdCitizen *person,
   cd_record_emit(w, CD_EVENT_JOB, person->civil.ref, mentor, job->view.id, 0,
                  CD_RECORD_DIAGNOSTIC, job->view.basis,
                  "Qualified workplace assignment committed");
+  if (job->training_learner && job->training_learner != person->civil.ref.person_id) {
+    job->training_remaining = 0;
+    job->training_learner = 0;
+  }
   job->view.worker = person->civil.ref;
   job->view.mentor = mentor;
   person->jobs[secondary] = job->view.id;
@@ -252,7 +256,7 @@ static void publish_assignment(CdWorld *w, CdJob *job, CdCitizen *person,
 
 static CdStatus job_assignment(CdWorld *w, CdEntityId id, CdPersonRef ref,
                                CdPersonRef mentor, int secondary,
-                               int publish, CdDiagnostic *d) {
+                               int publish, CdEntityId replace, CdDiagnostic *d) {
   CdJob *j = cd_job(w, id);
   CdCitizen *p = cd_citizen(w, ref);
   if (!cd_model_ready(w) || !j || !p || !j->view.open ||
@@ -272,7 +276,7 @@ static CdStatus job_assignment(CdWorld *w, CdEntityId id, CdPersonRef ref,
       return cd_diag(d, CD_OK, "Assignment already published");
     return cd_diag(d, CD_CAPACITY, "Vacancy is occupied");
   }
-  if (p->jobs[secondary])
+  if (p->jobs[secondary] && p->jobs[secondary] != replace)
     return cd_diag(d, CD_CAPACITY, "Primary/secondary duty slot occupied");
   CdJob candidate = *j;
   candidate.view.mentor = mentor;
@@ -304,7 +308,7 @@ static CdStatus job_assignment(CdWorld *w, CdEntityId id, CdPersonRef ref,
 }
 CdStatus cd_world_job_assign(CdWorld *w, CdEntityId id, CdPersonRef ref,
                              CdPersonRef mentor, int secondary, CdDiagnostic *d) {
-  return job_assignment(w, id, ref, mentor, secondary, 1, d);
+  return job_assignment(w, id, ref, mentor, secondary, 1, 0, d);
 }
 
 CdStatus cd_world_staff_jobs(CdWorld *w, const CdEntityId *jobs, size_t job_count,
@@ -347,7 +351,7 @@ CdStatus cd_world_staff_jobs(CdWorld *w, const CdEntityId *jobs, size_t job_coun
     for (size_t a = 0; a < applicant_count; ++a) {
       CdCitizen *person = cd_citizen(w, applicants[a]);
       if (!person || used[person - w->people] ||
-          job_assignment(w, jobs[i], applicants[a], (CdPersonRef){0}, 0, 0, NULL) != CD_OK)
+          job_assignment(w, jobs[i], applicants[a], (CdPersonRef){0}, 0, 0, 0, NULL) != CD_OK)
         continue;
       selected[i] = person;
       used[person - w->people] = 1;
@@ -383,6 +387,50 @@ static void unassign_one(CdWorld *w, CdJob *j) {
   j->view.worker = (CdPersonRef){0};
   j->view.mentor = (CdPersonRef){0};
 }
+CdStatus cd_world_dsl_advance_job(CdWorld *w, CdPersonRef ref, const char *transition,
+                                   CdEntityId current, CdEntityId destination,
+                                   int consent, CdDiagnostic *d) {
+  const CdDslAdvance *link = cd_dsl_advance(transition);
+  CdJob *from = cd_job(w, current), *to = cd_job(w, destination);
+  CdCitizen *person = cd_citizen(w, ref);
+  const CdDslRole *source = from ? cd_dsl_job_role(from->view.occupation) : NULL;
+  const CdDslRole *target = to ? cd_dsl_job_role(to->view.occupation) : NULL;
+  if (!cd_model_ready(w) || consent != 1 || !person || !link || !source || !target ||
+      !from->view.open || from->view.worker.person_id != ref.person_id ||
+      (person->jobs[0] != current && person->jobs[1] != current) ||
+      strcmp(link->from, source->id) || strcmp(link->to, target->id) || !to->view.wage)
+    return cd_diag(d, CD_INVALID_ARGUMENT, "Advancement requires consent and matching current and destination roles");
+  if (person->work.view.job == current && cd_pending(person->work.view.state))
+    return cd_diag(d, CD_INVALID_STATE, "Finish or cancel active work before advancement");
+  if (cd_dsl_role_minutes(person, source) < link->minimum_minutes)
+    return cd_diag(d, CD_INVALID_STATE, "Transition requires completed source-role experience");
+  uint32_t premises = cd_polygon_index(w->content, to->view.workplace);
+  uint64_t payroll = 0;
+  for (size_t i = 0; i < w->job_count; ++i) {
+    const CdJobView *job = &w->jobs[i].view;
+    if (job->open && job->id != current && job->workplace == to->view.workplace)
+      payroll += shift_cost(job->shift_start, job->shift_end, job->wage);
+  }
+  if (premises == CD_NONE || w->premises[premises].treasury < payroll)
+    return cd_diag(d, CD_CAPACITY, "Destination payroll is not funded");
+  int secondary = person->jobs[1] == current;
+  CdStatus status = job_assignment(w, destination, ref, (CdPersonRef){0},
+                                  secondary, 0, current, d);
+  if (status != CD_OK)
+    return status;
+  unsigned sector = from->attendance_sector;
+  unsigned commute = from->view.shift_start >= from->commute_start
+                         ? from->view.shift_start - from->commute_start : 0;
+  cd_world_job_unassign(w, current, NULL);
+  from->view.open = 0;
+  if (sector) {
+    to->attendance_sector = sector;
+    to->commute_start = to->view.shift_start > commute ? to->view.shift_start - commute : 0;
+  }
+  publish_assignment(w, to, person, (CdPersonRef){0}, secondary);
+  return cd_diag(d, CD_OK, "Reviewed career transition committed");
+}
+
 CdStatus cd_world_job_unassign(CdWorld *w, CdEntityId id, CdDiagnostic *d) {
   CdJob *j = cd_job(w, id);
   if (!cd_model_ready(w) || !j)

@@ -25,7 +25,23 @@ BUDGETS = {'career': 128, 'occupation': 512, 'resource': 128, 'service': 128,
 # Actor, job and premises are resolved from the live assignment at dispatch.
 REFINED_RECIPES = {'cut_timber', 'cut_cloth', 'mill_wheat', 'cut_paper',
                    'form_metalwork', 'trial_trim_leather', 'trial_portion_meat',
-                   'trial_portion_fish'}
+                   'trial_portion_fish', 'bake_bread', 'cook_meal', 'bind_school_book',
+                   'sew_garment', 'make_shoes',
+                   'brew_small_beer',
+                   'fit_pipe',
+                   'form_electrical_fitting',
+                   'recondition_vehicle_part',
+                   'form_pottery',
+                   'prepare_brickwork',
+                   'dress_stone',
+                   'cut_roofing',
+                   'mix_plaster',
+                   'prepare_paint',
+                   'clean_harvest',
+                   'sort_eggs',
+                   'churn_butter',
+                   'grade_vegetables',
+                   'split_firewood', 'wash_linen'}
 WORK_RECIPES = ('meal', 'pot', 'textile', 'tool', 'service', 'development')
 TYPES = {'string': (str,), 'integer': (int,), 'boolean': (bool,),
          'number': (int, float)}
@@ -271,6 +287,10 @@ def compile_records(records, schema, catalogue, catalogue_hash, controls, map_ha
         key = ('resource', name)
         ensure(resource['unit'] in {'g', 'ml', 'each'} and resource['initial_stock'] >= 0,
                key, 'invalid stock units or quantity')
+        ensure(resource['food_energy_per_unit'] is None or
+               (resource['unit'] == 'g' and resource['group'] == 'food_processed' and
+                0 < resource['food_energy_per_unit'] <= 1000),
+               key, 'invalid technical food energy rate')
         ensure(not resource['automatic_renewal'], key, 'stocks require accounted replenishment')
     for name, recipe in group('recipe').items():
         key = ('recipe', name)
@@ -282,11 +302,39 @@ def compile_records(records, schema, catalogue, catalogue_hash, controls, map_ha
             ensure(len(set(resources)) == len(resources), key, 'duplicate recipe resource', side + '_resources')
             for resource in resources:
                 definition = reference(key, side + '_resources', 'resource', resource)
-                ensure(definition['unit'] == recipe['unit'], key, 'incompatible recipe units')
-        if recipe['accounting'] == 'mass_conserved_including_byproducts':
+                accounting = recipe['accounting']
+                if accounting in {'water_mass_conserved', 'water_mixed_material'}:
+                    ensure(recipe['unit'] == 'g' and
+                           (definition['unit'] == 'g' or
+                            (definition['unit'] == 'ml' and resource in
+                             {'potable_water', 'process_water', 'waste_water', 'beer'})),
+                           key, 'water mass recipes use grams and explicit water millilitres')
+                elif accounting == 'counted_bill_of_materials':
+                    ensure(recipe['unit'] == 'each' and
+                           definition['unit'] in ({'g'} if side == 'input' else {'g', 'each'}),
+                           key, 'counted recipe uses gram inputs and counted output with gram scrap')
+                else:
+                    ensure(definition['unit'] == recipe['unit'], key, 'incompatible recipe units')
+        if recipe['accounting'] in {'mass_conserved_including_byproducts', 'water_mixed_material'}:
             ensure(recipe['unit'] == 'g' and
                    sum(recipe['input_quantities']) == sum(recipe['output_quantities']),
                    key, 'mass including byproducts must balance')
+        if recipe['accounting'] == 'water_mass_conserved':
+            energy = [sum(n for r, n in zip(recipe[side + '_resources'],
+                                           recipe[side + '_quantities'])
+                          if group('resource')[r]['group'] == 'fuel')
+                      for side in ('input', 'output')]
+            ensure(0 < energy[1] < energy[0], key, 'heated food needs fuel and measured residue')
+            ensure(sum(recipe['input_quantities']) - energy[0] ==
+                   sum(recipe['output_quantities']) - energy[1],
+                   key, 'food and water mass must balance separately from fuel')
+        if recipe['accounting'] == 'counted_bill_of_materials':
+            counts = [n for r, n in zip(recipe['output_resources'], recipe['output_quantities'])
+                      if group('resource')[r]['unit'] == 'each']
+            scrap = sum(n for r, n in zip(recipe['output_resources'], recipe['output_quantities'])
+                        if group('resource')[r]['unit'] == 'g')
+            ensure(counts == [1] and scrap < sum(recipe['input_quantities']),
+                   key, 'one counted item must account for positive material mass')
         if not recipe['worker_minutes'] or not recipe['required_equipment']:
             blockers.append(f'recipe {name}: configure positive worker minutes and equipment')
         ensure(recipe['worker_minutes'] is None or recipe['worker_minutes'] > 0,

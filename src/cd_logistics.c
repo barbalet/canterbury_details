@@ -3,6 +3,16 @@
 static CdVehicle *vehicle(CdWorld *w, CdEntityId id) {
   return w && id && id <= w->vehicle_count ? &w->vehicles[id - 1] : NULL;
 }
+int cd_vehicle_route_mode(CdVehicleKind kind) {
+  if (kind == CD_RAIL_VEHICLE)
+    return CD_ROUTE_RAIL_MODE;
+  if (kind == CD_ROAD_FREIGHT || kind == CD_ROAD_PASSENGER)
+    return CD_ROUTE_ROAD_MODE;
+  return CD_ROUTE_WALK_MODE;
+}
+static int passenger_vehicle(CdVehicleKind kind) {
+  return kind == CD_STRETCHER || kind == CD_ROAD_PASSENGER || kind == CD_RAIL_VEHICLE;
+}
 static int qualified(CdWorld *w, CdVehicle *v, CdCitizen *p) {
   CdJob *j = cd_job(w, v->view.job);
   return p && j && j->view.worker.person_id == p->civil.ref.person_id &&
@@ -14,22 +24,41 @@ static int qualified(CdWorld *w, CdVehicle *v, CdCitizen *p) {
 CdStatus cd_world_vehicle(CdWorld *w, const CdVehicleSpec *s, CdEntityId *out,
                           CdDiagnostic *d) {
   if (!cd_model_ready(w) || !s || !out || !cd_basis_valid(s->basis) ||
-      (unsigned)s->kind > CD_RAIL_VEHICLE)
+      (unsigned)s->kind > CD_ROAD_PASSENGER)
     return cd_diag(d, CD_INVALID_ARGUMENT,
                    "Explicit bounded transport definition required");
-  if (s->kind == CD_RAIL_VEHICLE)
-    return cd_diag(d, CD_UNSUPPORTED,
-                   "Rail geometry is reference only; no qualified operational "
-                   "equipment/service supplied");
-  if ((s->kind == CD_HANDCART &&
+  if (s->kind == CD_RAIL_VEHICLE) {
+    int track = 0;
+    for (uint32_t i = 0; i < w->content->ne; ++i)
+      track |= cd_edge_in_mode(&w->content->edges[i], CD_ROUTE_RAIL_MODE);
+    if (!track)
+      return cd_diag(d, CD_UNSUPPORTED, "Map has no reviewed operating rail");
+  }
+  if ((!passenger_vehicle(s->kind) &&
        (!s->cargo_capacity || s->cargo_capacity > 16)) ||
-      (s->kind == CD_STRETCHER && s->cargo_capacity))
+      (passenger_vehicle(s->kind) && s->cargo_capacity))
     return cd_diag(d, CD_CAPACITY,
-                   "Technical handcart carries 1..16 cargo units; stretcher "
-                   "carries one person only");
+                   "Freight capacity is 1..16 cargo units and passenger capacity is one");
   CdJob *j = cd_job(w, s->job);
   if (!j || j->view.apprenticeship)
     return cd_diag(d, CD_UNSUPPORTED, "Transport needs a regular crew job");
+  const CdDslRole *role = cd_dsl_job_role(j->view.occupation);
+  if (cd_vehicle_route_mode(s->kind) == CD_ROUTE_ROAD_MODE &&
+      (!role || role->stage > 3 ||
+       (s->kind == CD_ROAD_PASSENGER && role->stage != 3) ||
+       strcmp(role->career, s->kind == CD_ROAD_FREIGHT ? "road_haulage" : "bus_operations")))
+    return cd_diag(d, CD_UNSUPPORTED, "Road transport requires a named operating crew post");
+  if (s->kind == CD_RAIL_VEHICLE) {
+    uint32_t door = cd_door_index(w->content, j->view.entrance);
+    int connected = 0;
+    if (door != CD_NONE && w->content->doors[door].reviewed) {
+      uint32_t node = w->content->doors[door].node;
+      for (uint32_t i = w->content->adj_offset[node]; i < w->content->adj_offset[node + 1]; ++i)
+        connected |= cd_edge_in_mode(&w->content->edges[w->content->adj_edges[i]], CD_ROUTE_RAIL_MODE);
+    }
+    if (!role || role->stage != 3 || strcmp(role->career, "railway_operations") || !connected)
+      return cd_diag(d, CD_UNSUPPORTED, "Rail requires a qualified operating post and reviewed station track");
+  }
   for (size_t i = 0; i < w->vehicle_count; i++)
     if (w->vehicles[i].view.job == s->job)
       return cd_diag(d, CD_INVALID_STATE,
@@ -51,8 +80,26 @@ CdStatus cd_world_vehicle(CdWorld *w, const CdVehicleSpec *s, CdEntityId *out,
   *out = v->view.id;
   return cd_diag(
       d, CD_OK,
-      "Explicit technical hand-carried vehicle; no historical fleet inferred");
+      "Explicit technical vehicle and crew");
 }
+static uint32_t loading_door(const CdWorld *w, CdEntityId premises, CdVehicleKind kind) {
+  if (kind != CD_RAIL_VEHICLE)
+    return cd_reviewed_door(w, premises);
+  const CdContent *c = w->content;
+  uint32_t building = cd_polygon_index(c, premises);
+  if (building == CD_NONE || !c->polygons[building].capacity_known)
+    return CD_NONE;
+  for (uint32_t d = 0; d < c->nd; ++d) {
+    const CdDoor *door = &c->doors[d];
+    if (!door->reviewed || door->building != building)
+      continue;
+    for (uint32_t i = c->adj_offset[door->node]; i < c->adj_offset[door->node + 1]; ++i)
+      if (cd_edge_in_mode(&c->edges[c->adj_edges[i]], CD_ROUTE_RAIL_MODE))
+        return d;
+  }
+  return CD_NONE;
+}
+
 CdStatus cd_world_transport(CdWorld *w, CdEntityId id, uint64_t key,
                             CdEntityId source, CdEntityId destination,
                             unsigned good, int meals, unsigned units,
@@ -76,11 +123,12 @@ CdStatus cd_world_transport(CdWorld *w, CdEntityId id, uint64_t key,
     return cd_diag(d, CD_INVALID_STATE,
                    "Stale key or outstanding vehicle load");
   CdCitizen *crew = cd_citizen(w, r->crew), *p = cd_citizen(w, passenger);
-  uint32_t a = cd_reviewed_door(w, source),
-           b = cd_reviewed_door(w, destination);
+  uint32_t a = loading_door(w, source, r->kind),
+           b = loading_door(w, destination, r->kind);
   if (a == CD_NONE || b == CD_NONE || !qualified(w, v, crew) || crew->mission ||
       crew->gathering || crew->refuge || crew->vehicle || crew->driving ||
-      crew->inside != w->content->doors[a].building || !crew->goods[CD_TOOL])
+      crew->inside != w->content->doors[a].building || crew->door != CD_NONE ||
+      !crew->goods[CD_TOOL])
     return cd_diag(d, CD_INVALID_STATE,
                    "Qualified equipped crew must physically reach reviewed "
                    "loading premises");
@@ -90,9 +138,9 @@ CdStatus cd_world_transport(CdWorld *w, CdEntityId id, uint64_t key,
     return cd_diag(d, CD_INVALID_STATE,
                    "Crew must physically retrieve the existing vehicle; new "
                    "trip cannot relocate it");
-  if ((r->kind == CD_HANDCART &&
+  if ((!passenger_vehicle(r->kind) &&
        (!units || units > r->capacity || passenger.person_id)) ||
-      (r->kind == CD_STRETCHER &&
+      (passenger_vehicle(r->kind) &&
        (units || meals || !p || p == crew || p->vehicle || p->driving ||
         p->mission || p->gathering || p->refuge || p->door != CD_NONE ||
         p->held_edge != CD_NONE || !cd_colocated(w, crew, p))))
@@ -100,8 +148,8 @@ CdStatus cd_world_transport(CdWorld *w, CdEntityId id, uint64_t key,
                    "Unique load/passenger, physical boarding and vehicle "
                    "capacities required");
   CdRoute route;
-  if (cd_route_indices(w, w->content->doors[a].node, w->content->doors[b].node,
-                       &route) != CD_OK)
+  if (cd_route_indices_mode(w, w->content->doors[a].node, w->content->doors[b].node,
+                            cd_vehicle_route_mode(r->kind), &route) != CD_OK)
     return cd_diag(
         d, CD_INVALID_STATE,
         "Transport destination not reachable through qualified source links");
@@ -211,6 +259,25 @@ unsigned cd_vehicle_extra(const CdWorld *w, const CdCitizen *p, uint32_t b) {
     return 0;
   return 1;
 }
+static int named_transport(const CdJob *job) {
+  const CdDslRole *role = job ? cd_dsl_job_role(job->view.occupation) : NULL;
+  const CdDslCareer *career = role ? cd_dsl_career(role->career) : NULL;
+  return career && !strcmp(career->sector, "Transport and distribution");
+}
+
+static void transport_pay(CdWorld *w, CdJob *job, CdCitizen *crew) {
+  if (!named_transport(job) || job->attendance_sector)
+    return;
+  uint32_t base = cd_polygon_index(w->content, job->view.workplace);
+  CdPremises *premises = &w->premises[base];
+  if (premises->treasury < job->view.wage)
+    return;
+  premises->treasury -= job->view.wage;
+  crew->wallet += job->view.wage;
+  w->economy.wages += job->view.wage;
+  cd_dsl_record_experience(crew, cd_dsl_job_role(job->view.occupation), 1);
+}
+
 void cd_logistics_plan(CdWorld *w) {
   for (size_t i = 0; i < w->vehicle_count; i++) {
     CdVehicle *v = &w->vehicles[i];
@@ -243,6 +310,7 @@ void cd_logistics_plan(CdWorld *w) {
     CdJob *j = cd_job(w, r->job);
     uint32_t base = cd_polygon_index(w->content, j->view.workplace);
     if (w->premises[base].closed ||
+        (named_transport(j) && w->premises[base].treasury < j->view.wage) ||
         !cd_shift(j->view.shift_start, j->view.shift_end, cd_now(w) % 1440)) {
       p->activity = CD_ACTIVITY_WAIT;
       continue;
@@ -274,17 +342,20 @@ void cd_logistics_tick(CdWorld *w) {
       s->entering = p->entering;
       s->travel = p->travel;
     }
+    CdJob *j = cd_job(w, r->job);
+    if (r->phase == CD_VEHICLE_MOVING && p->activity == CD_ACTIVITY_TRAVEL)
+      transport_pay(w, j, p);
     if (r->stopped || !qualified(w, v, p) || p->activity != CD_ACTIVITY_IDLE)
       continue;
-    CdJob *j = cd_job(w, r->job);
-    if (w->premises[cd_polygon_index(w->content, j->view.workplace)].closed ||
+    CdPremises *base = &w->premises[cd_polygon_index(w->content, j->view.workplace)];
+    if (base->closed || (named_transport(j) && base->treasury < j->view.wage) ||
         !cd_shift(j->view.shift_start, j->view.shift_end, cd_now(w) % 1440))
       continue;
     if (r->phase == CD_VEHICLE_LOADING) {
       uint32_t b = cd_polygon_index(w->content, r->source);
       if (p->inside != b || !cd_usable(w, b))
         continue;
-      if (r->kind == CD_STRETCHER) {
+      if (passenger_vehicle(r->kind)) {
         s = cd_citizen(w, v->requested_passenger);
         if (!s || s->vehicle != r->id || !cd_colocated(w, p, s) ||
             !cd_native_claim(w->native, p->civil.ref))
@@ -294,6 +365,7 @@ void cd_logistics_tick(CdWorld *w) {
         s->activity = CD_ACTIVITY_TRAVEL;
         cd_native_block(w->native, s->civil.ref, 0);
         p->activity = CD_ACTIVITY_WORK;
+        transport_pay(w, j, p);
         r->phase = CD_VEHICLE_MOVING;
       } else {
         if (r->loaded < r->requested) {
@@ -307,6 +379,7 @@ void cd_logistics_tick(CdWorld *w) {
             site->goods[r->good]--;
           r->loaded++;
           p->activity = CD_ACTIVITY_WORK;
+        transport_pay(w, j, p);
         }
         if (r->loaded == r->requested)
           r->phase = CD_VEHICLE_MOVING;
@@ -333,6 +406,7 @@ void cd_logistics_tick(CdWorld *w) {
         r->loaded--;
         r->delivered++;
         p->activity = CD_ACTIVITY_WORK;
+        transport_pay(w, j, p);
       } else if (r->passenger.person_id) {
         if (!cd_native_claim(w->native, p->civil.ref))
           continue;
@@ -343,6 +417,7 @@ void cd_logistics_tick(CdWorld *w) {
         }
         r->passenger = (CdPersonRef){0};
         p->activity = CD_ACTIVITY_WORK;
+        transport_pay(w, j, p);
       }
       if (!r->loaded && !r->passenger.person_id) {
         r->phase = CD_VEHICLE_DONE;

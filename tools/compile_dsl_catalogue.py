@@ -44,20 +44,31 @@ def build():
             output += ', '.join(map(string, premises)) + '};\n'
         career_rows.append([string(name), string(career['sector']), str(len(premises)), symbol])
     output += array('career_families', 'CdDslCareer', career_rows)
-    output += array('career_roles', 'CdDslRole', [
-        [string(name), string(role['title']), string(role['career']),
-         string(role['qualification']), str(role['stage']),
-         str(int(role['training_post'])), str(int(role['enabled'])),
-         str(role['mentor_minimum_stage'] or 0),
-         str(int('capital or approved finance' in role['advancement_requirements']))]
-        for name, role in entries('occupation')
-    ])
+    role_rows = []
+    for index, (name, role) in enumerate(entries('occupation')):
+        requirements = role['advancement_requirements']
+        symbol = f'role_{index}_requirements'
+        output += f'static const char *const {symbol}[] = {{'
+        output += ', '.join(map(string, requirements)) + '};\n'
+        role_rows.append([
+            string(name), string(role['title']), string(role['career']),
+            string(role['qualification']), str(role['stage']),
+            str(int(role['training_post'])), str(int(role['enabled'])),
+            str(role['mentor_minimum_stage'] or 0),
+            str(int('capital or approved finance' in requirements)),
+            str(int(any(r.startswith('independent family-specific') for r in requirements))),
+            str(len(requirements)), symbol,
+        ])
+    output += array('career_roles', 'CdDslRole', role_rows)
     output += array('career_transitions', 'CdDslAdvance', [
-        [string(name), string(link['from']), string(link['to'])]
+        [string(name), string(link['from']), string(link['to']),
+         str(link['minimum_supervised_minutes'] or
+             (60 if declarations['occupation', link['from']]['training_post'] else 480))]
         for name, link in entries('advance')
     ])
     output += array('resource_kinds', 'CdDslResource', [
-        [string(name), string(resource['group']), string(resource['unit'])]
+        [string(name), string(resource['group']), string(resource['unit']),
+         str(resource['food_energy_per_unit'] or 0)]
         for name, resource in entries('resource')
     ])
     recipe_rows = []

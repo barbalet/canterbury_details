@@ -368,7 +368,7 @@ CdStatus cd_world_operation_preview(const CdWorld *world, const CdCommand *c,
       FAIL(CD_INVALID_ARGUMENT, "Configured employer and open flag required");
     break;
   case CD_CMD_VEHICLE:
-    if (!cd_job(w, c->target) || c->flags >= CD_RAIL_VEHICLE || c->units > 16)
+    if (!cd_job(w, c->target) || c->flags > CD_ROAD_PASSENGER || c->units > 16)
       FAIL(CD_UNSUPPORTED,
            "Qualified crew job and technical handcart/stretcher only");
     break;

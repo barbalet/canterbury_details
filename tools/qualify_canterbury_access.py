@@ -199,6 +199,19 @@ def road_allowed(source):
             not tags.get('foot:conditional') and not tags.get('access:conditional'))
 
 
+def motor_road(source):
+    tags = source.get('tags', {})
+    restricted = {'no', 'private', 'customers', 'permit', 'delivery', 'destination'}
+    return (source['highway'] in {'residential', 'living_street', 'unclassified',
+                                  'tertiary', 'secondary', 'primary', 'service'}
+            and source.get('vehicle_direction') == 'both'
+            and not any(tags.get(key) in restricted or tags.get(key + ':conditional')
+                        for key in ('access', 'vehicle', 'motor_vehicle', 'motorcar',
+                                    'motor_vehicle:forward', 'motor_vehicle:backward', 'bus', 'hgv'))
+            and tags.get('junction') not in {'roundabout', 'circular'}
+            and not tags.get('restriction'))
+
+
 def crossings(poly, a, b):
     hits = 0
     bounds = min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])
@@ -302,6 +315,101 @@ def components(adjacency):
     return sorted(groups, key=lambda group: (-len(group), min(group)))
 
 
+def apply_rail_footprint_review(model, bundle):
+    review_path = ROOT / 'content/canterbury-rail-footprint-review.json'
+    if not review_path.exists():
+        return None
+    raw = review_path.read_bytes()
+    review = json.loads(raw)
+    rail_source = ROOT / 'content/canterbury-west-sturry-rail-candidates.json'
+    if (review['map_generation'] != bundle['generation_id'] or
+            review['rail_source_sha256'] != hashlib.sha256(rail_source.read_bytes()).hexdigest()):
+        raise ValueError('Rail footprint review belongs to different map or track inputs')
+    buildings = {p['source']: p for p in model['polygons'] if p['kind'] == 1}
+    seen = set()
+    for move in review['moves']:
+        name = move['source']
+        dx, dy = move['offset_pixels']
+        if name in seen or name not in buildings or not 0 < math.hypot(dx, dy) <= 12:
+            raise ValueError('Invalid rail footprint translation')
+        seen.add(name)
+        polygon = buildings[name]
+        rings = [[[x + dx, y + dy] for x, y in ring] for ring in polygon['rings']]
+        if not all(0 <= x <= model['width'] and 0 <= y <= model['height']
+                   for ring in rings for x, y in ring):
+            raise ValueError('Rail footprint translation leaves the map')
+        polygon['rings'] = rings
+    for trim in review.get('trims', []):
+        name, rings = trim['source'], trim['rings']
+        if (name in seen or name not in buildings or not rings or
+                not all(len(ring) >= 4 and ring[0] == ring[-1] and
+                        all(0 <= x <= model['width'] and 0 <= y <= model['height']
+                            for x, y in ring) for ring in rings)):
+            raise ValueError('Invalid rail footprint trim')
+        seen.add(name)
+        buildings[name]['rings'] = rings
+    return hashlib.sha256(raw).hexdigest()
+
+
+def admit_rail(model, bundle, footprint_hash, scale, walk_units):
+    raw = (ROOT / 'content/canterbury-rail-operation-review.json').read_bytes()
+    review = json.loads(raw)
+    source = ROOT / 'content/canterbury-west-sturry-rail-candidates.json'
+    if (review['map_generation'] != bundle['generation_id'] or
+            review['footprint_review_sha256'] != footprint_hash or
+            review['source_subset_sha256'] != hashlib.sha256(source.read_bytes()).hexdigest()):
+        raise ValueError('Stale operating rail review')
+    polygons = model['polygons']
+    west = next(p for p in polygons if p['source'] == 'reviewed_rail:osm_way_151293646')
+    dry = Geometry([p for p in polygons if p['kind'] != 2])
+    water = Geometry([p for p in polygons if p['kind'] == 2])
+    nodes = {}
+    bridges = 0
+    last = None
+    for segment in review['segments']:
+        a, b = segment['nodes']
+        start, end = segment['points']
+        if last is not None and a != last:
+            raise ValueError('Disconnected operating rail review')
+        last = b
+        bridge = segment['conflicts'] == {'water': ['waterways-86030fec4f522c40687b']}
+        if (not dry.clear(start, end) or water.clear(start, end) == bridge or
+                (bridge and (segment['way'], a, b) != (196268643, 26985469, 26985472))):
+            raise ValueError(f'Operating rail geometry conflict at {a}–{b}')
+        bridges += bridge
+        for node, point in ((a, start), (b, end)):
+            if node not in nodes:
+                nodes[node] = dict(id=uid('reviewed-rail-node', str(node)),
+                                   source=f'reviewed_rail:{node}', point=point)
+        model['edges'].append(dict(id=uid('reviewed-rail-edge', f'{a}:{b}'),
+                                   source=f'reviewed_rail:{segment["way"]}:{a}:{b}',
+                                   basis='technical trial: explicitly reviewed operating rail',
+                                   qualified=True, bridge=bridge, capacity=1,
+                                   points=[start, end], **{'from': nodes[a]['id'], 'to': nodes[b]['id']}))
+    if bridges != 1:
+        raise ValueError('Expected one reviewed Sturry water crossing')
+    model['nodes'].extend(nodes.values())
+    geometry = Geometry(polygons)
+    for source_id, track, point in (
+            (west['source'], 3453612248, (728.6, 669.4)),
+            ('buildings-ae21ffc2ad9ed726de63', 26985474, (1506.72, 160.0))):
+        i = next(i for i, p in enumerate(polygons) if p['source'] == source_id)
+        polygon = polygons[i]
+        start = nodes[track]['point']
+        if (not one_crossing(polygon, start, point) or not geometry.clear(start, point, i) or
+                not native_connector(geometry, i, start, point, scale, walk_units)):
+            raise ValueError(f'Unqualified station connection for {source_id}')
+        if not polygon.get('capacity_known'):
+            polygon.update(capacity_known=True, capacity=12,
+                           policy_basis='Technical rail station capacity')
+        polygon.update(opening_known=True, opens=360, closes=1320)
+        model['doors'].append( dict(id=uid('reviewed-rail-door', source_id),
+                                      building=polygon['id'], node=nodes[track]['id'], reviewed=True,
+                                      basis='Technical reviewed rail station connector',
+                                      points=[start, point]))
+    return hashlib.sha256(raw).hexdigest()
+
+
 def build():
     bundle_raw = BUNDLE.read_bytes()
     estimate_raw = ESTIMATES.read_bytes()
@@ -314,6 +422,14 @@ def build():
     empty = dict(format='canterbury-details-spatial-review', version=1,
                  generation_id=bundle['generation_id'], edges=[], doors=[], dwellings=[])
     model = compile_model(bundle, empty, json.loads(estimate_raw))
+    rail_review = apply_rail_footprint_review(model, bundle)
+    review = json.loads((ROOT / 'content/canterbury-rail-operation-review.json').read_bytes())
+    west = dict(id=uid('reviewed-rail-station', '151293646'),
+                source='reviewed_rail:osm_way_151293646', name='Canterbury West',
+                kind=1, use='transport', rings=[review['west_station_ring']],
+                capacity_known=True, capacity=12,
+                policy_basis='Technical station premises from registered OSM footprint')
+    model['polygons'].append(west)
     polygons = model['polygons']
     scale = 65535 / max(model['width'], model['height'])
     metres_per_pixel = bundle['data']['modern_roads']['registration']['approximate_metres_per_pixel']
@@ -325,6 +441,8 @@ def build():
     geometry = Geometry(polygons)
     node_lookup = {node['id']: node['point'] for node in model['nodes']}
     sources = {edge['id']: edge for edge in bundle['data']['modern_roads']['network']['edges']}
+    restricted_ways = {member['ref'] for relation in bundle['data']['modern_roads']['source_turn_restrictions']
+                       for member in relation['members'] if member['type'] == 'way'}
     adjacency = defaultdict(set)
     for edge in model['edges']:
         namespace, source = edge['source'].split(':', 1)
@@ -335,7 +453,8 @@ def build():
         adjacency[edge['from']].add(edge['to'])
         adjacency[edge['to']].add(edge['from'])
         edge.update(qualified=True, capacity=WALK_LINK_CAPACITY, junction=False,
-                    basis='technical trial: surface walking on clear mapped street')
+                    basis=('technical trial: shared two-way road and walking' if sources[source]['osm_way_id'] not in restricted_ways and motor_road(sources[source])
+                           else 'technical trial: surface walking on clear mapped street'))
     groups = components(adjacency)
     if not groups:
         raise ValueError('No clear pedestrian network')
@@ -389,9 +508,10 @@ def build():
                                  node=node, use=use, capacity=capacity, component=component[node],
                                  work_capacity=work_capacity, school_capacity=school_capacity))
             break
+    operation_review = admit_rail(model, bundle, rail_review, scale, walk_units)
     model['basis'] = f'Canterbury registered access trial; walking units/minute={walk_units}'
     model['generation'] = hashlib.sha256(canonical({
-        'source': model['generation'], 'walking_budget': walk_units, 'walking_link_capacity': WALK_LINK_CAPACITY, 'edges': [edge['id'] for edge in model['edges'] if edge['qualified']],
+        'source': model['generation'], 'rail_footprint_review': rail_review, 'rail_operation_review': operation_review, 'walking_budget': walk_units, 'walking_link_capacity': WALK_LINK_CAPACITY, 'edges': [(edge['id'], edge['basis']) for edge in model['edges'] if edge['qualified']],
         'doors': model['doors'], 'premises': admitted,
         'trial_destination_opening': [360, 1320],
     })).hexdigest()
@@ -400,6 +520,8 @@ def build():
     inhabited_components = {b['component'] for b in admitted if b['use'] == 'residential'}
     local = [b for b in admitted if b['component'] in inhabited_components]
     report = {
+        'rail_footprint_review_sha256': rail_review,
+        'rail_operation_review_sha256': operation_review,
         'source_generation': bundle['generation_id'],
         'generation': model['generation'],
         'pack_sha256': hashlib.sha256(packed).hexdigest(),
@@ -412,6 +534,12 @@ def build():
         'dry_native_walk_units': walk_units,
         'scope': 'Technical model assumptions for access and capacity on the actual Canterbury map',
         'qualified_edges': sum(edge['qualified'] for edge in model['edges']),
+        'motor_road_edges': sum(edge['qualified'] and edge['basis'] ==
+                                'technical trial: shared two-way road and walking'
+                                for edge in model['edges']),
+        'operating_rail_segments': sum(edge['source'].startswith('reviewed_rail:') for edge in model['edges']),
+        'qualified_rail_water_crossings': 1,
+        'qualified_rail_station_connections': 2,
         'qualified_nodes': len(component),
         'components': len(groups),
         'largest_component_nodes': len(groups[0]),

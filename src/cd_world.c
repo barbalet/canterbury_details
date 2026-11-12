@@ -532,6 +532,7 @@ void cd_human_tick(CdWorld *w) {
   cd_services_tick(w);
   cd_community_tick(w);
   cd_food_tick(w);
+  cd_dsl_expiry_tick(w);
   cd_economy_tick(w);
   cd_jobs_tick(w);
   cd_development_tick(w);

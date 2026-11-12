@@ -45,8 +45,16 @@ def validate(records,catalogue=None):
   for side in ['input','output']:
    require(len(r[side+'_resources'])==len(r[side+'_quantities'])>0,'Recipe quantity mismatch')
    require(all(type(q) is int and q>0 for q in r[side+'_quantities']),'Recipe quantities must be positive integers')
-   for resource in r[side+'_resources']:require(ref('resource',resource)['unit']==r['unit'],'Incompatible recipe units')
-  require(sum(r['input_quantities'])==sum(r['output_quantities']),'Recipe mass not conserved including waste: '+key)
+   for resource in r[side+'_resources']:
+    unit=ref('resource',resource)['unit']
+    if r['accounting'] in {'water_mass_conserved','water_mixed_material'}:
+     require(r['unit']=='g' and (unit=='g' or resource in {'potable_water','process_water','waste_water','beer'}),'Incompatible water recipe units')
+    elif r['accounting']=='counted_bill_of_materials':
+     require(r['unit']=='each' and (unit=='g' or (side=='output' and unit=='each')),'Incompatible counted recipe units')
+    else:
+     require(unit==r['unit'],'Incompatible recipe units')
+  if r['accounting'] not in {'counted_bill_of_materials','water_mass_conserved'}:
+   require(sum(r['input_quantities'])==sum(r['output_quantities']),'Recipe mass not conserved including waste: '+key)
  if catalogue:
   require(set(roles)=={r['id'] for r in catalogue['roles']},'Catalogue ID mismatch')
   for r in catalogue['roles']:require(roles[r['id']]['title']==r['name'],'Catalogue title mismatch')

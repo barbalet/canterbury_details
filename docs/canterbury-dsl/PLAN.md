@@ -2,21 +2,22 @@
 
 Implement a runnable Canterbury 1940 scenario from the [DSL draft](../../content/scenarios/canterbury1940-draft.canterbury). The release target includes 60 career families, 300 roles, 240 advancement links, 72 resource kinds, 21 services and the five draft recipes. The scenario starts with 27,000 residents and supports growth to 30,000. It runs through the CLI and native app using the existing Canterbury map, native bodies and simulation clock.
 
-The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 is complete for the opt-in citywide startup, funded shifts and recurring school sessions. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
+The [draft specification](../CANTERBURY-DSL-DRAFT.txt) and checker are the authoring baseline. The current runtime supplies placement, jobs, training, services, inventories, operations and checkpoints. The new work connects and extends those systems through a versioned scenario compiler. Cycles 01–05 cover compilation and native population startup. Cycle 06 has exact age cohorts and guarded households, with activity schedules still open. Cycle 07 has passed actual-map housing and entry acceptance in the technical access trial. Cycle 08 is complete for the opt-in citywide startup, funded shifts and recurring school sessions. Cycle 09 is complete for catalogue inspection, role qualification and funded-job binding. See the [compiler guide](COMPILER.md) for the ownership inventory, schema migration and build commands.
 
 The current compiler qualifies draft parsing, typed binding, deterministic publication and activation preflight. Runtime execution begins in Cycle 05.
 
 Cycles 09–12 have a compiled definition layer. The CLI can inspect all 60
-families, 300 roles, 240 links, 72 resource kinds and five material recipes by
+families, 300 roles, 240 links, 72 resource kinds and 29 production recipes by
 stable ID. The existing eight enabled occupations retain their IDs. The
 compiler rejects invalid mentor stages, duplicate stock rows and equipment
 references to non-equipment resources. Each recipe now has a labelled manual
 trial with finite inputs, outputs, equipment and labour minutes.
 
-The exit checks for Cycles 09–12 remain open. Role assignment, resident competence and supervised progression remain open.
-Native premises stock now supports finite imports, reservations, consumption
-and return. Refined hand-cargo transfers work between qualified premises. Batch condition remains open. The five original recipes and three additional trade trials now have native execution in staffed fixtures. The unresolved activity, placement and staffing
-work from Cycles 06–08 still applies to actual-map integration.
+Cycle 10 is complete for supervised training, independent qualifications and the 240 declared transitions. Cycle 11 is complete for refined stock and batch custody. Cycle 12 is complete for the compiled production recipes and funded supply-chain trials. Cycle 13 is complete for the 155 trades, production and commerce roles.
+Native premises stock supports finite imports, reservations, consumption,
+condition-rated equipment and native hand-cargo custody. The five original
+recipes and three additional trade trials have native execution in staffed
+fixtures. Activity work remaining in Cycle 06 still applies to actual-map integration.
 
 Cycles 13–16 have an initial production integration. The existing carpenter
 and weaver posts can execute the timber and cloth trials through native work.
@@ -164,11 +165,50 @@ Load all 300 stable role IDs, their 60 families and workplace requirements. Pres
 
 **Exit.** The compiler and runtime can resolve every role and inspect its eligibility. Old occupation references remain intelligible. Full-population memory measurements include career state.
 
+The funded scenario binds 12,000 jobs to compatible named entry roles in
+the nine workforce sectors. It supplies explicit synthetic assessments.
+Independent licences and appointments, mentor requirements, and
+proprietor authority remain separate qualification checks. The full
+catalogue is resolvable in both directions between stable DSL names and
+the existing numeric job mapping. The compiled definition identity
+versions that mapping. The runtime records completed experience in
+bounded per-person records. Family totals combine experience only across
+roles within the same family and confer no automatic promotion.
+
+**Cycle 09 acceptance.** The full native day resolves and inspects all
+300 roles. All 12,000 funded workers remain eligible, complete their
+shifts, receive full wages, and record 480 minutes of role and family
+experience. All 4,050 pupils also complete their sessions and round
+trips. The 30,000-slot runtime reserves 3,840,000 bytes for bounded
+competence and experience records. Peak owned allocation was
+2,423,133,213 bytes. Task and service bindings continue in later cycles.
+
 ## Cycle 10 — Training, qualifications and advancement
 
 Implement curricula, training posts, supervised minutes, mentor capacity, skill assessments and credentials. Enforce age, supervision, independent qualifications and tradition-specific appointments. Implement all 240 candidate transitions with consent, funding, a destination vacancy and any required ownership or appointment. Commit transfers atomically.
 
 **Exit.** Each transition has an executable success fixture and a rejected prerequisite case. Mentor loss preserves earned evidence, failed advancement preserves the current post, and ownership and credential checks have independent coverage.
+
+The compiled transitions use authored minute requirements where available.
+Unset requirements use technical defaults of 60 supervised minutes for
+apprentices and 480 completed source-role minutes for later transitions.
+Training reserves the learner's and mentor's native minute together.
+An interrupted assignment preserves the learner's completed evidence.
+Advancement requires consent, the destination assessment or independent
+credential, any required appointment or ownership, a reachable vacancy,
+and funded payroll. Validation precedes releasing the current post.
+
+The transition matrix exercises all 240 links with seeded completed
+experience so it can isolate each prerequisite. The funded Canterbury
+mill trial measures training in native minutes, including mentor loss,
+resumption, and advancement from apprentice to mill worker.
+
+**Cycle 10 acceptance.** All 240 transitions passed their success and
+unchanged-state rejection fixtures. The funded mill apprentice retained
+15 minutes across mentor loss, resumed to 60 minutes, and advanced.
+The 1,440-minute Canterbury run passed for all 12,000 funded workers and
+4,050 pupils. A funded worker then used completed shift experience to
+advance into a reachable named vacancy after an explicit assessment.
 
 ## Cycle 11 — Refined resources and custody
 
@@ -176,11 +216,55 @@ Implement all 72 finite kinds with explicit units, storage and custody. Support 
 
 **Exit.** Every kind can be admitted, reserved, transferred, consumed or retained according to its declared policy. Invalid units, insufficient stock, overflow and duplicate transfers preserve ledger balances.
 
+Tagged lots carry provenance, quality and an optional expiry. A condition
+rating applies to one equipment item, and a zero-condition item cannot
+satisfy a recipe equipment hold. Transfers retain batch identity through
+native hand custody. The most recent keyed cargo request can be retried
+without moving stock twice. Expiry records available or carried stock as
+loss. An expired reservation cannot be consumed and records its loss when
+released. Resources with unset expiry and quality keep those attributes
+unknown. Inventory remains bounded per premises, and depleted lot slots
+can be reused.
+
+**Cycle 11 acceptance.** The funded city verifies admission in the declared
+unit, reservation and settlement for all 72 kinds, retaining equipment and
+rejecting bad units, insufficient stock and overflow. The funded mill trial
+moves 1,000 g of tagged wheat in native custody, saves and restores it in
+transit, rejects a conflicting delivery retry and mills the delivered lot.
+The same trial accounts for 100 g of expired wheat and retains its rated
+hand tool after production. The full city day passes for all 12,000 workers
+and 4,050 pupils, and the stock, work and checkpoint regressions pass.
+
 ## Cycle 12 — Production and supply chains
 
 Complete the five draft recipes with configured equipment, energy and work time. Add the production chains required by the role matrix, including materials, food preparation and counted goods with bills of materials. Account for byproducts, waste, spoilage and imports. Attach producers, processors, retailers and consumers to funded premises and actual deliveries.
 
 **Exit.** Every recipe has a successful native-minute execution and interruption case. End-to-end chains reconcile raw inputs, outputs, byproducts, money, stock and transport. Cooking accounts for water and food energy.
+
+The compiled catalogue adds baking, meal preparation, school-book
+binding, garment sewing and shoemaking. Food recipes account for water
+and wastewater with a technical conversion of one gram per millilitre.
+Fuel consumption and ash are accounted separately from food and water.
+Counted recipes specify a gram bill of materials, one finished item and
+measured scrap. Bread and prepared meals have an explicit model energy
+rate. Paid purchases move money and stock together on a native minute.
+Transport retains the Cycle 11 stock and custody accounting.
+
+The funded district follows wheat through milling, bakery delivery, a
+paid retail sale and consumption. A second chain cuts imported paper,
+binds a counted school book and delivers it to a mapped school. Inputs
+that lack a funded upstream producer enter through recorded imports.
+Role-specific duties, production breadth and recurring commercial
+operations continue in the domain cycles.
+
+**Cycle 12 acceptance.** All 13 recipes complete with reconciled outputs
+and wages after an in-progress workplace interruption. The funded bakery
+uses 750 g flour, 300 ml water and 120 g fuel. It delivers 1,000 g bread
+and accounts for 50 ml wastewater and 12 g ash. The buyer pays 12 model
+tokens and consumes 100 g of bread. The counted-goods chain delivers one
+school book and accounts for 70 g of paper offcuts. A funded startup job
+also completes a paid cloth order during the 1,440-minute city run.
+All 12,000 workers and 4,050 pupils complete their schedules and return.
 
 ## Cycle 13 — Trades, production and commerce roles
 
@@ -194,11 +278,70 @@ Implement distribution, storage, postal, passenger, hospitality and domestic wor
 
 **Exit.** Every role in these families has a funded post and successful work fixture. Delivery and passenger state survive delays, crew changes and cancellations with unique custody.
 
+**Cycle 14 complete.** Funded role fixtures exercise all 25 hotel,
+licensed hospitality, kitchen, laundry and domestic posts. The named
+hospitality roster uses the native paid meal and visit service. Hotel
+check-in and checkout use physical presence and finite visitor capacity.
+Laundry accounts for clean stock and wastewater.
+
+The funded actual-map trial exercises goods and postal carts, a road
+freight vehicle, and a one-passenger road service. Road crews require
+matching named posts, explicit credentials and equipment. The technical
+trial routes road vehicles only on clear two-way mapped road links and
+excludes ways involved in mapped turn restrictions. It uses the shared
+native movement pace. The trial also checks stop/resume custody, named
+dispatch authority and a paid hotel meal after passenger arrival.
+Existing custody regressions cover crew replacement and cancellation.
+
+The funded native matrix exercises all 25 stages across goods carriers,
+postal service, road haulage, bus operations and railway operations on
+the registered Canterbury map. It covers supervised training, station
+assistance, qualified operators and dispatch by both supervisory stages.
+The rail test boards at Canterbury West, checks custody through a stop and
+restart, disembarks at Sturry and returns the passenger to Canterbury West.
+
+The route uses 39 registered OpenStreetMap track segments. The geometry
+review applies 21 bounded footprint translations and one track-side trim,
+leaving zero building and rail-ink conflicts. The funded map admits one
+reviewed grade-separated water crossing and both track-side station
+connectors. Canterbury West uses the registered OpenStreetMap station
+footprint. Sturry uses the mapped station building. The modeled crossing
+is informed by the existing railway culvert described in the Kent
+Statement of Case, section 4.32. Its alignment with the historic water
+polygon and the station operating hours are technical scenario assumptions.
+
+[Track source](https://api.openstreetmap.org/api/0.6/map?bbox=1.073%2C51.283%2C1.125%2C51.302)
+[Canterbury West station footprint](https://www.openstreetmap.org/way/151293646)
+[OpenStreetMap attribution and licence](https://www.openstreetmap.org/copyright)
+[Kent Statement of Case](https://www.kent.gov.uk/__data/assets/pdf_file/0010/167059/Statement-of-Case.pdf)
+
 ## Cycle 15 — Public, professional and community roles
 
 Bind health, education, civic, religious and community careers to the 21 service definitions. Specify recipient eligibility, permissions, facilities, staff qualifications, equipment and finite supplies. Use ordinary social, work and activity events at successful commit. Preserve each institution's explicit operating status and source provenance.
 
 **Exit.** Every remaining role completes its declared work in a qualified scenario. Each service demonstrates delivery, demand accounting, capacity and failure handling. The traceability inventory covers all 300 roles and 21 services.
+
+**Cycle 15 complete.** The [role traceability inventory](ROLE-TRACEABILITY.json)
+lists all 300 compiled occupations and links all 21 service declarations
+to funded native checks. The funded map fixtures exercise the 38 newly
+bound public, professional and community posts and three institution-linked
+ministry support posts. The latter check that their jobs can deliver
+pastoral visits or education and that those same jobs cannot occupy a
+priest or rabbi office.
+
+The remaining service cases exercise finite clinic beds and medicine,
+neonatal care for a recorded newborn, household visits, fire tools and
+water, water distribution, stock-backed cleaning, on-site library access,
+charity textiles, paid building repair and an attended worship gathering.
+Pharmacy transfers a refined dose into the clinic supply ledger. Library
+access requires a usable on-site book and keeps it at the premises.
+
+The verification uses explicit technical staffing, operating status and
+supplies on the reviewed Canterbury map. The Catholic support fixture
+uses Canterbury Cathedral Lodge and the rabbinical education fixture uses
+Beerling Hall as temporary venues. The water, charity and cleaning fixtures
+use explicit premises-use overrides. Neonatal eligibility uses the first
+28 days after a recorded birth. These are scenario assumptions.
 
 ## Cycle 16 — Scheduling, economy and daily integration
 
@@ -208,38 +351,33 @@ Integrate staffing, supply orders, production, wages, work, care, instruction, t
 
 ### Cycle 13 staffed trade fixtures
 
-The native trial covers ten families and 50 of the 155 roles. Milling,
-carpentry, weaving, printing, metalworking, joinery, dressmaking, shoemaking,
-butchery and fishmongery each have an executable material task. The five
-original recipes run alongside three labelled technical trials for leather,
-meat and fish. Each family exercises all five posts in a suitable reviewed
-fixture. Named roles retain stable string IDs and extend the existing native
-numeric role range.
+The production and repair matrix covers 130 roles across 26 families.
+Each family exercises an apprentice, qualified workers, supervisor and
+owner or senior manager at a funded, reviewed premises. Production
+reserves wages, refined inputs and equipment. Named repair trades use
+the existing development project and its finite worksite materials to
+restore premises condition. These repair posts cannot change site use or
+capacity.
 
-Qualification is an explicit technical assessment tied to the resident and
-role. Apprentices require a qualified mentor at the same workplace and share
-the native work grant. Supervisors and managers can dispatch appropriate
-work for their family. Proprietors with property authority can transfer
-finite personal funds to the employer. Opening named vacancies checks one
-shift of combined payroll, and individual work orders reserve their own
-wages, inputs and tools. Qualification, funding, stock and authority
-rejections and checkpoint continuation are covered by the work suite.
+The retail matrix covers the five grocery, drapery, ironmongery,
+bookselling and coal merchant families across all 25 roles. An on-shift
+clerk must be present for a named-post sale. Apprentices require a
+qualified on-site mentor and consume a shared native minute. Sales move
+the buyer's money and the stock together and pay the clerk. Managers
+control storefront operation, and proprietors need the required property
+authority.
 
-Cycle 13 remains open for 105 roles in 21 families. Run the staffed
-fixtures with `python3 tools/verify_work_cycles.py --run`.
+The recipe quantities and trade assessments are technical scenario
+inputs. Agricultural tasks prepare explicitly imported harvest, livestock
+and dairy stocks. Construction and skilled trade recipes use accounted
+materials and tools alongside native worksite repair orders.
 
-| Sector | Families still requiring task bindings |
-| --- | --- |
-| Retail | Grocery, drapery, ironmongery, bookselling and coal merchant |
-| Food production | Bakery and brewing |
-| Skilled trades | Plumbing, electrical work and motor mechanics |
-| Manufacturing | Pottery |
-| Construction | Bricklaying, stonemasonry, roofing, plastering and painting/decorating |
-| Agriculture | Crop farming, livestock farming, dairy, horticulture and woodland |
-
-The unresolved tasks include stock-backed sales, cooking and brewing,
-worksite repairs and agricultural production. Default city staffing and
-career advancement remain separate work.
+**Cycle 13 acceptance.** All 155 roles pass the staffed role fixtures.
+All 28 recipes pass native execution and interruption checks. The
+actual-map district completes a named staffed bread sale. The full
+1,440-minute funded city completes 10 paid production orders on normal
+startup jobs, and all 12,000 workers and 4,050 pupils complete their
+schedules and return home.
 
 ### Cycle 16 integration fixture
 
@@ -256,18 +394,38 @@ allocates all households before publishing any change. A qualified walking
 link, reviewed entrance and explicit residential capacity are required.
 Physical entrance uses the existing native placement and movement APIs.
 
-Cycle 16 remains open for actual-map workforce scale, school and care
-schedules, full demand and service chains, and career progression. The
-technical access trial now completes initial home entry for 27,000 residents.
+**Cycle 16 complete.** The funded Canterbury verification runs 1,440
+native minutes from normal startup with 27,000 residents. All 12,000
+workers and 4,050 pupils complete their scheduled attendance and
+return home. Twelve production orders and three same-workplace service
+requests complete during the day. The service requests cover
+administration, a social-care visit and instruction. They wait for
+physical arrival and an active shift, then use the scheduled post's
+payroll and experience credit. A separate funded post still uses its
+own response wage reservation.
+
+The full-day test reconciles 5,760,000 currency units in payroll,
+checks the ordinary and refined stock, food and water ledgers, and
+requires zero outstanding wage escrow. It verifies inspection purity
+with the complete world digest, including the native clock and RNG.
+The funded district check uses a delivered supply batch and confirms
+that an active milling order takes precedence over the same worker's
+mentoring duty. Training resumes when the order completes. A
+qualified worker advances to a funded vacancy at the city-day
+boundary.
+
+Run the combined checks with `make access-check`. The service requests
+and production orders use explicit technical demand and supplies in
+the verifier.
 
 ### Dependencies for closing Cycles 13–16
 
 | Cycle | Remaining prerequisite |
 | --- | --- |
 | 13 | Cycles 09–12 supply active role IDs, qualifications, authority and the remaining executable production chains. |
-| 14 | Cycles 07–08 supply qualified routes and staffed premises. Cycle 14 itself still needs vehicle, railway, hospitality and domestic task bindings. |
-| 15 | Cycles 08–10 supply funded posts, qualifications and appointment gates. Cycle 15 itself needs each DSL service to dispatch an implemented handler with real staff, supplies and premises. |
-| 16 | Cycles 06–15 supply the population routines, placements, jobs, training and service chains needed to execute a full city day. |
+| 14 | Cycles 07–08 supply qualified routes and staffed premises. Funded native fixtures verify the transport, railway, hospitality and domestic task bindings. |
+| 15 | Cycles 08–10 supply funded posts, qualifications and appointment gates. The funded verifier exercises all 21 services with staffed premises and finite supplies. |
+| 16 | The funded full-day check verifies commutes, production, services and conserved ledgers. |
 
 Cycles 17–20 extend persistence, authoring and release qualification. The
 remaining requirements above can be implemented against the current runtime.

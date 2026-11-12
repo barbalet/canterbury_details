@@ -153,18 +153,27 @@ CdStatus cd_world_open_duty_startup(const CdContent *content,
         if (status != CD_OK)
           goto done;
       }
-      CdJobSpec spec = {workplace, content->doors[door].id, CD_SECTOR_JOB_BASE + sector,
+      const CdDslRole *role = cd_dsl_startup_role(sector, site->use, person);
+      if (!role) {
+        status = cd_diag(d, CD_UNSUPPORTED, "No compatible named role for the funded sector post");
+        goto done;
+      }
+      CdJobSpec spec = {workplace, content->doors[door].id, cd_dsl_role_occupation(role),
                         0, start, end, 1, 0, 0, "Funded Canterbury sector attendance"};
       CdEntityId job;
-      status = cd_world_job_create(world, &spec, &job, d);
+      status = cd_world_money_import(world, (CdAccount){.kind = CD_ACCOUNT_EMPLOYER, .id = workplace},
+                                     end - start, "One day of scenario payroll", d);
       if (status == CD_OK)
-        status = cd_world_money_import(world, (CdAccount){.kind = CD_ACCOUNT_EMPLOYER, .id = workplace},
-                                       end - start, "One day of scenario payroll", d);
+        status = cd_world_dsl_certify(world, ref, role->id,
+                                     "Explicit synthetic startup entry-role assessment", d);
+      if (status == CD_OK)
+        status = cd_world_job_create(world, &spec, &job, d);
       if (status == CD_OK)
         status = cd_world_job_assign(world, job, ref, (CdPersonRef){0}, 0, d);
       if (status != CD_OK)
         goto done;
       cd_job(world, job)->commute_start = leave;
+      cd_job(world, job)->attendance_sector = sector;
     }
   }
   char extra;

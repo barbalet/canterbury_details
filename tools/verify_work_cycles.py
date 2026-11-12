@@ -48,7 +48,7 @@ def main():
  print('PASS refined production, physical cargo, cancellation and checkpoint',flush=True)
  output=run([ROOT/'build/work-test',25]);(ROOT/'build/work-dsl-trades.log').write_text(output)
  result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
- print('PASS 50 named trade roles, authority, finite production and checkpoint',flush=True)
+ print('PASS 155 named production and hospitality roles, authority, finite production and checkpoint',flush=True)
  output=run([ROOT/'build/work-test',26]);(ROOT/'build/work-staffed-day.log').write_text(output)
  result=json.loads(output.splitlines()[-1]);assert result['ok'] and result['closed_bytes']==0
  print('PASS staffed full day, commutes, production, service, conservation and replay',flush=True)

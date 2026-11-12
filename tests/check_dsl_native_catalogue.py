@@ -17,7 +17,7 @@ def inspect(query):
 
 def main():
     records = parse(SOURCE.read_text())
-    counts = dict(families=60, roles=300, advancements=240, resources=72, recipes=8)
+    counts = dict(families=60, roles=300, advancements=240, resources=72, recipes=29)
     summary = inspect('summary')
     assert all(summary[key] == count for key, count in counts.items())
     comparisons = {
@@ -38,7 +38,7 @@ def main():
                             zip(record[side + '_resources'], record[side + '_quantities'])]
                 assert value[side + 's'] == expected, (name, side)
             assert value['equipment'] == record['required_equipment']
-    print('PASS all 680 native family, role, advancement, resource and recipe definitions')
+    print(f'PASS all {sum(counts.values())} native family, role, advancement, resource and recipe definitions')
 
 
 if __name__ == '__main__':

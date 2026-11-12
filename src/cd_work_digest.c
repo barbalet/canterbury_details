@@ -14,6 +14,8 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
   H(w->next_trade);
   H(w->next_project);
   H(w->job_count);
+  H(w->dsl_batch_next);
+  H(w->dsl_expiry_next);
   for (size_t i = 0; i < CD_DSL_RESOURCE_LIMIT; ++i) {
     H(w->dsl_imported[i]);
     H(w->dsl_consumed[i]);
@@ -37,13 +39,18 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
     T(j->view.basis);
     H(j->has_key);
     H(j->commute_start);
+    H(j->attendance_sector);
+    H(j->training_remaining);
+    H(j->training_learner);
   }
   for (size_t i = 0; i < w->count; i++) {
     const CdCitizen *p = &w->people[i];
     H(p->jobs[0]);
     H(p->jobs[1]);
-    for (size_t i = 0; i < CD_DSL_CERTIFICATES; ++i)
+    for (size_t i = 0; i < CD_DSL_CERTIFICATES; ++i) {
       H(p->certificates[i].role);
+      H(p->certificates[i].completed_minutes);
+    }
     H(p->wallet);
     H(p->cargo.building);
     H(p->cargo.household);
@@ -56,6 +63,23 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
     H(p->dsl_cargo.resource);
     H(p->dsl_cargo.requested);
     H(p->dsl_cargo.delivery);
+    H(p->dsl_cargo.batch.id);
+    H(p->dsl_cargo.batch.expires);
+    H(p->dsl_cargo.batch.quality);
+    H(p->dsl_cargo.batch.condition);
+    T(p->dsl_cargo.batch.provenance);
+    H(p->dsl_cargo.requested_batch);
+    H(p->dsl_cargo.order_key);
+    H(p->dsl_cargo.order_batch);
+    H(p->dsl_cargo.order_premises);
+    H(p->dsl_cargo.order_quantity);
+    H(p->dsl_cargo.order_resource);
+    H(p->dsl_cargo.order_delivery);
+    H(p->dsl_cargo.eating);
+    H(p->dsl_cargo.price);
+    H(p->dsl_cargo.order_price);
+    H(p->dsl_cargo.seller_job);
+    H(p->dsl_cargo.order_seller_job);
     H(p->trade.cost);
     H(p->trade.payer);
     H(p->work.view.id);
@@ -109,6 +133,11 @@ uint64_t cd_work_digest(const CdWorld *w, uint64_t h) {
       H(stock->key);
       H(stock->work);
       H(stock->settled);
+      H(stock->batch.id);
+      H(stock->batch.expires);
+      H(stock->batch.quality);
+      H(stock->batch.condition);
+      T(stock->batch.provenance);
     }
     H(p->escrow_money);
     H(p->reserved_raw);

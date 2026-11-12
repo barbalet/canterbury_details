@@ -7,7 +7,7 @@
     "apesdk/bronze/content/bronze_age_full.bronze": "5052ecae8c8f860ea5189e512a3653276062627a9ec7d240d0e514483181cd3a",
     "apesdk/bronze/work/bronze_work.c": "cfcd3c375f789e734c5fe4c557a5cc2b02e9c8356db90e9cae805fb7209f9105",
     "apesdk/bronze/actors/bronze_actors.c": "ace69fbd389abea5c61dbddd23c18bb9967986d9e1bcf622f0f6b5a59e48e1b5",
-    "src/cd_civic.h": "65ddd7c6ad05ec47485dd4288f9b99152819014dbebbc593a6366647f5f55f5f",
+    "src/cd_civic.h": "38484dded293c7dc2c17ce3276525449f758a00a67f68cca9fc384507f897df6",
     "tools/verify_civic_cycles.py": "5c0a49bd744ffd800312b81886cc6d5af65585b63e30e75ff9bffd989baa0a2f"
   },
   "sources": {

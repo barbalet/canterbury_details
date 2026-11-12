@@ -106,6 +106,28 @@ static int office_qualified(const CdOffice *o, const CdCitizen *p) {
     return p->credentials & CD_AUTH_ADMIN;
   return 1;
 }
+static int office_post_matches(const CdJob *job, const CdSite *site, CdOfficeKind kind) {
+  const CdDslRole *role = cd_dsl_job_role(job->view.occupation);
+  if (!role)
+    return job->view.occupation == (kind <= CD_OFFICE_RABBI ? 7u : 8u);
+  if (role->stage < 2)
+    return 0;
+  if (kind == CD_OFFICE_RABBI)
+    return role->stage >= 3 && !strcmp(role->career, "jewish_ministry");
+  if (kind == CD_OFFICE_PRIEST) {
+    if (role->stage < 3)
+      return 0;
+    if (!strcmp(site->denomination, "anglican"))
+      return !strcmp(role->career, "anglican_ministry");
+    if (!strcmp(site->denomination, "roman_catholic") ||
+        !strcmp(site->denomination, "catholic"))
+      return !strcmp(role->career, "roman_catholic_ministry");
+    return 0;
+  }
+  return (kind == CD_OFFICE_CUSTODIAN || kind == CD_OFFICE_SEXTON) &&
+         !strcmp(role->career, "religious_lay_service");
+}
+
 CdStatus cd_world_office_create(CdWorld *w, const CdOfficeSpec *s,
                                 CdEntityId *out, CdDiagnostic *d) {
   if (!cd_model_ready(w) || !s || !out || !cd_basis_valid(s->basis))
@@ -116,7 +138,7 @@ CdStatus cd_world_office_create(CdWorld *w, const CdOfficeSpec *s,
   if (si == CD_NONE || !j || j->view.institution != s->institution ||
       j->view.apprenticeship ||
       !title_supported(&w->content->sites[si], s->kind) ||
-      j->view.occupation != (s->kind <= CD_OFFICE_RABBI ? 7u : 8u))
+      !office_post_matches(j, &w->content->sites[si], s->kind))
     return cd_diag(d, CD_UNSUPPORTED,
                    "Office needs compatible source tradition, linked employer "
                    "and ordinary clergy/lay job");
@@ -190,7 +212,7 @@ int cd_provider(CdWorld *w, int religious, CdEntityId id, CdJob **job,
     required |= CD_AUTH_BURIAL;
   if ((p->credentials & required) != required)
     return 0;
-  if ((*caps & (1u << CD_SERVICE_HEALTH)) && !(p->skills & CD_SKILL_CARE))
+  if ((*caps & ((1u << CD_SERVICE_HEALTH) | (1u << CD_SERVICE_MIDWIFERY))) && !(p->skills & CD_SKILL_CARE))
     return 0;
   if ((*caps & (1u << CD_SERVICE_FIRE)) && !(p->skills & CD_SKILL_CRAFT))
     return 0;

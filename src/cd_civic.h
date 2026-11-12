@@ -41,6 +41,11 @@ typedef enum {
   CD_SERVICE_ADMIN,
   CD_SERVICE_POLICE,
   CD_SERVICE_FIRE,
+  CD_SERVICE_LIBRARY,
+  CD_SERVICE_WATER,
+  CD_SERVICE_CLEANING,
+  CD_SERVICE_PHARMACY,
+  CD_SERVICE_MIDWIFERY,
   CD_SERVICE_KINDS
 } CdServiceKind;
 typedef struct {
@@ -109,7 +114,9 @@ typedef struct {
   uint64_t paid, reserved_money;
   char basis[96], reason[96];
 } CdGatheringView;
-typedef enum { CD_HANDCART, CD_STRETCHER, CD_RAIL_VEHICLE } CdVehicleKind;
+typedef enum {
+  CD_HANDCART, CD_STRETCHER, CD_RAIL_VEHICLE, CD_ROAD_FREIGHT, CD_ROAD_PASSENGER
+} CdVehicleKind;
 typedef enum {
   CD_VEHICLE_IDLE,
   CD_VEHICLE_LOADING,
@@ -201,6 +208,14 @@ CdStatus cd_world_vehicle(CdWorld *, const CdVehicleSpec *, CdEntityId *,
 CdStatus cd_world_transport(CdWorld *, CdEntityId, uint64_t, CdEntityId,
                             CdEntityId, unsigned, int, unsigned, CdPersonRef,
                             CdDiagnostic *);
+CdStatus cd_world_dsl_transport_dispatch(CdWorld *, CdPersonRef, CdEntityId, uint64_t,
+                                           CdEntityId, CdEntityId, unsigned, int,
+                                           unsigned, CdPersonRef, CdDiagnostic *);
+CdStatus cd_world_dsl_public_roster(CdWorld *, const CdRosterSpec *, CdEntityId *, CdDiagnostic *);
+CdStatus cd_world_dsl_station_roster(CdWorld *, const CdRosterSpec *, CdEntityId *, CdDiagnostic *);
+CdStatus cd_world_dsl_hotel_visit(CdWorld *, CdEntityId, CdPersonRef, int, CdDiagnostic *);
+CdStatus cd_world_dsl_hospitality_roster(CdWorld *, const CdRosterSpec *,
+                                          CdEntityId *, CdDiagnostic *);
 CdStatus cd_world_vehicle_view(const CdWorld *, CdEntityId, CdVehicleView *,
                                CdDiagnostic *);
 CdStatus cd_world_vehicle_crew(CdWorld *, CdEntityId, CdPersonRef,

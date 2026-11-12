@@ -110,6 +110,15 @@ static int definition_output(const char *query) {
       json_text(recipe);
     else
       fputs("null", stdout);
+    printf(",\"occupation_id\":%" PRIu64 ",\"independent_qualification_required\":%s,"
+           "\"requirements\":[", (uint64_t)cd_dsl_role_occupation(role),
+           role->independent ? "true" : "false");
+    for (size_t i = 0; i < role->requirement_count; ++i) {
+      if (i)
+        putchar(',');
+      json_text(role->requirements[i]);
+    }
+    putchar(']');
     puts("}");
     return 0;
   }
@@ -121,6 +130,7 @@ static int definition_output(const char *query) {
     json_text(advance->from);
     fputs(",\"to\":", stdout);
     json_text(advance->to);
+    printf(",\"minimum_experience_minutes\":%u", advance->minimum_minutes);
     puts("}");
     return 0;
   }
@@ -154,6 +164,7 @@ static int definition_output(const char *query) {
     json_text(resource->group);
     fputs(",\"unit\":", stdout);
     json_text(resource->unit);
+    printf(",\"food_energy_per_unit\":%u", resource->food_energy_per_unit);
     puts("}");
     return 0;
   }

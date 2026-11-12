@@ -118,6 +118,12 @@ CdStatus cd_world_employer(CdWorld *, CdEntityId, const char *name,
 CdStatus cd_world_employer_open(CdWorld *, CdEntityId, int, CdDiagnostic *);
 CdStatus cd_world_dsl_certify(CdWorld *, CdPersonRef, const char *role,
                               const char *basis, CdDiagnostic *);
+CdStatus cd_world_dsl_training_start(CdWorld *, CdEntityId, unsigned, CdDiagnostic *);
+CdStatus cd_world_dsl_credential(CdWorld *, CdPersonRef, const char *role,
+                                  const char *authority, CdDiagnostic *);
+CdStatus cd_world_dsl_advance_job(CdWorld *, CdPersonRef, const char *transition,
+                                   CdEntityId current, CdEntityId destination,
+                                   int consent, CdDiagnostic *);
 CdStatus cd_world_dsl_job_create(CdWorld *, const CdJobSpec *, const char *role,
                                   CdEntityId *, CdDiagnostic *);
 CdStatus cd_world_dsl_supervise(CdWorld *, CdPersonRef supervisor,

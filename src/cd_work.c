@@ -9,6 +9,17 @@ static void reason(CdWorkTask *t, const char *s) {
   snprintf(t->view.reason, 96, "%s", s);
   t->view.state = CD_TASK_WAITING;
 }
+int cd_dsl_role_repairs(const CdDslRole *role) {
+  static const char *const trades[] = {
+    "carpenter", "joiner", "plumber", "electrician", "motor_mechanic",
+    "bricklayer", "stonemason", "roofer", "plasterer", "painter_decorator",
+  };
+  for (size_t i = 0; role && role->stage <= 3 && i < sizeof trades / sizeof trades[0]; ++i)
+    if (!strcmp(role->career, trades[i]))
+      return 1;
+  return 0;
+}
+
 static int definition(const CdJob *j, CdRecipe recipe, unsigned *duration,
                       uint64_t inputs[CD_GOODS], uint64_t *raw) {
   *raw = 0;
@@ -20,13 +31,16 @@ static int definition(const CdJob *j, CdRecipe recipe, unsigned *duration,
     *duration = 2;
     *raw = 1;
     return 1;
-  case CD_RECIPE_POT:
-    if (j->view.occupation != 5)
+  case CD_RECIPE_POT: {
+    const CdDslRole *role = cd_dsl_job_role(j->view.occupation);
+    if (j->view.occupation != 5 &&
+        !(role && role->stage <= 3 && cd_dsl_role_can_make(role, "form_pottery")))
       return 0;
     *duration = 3;
     inputs[CD_WOOD] = 1;
     inputs[CD_CLAY] = 2;
     return 1;
+  }
   case CD_RECIPE_TEXTILE:
     if (j->view.occupation != 4)
       return 0;
@@ -45,7 +59,7 @@ static int definition(const CdJob *j, CdRecipe recipe, unsigned *duration,
     *duration = 2;
     return 1;
   case CD_RECIPE_DEVELOPMENT:
-    if (j->view.occupation != 3)
+    if (j->view.occupation != 3 && !cd_dsl_role_repairs(cd_dsl_job_role(j->view.occupation)))
       return 0;
     *duration = 1;
     return 1;
@@ -118,10 +132,9 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
                                    ? cd_dsl_recipe_at((size_t)s->project - 1)
                                    : NULL;
     const CdDslRole *role = cd_dsl_job_role(j->view.occupation);
-    const char *bound = cd_dsl_role_recipe(role);
     if (!recipe || !recipe->worker_minutes ||
         strcmp(recipe->power, "manual_power_technical_trial") ||
-        !(role ? (role->stage <= 3 && bound && !strcmp(bound, recipe->id)) :
+        !(role ? (role->stage <= 3 && cd_dsl_role_can_make(role, recipe->id)) :
                  ((j->view.occupation == 3 && !strcmp(recipe->id, "cut_timber")) ||
                   (j->view.occupation == 4 && !strcmp(recipe->id, "cut_cloth")))))
       return cd_diag(d, CD_UNSUPPORTED, "Refined recipe needs a compatible enabled occupation");
@@ -135,6 +148,8 @@ CdStatus cd_world_work_submit(CdWorld *w, CdPersonRef ref, uint64_t key,
         !pending(project->view.state))
       return cd_diag(d, CD_UNKNOWN_REFERENCE,
                      "Unknown active worksite project");
+    if (j->view.occupation != 3 && project->view.kind != CD_DEV_REPAIR)
+      return cd_diag(d, CD_UNSUPPORTED, "Named repair trade cannot change site use or capacity");
   } else if (s->project && s->recipe != CD_RECIPE_REFINED)
     return cd_diag(d, CD_INVALID_ARGUMENT,
                    "Non-development work cannot name a project");
@@ -246,8 +261,12 @@ void cd_jobs_tick(CdWorld *w) {
                       NULL);
   for (size_t i = 0; i < w->count; i++) {
     CdCitizen *p = &w->people[i];
+    for (unsigned slot = 0; slot < 2; ++slot)
+      if (!pending(p->work.view.state))
+        cd_dsl_training_tick(w, p, cd_job(w, p->jobs[slot]), clock.minute_of_day);
     CdJob *attendance = cd_job(w, p->jobs[0]);
-    if (attendance && cd_sector_job(attendance->view.occupation) &&
+    if (attendance && (attendance->attendance_sector || cd_sector_job(attendance->view.occupation)) &&
+        !pending(p->work.view.state) &&
         cd_job_qualified(w, attendance, p) && workplace_open(w, attendance) &&
         cd_shift(attendance->view.shift_start, attendance->view.shift_end,
                  clock.minute_of_day) &&
@@ -257,6 +276,8 @@ void cd_jobs_tick(CdWorld *w) {
       if (employer->treasury >= attendance->view.wage) {
         employer->treasury -= attendance->view.wage;
         p->wallet += attendance->view.wage;
+        w->economy.wages += attendance->view.wage;
+        cd_dsl_record_experience(p, cd_dsl_job_role(attendance->view.occupation), 1);
       }
     }
     CdWorkTask *t = &p->work;
@@ -270,6 +291,11 @@ void cd_jobs_tick(CdWorld *w) {
       continue;
     }
     uint32_t b = cd_polygon_index(w->content, j->view.workplace);
+    if (t->spec.recipe == CD_RECIPE_REFINED &&
+        !cd_dsl_work_inputs_current(w, b, t->view.id)) {
+      cd_work_release(w, p, 1);
+      continue;
+    }
     CdPremises *site = &w->premises[b];
     CdProject *project = &w->projects[b];
     if (t->spec.recipe == CD_RECIPE_DEVELOPMENT &&
@@ -387,6 +413,7 @@ void cd_jobs_tick(CdWorld *w) {
         project->view.progress++;
     }
     if (t->view.progress == t->view.duration) {
+      cd_dsl_record_experience(p, cd_dsl_job_role(j->view.occupation), t->view.duration);
       if (t->spec.recipe == CD_RECIPE_REFINED &&
           !cd_dsl_work_stock(w, b, t, CD_DSL_COMPLETE))
         abort();

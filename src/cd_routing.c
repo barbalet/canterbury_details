@@ -59,14 +59,31 @@ const char *cd_route_reason(CdRouteReason r) {
   return (unsigned)r < sizeof s / sizeof *s ? s[r]
                                             : "unknown routing diagnostic";
 }
-CdStatus cd_route_indices(CdWorld *w, uint32_t start, uint32_t goal,
-                          CdRoute *out) {
+int cd_edge_in_mode(const CdEdge *edge, int mode) {
+  if (!edge->qualified)
+    return 0;
+  int rail = !strncmp(edge->source, "reviewed_rail:", sizeof "reviewed_rail:" - 1) &&
+             !strcmp(edge->basis, "technical trial: explicitly reviewed operating rail");
+  if (mode == CD_ROUTE_RAIL_MODE)
+    return rail;
+  if (mode == CD_ROUTE_ROAD_MODE)
+    return !rail && !strcmp(edge->basis, "technical trial: shared two-way road and walking");
+  return !rail;
+}
+
+CdStatus cd_route_indices_mode(CdWorld *w, uint32_t start, uint32_t goal,
+                               int mode, CdRoute *out) {
   CdContent *c = w->content;
   CdRoute result = {0};
   result.reason = CD_ROUTE_UNKNOWN_NODE;
   if (start >= c->nn || goal >= c->nn) {
     *out = result;
     return CD_UNKNOWN_REFERENCE;
+  }
+  if (start == goal && mode == CD_ROUTE_RAIL_MODE) {
+    result.reason = CD_ROUTE_UNQUALIFIED;
+    *out = result;
+    return CD_INVALID_STATE;
   }
   if (start == goal) {
     result.reason = CD_ROUTE_OK;
@@ -99,7 +116,7 @@ CdStatus cd_route_indices(CdWorld *w, uint32_t start, uint32_t goal,
     for (uint32_t i = c->adj_offset[node]; i < c->adj_offset[node + 1]; i++) {
       uint32_t ei = c->adj_edges[i];
       CdEdge *e = &c->edges[ei];
-      if (!e->qualified)
+      if (!cd_edge_in_mode(e, mode))
         continue;
       if (cd_edge_closed(w, ei)) {
         closed = 1;
@@ -153,6 +170,9 @@ CdStatus cd_route_indices(CdWorld *w, uint32_t start, uint32_t goal,
     result.edges[i] = reverse[n - i - 1];
   *out = result;
   return CD_OK;
+}
+CdStatus cd_route_indices(CdWorld *w, uint32_t start, uint32_t goal, CdRoute *out) {
+  return cd_route_indices_mode(w, start, goal, 0, out);
 }
 CdStatus cd_world_plan(CdWorld *w, CdEntityId from, CdEntityId to, CdRoute *out,
                        CdDiagnostic *d) {
