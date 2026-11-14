@@ -4,6 +4,9 @@ Model ordinary human Canterbury in 1940 using the pinned `canterbury` data and
 `apesdk` engine submodules. Religious information is retained for occupations,
 institutions and community services. No supernatural model is part of this host.
 
+Read the [Canterbury Details book](book/README.md) for the architectural account
+of the forty-cycle foundation and the later DSL implementation through cycle 17.
+
 All **40 cycles are complete**, including the offline clean-checkout release gate.
 The native app starts with **27,000 ordinary humans**, **6,750 synthetic households**
 and capacity for **30,000 people**. It implements native street/building movement,
