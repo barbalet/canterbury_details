@@ -11,22 +11,22 @@
   "submodules": [
     {
       "path": "canterbury",
-      "revision": "56cfe688be2ebb62d2c0497a296e16fe7f508b32",
+      "revision": "e0114e2d2329f1f6014314db3970b28817a7f79b",
       "origin": "git@github.com:barbalet/ds-canterbury1940.git",
-      "tracked_files": 86,
+      "tracked_files": 107,
       "reviewed_worktree_files": []
     },
     {
       "path": "apesdk",
-      "revision": "dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98",
+      "revision": "d407ae33b095c276a584ad3504287a47ead810c4",
       "origin": "git@github.com:barbalet/apesdk.git",
-      "tracked_files": 471,
+      "tracked_files": 473,
       "reviewed_worktree_files": []
     }
   ],
   "sdk_worktree_review": {
     "path": "content/sdk-working-tree.json",
-    "sha256": "ae5fda6b9e4b592f6694140921fb4d694712e15c5a481ac0469ff33e0fcd825a"
+    "sha256": "03c9c1d109f89fa003f0940b937cc84f191e773dff57fe5300cda5cd38ec21c8"
   },
   "root_license": {
     "path": "LICENSE",
@@ -602,8 +602,18 @@
     },
     {
       "path": "canterbury/README.md",
-      "bytes": 5170,
-      "sha256": "ecfa0e950c0986d3ad453baaff3a572dbb051d5f697ac7ac311d5c2528f7b328"
+      "bytes": 5353,
+      "sha256": "8d676bfae6d249e5510724e5fc579495667d73e32135dcabd78f0bfc434dc24c"
+    },
+    {
+      "path": "canterbury/book/README.md",
+      "bytes": 746,
+      "sha256": "fbfc452916233f9d6f1056d1a160a03d5dac44621f1f431bb248b1e40688942b"
+    },
+    {
+      "path": "canterbury/book/chapter_01.md",
+      "bytes": 7804,
+      "sha256": "101fe418a88b9c45468766703a5d135ec940403ab370758c5e2654a8b638c46e"
     },
     {
       "path": "canterbury/canterbury-mac/canterbury-mac.xcodeproj/project.pbxproj",
@@ -757,8 +767,8 @@
     },
     {
       "path": "canterbury/simulation-map/README.md",
-      "bytes": 23524,
-      "sha256": "cf98eacf585cf39a884f163ee1831934c4112ad114ba2f567be3f198579a556b"
+      "bytes": 30154,
+      "sha256": "4b4063876d2142807c04d96e74af6e6a61fef29f943b94f71001e0500805fcfb"
     },
     {
       "path": "canterbury/simulation-map/assemble.py",
@@ -776,9 +786,24 @@
       "sha256": "95eca9b97b6cab60bd723309e2aaae852f5aec99fa052dfd10e5187d36413028"
     },
     {
+      "path": "canterbury/simulation-map/building-review.json",
+      "bytes": 62116,
+      "sha256": "5f8f423daaa8680e9947a4a3ec754ba25117f7318a9600f11a3498af09f0d38d"
+    },
+    {
       "path": "canterbury/simulation-map/building_placements.py",
       "bytes": 6426,
       "sha256": "c2c0a6cd4f66a7b4bf8e8111c8c45365177e0106139a5f3fe85cd7bef0e04142"
+    },
+    {
+      "path": "canterbury/simulation-map/clean_buildings.py",
+      "bytes": 16555,
+      "sha256": "c78c28cbf1b5af8a4c358ccdb95e26fb9740a749b0cf0ea14ba326a710d3b0ec"
+    },
+    {
+      "path": "canterbury/simulation-map/clean_lines.py",
+      "bytes": 17064,
+      "sha256": "ace79ee4375e0eb4b5690f5ccaed057e36e3b30b44ee3d3173b98abc6162ae13"
     },
     {
       "path": "canterbury/simulation-map/complete_roads.py",
@@ -791,14 +816,29 @@
       "sha256": "ee93e892ed785863e0b8190a7591c52cf5ee759d7a84597b1d7987f2d533e483"
     },
     {
+      "path": "canterbury/simulation-map/derived/building-review.svg",
+      "bytes": 121246,
+      "sha256": "c812114cb10c7f46d2050d6dc7d780dc4bcc9c44e4dcf55927fcfe4d932282f7"
+    },
+    {
       "path": "canterbury/simulation-map/derived/building-uses-preview.png",
-      "bytes": 273614,
-      "sha256": "06c37d310898ddc875e0a38f002e627e684dfa84ad7189005cb1713552551e7f"
+      "bytes": 268552,
+      "sha256": "988151ce2c86e984f18a03a420a0c93246391fcb9a9347c9affe3858d66864fa"
     },
     {
       "path": "canterbury/simulation-map/derived/building-uses.svg",
-      "bytes": 4239044,
-      "sha256": "854ebf6d26ef9f4ce90ccce9ca6bbc18f258dd80f9d219b1cf1a747424864292"
+      "bytes": 3992503,
+      "sha256": "ecdd5fd0da898a904cfaa68614a0526e153df628d6545c1710dae6bc466ec87e"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-vector-comparison.svg",
+      "bytes": 10029,
+      "sha256": "7e93860beb397b36efbd97e5a340ef2281f35be276f1700278f109fea266f9d1"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/building-vector-report.json",
+      "bytes": 913,
+      "sha256": "7c85f615f5ce465169a3970efe78af08f4bf6e21bb85357fc28c1d7936f5d80f"
     },
     {
       "path": "canterbury/simulation-map/derived/buildings-1940.json",
@@ -811,14 +851,39 @@
       "sha256": "e11e2fa0660c082a68ff7dc1299b7ee5cc0578a0913b856230bcc71e651e4080"
     },
     {
+      "path": "canterbury/simulation-map/derived/buildings-vector.json",
+      "bytes": 1487697,
+      "sha256": "7e46955820422f0839ee27e99c3a57d8e8b1615799cb0f29d1d7d2bdd0569075"
+    },
+    {
       "path": "canterbury/simulation-map/derived/buildings.json",
       "bytes": 1964555,
       "sha256": "6acb75778cf8fc55ae9b33d5a783d339566153661870d2123b83c72dcb0361d7"
     },
     {
+      "path": "canterbury/simulation-map/derived/linear-vector-report.json",
+      "bytes": 1100,
+      "sha256": "b7d096481522b491f63c3c282077ac4b3b7ae5c5cf2c7353ad078eeff10902e1"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/linear-vectors.json",
+      "bytes": 2292951,
+      "sha256": "6cd4ceffcfc7e33508e2d09c1a9224e465cf134d0628a3875f71fa0ee497aa09"
+    },
+    {
       "path": "canterbury/simulation-map/derived/modern-buildings-projected.json",
       "bytes": 6971228,
       "sha256": "26bbfa271dd29b723c1edb5a8f9310837ee68398d596029f0df966c980c307c5"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/network-vector-report.json",
+      "bytes": 537692,
+      "sha256": "d9bf8035ef0359fcea135e9827f914f3cc19812b7c5a600fdbbd96c4a81be304"
+    },
+    {
+      "path": "canterbury/simulation-map/derived/network-vectors.json",
+      "bytes": 42588494,
+      "sha256": "8a41c8a1567b559df2e601478207ea0890fa1a2229607817417df8b44cc58756"
     },
     {
       "path": "canterbury/simulation-map/derived/overview-historical-traces.svg",
@@ -832,13 +897,13 @@
     },
     {
       "path": "canterbury/simulation-map/derived/overview.png",
-      "bytes": 293313,
-      "sha256": "6e0161081a68842bb9f78ed818e22379a9c896f4df270d8d059153d5ddc61186"
+      "bytes": 288229,
+      "sha256": "436089deaf36aa50aa5da66f68f7b45e5777f48c1f1d802ec7f12b9795924b52"
     },
     {
       "path": "canterbury/simulation-map/derived/overview.svg",
-      "bytes": 5497467,
-      "sha256": "3057b2b6512668dc936c68295e397aadf19b25a8afdf7bd69bf234da65982865"
+      "bytes": 5260617,
+      "sha256": "2b6451af9e6dfb7155fccae982fe89f9de8c2e03e40345ab9522ee5d60d29a0b"
     },
     {
       "path": "canterbury/simulation-map/derived/rail-corridors.json",
@@ -936,9 +1001,19 @@
       "sha256": "4a11148c586f99c5f0ec4101f40e9cf6a3fa825e8a3eb0a55f390f66eea23b3b"
     },
     {
+      "path": "canterbury/simulation-map/modern/osm-water-rail.json",
+      "bytes": 402229,
+      "sha256": "c9cf35a284b34e3051e4dd08e0dafde1eab822656315f8d6ed5ff23e3d9dead9"
+    },
+    {
       "path": "canterbury/simulation-map/modern/sources.json",
       "bytes": 4525,
       "sha256": "53c3fe3b9ea996133b0a22e8aff8a7dcde7e5cfddcd3a4c3fd0b6b07e76a20fa"
+    },
+    {
+      "path": "canterbury/simulation-map/network_vectors.py",
+      "bytes": 14894,
+      "sha256": "f5cd12311d80918984d875d205f33635848344b3744a30c82be3bc3a1184d5d8"
     },
     {
       "path": "canterbury/simulation-map/osm_roads.py",
@@ -961,6 +1036,11 @@
       "sha256": "6e134be79cb1ac52b76eb1eebc988afaf697609b02130bf296ef46e2b56a6b86"
     },
     {
+      "path": "canterbury/simulation-map/requirements-vector-cleanup.txt",
+      "bytes": 95,
+      "sha256": "d4ba31af7aab6db69a297bc4df7c145a18eed4a66f4840b2ecf030f4fe58218a"
+    },
+    {
       "path": "canterbury/simulation-map/review_building_placements.py",
       "bytes": 6705,
       "sha256": "1323986b16ea34d9337ac05e361054d1c14d0dc4fcefccb9723ebc7b4612779c"
@@ -969,6 +1049,11 @@
       "path": "canterbury/simulation-map/review_building_structures.py",
       "bytes": 6209,
       "sha256": "2f5c67958ecd3e3625de903258c909ba654383789ee67234d69b077a38076528"
+    },
+    {
+      "path": "canterbury/simulation-map/review_buildings.py",
+      "bytes": 7785,
+      "sha256": "fc2940b1cdb6453da5ba1b0c28418a4833204c3baaa991bd0ffa5b732444642b"
     },
     {
       "path": "canterbury/simulation-map/road-traces.json",
@@ -986,6 +1071,16 @@
       "sha256": "a2d0cd07f6fe76589f3874c8bc6724332dac6fa31dff26ba73c7bbce5f6f55a7"
     },
     {
+      "path": "canterbury/simulation-map/test_clean_buildings.py",
+      "bytes": 3463,
+      "sha256": "a4c15f4aeb895d4858f94fe1dc654b83f62393cf03c35c038c514872f1b51a36"
+    },
+    {
+      "path": "canterbury/simulation-map/test_clean_lines.py",
+      "bytes": 5456,
+      "sha256": "65a79155424d011a6e8952cf8c6367f361f50d2c9edd48e1ed53f306c558c336"
+    },
+    {
       "path": "canterbury/simulation-map/test_complete_roads.py",
       "bytes": 2828,
       "sha256": "21639ede56754fe324624d7e03660dc5b426087c5d7e2d4e264b7180825d68f2"
@@ -996,6 +1091,11 @@
       "sha256": "fedf7ccc2cd828a536182c85055f5d5617ec7cfff93d06a82a436a1a81099b10"
     },
     {
+      "path": "canterbury/simulation-map/test_network_vectors.py",
+      "bytes": 5826,
+      "sha256": "94f9e8b7ec02f7a56dbb4df52b8459784c314022d2e2bc039e2d5ec3a8835fb3"
+    },
+    {
       "path": "canterbury/simulation-map/test_osm_roads.py",
       "bytes": 5576,
       "sha256": "8b310ebc0803eb99add26fc15cc30d9a09789fb528719e1af17dde5cdef2fcb2"
@@ -1004,6 +1104,11 @@
       "path": "canterbury/simulation-map/test_religion_1940.py",
       "bytes": 3136,
       "sha256": "0303d7a12697313a9d8870d6834ddec082dcdee0e1b32e7adb3a1d055730ca0a"
+    },
+    {
+      "path": "canterbury/simulation-map/test_review_buildings.py",
+      "bytes": 4427,
+      "sha256": "23d7cdba8a87fcc0b4194c661725fe1f37a70bc86431b44cf4bbe3d87845b107"
     },
     {
       "path": "canterbury/simulation-map/validate.py",
@@ -1117,8 +1222,8 @@
     },
     {
       "path": "apesdk/book/README.md",
-      "bytes": 693,
-      "sha256": "f78bccebb89ba884d437a207926065678075555a9dfb408646c797c37721f850"
+      "bytes": 1063,
+      "sha256": "0aa19c8d0d05425098bd1895fdf1bf33ec4406cb9c4d3533e88b526efeec6f57"
     },
     {
       "path": "apesdk/book/chapter_01.md",
@@ -1127,23 +1232,23 @@
     },
     {
       "path": "apesdk/book/chapter_02.md",
-      "bytes": 20899,
-      "sha256": "9538c423a45e9abb009115d559520e3d5d9e96b42e49dbb17bad60eb49c185b9"
+      "bytes": 21463,
+      "sha256": "040a037cebea65e912b4840a05c83f24513f0bb483cd776690973c6c18400bf9"
     },
     {
       "path": "apesdk/book/chapter_03.md",
-      "bytes": 19671,
-      "sha256": "66b683cda27cb34854452e07e88193e87b4cdca33e3079612423831fa869273d"
+      "bytes": 20207,
+      "sha256": "c12b1bde6da00ae71f2f583abe1aa632407a493470db5b01b9d41dc8fb827e75"
     },
     {
       "path": "apesdk/book/chapter_04.md",
-      "bytes": 20086,
-      "sha256": "a526b7177c3e9d74596ffb7fada215401efe76ffcc02dc0b079ca463379e9024"
+      "bytes": 20674,
+      "sha256": "2e96f890c460c1ebc187261836ffc69ad1273ff8f2511b7d70b155d0e7b64679"
     },
     {
       "path": "apesdk/book/chapter_05.md",
-      "bytes": 20200,
-      "sha256": "57b092b07ad6a645f2b3e60599ae80bd30cd7016f9156329deca4c29208b3f13"
+      "bytes": 20749,
+      "sha256": "42a62053286869780d8cc7f2d86ad2c5b5914f514e400708677f8067a985fc96"
     },
     {
       "path": "apesdk/book/chapter_06.md",
@@ -1152,8 +1257,8 @@
     },
     {
       "path": "apesdk/book/chapter_07.md",
-      "bytes": 19846,
-      "sha256": "684ece86b344d26ed75a2e6f3f3159a2c77cfc62656ece41a92b4304ca521ee4"
+      "bytes": 20405,
+      "sha256": "33509fba27eea442379bba52b57092d5a894a60cdee2e2e58f61671f8ffeacf8"
     },
     {
       "path": "apesdk/book/chapter_08.md",
@@ -1167,18 +1272,18 @@
     },
     {
       "path": "apesdk/book/chapter_10.md",
-      "bytes": 19094,
-      "sha256": "8aa175eaaf1e7fdfe790d9974670db5715fb6af9fa9f0d2a3656f57b5351c2a4"
+      "bytes": 19666,
+      "sha256": "e36b5a6e5c088c8277a68ae2bbfec934a4b6e984bc9e363e016d722a2553c760"
     },
     {
       "path": "apesdk/book/chapter_11.md",
-      "bytes": 19368,
-      "sha256": "f1c90823aa8c3f3efcc0b836d6e8bab42e45c4e19dedc405d1e41dc391fc2b69"
+      "bytes": 19920,
+      "sha256": "8872b1ac71cdbc25d91954c7b4964d908382d10f7a7da92f1d2e51a550815c66"
     },
     {
       "path": "apesdk/book/chapter_12.md",
-      "bytes": 19999,
-      "sha256": "be4658736529696840618c966654b8aef9a9a937c881ed68feac96317911b8d6"
+      "bytes": 20612,
+      "sha256": "14b12965c775ca3cb8762f31f73c55599b76ae37a096ac34830e27ef82e2abee"
     },
     {
       "path": "apesdk/book/chapter_13.md",
@@ -1186,9 +1291,19 @@
       "sha256": "4ef03caea54272c71fc9f43b4afb9677d6662cd36f9cb82e528903b946da8129"
     },
     {
+      "path": "apesdk/book/chapter_14.md",
+      "bytes": 10491,
+      "sha256": "bdefee4dffb03f01771b17e26f30278ca0b99d85c8dd249d77a140fa56431c0d"
+    },
+    {
+      "path": "apesdk/book/chapter_15.md",
+      "bytes": 8592,
+      "sha256": "358627fc6447d51d5c36e10cbef8a75e6f383d8b4861d6da57275e85e1501e1f"
+    },
+    {
       "path": "apesdk/book/synopsis.md",
-      "bytes": 6665,
-      "sha256": "69c3abd29849ba91922d1892fecc70b274728e6b001ff5e5ddd82442ae8eaec7"
+      "bytes": 8218,
+      "sha256": "127be88057b3ad0adce70a8a60584c2ace088f57fefe6765f907c0378223220b"
     },
     {
       "path": "apesdk/bronze/CANTERBURY.md",

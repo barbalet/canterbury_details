@@ -42,7 +42,10 @@ class CompilerTests(unittest.TestCase):
             original = output.read_bytes()
             source.write_text('# formatting changes\n\n' + self.raw)
             self.assertEqual(build(source, output, check=True)['identity'], pack['identity'])
-            self.assertEqual(len(pack['records']), 841)
+            self.assertCountEqual(
+                [(record['kind'], record['id']) for record in pack['records']],
+                list(parse(self.raw)),
+            )
             self.assertEqual(pack['authored_version'], '0.1')
             self.assertEqual(next(r for r in pack['records'] if r['kind'] == 'scenario')
                              ['fields']['language_version'], '1.0')

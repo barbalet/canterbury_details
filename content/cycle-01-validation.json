@@ -3,7 +3,7 @@
   "version": 1,
   "date": "2026-11-08",
   "scope": "source inventory and upstream map data validation, not standalone simulation/runtime qualification",
-  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
+  "source_manifest_sha256": "1b49708218962b452bb8ddfdfb6e0665792c047c3f71cd7bf2e10bd37dc2fa8e",
   "runs": [
     {
       "command": [
@@ -38,8 +38,8 @@
       "purpose": "assembly, enrichment, OSM topology, road completion and religious-site fixtures",
       "exit_code": 0,
       "log": "docs/evidence/cycle01-3.log",
-      "log_sha256": "66392930bdd7daa9e9b0725ba561d8a5b31d107bed1e7122349ed978a8229181",
-      "tests_run": 38
+      "log_sha256": "01b2dbd2015529df7e9849121c66367720cca6cb7bf25911e90408335929e54e",
+      "tests_run": 61
     }
   ],
   "sdk_suites": "entry points inventoried; execution belongs to SDK/build/profile implementation cycles",

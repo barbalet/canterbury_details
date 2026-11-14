@@ -2,7 +2,7 @@
   "format": "canterbury-details-cycle08-validation",
   "version": 1,
   "inputs": {
-    "Makefile": "d301d92a440b8e79956ce8d395abdd6b9b68ac75fdf79ab092e0ceef7f87245f",
+    "Makefile": "b231de78b61940ef8e651ba7c9926b316a9e5e8661fed939f3691f523442ac1f",
     "tools/verify_cycle08.py": "921a948113fea5725f0165630823c988f8ffe99141907c8e35f705b685930795",
     "tools/compile_content.py": "75abc637a9e114c545085cbfaaed23b8f0a3aa9b670bb9228e623e543d4fa31b",
     "tests/test_content.py": "c9e0f1c82e7a5f7e45ada70ec87ddbee5ba72cad23168c719b8766fd3c97a4e0",
@@ -19,18 +19,18 @@
     "content/content-policy.json": "cc3b9922cd471cee8944dec30508c86b38ce9b6782df041b2f6906bf75d3cef6",
     "content/review-annotations.json": "81e94a8ef7ec76267cd22106be2347a362114cf77876561c75044986987b5c88",
     "content/content.schema.json": "2860cfae80dcb90fabdc693175fe89e90a7056e21640da73fce1f46d5f23a569",
-    "content/cycle-01-validation.json": "f8db3e8cb457a399b0fe62b0ebf297a0d38ccabfcdda88777f7467845b6a973a",
-    "content/source-manifest.json": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
+    "content/cycle-01-validation.json": "abe8abb137ce612ff4b6d16d797f853a8e15c613ad7a9cace45c4417ce675c3f",
+    "content/source-manifest.json": "1b49708218962b452bb8ddfdfb6e0665792c047c3f71cd7bf2e10bd37dc2fa8e",
     "docs/evidence/cycle01-1.log": "69449a1cba8d7935766017b430b798d9c3a9a38b4d4d79fc7229611f52e8d6b8",
     "docs/evidence/cycle01-2.log": "1cf2945274655f0e22b0a152e71508dc24d2a9c09ec8430f0133ed465fc09421",
-    "docs/evidence/cycle01-3.log": "66392930bdd7daa9e9b0725ba561d8a5b31d107bed1e7122349ed978a8229181"
+    "docs/evidence/cycle01-3.log": "01b2dbd2015529df7e9849121c66367720cca6cb7bf25911e90408335929e54e"
   },
-  "source_manifest_sha256": "c29bc6a2a4360b9e147850d3a002ea22d08ac84092117263725681555abbaad6",
+  "source_manifest_sha256": "1b49708218962b452bb8ddfdfb6e0665792c047c3f71cd7bf2e10bd37dc2fa8e",
   "contract_tests": 30,
   "artifact_path": "build/content/canterbury.json",
   "artifact_bytes": 63744161,
-  "artifact_sha256": "9078a5dd840e77a9813062f2328f00e1474b0c9ebd04a72960baa13c16291ae9",
-  "generation_id": "2b299d611dbfd5079352af44f3224e05f6a88abec1324f3a06e8d54538086400",
+  "artifact_sha256": "d44ed31e3c089f113bdb462f86ee81b22cd81fb51a29a5b57a6766bc765c499b",
+  "generation_id": "da1a0a2935deed4acf494049ae680e08d8be228f584a8c11a6f7dc480a9145c0",
   "repeat_byte_identical": true,
   "cli_freshness_check_passed": true,
   "statistics": {

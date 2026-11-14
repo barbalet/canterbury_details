@@ -1,7 +1,7 @@
 {
   "format": "canterbury-details-reviewed-sdk-worktree",
   "version": 1,
-  "base_revision": "dc4e6d4e35c1a9bdb79ae0a52951631a2e973e98",
-  "reason": "Native activity integration is committed in the pinned ApeSDK revision; no working-tree exceptions are required.",
+  "base_revision": "d407ae33b095c276a584ad3504287a47ead810c4",
+  "reason": "The pinned SDK includes native activity integration and the Bronze/Canterbury book update; no working-tree exceptions are required.",
   "files": {}
 }
